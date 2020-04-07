@@ -1,0 +1,22 @@
+{
+    "manifest_version": 2,
+    "name": "GamersClub Booster",
+    "description": "Extensão para o Google Chrome que adiciona algumas melhorias na plataforma da GamersClub.",
+    "version": "1.0.0",
+    "icons": {
+      "16": "icons/icon_16.png",
+      "48": "icons/icon_48.png",
+      "128": "icons/icon_128.png"
+    },
+    "permissions": [
+        "https://gamersclub.com.br/",
+        "storage"
+    ],
+    "content_scripts": [
+        {
+            "matches": ["*://*.gamersclub.com.br/jogador/*"],
+            "js": ["profile.js"],
+            "css" : ["profile.css"]
+        }
+    ]
+}
