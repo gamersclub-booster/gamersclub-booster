@@ -1,6 +1,8 @@
-## GamersClub Booster is a chrome extension that will boost GamersClub platform
-### Current Features
+## GamersClub Booster é uma extensão do chrome com o intuito de melhorar a plataforma.
 
-- Shows the number of medals in the profile page.
+### O que ela faz?
 
-#### For more features, please open an issue request or a pull request :)
+- Mostra o número de medalhas na página de perfil
+- Adiciona um Botão para Esconder/Mostrar as medalhas (diminuir a poluição visual)
+
+#### Para solicitar uma feature abra um Pull Request ou Issue
