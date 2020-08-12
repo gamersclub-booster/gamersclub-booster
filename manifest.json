@@ -17,6 +17,10 @@
             "matches": ["*://*.gamersclub.com.br/jogador/*"],
             "js": ["profile.js"],
             "css" : ["profile.css"]
+        },
+		{
+            "matches": ["*://*.gamersclub.com.br/minhas-partidas*"],
+            "js": ["lib/jquery.min.js", "minhas-partidas.js"]
         }
     ]
 }
