@@ -17,9 +17,9 @@ const verificarBans = async ( partida, matchColumn ) => {
         const dadosPartida = await resposta.json();
         const temBanidos = dadosPartida.jogos.players.team_a.some( jogador => jogador.player.banned) || dadosPartida.jogos.players.team_b.some( jogador => jogador.player.banned);
         if ( temBanidos ) {
-            matchColumn.style.background = 'red';
+            matchColumn.style.background = '#d12828';
         } else {
-			matchColumn.style.background = 'green';
+			matchColumn.style.background = '#067d28';
 
 		}
     } catch (e) {
