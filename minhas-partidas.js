@@ -1,7 +1,7 @@
 const GC_API_URL = '';
 const SELETOR_LINK_PARTIDAS = 'a:contains("Ver partida")'
 
-const log = ( msg ) => console.log('GC BAN',  msg );
+const log = ( msg ) => console.log('[GC Booster] ',  msg );
 
 const buscaLinksDasPartidas = () => {
     let partidas = [];
