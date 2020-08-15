@@ -29,6 +29,20 @@ const init = () => {
         }
     });
 
+    const ACHIEVEMENT = document.getElementsByClassName('gc-profile-achievement')[0];
+    const ACHIEVEMENT_TITLE = document.getElementsByClassName('gc-profile-title')[4];
+    const SHOW_HIDE_ACHIEVEMENT  = '<button id="gc-booster-showHideAchievement" style="border:1px solid;width: 110px;margin-left: 10px;">Esconder</button>'
+    ACHIEVEMENT_TITLE.innerHTML += `${SHOW_HIDE_ACHIEVEMENT}`;
+    document.getElementById("gc-booster-showHideAchievement").addEventListener("click", function(){
+        if (ACHIEVEMENT.style.display === "none") {
+            ACHIEVEMENT.style.display = "flex";
+            document.getElementById("gc-booster-showHideAchievement").innerText = "Esconder";
+        } else {
+            ACHIEVEMENT.style.display = "none";
+            document.getElementById("gc-booster-showHideAchievement").innerText = "Mostrar";
+        }
+    });
+
     // PROFILE BOX CONTENT STUFF
     // const actionsDiv = document.createElement('div');
     //Good/Nice player
