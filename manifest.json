@@ -22,5 +22,10 @@
             "matches": ["*://*.gamersclub.com.br/minhas-partidas*"],
             "js": ["lib/jquery.min.js", "minhas-partidas.js"]
         }
+        ,
+		{
+            "matches": ["*://*.gamersclub.com.br/team/matches/*"],
+            "js": ["lib/jquery.min.js", "time-partidas.js"]
+        }
     ]
 }
