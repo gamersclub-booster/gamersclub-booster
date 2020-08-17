@@ -8,7 +8,11 @@ const SELETOR_CONQUISTAS = 'h3:contains("Conquistas")'
 // let watchedUsers = [];
 // let toxicPlayers = [];
 // let goodPlayers = [];
+let autoEsconderMedalhas = false;
+let autoEsconderConquistas = false;
 chrome.storage.sync.get(null, function (result) {
+    autoEsconderMedalhas = result.autoEsconderMedalhas;
+    autoEsconderConquistas = result.autoEsconderConquistas;
     // watchedUsers = result.watchedUsers ? result.watchedUsers : [];
     // goodPlayers = result.goodPlayers ? result.goodPlayers : [];
     // toxicPlayers = result.toxicPlayers ? result.toxicPlayers : [];
@@ -21,7 +25,6 @@ const init = () => {
     const MEDALS = MEDALS_GRID.getElementsByClassName('gc-profile-medal-grid-item');
     // const MEDALS_TITLE = MEDALS_GRID.parentElement.getElementsByClassName('gc-profile-title')[0];
     const MEDALS_TITLE = $( SELETOR_MEDALHAS )[0];
-    log(MEDALS_TITLE);
     const SHOW_HIDE_MEDALS = '<button id="gc-booster-showHideMedals" style="border:1px solid;width: 110px;margin-left: 10px;">Esconder</button>'
     MEDALS_TITLE.innerHTML += ` (${MEDALS.length}) ${SHOW_HIDE_MEDALS}`;
     document.getElementById("gc-booster-showHideMedals").addEventListener("click", function(){
@@ -33,6 +36,10 @@ const init = () => {
             document.getElementById("gc-booster-showHideMedals").innerText = "Mostrar";
         }
     });
+    if (autoEsconderMedalhas) {
+        document.getElementById('gc-booster-showHideMedals').click();
+    }
+
 
     const ACHIEVEMENT = document.getElementsByClassName('gc-profile-achievement')[0];
     const ACHIEVEMENT_TITLE =  $( SELETOR_CONQUISTAS )[0];
@@ -47,7 +54,9 @@ const init = () => {
             document.getElementById("gc-booster-showHideAchievement").innerText = "Mostrar";
         }
     });
-
+    if (autoEsconderConquistas) {
+        document.getElementById('gc-booster-showHideAchievement').click();
+    }
     // PROFILE BOX CONTENT STUFF
     // const actionsDiv = document.createElement('div');
     //Good/Nice player
