@@ -15,7 +15,7 @@
     "content_scripts": [
         {
             "matches": ["*://*.gamersclub.com.br/jogador/*"],
-            "js": ["profile.js"],
+            "js": ["lib/jquery.min.js", "profile.js"],
             "css" : ["profile.css"]
         },
 		{
@@ -27,5 +27,6 @@
             "matches": ["*://*.gamersclub.com.br/team/matches/*"],
             "js": ["lib/jquery.min.js", "time-partidas.js"]
         }
-    ]
+    ],
+    "options_page": "options.html"
 }
