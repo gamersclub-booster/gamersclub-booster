@@ -7,12 +7,8 @@ function constructOptions() {
     let checkboxConquistas = document.getElementById('auto-esconder-conquistas');
     
     chrome.storage.sync.get(['autoEsconderMedalhas', 'autoEsconderConquistas'], function(result) {
-        if (result.autoEsconderMedalhas) {
-            checkboxMedalhas.checked = true
-        }
-        if (result.autoEsconderConquistas) {
-            checkboxConquistas.checked = true
-        }
+        checkboxMedalhas.checked = result.autoEsconderMedalhas
+        checkboxConquistas.checked = result.autoEsconderConquistas
     });
 
     checkboxConquistas.addEventListener('change', function(e) {

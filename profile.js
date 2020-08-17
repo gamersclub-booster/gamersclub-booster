@@ -8,11 +8,11 @@ const SELETOR_CONQUISTAS = 'h3:contains("Conquistas")'
 // let watchedUsers = [];
 // let toxicPlayers = [];
 // let goodPlayers = [];
+let options = {};
 let autoEsconderMedalhas = false;
 let autoEsconderConquistas = false;
 chrome.storage.sync.get(null, function (result) {
-    autoEsconderMedalhas = result.autoEsconderMedalhas;
-    autoEsconderConquistas = result.autoEsconderConquistas;
+    options = result;
     // watchedUsers = result.watchedUsers ? result.watchedUsers : [];
     // goodPlayers = result.goodPlayers ? result.goodPlayers : [];
     // toxicPlayers = result.toxicPlayers ? result.toxicPlayers : [];
@@ -36,7 +36,7 @@ const init = () => {
             document.getElementById("gc-booster-showHideMedals").innerText = "Mostrar";
         }
     });
-    if (autoEsconderMedalhas) {
+    if (options.autoEsconderMedalhas) {
         document.getElementById('gc-booster-showHideMedals').click();
     }
 
@@ -54,7 +54,7 @@ const init = () => {
             document.getElementById("gc-booster-showHideAchievement").innerText = "Mostrar";
         }
     });
-    if (autoEsconderConquistas) {
+    if (options.autoEsconderConquistas) {
         document.getElementById('gc-booster-showHideAchievement').click();
     }
     // PROFILE BOX CONTENT STUFF
