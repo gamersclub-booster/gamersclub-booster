@@ -25,6 +25,10 @@
 		{
             "matches": ["*://*.gamersclub.com.br/team/matches/*"],
             "js": ["lib/jquery.min.js", "time-partidas.js"]
+        },
+		{
+            "matches": ["*://*.gamersclub.com.br/lobby/*"],
+            "js": ["lib/jquery.min.js", "lobby.js"]
         }
     ],
     "options_page": "options.html"

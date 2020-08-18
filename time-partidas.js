@@ -6,6 +6,7 @@ const pegarIdPartida = ( link ) => link.split('/')[7];
 
 const adicioanrLinksVerMapas = () => {
     $( SELETOR_LINK_PARTIDAS ).each( function () {
+        $( this ).parent().width('235px');
         if( $( this ).attr('class').includes('finished')) {
             const idPartida = pegarIdPartida(this.href);
             const botaoRevelarMapa =  $( `<a class="button-date-table ">Revelar Mapa </a>` );
@@ -22,9 +23,6 @@ const revelarMapa = async ( partida, elemento, tentativas = 0 ) => {
         }
         const resposta = await fetch( `${GC_API_URL}/${partida}` );
         const dadosPartida = await resposta.json();
-        log(dadosPartida.maps);
-        log(Object.keys(dadosPartida.maps));
-        log(Object.keys(dadosPartida.maps).join(', '));
         const mapas = Object.keys(dadosPartida.maps).join(', ');
         if (mapas) {
             elemento.html(mapas);
