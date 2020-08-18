@@ -1,15 +1,17 @@
 function constructOptions() {
     let checkboxPreReady = document.getElementById('auto-aceitar-pre-ready');
+    
+    let checkboxCopiarIp = document.getElementById('auto-copiar-ip');
 
     let checkboxMedalhas = document.getElementById('auto-esconder-medalhas');
     
     let checkboxConquistas = document.getElementById('auto-esconder-conquistas');
     
-    chrome.storage.sync.get(['autoEsconderMedalhas', 'autoEsconderConquistas', 'autoAceitarPreReady'], function(result) {
-        console.log(result);
+    chrome.storage.sync.get(['autoEsconderMedalhas', 'autoEsconderConquistas', 'autoAceitarPreReady', 'autoCopiarIp'], function(result) {
         checkboxMedalhas.checked = result.autoEsconderMedalhas;
         checkboxConquistas.checked = result.autoEsconderConquistas;
         checkboxPreReady.checked = result.autoAceitarPreReady;
+        checkboxAutoCopiarIp = result.autoCopiarIp;
     });
 
     checkboxConquistas.addEventListener('change', function(e) {
@@ -21,8 +23,11 @@ function constructOptions() {
     });
 
     checkboxPreReady.addEventListener('change', function(e) {
-        console.log(this.checked);
         chrome.storage.sync.set({autoAceitarPreReady: this.checked}, function() {});
+    });
+
+    checkboxAutoCopiarIp.addEventListener('change', function(e) {
+        chrome.storage.sync.set({autoCopiarIp: this.checked}, function() {});
     });
 }
 constructOptions();

@@ -14,12 +14,12 @@ const init = () => {
             }
         }, 5000);
     }
-    // if ( options.autoCopiarIp ) {
+    if ( options.autoCopiarIp ) {
         const intervalCopia = setInterval(function() {
             const buttonCopia = document.getElementById('gameModalCopyServer');
             if (buttonCopia && buttonCopia.textContent === 'Copiar IP') {
                 buttonCopia.click();
             }
         }, 5000);
-    // }
+    }
 };
