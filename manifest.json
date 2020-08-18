@@ -27,7 +27,7 @@
             "js": ["lib/jquery.min.js", "time-partidas.js"]
         },
 		{
-            "matches": ["*://*.gamersclub.com.br/lobby/*"],
+            "matches": ["*://*.gamersclub.com.br/lobby*"],
             "js": ["lib/jquery.min.js", "lobby.js"]
         }
     ],
