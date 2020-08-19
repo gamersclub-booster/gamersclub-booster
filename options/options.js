@@ -7,12 +7,15 @@ function constructOptions() {
     
     let checkboxConquistas = document.getElementById('auto-esconder-conquistas');
     
-    chrome.storage.sync.get(['autoEsconderMedalhas', 'autoEsconderConquistas', 'autoAceitarPreReady', 'autoCopiarIp'], function(result) {
+    let checkboxEsconderChat = document.getElementById('auto-esconder-chat');
+
+    chrome.storage.sync.get(['autoEsconderMedalhas', 'autoEsconderConquistas', 'autoAceitarPreReady', 'autoCopiarIp', 'autoEsconderChat'], function(result) {
         console.log(result);
         checkboxMedalhas.checked = result.autoEsconderMedalhas;
         checkboxConquistas.checked = result.autoEsconderConquistas;
         checkboxPreReady.checked = result.autoAceitarPreReady;
         checkboxCopiarIp.checked = result.autoCopiarIp;
+        checkboxEsconderChat.checked = result.autoEsconderChat;
     });
 
     checkboxConquistas.addEventListener('change', function(e) {
@@ -29,6 +32,10 @@ function constructOptions() {
 
     checkboxCopiarIp.addEventListener('change', function(e) {
         chrome.storage.sync.set({autoCopiarIp: this.checked}, function() {});
+    });
+
+    checkboxEsconderChat.addEventListener('change', function(e) {
+        chrome.storage.sync.set({autoEsconderChat: this.checked}, function() {});
     });
 }
 constructOptions();

@@ -1,11 +1,10 @@
-const log = ( msg ) => console.log('[GC Booster] ',  msg );
 let options = {};
 chrome.storage.sync.get(['autoAceitarPreReady', 'autoCopiarIp'], function (result) {
     options = result;
-    init();
+    initLobby();
 });
 
-const init = () => {
+const initLobby = () => {
     if ( options.autoAceitarPreReady ) {
         const intervalAceitar = setInterval(function() {
             const buttonAceitar = document.getElementById('playNowOverlayReady');
@@ -23,3 +22,5 @@ const init = () => {
         }, 5000);
     }
 };
+//game-modal-ready-button e ready
+///<button class="game-modal-command-btn" id="gameModalCopyServer" data-clipboard-text="connect 45.164.124.56:20117;password GC5072" title="Clique para copiar" data-jsaction="gcCommonTooltip" data-tip-text="Clique para copiar">IP Copiado</button>

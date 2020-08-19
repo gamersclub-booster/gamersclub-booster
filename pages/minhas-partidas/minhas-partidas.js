@@ -1,8 +1,6 @@
 const GC_API_URL = '';
 const SELETOR_LINK_PARTIDAS = 'a:contains("Ver partida")'
 
-const log = ( msg ) => console.log('[GC Booster] ',  msg );
-
 const buscaLinksDasPartidas = () => {
     let partidas = [];
     $( SELETOR_LINK_PARTIDAS ).each( function() {
@@ -29,7 +27,7 @@ const verificarBans = async ( partida, matchColumn ) => {
 }
 
 // content.js
-const run = async () => {
+const initVerificarBans = async () => {
     const partidas = buscaLinksDasPartidas();
     const matchColumns = $('span.versus').parent().parent();
     const promises = partidas.map( ( partida, index ) => verificarBans( partida, matchColumns[ index ] ) );
@@ -44,7 +42,7 @@ const run = async () => {
         run();
     });
 
-    run();
+    initVerificarBans();
 })();
 
 

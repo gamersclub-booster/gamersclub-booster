@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "GamersClub Booster",
     "description": "Extensão para o Google Chrome que adiciona algumas melhorias na plataforma da GamersClub.",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "icons": {
       "16": "icons/icon_16.png",
       "48": "icons/icon_48.png",
@@ -14,22 +14,25 @@
     ],
     "content_scripts": [
         {
+            "matches": ["*://*.gamersclub.com.br/*"],
+            "js": ["lib/jquery.min.js", "pages/geral/index.js"]
+        },
+        {
             "matches": ["*://*.gamersclub.com.br/jogador/*"],
-            "js": ["lib/jquery.min.js", "profile.js"],
-            "css" : ["profile.css"]
+            "js": ["lib/jquery.min.js", "pages/profile/profile.js"]
         },
 		{
             "matches": ["*://*.gamersclub.com.br/minhas-partidas*"],
-            "js": ["lib/jquery.min.js", "minhas-partidas.js"]
+            "js": ["lib/jquery.min.js", "pages/minhas-partidas/minhas-partidas.js"]
         },
 		{
             "matches": ["*://*.gamersclub.com.br/team/matches/*"],
-            "js": ["lib/jquery.min.js", "time-partidas.js"]
+            "js": ["lib/jquery.min.js", "pages/time/partidas.js"]
         },
 		{
             "matches": ["*://*.gamersclub.com.br/lobby*"],
-            "js": ["lib/jquery.min.js", "lobby.js"]
+            "js": ["lib/jquery.min.js", "pages/lobby/lobby.js"]
         }
     ],
-    "options_page": "options.html"
+    "options_page": "options/options.html"
 }

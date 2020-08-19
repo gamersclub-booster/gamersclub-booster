@@ -1,7 +1,6 @@
 const GC_API_URL = '//gamersclub.com.br/campeonatos/getEndedMatchMaps';
 const SELETOR_LINK_PARTIDAS = 'a:contains("Ver partida")'
 
-const log = ( msg ) => console.log('[GC Booster] ',  msg );
 const pegarIdPartida = ( link ) => link.split('/')[7];
 
 const adicioanrLinksVerMapas = () => {
@@ -37,12 +36,12 @@ const revelarMapa = async ( partida, elemento, tentativas = 0 ) => {
 }
 
 // content.js
-const run = async () => {
+const initPartidas = async () => {
     const partidas = adicioanrLinksVerMapas();
 }
 
 (async () => {
-    run();
+    initPartidas();
 })();
 
 
