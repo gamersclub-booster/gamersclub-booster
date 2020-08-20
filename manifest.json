@@ -34,5 +34,5 @@
             "js": ["lib/jquery.min.js", "pages/lobby/lobby.js"]
         }
     ],
-    "options_page": "options/options.html"
+    "options_page": "opcoes/opcoes.html"
 }
