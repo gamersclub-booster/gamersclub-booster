@@ -39,7 +39,7 @@ const initVerificarBans = async () => {
         //Wait 5 seconds before start;
         log( 'Page changed, running.' )
         await new Promise( r => setTimeout( r, 3000 ) );
-        run();
+        initVerificarBans();
     });
 
     initVerificarBans();
