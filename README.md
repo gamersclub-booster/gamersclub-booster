@@ -12,8 +12,10 @@
 - Lista de partidas do time  
   - Adiciona um Botão para revelar o mapa.
   
-- Lobby  
+- Lobby/Ranked  
   - Pré Ready Automático (opcional)
+  - Ready Automático (opcional)
   - Copiar IP Automático (opcional)
+  - Auto aceitar os termos da ranked (opcional)
 
 #### Para solicitar uma feature abra um Pull Request ou Issue
