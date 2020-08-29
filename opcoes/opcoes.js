@@ -10,6 +10,9 @@ function constructOptions() {
     let checkboxEsconderChat = document.getElementById('auto-esconder-chat');
 
     let checkboxAutoConcordarTermosRanked = document.getElementById('auto-concordar-termos-ranked');
+
+    let checkboxReady = document.getElementById('auto-aceitar-ready');
+
     chrome.storage.sync.get(null, function(result) {
         checkboxMedalhas.checked = result.autoEsconderMedalhas;
         checkboxConquistas.checked = result.autoEsconderConquistas;
@@ -17,6 +20,7 @@ function constructOptions() {
         checkboxCopiarIp.checked = result.autoCopiarIp;
         checkboxEsconderChat.checked = result.autoEsconderChat;
         checkboxAutoConcordarTermosRanked.checked = result.autoConcordarTermosRanked;
+        checkboxReady.checked = result.autoAceitarReady;
     });
 
     checkboxConquistas.addEventListener('change', function(e) {
@@ -41,6 +45,10 @@ function constructOptions() {
 
     checkboxAutoConcordarTermosRanked.addEventListener('change', function(e) {
         chrome.storage.sync.set({autoConcordarTermosRanked: this.checked}, function() {});
+    });
+
+    checkboxReady.addEventListener('change', function(e) {
+        chrome.storage.sync.set({autoAceitarReady: this.checked}, function() {});
     });
 }
 constructOptions();
