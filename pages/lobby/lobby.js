@@ -21,6 +21,14 @@ const initLobby = () => {
             }
         }, 5000);
     }
+    if ( options.autoAceitarReady ) {
+        const intervalAceitar = setInterval(function() {
+            const buttonAceitarReady = document.getElementById('gameModalReadyBtn');
+            if (buttonAceitarReady && buttonAceitarReady.textContent === 'Ready') {
+                buttonAceitarReady.click();
+            }
+        }, 5000);
+    }
 };
 //game-modal-ready-button e ready
 ///<button class="game-modal-command-btn" id="gameModalCopyServer" data-clipboard-text="connect 45.164.124.56:20117;password GC5072" title="Clique para copiar" data-jsaction="gcCommonTooltip" data-tip-text="Clique para copiar">IP Copiado</button>
