@@ -23,9 +23,9 @@ const initLobby = () => {
     }
     if ( opcoes.autoAceitarReady ) {
         const intervalAceitar = setInterval(function() {
-            const buttonAceitarReady = document.getElementById('gameModalReadyBtn');
-            if (buttonAceitarReady && buttonAceitarReady.textContent === 'Ready' && !buttonAceitarReady.disabled) {
-                buttonAceitarReady.click();
+            const buttonReady = $('#gameModalReadyBtn> button');
+            if (buttonReady && !buttonReady.disabled) {
+                buttonReady.click();
             }
         }, 5000);
     }
