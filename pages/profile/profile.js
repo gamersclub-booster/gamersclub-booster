@@ -12,7 +12,6 @@ const initProfilePage = () => {
     // MEDALS BOX CONTENT STUFF
     const MEDALS_GRID = document.getElementsByClassName('gc-profile-medal-grid')[0];
     const MEDALS = MEDALS_GRID.getElementsByClassName('gc-profile-medal-grid-item');
-    // const MEDALS_TITLE = MEDALS_GRID.parentElement.getElementsByClassName('gc-profile-title')[0];
     const MEDALS_TITLE = $( SELETOR_MEDALHAS )[0];
     const SHOW_HIDE_MEDALS = '<button id="gc-booster-showHideMedals" style="border:1px solid;width: 110px;margin-left: 10px;">Esconder</button>'
     MEDALS_TITLE.innerHTML += ` (${MEDALS.length}) ${SHOW_HIDE_MEDALS}`;
@@ -47,5 +46,3 @@ const initProfilePage = () => {
         document.getElementById('gc-booster-showHideAchievement').click();
     }
 }
-
-//class="game-modal-ready-button"
