@@ -1,5 +1,5 @@
 let opcoes = {};
-chrome.storage.sync.get(['autoAceitarPreReady', 'autoCopiarIp', 'autoAceitarReady', 'autoConcordarTermosRanked', 'autoFixarMenuLobby'], function (result) {
+chrome.storage.sync.get(['autoAceitarPreReady', 'autoCopiarIp', 'autoAceitarReady', 'autoConcordarTermosRanked', 'autoFixarMenuLobby', 'autoEsconderBotaoSuporte'], function (result) {
     opcoes = result;
     initLobby();
 });
@@ -35,6 +35,13 @@ const initLobby = () => {
         }
         document.styleSheets[0].insertRule("#SidebarSala {position: fixed; top: 10%;}");
     }
+    if (opcoes.autoEsconderBotaoSuporte) {
+        if (document.styleSheets.length == 0) {
+            document.head.appendChild(document.createElement("style"));
+        }
+        document.styleSheets[0].insertRule("#js-mdLauncherWidget {display: none}");
+    }
+
     //Auto concordar com termos da ranked.
     $('#rankedqualifyModal, #rankedopenModal, #rankedproModal, #rankedchallengeModal').on('transitionend', concordarTermos);
 };

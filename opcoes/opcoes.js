@@ -7,11 +7,14 @@ function constructOptions() {
 
     let checkboxFixarMenuLobby = document.getElementById('auto-fixar-menu-lobby');
 
+    let checkboxEsconderBotaoSuporte = document.getElementById('auto-esconder-botao-suporte');
+
     chrome.storage.sync.get(null, function (result) {
         checkboxPreReady.checked = result.autoAceitarPreReady;
         checkboxCopiarIp.checked = result.autoCopiarIp;
         checkboxReady.checked = result.autoAceitarReady;
         checkboxFixarMenuLobby.checked = result.autoFixarMenuLobby;
+        checkboxEsconderBotaoSuporte.checked = result.autoEsconderBotaoSuporte;
     });
 
     checkboxPreReady.addEventListener('change', function (e) {
@@ -32,6 +35,10 @@ function constructOptions() {
             var code = 'window.location.reload();';
             chrome.tabs.executeScript(tab.id, { code: code });
         });
+    });
+
+    checkboxEsconderBotaoSuporte.addEventListener('change', function (e) {
+        chrome.storage.sync.set({ autoEsconderBotaoSuporte: this.checked }, function () { });
     });
 }
 constructOptions();
