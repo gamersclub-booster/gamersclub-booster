@@ -7,9 +7,6 @@ chrome.storage.sync.get(null, function (result) {
 });
 
 const initGcBooster = async () => {
-    if (generalOptions.autoEsconderChat) {
-        $('.gcf-sidebar').first().hide();
-    }
     if ($('#GamersClubStatsBox').is(":visible")) {
         const minPontos = $('.StatsBoxProgressBar__minRating').text();
         const maxPontos = $('.StatsBoxProgressBar__maxRating').text();
