@@ -28,10 +28,6 @@ function constructOptions() {
 
     checkboxFixarMenuLobby.addEventListener('change', function (e) {
         chrome.storage.sync.set({ autoFixarMenuLobby: this.checked }, function () { });
-        chrome.tabs.getSelected(null, function (tab) {
-            var code = 'window.location.reload();';
-            chrome.tabs.executeScript(tab.id, { code: code });
-        });
     });
 }
 constructOptions();
