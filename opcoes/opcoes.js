@@ -3,29 +3,15 @@ function constructOptions() {
 
     let checkboxCopiarIp = document.getElementById('auto-copiar-ip');
 
-    let checkboxMedalhas = document.getElementById('auto-esconder-medalhas');
-
-    let checkboxConquistas = document.getElementById('auto-esconder-conquistas');
-
     let checkboxReady = document.getElementById('auto-aceitar-ready');
 
     let checkboxFixarMenuLobby = document.getElementById('auto-fixar-menu-lobby');
 
     chrome.storage.sync.get(null, function (result) {
-        checkboxMedalhas.checked = result.autoEsconderMedalhas;
-        checkboxConquistas.checked = result.autoEsconderConquistas;
         checkboxPreReady.checked = result.autoAceitarPreReady;
         checkboxCopiarIp.checked = result.autoCopiarIp;
         checkboxReady.checked = result.autoAceitarReady;
         checkboxFixarMenuLobby.checked = result.autoFixarMenuLobby;
-    });
-
-    checkboxConquistas.addEventListener('change', function (e) {
-        chrome.storage.sync.set({ autoEsconderConquistas: this.checked }, function () { });
-    });
-
-    checkboxMedalhas.addEventListener('change', function (e) {
-        chrome.storage.sync.set({ autoEsconderMedalhas: this.checked }, function () { });
     });
 
     checkboxPreReady.addEventListener('change', function (e) {

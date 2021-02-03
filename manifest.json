@@ -17,10 +17,6 @@
             "matches": ["*://*.gamersclub.com.br/*"],
             "js": ["lib/jquery.min.js", "pages/geral/index.js"]
         },
-        {
-            "matches": ["*://*.gamersclub.com.br/jogador/*"],
-            "js": ["lib/jquery.min.js", "pages/profile/profile.js"]
-        },
 		{
             "matches": ["*://*.gamersclub.com.br/minhas-partidas*"],
             "js": ["lib/jquery.min.js", "pages/minhas-partidas/minhas-partidas.js"]
