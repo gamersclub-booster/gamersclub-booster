@@ -33,7 +33,8 @@ const initLobby = () => {
         if (document.styleSheets.length == 0) {
             document.head.appendChild(document.createElement("style"));
         }
-        document.styleSheets[0].insertRule("#SidebarSala {position: fixed; top: 10%;}");
+        document.styleSheets[0].insertRule("#SidebarSala {position: fixed; top: 10%; bottom: auto;}");
+        document.styleSheets[0].insertRule('#challengeList > sidebar {position: fixed; top: 10%; right: 72px; bottom: auto;}')
     }
     //Auto concordar com termos da ranked.
     $('#rankedqualifyModal, #rankedopenModal, #rankedproModal, #rankedchallengeModal').on('transitionend', concordarTermos);
