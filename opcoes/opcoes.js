@@ -7,14 +7,14 @@ function constructOptions() {
 
     let checkboxFixarMenuLobby = document.getElementById('auto-fixar-menu-lobby');
 
-    let checkboxEsconderBotaoSuporte = document.getElementById('auto-esconder-botao-suporte');
+    let checkboxMoverBotaoSuporte = document.getElementById('auto-mover-botao-suporte');
 
     chrome.storage.sync.get(null, function (result) {
         checkboxPreReady.checked = result.autoAceitarPreReady;
         checkboxCopiarIp.checked = result.autoCopiarIp;
         checkboxReady.checked = result.autoAceitarReady;
         checkboxFixarMenuLobby.checked = result.autoFixarMenuLobby;
-        checkboxEsconderBotaoSuporte.checked = result.autoEsconderBotaoSuporte;
+        checkboxMoverBotaoSuporte.checked = result.autoMoverBotaoSuporte;
     });
 
     checkboxPreReady.addEventListener('change', function (e) {
@@ -37,8 +37,8 @@ function constructOptions() {
         });
     });
 
-    checkboxEsconderBotaoSuporte.addEventListener('change', function (e) {
-        chrome.storage.sync.set({ autoEsconderBotaoSuporte: this.checked }, function () { });
+    checkboxMoverBotaoSuporte.addEventListener('change', function (e) {
+        chrome.storage.sync.set({ autoMoverBotaoSuporte: this.checked }, function () { });
     });
 }
 constructOptions();

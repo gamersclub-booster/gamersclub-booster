@@ -1,5 +1,5 @@
 let opcoes = {};
-chrome.storage.sync.get(['autoAceitarPreReady', 'autoCopiarIp', 'autoAceitarReady', 'autoConcordarTermosRanked', 'autoFixarMenuLobby', 'autoEsconderBotaoSuporte'], function (result) {
+chrome.storage.sync.get(['autoAceitarPreReady', 'autoCopiarIp', 'autoAceitarReady', 'autoConcordarTermosRanked', 'autoFixarMenuLobby', 'autoMoverBotaoSuporte'], function (result) {
     opcoes = result;
     initLobby();
 });
@@ -35,11 +35,8 @@ const initLobby = () => {
         }
         document.styleSheets[0].insertRule("#SidebarSala {position: fixed; top: 10%;}");
     }
-    if (opcoes.autoEsconderBotaoSuporte) {
-        if (document.styleSheets.length == 0) {
-            document.head.appendChild(document.createElement("style"));
-        }
-        document.styleSheets[0].insertRule("#js-mdLauncherWidget {display: none}");
+    if (opcoes.autoMoverBotaoSuporte) {
+        $('.Movidesk').css({ "left": "88%", "bottom": "5%", "position": "fixed", "z-index": "10" })
     }
 
     //Auto concordar com termos da ranked.
