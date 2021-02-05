@@ -30,10 +30,25 @@ const initLobby = () => {
         }, 5000);
     }
     if (opcoes.autoFixarMenuLobby) {
-        if (document.styleSheets.length == 0) {
-            document.head.appendChild(document.createElement("style"));
-        }
-        document.styleSheets[0].insertRule("#SidebarSala {position: fixed; top: 10%;}");
+        let observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (!mutation.addedNodes) return
+
+                for (let i = 0; i < mutation.addedNodes.length; i++) {
+                    let node = mutation.addedNodes[i]
+                    if (typeof node.id != 'undefined') {
+                        if (node.id.includes("SidebarSala")) {
+                            $(node).css({ position: "fixed", top: "10%", bottom: "auto" });
+                        }
+                        if (node.className.includes("sidebar-desafios sidebar-content")) {
+                            $(node).css({ position: 'fixed', top: '10%', right: '72px', bottom: 'auto' });
+                        }
+                    }
+                }
+            })
+        });
+
+        observer.observe($('#lobbyContent').get(0), { childList: true, subtree: true, attributes: false, characterData: false })
     }
     //Auto concordar com termos da ranked.
     $('#rankedqualifyModal, #rankedopenModal, #rankedproModal, #rankedchallengeModal').on('transitionend', concordarTermos);
