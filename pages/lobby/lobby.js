@@ -9,12 +9,11 @@ const initLobby = () => {
         let preReadyObserver = new MutationObserver((mutations) => {
             $.each(mutations, (i, mutation) => {
                 var addedNodes = $(mutation.addedNodes);
-                var selector = "#setPlayerReady";
-                var filteredEls = addedNodes.find(selector).addBack(selector);
-                filteredEls.each(() => {
-                    console.log(filteredEls);
-                    filteredEls[0].click();
-                });
+                let selector = '#setPlayerReady';
+                var preReadyButton = addedNodes.find(selector).addBack(selector);
+                if (preReadyButton.length) {
+                    preReadyButton[0].click();
+                }
             });
         });
 
@@ -30,16 +29,17 @@ const initLobby = () => {
     }
     if (opcoes.autoAceitarReady) {
         let readyObserver = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (!mutation.addedNodes) return
-
-                for (let i = 0; i < mutation.addedNodes.length; i++) {
-                    $('#gameModalReadyBtn > button').click(); // TODO - Fazer da mesma forma que o preReady
+            $.each(mutations, (i, mutation) => {
+                var addedNodes = $(mutation.addedNodes);
+                let selector = '#gameModalReadyBtn > button';
+                var readyButton = addedNodes.find(selector).addBack(selector);
+                if (readyButton.length) {
+                    readyButton[0].click();
                 }
-            })
+            });
         });
 
-        readyObserver.observe($('#lobbyModal').get(0), { childList: true, subtree: true })
+        readyObserver.observe($(document.body).get(0), { childList: true, subtree: true })
     }
     if (opcoes.autoFixarMenuLobby) {
         let observer = new MutationObserver((mutations) => {
