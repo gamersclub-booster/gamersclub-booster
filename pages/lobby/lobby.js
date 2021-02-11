@@ -17,15 +17,21 @@ const initLobby = () => {
             });
         });
 
-        preReadyObserver.observe($(document.body).get(0), { childList: true, subtree: true })
+        preReadyObserver.observe($('#rankedModals').get(0), { childList: true, subtree: true })
     }
     if (opcoes.autoCopiarIp) {
-        const intervalCopia = setInterval(function () {
-            const buttonCopia = document.getElementById('gameModalCopyServer');
-            if (buttonCopia && buttonCopia.textContent === 'Copiar IP') {
-                buttonCopia.click();
-            }
-        }, 5000);
+        let copyIpObserver = new MutationObserver((mutations) => {
+            $.each(mutations, (i, mutation) => {
+                var addedNodes = $(mutation.addedNodes);
+                let selector = '#gameModalCopyServer';
+                var copyIpButton = addedNodes.find(selector).addBack(selector);
+                if (copyIpButton.length) {
+                    copyIpButton[0].click();
+                }
+            });
+        });
+
+        copyIpObserver.observe($('#rankedModals').get(0), { childList: true, subtree: true })
     }
     if (opcoes.autoAceitarReady) {
         let readyObserver = new MutationObserver((mutations) => {
@@ -39,7 +45,7 @@ const initLobby = () => {
             });
         });
 
-        readyObserver.observe($(document.body).get(0), { childList: true, subtree: true })
+        readyObserver.observe($('#rankedModals').get(0), { childList: true, subtree: true })
     }
     if (opcoes.autoFixarMenuLobby) {
         let observer = new MutationObserver((mutations) => {
