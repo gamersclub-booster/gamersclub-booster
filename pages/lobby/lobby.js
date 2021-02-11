@@ -6,12 +6,18 @@ chrome.storage.sync.get(['autoAceitarPreReady', 'autoCopiarIp', 'autoAceitarRead
 
 const initLobby = () => {
     if (opcoes.autoAceitarPreReady) {
-        const intervalAceitar = setInterval(function () {
-            const buttonAceitar = document.getElementById('playNowOverlayReady');
-            if (buttonAceitar && buttonAceitar.textContent === 'Ready' && !buttonAceitar.disabled) {
-                buttonAceitar.click();
-            }
-        }, 5000);
+        let preReadyObserver = new MutationObserver((mutations) => {
+            $.each(mutations, (i, mutation) => {
+                var addedNodes = $(mutation.addedNodes);
+                let selector = '#setPlayerReady';
+                var preReadyButton = addedNodes.find(selector).addBack(selector);
+                if (preReadyButton.length) {
+                    preReadyButton[0].click();
+                }
+            });
+        });
+
+        preReadyObserver.observe($(document.body).get(0), { childList: true, subtree: true })
     }
     if (opcoes.autoCopiarIp) {
         const intervalCopia = setInterval(function () {
@@ -22,12 +28,18 @@ const initLobby = () => {
         }, 5000);
     }
     if (opcoes.autoAceitarReady) {
-        const intervalAceitar = setInterval(function () {
-            const buttonReady = $('#gameModalReadyBtn> button');
-            if (buttonReady && !buttonReady.disabled) {
-                buttonReady.click();
-            }
-        }, 5000);
+        let readyObserver = new MutationObserver((mutations) => {
+            $.each(mutations, (i, mutation) => {
+                var addedNodes = $(mutation.addedNodes);
+                let selector = '#gameModalReadyBtn > button';
+                var readyButton = addedNodes.find(selector).addBack(selector);
+                if (readyButton.length) {
+                    readyButton[0].click();
+                }
+            });
+        });
+
+        readyObserver.observe($(document.body).get(0), { childList: true, subtree: true })
     }
     if (opcoes.autoFixarMenuLobby) {
         let observer = new MutationObserver((mutations) => {
