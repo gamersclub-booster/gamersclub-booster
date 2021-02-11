@@ -9,28 +9,31 @@ const buscaLinksDasPartidas = () => {
     return partidas;
 }
 
-const verificarBans = async (partida, matchColumn) => {
+const verificarBans = async (partida, statsColumns) => {
     try {
         const resposta = await fetch(partida + '/1');
         const dadosPartida = await resposta.json();
         const temBanidos = dadosPartida.jogos.players.team_a.some(jogador => jogador.player.banned) || dadosPartida.jogos.players.team_b.some(jogador => jogador.player.banned);
         if (temBanidos) {
-            matchColumn.style.background = '#d12828';
-        } else {
-            matchColumn.style.background = '#067d28';
-
+            // statsColumns.prepend("<div></div>").addClass("columns medium-1 small-12").prepend("<i></i>").addClass("fa fa-exclamation-triangle").attr("aria-hidden", true).css({ color: "red", "font-size": "35px" })
+            console.log(statsColumns);
+            $(statsColumns).children(".medium-offset-1").removeClass("medium-offset-1");
+            $(statsColumns).prepend(
+                $("<div></div>").addClass("columns medium-1").attr("title", "Esta partida possui jogador banido").append(
+                    $("<i></i>").addClass("fa fa-exclamation-triangle").attr("aria-hidden", true).css({ color: "red", "font-size": "35px", "margin-top": "5px" }))
+            );
         }
     } catch (e) {
         log('Fetch errored, trying again.');
-        return verificarBans(partida, matchColumn);
+        return verificarBans(partida, statsColumns);
     }
 }
 
 // content.js
 const initVerificarBans = async () => {
     const partidas = buscaLinksDasPartidas();
-    const matchColumns = $('span.versus').parent().parent();
-    const promises = partidas.map((partida, index) => verificarBans(partida, matchColumns[index]));
+    const statsColumns = $(SELETOR_LINK_PARTIDAS).parent().parent();
+    const promises = partidas.map((partida, index) => verificarBans(partida, statsColumns[index]));
     await Promise.all(promises);
 }
 
