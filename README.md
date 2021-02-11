@@ -1,3 +1,7 @@
+Chrome: https://chrome.google.com/webstore/detail/gamersclub-booster/dahnmmlhchpmmlgebpkpaofbefjdlpin
+
+Firefox: https://addons.mozilla.org/pt-BR/firefox/addon/gamersclub-booster/
+
 ## GamersClub Booster é uma extensão do chrome com o intuito de melhorar a plataforma.
 
 ### O que ela faz?
