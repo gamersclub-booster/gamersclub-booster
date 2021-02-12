@@ -15,12 +15,16 @@ const verificarBans = async (partida, statsColumns) => {
         const dadosPartida = await resposta.json();
         const temBanidos = dadosPartida.jogos.players.team_a.some(jogador => jogador.player.banned) || dadosPartida.jogos.players.team_b.some(jogador => jogador.player.banned);
         if (temBanidos) {
-            // statsColumns.prepend("<div></div>").addClass("columns medium-1 small-12").prepend("<i></i>").addClass("fa fa-exclamation-triangle").attr("aria-hidden", true).css({ color: "red", "font-size": "35px" })
-            console.log(statsColumns);
             $(statsColumns).children(".medium-offset-1").removeClass("medium-offset-1");
             $(statsColumns).prepend(
                 $("<div></div>").addClass("columns medium-1").attr("title", "Esta partida possui jogador banido").append(
                     $("<i></i>").addClass("fa fa-exclamation-triangle").attr("aria-hidden", true).css({ color: "red", "font-size": "35px", "margin-top": "5px" }))
+            );
+        } else {
+            $(statsColumns).children(".medium-offset-1").removeClass("medium-offset-1");
+            $(statsColumns).prepend(
+                $("<div></div>").addClass("columns medium-1").attr("title", "Não há jogadores banidos nesta partida").append(
+                    $("<i></i>").addClass("fa fa-check-circle").attr("aria-hidden", true).css({ color: "green", "font-size": "35px", "margin-top": "5px" }))
             );
         }
     } catch (e) {
