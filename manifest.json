@@ -28,6 +28,10 @@
 		{
             "matches": ["*://*.gamersclub.com.br/lobby*"],
             "js": ["lib/jquery.min.js", "pages/lobby/lobby.js"]
+        },
+		{
+            "matches": ["*://*.gamersclub.com.br/jogador*"],
+            "js": ["lib/jquery.min.js", "pages/profile/profile.js"]
         }
     ],
     "options_page": "opcoes/opcoes.html",
