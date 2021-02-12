@@ -17,5 +17,5 @@ const initProfilePage = () => {
     });
     const winRatio = ((totalVitorias / (totalVitorias + totalDerrotas)) * 100).toFixed(2);
     const titleHistorico = $(SELETOR_HISTORICO)[0];
-    titleHistorico.innerHTML += ` - ${totalVitorias}/${totalDerrotas} (${winRatio}%)`;
+    titleHistorico.innerHTML += ` - ${totalVitorias} Vitórias/${totalDerrotas} Derrotas (${winRatio}% Win Rate)`;
 }
