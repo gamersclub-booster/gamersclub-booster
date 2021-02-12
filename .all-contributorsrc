@@ -1,0 +1,35 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "henriquelbsouza",
+      "name": "Henrique Lauro Bagio de Souza",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1070818?v=4",
+      "profile": "https://github.com/henriquelbsouza",
+      "contributions": [
+        "bug",
+        "code",
+        "content",
+        "doc",
+        "example",
+        "ideas",
+        "maintenance",
+        "mentoring",
+        "review",
+        "tool",
+        "test",
+        "video"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "gamersclub-booster",
+  "projectOwner": "henriquelbsouza",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
