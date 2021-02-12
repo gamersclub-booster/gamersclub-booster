@@ -1,5 +1,5 @@
 let opcoes = {};
-chrome.storage.sync.get(['autoAceitarPreReady', 'autoCopiarIp', 'autoAceitarReady', 'autoConcordarTermosRanked', 'autoFixarMenuLobby'], function (result) {
+chrome.storage.sync.get(['autoAceitarPreReady', 'autoCopiarIp', 'autoAceitarReady', 'autoConcordarTermosRanked', 'autoFixarMenuLobby', 'autoOcultarMissoes'], function (result) {
     opcoes = result;
     initLobby();
 });
@@ -68,6 +68,7 @@ const initLobby = () => {
 
         observer.observe($('#lobbyContent').get(0), { childList: true, subtree: true, attributes: false, characterData: false })
     }
+
     //Auto concordar com termos da ranked.
     $('#rankedqualifyModal, #rankedopenModal, #rankedproModal, #rankedchallengeModal').on('transitionend', concordarTermos);
 };
