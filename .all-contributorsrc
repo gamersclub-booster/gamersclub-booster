@@ -44,6 +44,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "lucianocarvalho",
+      "name": "Luciano Carvalho",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14339481?v=4",
+      "profile": "https://github.com/lucianocarvalho",
+      "contributions": [
+        "design"
+      ]
     }
   ],
   "contributorsPerLine": 7,
