@@ -28,6 +28,10 @@
   - Copiar IP Automático
   - Opção de manter o lobby em posição fixa na tela. Evita aquele comportamento chato de ficar sumindo e aparecendo a aba do lobby.
 
+- Perfil
+  - Adiciona a soma de todas as vitórias / derrotas e win rate
+  ![image](https://user-images.githubusercontent.com/1070818/107776850-e13a2f80-6d20-11eb-9f2e-84f7fb38ead5.png)
+
 #### Para solicitar/colaborar com uma feature abra um Pull Request ou Issue
 
 ## Contributors ✨
