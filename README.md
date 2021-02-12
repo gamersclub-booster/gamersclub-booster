@@ -20,7 +20,8 @@
 
 - Lista de partidas do time  
   - Adiciona um Botão para revelar o mapa que foi jogado.
-  
+  ![image](https://user-images.githubusercontent.com/1070818/107768870-dc23b300-6d15-11eb-9499-c32a7fdd732b.png)
+
 - Lobby/Ranked  
   - Pré Ready Automático
   - Ready Automático
