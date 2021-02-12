@@ -12,11 +12,13 @@
 ## GamersClub Booster é uma extensão com o intuito de melhorar a plataforma.
 
 ### O que ela faz?
-- Minhas Partidas
-  - Verifica em cada partida se tem jogador banido (Marca a partida vermelho caso tenha jogadore banido)
-  
+- Página Minhas Partidas
+  - Verifica em cada partida se tem jogador banido
+    - Icone :warning: caso tenha algum jogador banido
+    - Icone ✔️ caso nenhum jogador tenha sido banido
+    
 - Lista de partidas do time  
-  - Adiciona um Botão para revelar o mapa.
+  - Adiciona um Botão para revelar o mapa que foi jogado.
   
 - Lobby/Ranked  
   - Pré Ready Automático
