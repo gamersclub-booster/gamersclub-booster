@@ -35,6 +35,15 @@
         "code",
         "maintenance"
       ]
+    },
+    {
+      "login": "RobertaMelo",
+      "name": "Roberta Melo",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31969450?v=4",
+      "profile": "https://github.com/RobertaMelo",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
