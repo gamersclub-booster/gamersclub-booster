@@ -32,6 +32,10 @@
 		{
             "matches": ["*://*.gamersclub.com.br/jogador*"],
             "js": ["lib/jquery.min.js", "pages/profile/profile.js"]
+        },
+		{
+            "matches": ["*://*.gamersclub.com.br/missoes*"],
+            "js": ["lib/jquery.min.js", "pages/missoes/missoes.js"]
         }
     ],
     "options_page": "opcoes/opcoes.html",
