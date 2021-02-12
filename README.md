@@ -9,6 +9,8 @@
 
 * [Video explicativo sobre a extensão](https://youtu.be/nmxw6xjsIjc)
 
+* [Como instalar no Microsoft EDGE e no Opera](https://youtu.be/rELLprJ15ug)
+
 ## GamersClub Booster é uma extensão com o intuito de melhorar a plataforma.
 
 ### O que ela faz?
