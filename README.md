@@ -1,7 +1,8 @@
-Chrome: https://chrome.google.com/webstore/detail/gamersclub-booster/dahnmmlhchpmmlgebpkpaofbefjdlpin
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
+
+Chrome: https://chrome.google.com/webstore/detail/gamersclub-booster/dahnmmlhchpmmlgebpkpaofbefjdlpin
 
 Firefox: https://addons.mozilla.org/pt-BR/firefox/addon/gamersclub-booster/
 
@@ -21,7 +22,7 @@ Firefox: https://addons.mozilla.org/pt-BR/firefox/addon/gamersclub-booster/
   - Auto aceitar os termos da ranked (opcional)
   - Opção de manter o lobby em posição fixa na tela. Evita aquele comportamento chato de ficar sumindo e aparecendo a aba do lobby.
 
-#### Para solicitar uma feature abra um Pull Request ou Issue
+#### Para solicitar/colaborar com uma feature abra um Pull Request ou Issue
 
 ## Contributors ✨
 
