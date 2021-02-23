@@ -10,6 +10,13 @@
                 "tabWidth": 2,
                 "printWidth": 200
             }
+        },
+        {
+            "files": "*.js",
+            "options": {
+                "bracketSpacing": true,
+                "singleQuote": true
+            }
         }
     ]
 }
