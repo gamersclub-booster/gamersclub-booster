@@ -107,16 +107,16 @@ const initLobby = () => {
 };
 //Criar lobby: https://github.com/LouisRiverstone/gamersclub-lobby_waiter/ com as modificações por causa do layout novo
 function intervalerCriacaoLobby() {
-    log('aaa');
     return setInterval(() => {
-        if (!lobbyCriada) {
+        if (!lobbyCriada || $('.sidebar-titulo.sidebar-sala-titulo').text().length) {
             const lobbies = $("span.Tag__tagLabel.Tag__tagLabel--success").text().split('/');
-            //Em contato com a GC, falaram que ta variando entre 50 e 100 =(
-            if (lobbies[1] < 50) {
+            //50 free 400 premium
+            const limiteLobby = $('.Cta.Topbar').text() ? 50 : 400;
+            if (lobbies[1] < limiteLobby) {
                 $('button.WasdButton.WasdButton--success.WasdButton--lg.LobbyHeaderButton').click()
                 
-                const antiCheat = $(".noty_bar.noty_type__info.noty_theme__mint.noty_close_with_click.noty_has_timeout.noty_close_with_button");
-                if (antiCheat.length && antiCheat.text() === "Você precisa estar com o jogo CS:GO e o Gamers Club Anti-cheat abertos para jogar. Clique aqui para baixar o GamersClub Anti-cheat.Está com o jogo e o anti-cheat abertos e ainda encontra dificuldades para jogar? Clique aqui.×") {
+                const alertaAc = $(".noty_bar.noty_type__info.noty_theme__mint.noty_close_with_click.noty_has_timeout.noty_close_with_button:contains('Você precisa estar com o jogo')");
+                if (alertaAc.length) {
                     clearInterval(intervalCriarLobby);
                     return;
                 }
@@ -129,15 +129,19 @@ function intervalerCriacaoLobby() {
                     setTimeout(() => {
                         $(".CheckboxContainer__input").click();
                         botaoCriarSala.click();
+                        const alertaLimite = $(".noty_bar.noty_type__info.noty_theme__mint.noty_close_with_click.noty_has_timeout.noty_close_with_button:contains('lobbies_limit_reached×')")
+                        if (alertaLimite.length) {
+                            return;
+                        }
                         lobbyCriada = true;
                         clearInterval(intervalCriarLobby);
-                    }, 300);
+                    }, 500);
                 }
             }
         } else {
             clearInterval(intervalCriarLobby)
         }
-    }, 100)
+    }, 500)
 }
 
 function concordarTermos(e) {
