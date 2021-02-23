@@ -7,7 +7,7 @@ chrome.storage.sync.get(null, function (result) {
 });
 
 const initGcBooster = async () => {
-    if ($('#GamersClubStatsBox').is(":visible")) {
+    if ($('#GamersClubStatsBox').is(':visible')) {
         const minPontos = $('.StatsBoxProgressBar__minRating').text();
         const maxPontos = $('.StatsBoxProgressBar__maxRating').text();
         const atualPontos = $('.StatsBoxRating__Score').text();

@@ -15,19 +15,19 @@ function constructOptions() {
     });
 
     checkboxPreReady.addEventListener('change', function (e) {
-        chrome.storage.sync.set({ autoAceitarPreReady: this.checked }, function () { });
+        chrome.storage.sync.set({ autoAceitarPreReady: this.checked }, function () {});
     });
 
     checkboxCopiarIp.addEventListener('change', function (e) {
-        chrome.storage.sync.set({ autoCopiarIp: this.checked }, function () { });
+        chrome.storage.sync.set({ autoCopiarIp: this.checked }, function () {});
     });
 
     checkboxReady.addEventListener('change', function (e) {
-        chrome.storage.sync.set({ autoAceitarReady: this.checked }, function () { });
+        chrome.storage.sync.set({ autoAceitarReady: this.checked }, function () {});
     });
 
     checkboxFixarMenuLobby.addEventListener('change', function (e) {
-        chrome.storage.sync.set({ autoFixarMenuLobby: this.checked }, function () { });
+        chrome.storage.sync.set({ autoFixarMenuLobby: this.checked }, function () {});
     });
 }
 constructOptions();

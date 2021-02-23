@@ -1,5 +1,5 @@
 const GC_API_URL = '//gamersclub.com.br/campeonatos/getEndedMatchMaps';
-const SELETOR_LINK_PARTIDAS = 'a:contains("Ver partida")'
+const SELETOR_LINK_PARTIDAS = 'a:contains("Ver partida")';
 
 const pegarIdPartida = (link) => link.split('/')[7];
 
@@ -9,11 +9,13 @@ const adicioanrLinksVerMapas = () => {
         if ($(this).attr('class').includes('finished')) {
             const idPartida = pegarIdPartida(this.href);
             const botaoRevelarMapa = $(`<a class="button-date-table ">Revelar Mapa </a>`);
-            botaoRevelarMapa.click(function () { revelarMapa(idPartida, botaoRevelarMapa); });
+            botaoRevelarMapa.click(function () {
+                revelarMapa(idPartida, botaoRevelarMapa);
+            });
             $(this).parent().append(botaoRevelarMapa);
         }
     });
-}
+};
 
 const revelarMapa = async (partida, elemento, tentativas = 0) => {
     try {
@@ -33,16 +35,13 @@ const revelarMapa = async (partida, elemento, tentativas = 0) => {
         log('Deu erro, tentando dnv');
         revelarMapa(partida, elemento, tentativas + 1);
     }
-}
+};
 
 // content.js
 const initPartidas = async () => {
     const partidas = adicioanrLinksVerMapas();
-}
+};
 
 (async () => {
     initPartidas();
 })();
-
-
-
