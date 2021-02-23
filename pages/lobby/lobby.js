@@ -99,12 +99,23 @@ const initLobby = () => {
     $('#rankedqualifyModal, #rankedopenModal, #rankedproModal, #rankedchallengeModal').on('transitionend', concordarTermos);
 
     //Feature pra criar lobby caso full
-    $('#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)').html('<button id="forcarCriacaoLobbyBtn" style="color:orange" type="button">Forçar Criação da Lobby</button>')
+    adicionarBotaoForcarCriarLobby();
+};
+function adicionarBotaoCancelarCriarLobby() {
+    $('#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)').html('<span style="color:orange">FORÇANDO CRIAÇÃO DA LOBBY...</span><button id="cancelarCriacaoLobbyBtn" style="color:red" type="button">Cancelar</button>');
+        document.getElementById("cancelarCriacaoLobbyBtn").addEventListener("click", function () {
+           clearInterval(intervalCriarLobby);
+           adicionarBotaoForcarCriarLobby();
+    });
+}
+function adicionarBotaoForcarCriarLobby() {
+    $('#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)').html('<button id="forcarCriacaoLobbyBtn" style="color:orange" type="button">Forçar Criação da Lobby</button>');
     document.getElementById("forcarCriacaoLobbyBtn").addEventListener("click", function () {
         lobbyCriada = false;
         intervalCriarLobby = intervalerCriacaoLobby();
+        adicionarBotaoCancelarCriarLobby();
     });
-};
+}
 //Criar lobby: https://github.com/LouisRiverstone/gamersclub-lobby_waiter/ com as modificações por causa do layout novo
 function intervalerCriacaoLobby() {
     return setInterval(() => {
@@ -118,6 +129,7 @@ function intervalerCriacaoLobby() {
                 const alertaAc = $(".noty_bar.noty_type__info.noty_theme__mint.noty_close_with_click.noty_has_timeout.noty_close_with_button:contains('Você precisa estar com o jogo')");
                 if (alertaAc.length) {
                     clearInterval(intervalCriarLobby);
+                    adicionarBotaoForcarCriarLobby();
                     return;
                 }
 
@@ -134,12 +146,14 @@ function intervalerCriacaoLobby() {
                             return;
                         }
                         lobbyCriada = true;
+                        adicionarBotaoForcarCriarLobby();
                         clearInterval(intervalCriarLobby);
                     }, 500);
                 }
             }
         } else {
-            clearInterval(intervalCriarLobby)
+            adicionarBotaoForcarCriarLobby();
+            clearInterval(intervalCriarLobby);
         }
     }, 500)
 }
