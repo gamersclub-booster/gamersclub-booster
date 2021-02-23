@@ -29,6 +29,8 @@
   - Ready Automático
   - Copiar IP Automático
   - Opção de manter o lobby em posição fixa na tela. Evita aquele comportamento chato de ficar sumindo e aparecendo a aba do lobby.
+  - Adiciona um botão pra forçar a criação da lobby (pra quando tem mais do que o limite, 50 free ou 400 premium)
+  ![image](https://user-images.githubusercontent.com/1070818/108875916-70c2c680-75dc-11eb-94df-2746d7348a53.png)
 
 - Perfil
   - Adiciona a soma de todas as vitórias / derrotas e win rate
