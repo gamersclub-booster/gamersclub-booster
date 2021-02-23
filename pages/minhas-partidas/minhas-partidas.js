@@ -61,7 +61,7 @@ const initVerificarBans = async () => {
         } else if (placarMeuTime < placarAdversario) {
             cor = 'rgba(220,20,0,.25) 0'
         } else {
-            cor = '#dfe094'
+            cor = '#cdcf57'
         }
         this.style = `background-image: linear-gradient(90deg, ${cor},transparent 40%);`;
     });
