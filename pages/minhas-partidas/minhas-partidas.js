@@ -42,6 +42,31 @@ const initVerificarBans = async () => {
 }
 
 (async () => {
+    // CSS
+    // background-image: linear-gradient(to right, red 0.1%,#181a29 15%, #181A28);
+    const matches = $('.match.columns');
+    matches.each(function() {
+        let placarMeuTime;
+        let placarAdversario;
+        let cor;
+        if (this.children[1].children.length > 1) {
+            placarMeuTime = +this.children[2].textContent;
+            placarAdversario = +this.children[4].textContent;
+        } else {
+            placarMeuTime = +this.children[4].textContent;
+            placarAdversario = +this.children[2].textContent;
+        }
+        if (placarMeuTime > placarAdversario) {
+            cor = 'rgba(22,229,180,.25) 0'
+        } else if (placarMeuTime < placarAdversario) {
+            cor = 'rgba(220,20,0,.25) 0'
+        } else {
+            cor = '#dfe094'
+        }
+        this.style = `background-image: linear-gradient(90deg, ${cor},transparent 40%);`;
+    });
+
+
     $('body').on('DOMNodeInserted', '#myMatchesPagination', async function () {
         //Wait 5 seconds before start;
         log('Page changed, running.')
