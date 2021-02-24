@@ -19,6 +19,8 @@
     - Icone :warning: caso tenha algum jogador banido
     - Icone ✔️ caso nenhum jogador tenha sido banido
     ![image](https://user-images.githubusercontent.com/1070818/107768732-ad0d4180-6d15-11eb-93d6-9ce156ecdad5.png)
+    - Adiciona um background com cores para vitória/derrota e empate
+    ![image](https://user-images.githubusercontent.com/1070818/108914631-661f2600-760a-11eb-9182-d98a2ef9beb5.png)
 
 - Lista de partidas do time  
   - Adiciona um Botão para revelar o mapa que foi jogado.
