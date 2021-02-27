@@ -2,17 +2,50 @@
 <!-- HTML5 -->
 <meta charset="utf-8" />
 <html>
-  <head>
-    <link rel="stylesheet" href="opcoes.css" />
-  </head>
-  <body>
-    <div class="center">
-      <p><input type="checkbox" id="autoAceitarPreReady" /><label for="autoAceitarPreReady">Aceitar Pre Ready</label></p>
-      <p><input type="checkbox" id="autoAceitarReady" /><label for="autoAceitarReady">Aceitar Ready</label></p>
-      <p><input type="checkbox" id="autoCopiarIp" /><label for="autoCopiarIp">Copiar IP</label></p>
-      <p><input type="checkbox" id="autoConcordarTermosRanked" /><label for="autoConcordarTermosRanked">Aceitar Termos da Ranked</label></p>
-      <p><input type="checkbox" id="autoFixarMenuLobby" /><label for="autoFixarMenuLobby">Fixar Menu do Lobby</label></p>
+
+<head>
+  <link rel="stylesheet" href="opcoes.css" />
+</head>
+
+<body>
+  <div class="header">
+    <a href="#default" class="logo">Gamersclub Booster</a>
+    <div class="header-right">
+      <a class="active" href="#geral" id="link-geral">Geral</a>
+      <a href="#contato" id="link-contato">Contato</a>
+      <a href="#sobre" id="link-sobre">Sobre</a>
     </div>
-  </body>
-  <script src="opcoes.js"></script>
+    </div>
+  <div class="body ativo" id="geral">
+    <label class="container" for="autoAceitarPreReady">Aceitar Pre Ready
+      <input type="checkbox" id="autoAceitarPreReady" />
+      <span class="checkmark"></span>
+    </label>
+    <label class="container" for="autoAceitarReady">Aceitar Ready
+      <input type="checkbox" id="autoAceitarReady" />
+      <span class="checkmark"></span>
+    </label>
+    <label class="container" for="autoCopiarIp">Copiar IP
+      <input type="checkbox" id="autoCopiarIp" />
+      <span class="checkmark"></span>
+    </label>
+    <label class="container" for="autoConcordarTermosRanked">Aceitar Termos da Ranked
+      <input type="checkbox" id="autoConcordarTermosRanked" />
+      <span class="checkmark"></span>
+    </label>
+    <label class="container" for="autoFixarMenuLobby">Fixar Menu do Lobby
+      <input type="checkbox" id="autoFixarMenuLobby" />
+      <span class="checkmark"></span>
+    </label>
+  </div>
+  <div class="body" id="contato">
+    Github
+    Twitter
+  </div>
+  <div class="body" id="sobre">
+    Versão: 1.0.12
+  </div>
+</body>
+<script src="opcoes.js"></script>
+
 </html>
