@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+  - 14
+
+deploy:
+  skip_cleanup: true
+  provider: script
+  script: npm run release
+  on:
+    branch: master
+    tags: true
+
+env:
+  EXTENSION_ID=dahnmmlhchpmmlgebpkpaofbefjdlpin
+  

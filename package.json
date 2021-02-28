@@ -1,0 +1,22 @@
+{
+  "name": "gamersclub-booster",
+  "version": "1.0.12",
+  "description": "GamersClub Booster é uma extensão com o intuito de melhorar a plataforma.",
+  "scripts": {
+    "release": "webstore upload --auto-publish"
+  },
+  "devDependencies": {
+    "chrome-webstore-upload-cli": "^1.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/henriquelbsouza/gamersclub-booster.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/henriquelbsouza/gamersclub-booster/issues"
+  },
+  "homepage": "https://github.com/henriquelbsouza/gamersclub-booster#readme"
+}
