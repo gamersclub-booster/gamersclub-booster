@@ -24,18 +24,9 @@ body {
     margin: 20px;
 }
 
-.pagina {
-    display: none;
-    margin-left: 20px;
-}
-
 .titulo {
     font-size: 20px;
     margin-bottom: 20px;
-}
-
-.ativo {
-    display: block;
 }
 
 .menu {
@@ -81,13 +72,23 @@ body {
     background-color: #2b3550;
 }
 
+.pagina {
+    display: none;
+    margin-left: 20px;
+    width: 390px;
+}
+
+.ativo {
+    display: block !important;
+}
+
 .pagina a {
     text-decoration: none;
 }
 
 .pagina .subtitulo {
     color:#2196f3;
-    margin-top: 0;
+    margin: 0px;
     font-size: 16px;
     text-transform: uppercase;
 }
