@@ -81,6 +81,24 @@ body {
     background-color: #2b3550;
 }
 
+/* h2 {
+    color: #fff;
+    border-bottom: #000 1px solid;
+} */
+
+.pagina a {
+    text-decoration: none;
+}
+
+.pagina .subtitulo {
+    color:#2196f3;
+    margin-top: 0;
+}
+
+.pagina .descricao {
+    color: #fff;
+}
+
 .container {
     display: block;
     position: relative;
@@ -108,14 +126,14 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    height: 25px;
-    width: 25px;
-    background-color: #eee;
+    height: 20px;
+    width: 20px;
+    background-color: #2196f3;
 }
 
 /* On mouse-over, add a grey background color */
 .container:hover input ~ .checkmark {
-    background-color: #ccc;
+    background-color: #2196f3;
 }
 
 /* When the checkbox is checked, add a blue background */
@@ -137,8 +155,8 @@ body {
 
 /* Style the checkmark/indicator */
 .container .checkmark:after {
-    left: 9px;
-    top: 5px;
+    left: 6px;
+    top: 2px;
     width: 5px;
     height: 10px;
     border: solid white;
