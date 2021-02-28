@@ -3,13 +3,9 @@ const features = [
     'autoCopiarIp',
     'autoAceitarReady',
     'autoFixarMenuLobby',
-    'autoConcordarTermosRanked'
+    'autoConcordarTermosRanked',
 ];
-const paginas = [
-    'geral',
-    'contato',
-    'sobre'
-]
+const paginas = ['geral', 'mapas', 'lobby', 'contato', 'sobre'];
 function iniciarPaginaOpcoes() {
     marcarCheckboxes();
     adicionarListenersFeatures();
@@ -42,13 +38,13 @@ function adicionarListenersPaginas() {
 function abrirPagina(pagina) {
     const link = document.getElementById(`link-${pagina}`);
     const paginaAtiva = document.getElementById(pagina);
-    
+
     Array.from(document.getElementsByClassName('ativo')).forEach((el) => {
-        el.classList.remove("ativo");
+        el.classList.remove('ativo');
     });
 
     Array.from(document.getElementsByClassName('active')).forEach((el) => {
-        el.classList.remove("active");
+        el.classList.remove('active');
     });
 
     link.classList.add('active');

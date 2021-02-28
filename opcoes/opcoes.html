@@ -2,57 +2,60 @@
 <!-- HTML5 -->
 <meta charset="utf-8" />
 <html>
+  <head>
+    <link rel="stylesheet" href="opcoes.css" />
+  </head>
 
-<head>
-  <link rel="stylesheet" href="opcoes.css" />
-</head>
-
-<body>
-  <div class="body">
-    <div class="header">
-      <a href="#default" class="logo">Gamersclub Booster</a>
+  <body>
+    <div class="body">
+      <div class="header">
+        <a href="#default" class="logo">Gamersclub Booster</a>
+        <span>v1.0.12</span>
+      </div>
+      <div class="conteudo">
+        <div class="menu">
+          <ul>
+            <li id="link-geral" class="active"><a href="#geral">Geral</a></li>
+            <li id="link-mapas"><a href="#mapas">Mapas</a></li>
+            <li id="link-lobby"><a href="#lobby">Lobby</a></li>
+            <li id="link-contato"><a href="#contato">Contato</a></li>
+            <li id="link-sobre"><a href="#sobre">Sobre</a></li>
+          </ul>
+        </div>
+        <div class="pagina ativo" id="geral">
+          <div class="titulo">Geral</div>
+          <label class="container" for="autoAceitarPreReady"
+            >Aceitar Pre Ready
+            <input type="checkbox" id="autoAceitarPreReady" />
+            <span class="checkmark"></span>
+          </label>
+          <label class="container" for="autoAceitarReady"
+            >Aceitar Ready
+            <input type="checkbox" id="autoAceitarReady" />
+            <span class="checkmark"></span>
+          </label>
+          <label class="container" for="autoCopiarIp"
+            >Copiar IP
+            <input type="checkbox" id="autoCopiarIp" />
+            <span class="checkmark"></span>
+          </label>
+          <label class="container" for="autoConcordarTermosRanked"
+            >Aceitar Termos da Ranked
+            <input type="checkbox" id="autoConcordarTermosRanked" />
+            <span class="checkmark"></span>
+          </label>
+          <label class="container" for="autoFixarMenuLobby"
+            >Fixar Menu do Lobby
+            <input type="checkbox" id="autoFixarMenuLobby" />
+            <span class="checkmark"></span>
+          </label>
+        </div>
+        <div class="pagina" id="lobby">Em breve teremos opções para criação forçada de lobby.</div>
+        <div class="pagina" id="mapas">Em breve teremos opções de veto automático de mapas.</div>
+        <div class="pagina" id="contato">Github Twitter</div>
+        <div class="pagina" id="sobre">Versão: 1.0.12</div>
+      </div>
     </div>
-    <div class="conteudo">
-      <div class="menu">
-        <ul>
-          <li id="link-geral" class="active"><a href="#geral">Geral</a></li>
-          <li id="link-contato"><a href="#contato">Contato</a></li>
-          <li id="link-sobre"><a href="#sobre">Sobre</a></li>
-        </ul>
-      </div>
-      <div class="pagina ativo" id="geral">
-        <div class="titulo">Geral</div>
-        <label class="container" for="autoAceitarPreReady">Aceitar Pre Ready
-          <input type="checkbox" id="autoAceitarPreReady" />
-          <span class="checkmark"></span>
-        </label>
-        <label class="container" for="autoAceitarReady">Aceitar Ready
-          <input type="checkbox" id="autoAceitarReady" />
-          <span class="checkmark"></span>
-        </label>
-        <label class="container" for="autoCopiarIp">Copiar IP
-          <input type="checkbox" id="autoCopiarIp" />
-          <span class="checkmark"></span>
-        </label>
-        <label class="container" for="autoConcordarTermosRanked">Aceitar Termos da Ranked
-          <input type="checkbox" id="autoConcordarTermosRanked" />
-          <span class="checkmark"></span>
-        </label>
-        <label class="container" for="autoFixarMenuLobby">Fixar Menu do Lobby
-          <input type="checkbox" id="autoFixarMenuLobby" />
-          <span class="checkmark"></span>
-        </label>
-      </div>
-      <div class="pagina" id="contato">
-        Github
-        Twitter
-      </div>
-      <div class="pagina" id="sobre">
-        Versão: 1.0.12
-      </div>
-    </div>
-  </div>
-</body>
-<script src="opcoes.js"></script>
-
+  </body>
+  <script src="opcoes.js"></script>
 </html>
