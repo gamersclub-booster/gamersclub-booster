@@ -98,11 +98,23 @@ const initLobby = () => {
         });
     }
 
-    //Auto concordar com termos da ranked.
-    $('#rankedqualifyModal, #rankedopenModal, #rankedproModal, #rankedchallengeModal').on(
-        'transitionend',
-        concordarTermos
-    );
+    if (opcoes.autoConcordarTermosRanked) {
+        let termosRankedObserver = new MutationObserver((mutations) => {
+            $.each(mutations, (i, mutation) => {
+                const addedNodes = $(mutation.addedNodes);
+                let selector = '.ranked-modal-agree.container-fluid > a';
+                const concordarButton = addedNodes.find(selector).addBack(selector);
+                if (concordarButton.length) {
+                    concordarButton[0].click();
+                }
+            });
+        });
+
+        termosRankedObserver.observe($('#rankedModals').get(0), {
+            childList: true,
+            subtree: true,
+        });
+    }
 
     //Feature pra criar lobby caso full
     adicionarBotaoForcarCriarLobby();
@@ -172,14 +184,4 @@ function intervalerCriacaoLobby() {
             clearInterval(intervalCriarLobby);
         }
     }, 500);
-}
-
-function concordarTermos(e) {
-    if (opcoes.autoConcordarTermosRanked && $('ranked-modal-agree').is(':visible')) {
-        if (!['rankedqualifyModal', 'rankedopenModal', 'rankedproModal', 'rankedchallengeModal'].includes(e.target.id))
-            return;
-        if (!e.target.classList.contains('game-modal-fade-in')) return;
-        const metodo = $('.ranked-modal-agree>a').attr('onclick');
-        location.href = `${metodo}; void 0`;
-    }
 }

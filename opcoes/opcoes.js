@@ -1,33 +1,54 @@
-function constructOptions() {
-    let checkboxPreReady = document.getElementById('auto-aceitar-pre-ready');
-
-    let checkboxCopiarIp = document.getElementById('auto-copiar-ip');
-
-    let checkboxReady = document.getElementById('auto-aceitar-ready');
-
-    let checkboxFixarMenuLobby = document.getElementById('auto-fixar-menu-lobby');
-
-    chrome.storage.sync.get(null, function (result) {
-        checkboxPreReady.checked = result.autoAceitarPreReady;
-        checkboxCopiarIp.checked = result.autoCopiarIp;
-        checkboxReady.checked = result.autoAceitarReady;
-        checkboxFixarMenuLobby.checked = result.autoFixarMenuLobby;
-    });
-
-    checkboxPreReady.addEventListener('change', function (e) {
-        chrome.storage.sync.set({ autoAceitarPreReady: this.checked }, function () {});
-    });
-
-    checkboxCopiarIp.addEventListener('change', function (e) {
-        chrome.storage.sync.set({ autoCopiarIp: this.checked }, function () {});
-    });
-
-    checkboxReady.addEventListener('change', function (e) {
-        chrome.storage.sync.set({ autoAceitarReady: this.checked }, function () {});
-    });
-
-    checkboxFixarMenuLobby.addEventListener('change', function (e) {
-        chrome.storage.sync.set({ autoFixarMenuLobby: this.checked }, function () {});
+const features = [
+    'autoAceitarPreReady',
+    'autoCopiarIp',
+    'autoAceitarReady',
+    'autoFixarMenuLobby',
+    'autoConcordarTermosRanked',
+];
+const paginas = ['geral', 'mapas', 'lobby', 'contato', 'sobre'];
+function iniciarPaginaOpcoes() {
+    marcarCheckboxes();
+    adicionarListenersFeatures();
+    adicionarListenersPaginas();
+}
+function marcarCheckboxes() {
+    chrome.storage.sync.get(null, (response) => {
+        if (!response) return false;
+        for (const feature of features) {
+            document.getElementById(feature).checked = response[feature];
+        }
     });
 }
-constructOptions();
+function adicionarListenersFeatures() {
+    for (const feature of features) {
+        document.getElementById(feature).addEventListener('change', function (e) {
+            console.log(feature, 'changed');
+            chrome.storage.sync.set({ [feature]: this.checked }, function () {});
+        });
+    }
+}
+
+function adicionarListenersPaginas() {
+    for (const pagina of paginas) {
+        document.getElementById(`link-${pagina}`).addEventListener('click', function (e) {
+            abrirPagina(pagina);
+        });
+    }
+}
+function abrirPagina(pagina) {
+    const link = document.getElementById(`link-${pagina}`);
+    const paginaAtiva = document.getElementById(pagina);
+
+    Array.from(document.getElementsByClassName('ativo')).forEach((el) => {
+        el.classList.remove('ativo');
+    });
+
+    Array.from(document.getElementsByClassName('active')).forEach((el) => {
+        el.classList.remove('active');
+    });
+
+    link.classList.add('active');
+    paginaAtiva.classList.add('ativo');
+}
+
+iniciarPaginaOpcoes();
