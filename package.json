@@ -3,7 +3,7 @@
   "version": "1.0.14",
   "description": "GamersClub Booster é uma extensão com o intuito de melhorar a plataforma.",
   "scripts": {
-    "dist": "cp -r . dist",
+    "dist": "rsync -r . ./dist",
     "release": "webstore upload --source=dist --auto-publish"
   },
   "devDependencies": {
