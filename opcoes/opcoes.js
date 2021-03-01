@@ -6,10 +6,19 @@ const features = [
     'autoConcordarTermosRanked',
 ];
 const paginas = ['geral', 'mapas', 'lobby', 'contato', 'sobre'];
+
+const versao = "1.0.12"
+
 function iniciarPaginaOpcoes() {
+    adicionaVersao();
     marcarCheckboxes();
     adicionarListenersFeatures();
     adicionarListenersPaginas();
+}
+function adicionaVersao() {
+    Array.from(document.getElementsByClassName('versao')).forEach( (v) => {
+        v.textContent = versao;
+    })
 }
 function marcarCheckboxes() {
     chrome.storage.sync.get(null, (response) => {
