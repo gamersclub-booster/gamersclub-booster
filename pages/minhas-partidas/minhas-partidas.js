@@ -56,10 +56,7 @@ const initVerificarBans = async () => {
     const promises = partidas.map((partida, index) => verificarBans(partida, statsColumns[index]));
     await Promise.all(promises);
 };
-
-(async () => {
-    // CSS
-    // background-image: linear-gradient(to right, red 0.1%,#181a29 15%, #181A28);
+const colorirPartidas = () => {
     const matches = $('.match.columns');
     matches.each(function() {
         let placarMeuTime;
@@ -82,13 +79,19 @@ const initVerificarBans = async () => {
         this.style = `background-image: linear-gradient(90deg, ${cor},transparent 40%);`;
     });
 
+}
+(async () => {
+    // CSS
+    // background-image: linear-gradient(to right, red 0.1%,#181a29 15%, #181A28);
 
     $('body').on('DOMNodeInserted', '#myMatchesPagination', async function () {
         //Wait 5 seconds before start;
         log('Page changed, running.');
         await new Promise((r) => setTimeout(r, 3000));
         initVerificarBans();
+        colorirPartidas();
     });
 
     initVerificarBans();
+    colorirPartidas();
 })();
