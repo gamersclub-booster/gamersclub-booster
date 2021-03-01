@@ -211,3 +211,15 @@ body {
         float: none;
     }
 }
+
+
+.img {
+    float: right
+}
+
+.version {
+    padding: 10px;
+    position: absolute;
+    bottom: 0;
+    left: 90%
+}
