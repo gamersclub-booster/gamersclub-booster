@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "GamersClub Booster",
     "description": "Extensão para o Google Chrome que adiciona algumas melhorias na plataforma da GamersClub.",
-    "version": "1.0.15",
+    "version": "1.0.16",
     "icons": {
       "16": "icons/icon_16.png",
       "48": "icons/icon_48.png",
@@ -10,31 +10,32 @@
     },
     "permissions": [
         "https://gamersclub.com.br/",
+        "https://csgo.gamersclub.gg/",
         "storage"
     ],
     "content_scripts": [
         {
-            "matches": ["*://*.gamersclub.com.br/*"],
+            "matches": ["*://*.gamersclub.com.br/*", "*://csgo.gamersclub.gg/*"],
             "js": ["lib/jquery.min.js", "pages/geral/index.js"]
         },
 		{
-            "matches": ["*://*.gamersclub.com.br/minhas-partidas*"],
+            "matches": ["*://*.gamersclub.com.br/minhas-partidas*", "*://csgo.gamersclub.gg/minhas-partidas*"],
             "js": ["lib/jquery.min.js", "pages/minhas-partidas/minhas-partidas.js"]
         },
 		{
-            "matches": ["*://*.gamersclub.com.br/team/matches/*"],
+            "matches": ["*://*.gamersclub.com.br/team/matches/*", "*://csgo.gamersclub.gg/team/matches/*"],
             "js": ["lib/jquery.min.js", "pages/time/partidas.js"]
         },
 		{
-            "matches": ["*://*.gamersclub.com.br/lobby*"],
+            "matches": ["*://*.gamersclub.com.br/lobby*", "*://csgo.gamersclub.gg/lobby*"],
             "js": ["lib/jquery.min.js", "pages/lobby/lobby.js"]
         },
 		{
-            "matches": ["*://*.gamersclub.com.br/jogador*"],
+            "matches": ["*://*.gamersclub.com.br/jogador*", "*://csgo.gamersclub.gg/jogador*"],
             "js": ["lib/jquery.min.js", "pages/profile/profile.js"]
         },
         {
-            "matches": ["*://*.gamersclub.com.br/missoes*"],
+            "matches": ["*://*.gamersclub.com.br/missoes*", "*://csgo.gamersclub.gg/missoes*"],
             "js": ["lib/jquery.min.js", "pages/missoes/missoes.js"]
         }
     ],
