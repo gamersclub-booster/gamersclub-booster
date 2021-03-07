@@ -1,120 +1,142 @@
-let opcoes = {};
-chrome.storage.sync.get(
-    ['autoAceitarPreReady', 'autoCopiarIp', 'autoAceitarReady', 'autoConcordarTermosRanked', 'autoFixarMenuLobby'],
-    function (result) {
-        opcoes = result;
-        initLobby();
-    }
-);
-
 let intervalCriarLobby = null;
 let lobbyCriada = false;
 
 const initLobby = () => {
-    if (opcoes.autoAceitarPreReady) {
-        let preReadyObserver = new MutationObserver((mutations) => {
-            $.each(mutations, (i, mutation) => {
-                var addedNodes = $(mutation.addedNodes);
-                let selector = '#setPlayerReady';
-                var preReadyButton = addedNodes.find(selector).addBack(selector);
-                if (preReadyButton.length) {
-                    preReadyButton[0].click();
-                }
-            });
-        });
 
-        preReadyObserver.observe($('#rankedModals').get(0), {
-            childList: true,
-            subtree: true,
-        });
-    }
-    if (opcoes.autoCopiarIp) {
-        let copyIpObserver = new MutationObserver((mutations) => {
-            $.each(mutations, (i, mutation) => {
-                var addedNodes = $(mutation.addedNodes);
-                let selector = '#gameModalCopyServer';
-                var copyIpButton = addedNodes.find(selector).addBack(selector);
-                if (copyIpButton.length) {
-                    copyIpButton[0].click();
-                }
-            });
-        });
-
-        copyIpObserver.observe($('#rankedModals').get(0), {
-            childList: true,
-            subtree: true,
-        });
-    }
-    if (opcoes.autoAceitarReady) {
-        let readyObserver = new MutationObserver((mutations) => {
-            $.each(mutations, (i, mutation) => {
-                var addedNodes = $(mutation.addedNodes);
-                let selector = '#gameModalReadyBtn > button';
-                var readyButton = addedNodes.find(selector).addBack(selector);
-                if (readyButton.length) {
-                    readyButton[0].click();
-                }
-            });
-        });
-
-        readyObserver.observe($('#rankedModals').get(0), {
-            childList: true,
-            subtree: true,
-        });
-    }
-    if (opcoes.autoFixarMenuLobby) {
-        let observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (!mutation.addedNodes) return;
-
-                for (let i = 0; i < mutation.addedNodes.length; i++) {
-                    let node = mutation.addedNodes[i];
-                    if (typeof node.id != 'undefined') {
-                        if (node.id.includes('SidebarSala')) {
-                            $(node).css({
-                                position: 'fixed',
-                                top: '10%',
-                                bottom: 'auto',
-                            });
-                        }
-                        if (node.className.includes('sidebar-desafios sidebar-content')) {
-                            $(node).css({
-                                position: 'fixed',
-                                top: '10%',
-                                right: '72px',
-                                bottom: 'auto',
-                            });
+    let preReadyObserver = new MutationObserver((mutations) => {
+        $.each(mutations, (i, mutation) => {
+            chrome.storage.sync.get(
+                ['autoAceitarPreReady'],
+                function (result) {
+                    if (result.autoAceitarPreReady) {
+                        var addedNodes = $(mutation.addedNodes);
+                        let selector = '#setPlayerReady';
+                        var preReadyButton = addedNodes.find(selector).addBack(selector);
+                        if (preReadyButton.length) {
+                            preReadyButton[0].click();
                         }
                     }
                 }
-            });
+            );
         });
+    });
 
-        observer.observe($('#lobbyContent').get(0), {
-            childList: true,
-            subtree: true,
-            attributes: false,
-            characterData: false,
-        });
-    }
+    preReadyObserver.observe($('#rankedModals').get(0), {
+        childList: true,
+        subtree: true,
+    });
 
-    if (opcoes.autoConcordarTermosRanked) {
-        let termosRankedObserver = new MutationObserver((mutations) => {
-            $.each(mutations, (i, mutation) => {
-                const addedNodes = $(mutation.addedNodes);
-                let selector = '.ranked-modal-agree.container-fluid > a';
-                const concordarButton = addedNodes.find(selector).addBack(selector);
-                if (concordarButton.length) {
-                    concordarButton[0].click();
+    
+    let copyIpObserver = new MutationObserver((mutations) => {
+        $.each(mutations, (i, mutation) => {
+            chrome.storage.sync.get(
+                ['autoCopiarIp'],
+                function (result) {
+                    if (result.autoCopiarIp) {
+                        var addedNodes = $(mutation.addedNodes);
+                        let selector = '#gameModalCopyServer';
+                        var copyIpButton = addedNodes.find(selector).addBack(selector);
+                        if (copyIpButton.length) {
+                            copyIpButton[0].click();
+                        }
+                    }
                 }
-            });
+            );
         });
+    });
 
-        termosRankedObserver.observe($('#rankedModals').get(0), {
-            childList: true,
-            subtree: true,
+    copyIpObserver.observe($('#rankedModals').get(0), {
+        childList: true,
+        subtree: true,
+    });
+
+   
+    let readyObserver = new MutationObserver((mutations) => {
+        $.each(mutations, (i, mutation) => {
+            chrome.storage.sync.get(
+                ['autoAceitarReady'],
+                function (result) {
+                    if (result.autoAceitarReady) {
+                        var addedNodes = $(mutation.addedNodes);
+                        let selector = '#gameModalReadyBtn > button';
+                        var readyButton = addedNodes.find(selector).addBack(selector);
+                        if (readyButton.length) {
+                            readyButton[0].click();
+                        }
+                    }
+                }
+            );
         });
-    }
+    });
+
+    readyObserver.observe($('#rankedModals').get(0), {
+        childList: true,
+        subtree: true,
+    });
+
+    let observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (!mutation.addedNodes) return;
+            chrome.storage.sync.get(
+                ['autoFixarMenuLobby'],
+                function (result) {
+                    if (result.autoFixarMenuLobby) {
+                        for (let i = 0; i < mutation.addedNodes.length; i++) {
+                            let node = mutation.addedNodes[i];
+                            if (typeof node.id != 'undefined') {
+                                if (node.id.includes('SidebarSala')) {
+                                    $(node).css({
+                                        position: 'fixed',
+                                        top: '10%',
+                                        bottom: 'auto',
+                                    });
+                                }
+                                if (node.className.includes('sidebar-desafios sidebar-content')) {
+                                    $(node).css({
+                                        position: 'fixed',
+                                        top: '10%',
+                                        right: '72px',
+                                        bottom: 'auto',
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+            );
+        });
+    });
+
+    observer.observe($('#lobbyContent').get(0), {
+        childList: true,
+        subtree: true,
+        attributes: false,
+        characterData: false,
+    });
+
+    
+    let termosRankedObserver = new MutationObserver((mutations) => {
+        $.each(mutations, (i, mutation) => {
+            chrome.storage.sync.get(
+                ['autoConcordarTermosRanked'],
+                function (result) {
+                    if (result.autoConcordarTermosRanked) {
+                        const addedNodes = $(mutation.addedNodes);
+                        let selector = '.ranked-modal-agree.container-fluid > a';
+                        const concordarButton = addedNodes.find(selector).addBack(selector);
+                        if (concordarButton.length) {
+                            concordarButton[0].click();
+                        }
+                    }
+                }
+            );
+        });
+    });
+
+    termosRankedObserver.observe($('#rankedModals').get(0), {
+        childList: true,
+        subtree: true,
+    });
 
     //Feature pra criar lobby caso full
     adicionarBotaoForcarCriarLobby();
@@ -185,3 +207,5 @@ function intervalerCriacaoLobby() {
         }
     }, 500);
 }
+
+initLobby();
