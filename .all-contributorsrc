@@ -53,11 +53,20 @@
       "contributions": [
         "design"
       ]
+    },
+    {
+      "login": "davidhirle",
+      "name": "davidhirle",
+      "avatar_url": "https://avatars.githubusercontent.com/u/51386047?v=4",
+      "profile": "https://github.com/davidhirle",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
   "projectName": "gamersclub-booster",
-  "projectOwner": "henriquelbsouza",
+  "projectOwner": "gamersclub-booster",
   "repoType": "github",
   "repoHost": "https://github.com",
   "skipCi": true
