@@ -12,32 +12,46 @@
         "https://gamersclub.com.br/",
         "storage"
     ],
-    "content_scripts": [
-        {
-            "matches": ["*://*.gamersclub.com.br/*"],
-            "js": ["lib/jquery.min.js", "pages/geral/index.js"]
-        },
-		{
-            "matches": ["*://*.gamersclub.com.br/minhas-partidas*"],
-            "js": ["lib/jquery.min.js", "pages/minhas-partidas/minhas-partidas.js"]
-        },
-		{
-            "matches": ["*://*.gamersclub.com.br/team/matches/*"],
-            "js": ["lib/jquery.min.js", "pages/time/partidas.js"]
-        },
-		{
-            "matches": ["*://*.gamersclub.com.br/lobby*"],
-            "js": ["lib/jquery.min.js", "pages/lobby/lobby.js"]
-        },
-		{
-            "matches": ["*://*.gamersclub.com.br/jogador*"],
-            "js": ["lib/jquery.min.js", "pages/profile/profile.js"]
-        },
-        {
-            "matches": ["*://*.gamersclub.com.br/missoes*"],
-            "js": ["lib/jquery.min.js", "pages/missoes/missoes.js"]
-        }
-    ],
+   "content_scripts": [ {
+      "js": [ "lib/jquery.min.js", "pages/geral/index.js" ],
+      "matches": [ "*://*.gamersclub.com.br/*" ]
+   }, {
+      "js": [ "lib/jquery.min.js", "pages/minhas-partidas/minhas-partidas.js" ],
+      "matches": [ "*://*.gamersclub.com.br/minhas-partidas*" ]
+   }, {
+      "js": [ "lib/jquery.min.js", "pages/time/partidas.js" ],
+      "matches": [ "*://*.gamersclub.com.br/team/matches/*" ]
+   }, {
+      "js": [ "lib/jquery.min.js", "pages/lobby/lobby.js" ],
+      "matches": [ "*://*.gamersclub.com.br/lobby*" ]
+   }, {
+      "js": [ "lib/jquery.min.js", "pages/profile/profile.js" ],
+      "matches": [ "*://*.gamersclub.com.br/jogador*" ]
+   }, {
+      "js": [ "lib/jquery.min.js", "pages/missoes/missoes.js" ],
+      "matches": [ "*://*.gamersclub.com.br/missoes*" ]
+   }, {
+      "js": [ "lib/jquery.min.js", "pages/geral/index.js" ],
+      "matches": [ "*://*.csgo.gamersclub.gg/*" ]
+   }, {
+      "js": [ "lib/jquery.min.js", "pages/minhas-partidas/minhas-partidas.js" ],
+      "matches": [ "*://*.csgo.gamersclub.gg/minhas-partidas*" ]
+   }, {
+      "js": [ "lib/jquery.min.js", "pages/minhas-partidas/minhas-partidas.js" ],
+      "matches": [ "*://*.csgo.gamersclub.gg/minhas-partidas*" ]
+   }, {
+      "js": [ "lib/jquery.min.js", "pages/time/partidas.js" ],
+      "matches": [ "*://*.csgo.gamersclub.gg/team/matches/*" ]
+   }, {
+      "js": [ "lib/jquery.min.js", "pages/lobby/lobby.js" ],
+      "matches": [ "*://*.csgo.gamersclub.gg/lobby/*" ]
+   }, {
+      "js": [ "lib/jquery.min.js", "pages/profile/profile.js" ],
+      "matches": [ "*://*.csgo.gamersclub.gg/jogador*" ]
+   }, {
+      "js": [ "lib/jquery.min.js", "pages/missoes/missoes.js" ],
+      "matches": [ "*://*.csgo.gamersclub.gg/missoes*" ]
+   } ],
     "options_page": "opcoes/opcoes.html",
 	"options_ui": {
 	  "page": "opcoes/opcoes.html"
