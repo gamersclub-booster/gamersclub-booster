@@ -9,6 +9,7 @@ chrome.storage.sync.get(
 
 let intervalCriarLobby = null;
 let lobbyCriada = false;
+var segundosParaBanir = 10;
 
 const initLobby = () => {
     if (opcoes.autoAceitarPreReady) {
@@ -148,6 +149,34 @@ const initLobby = () => {
 
     //Feature pra criar lobby caso full
     adicionarBotaoForcarCriarLobby();
+
+    //Feature para banir mapas sozinho
+    let clockObserver = new MutationObserver((mutations) => {
+        $.each(mutations, (i, mutation) => {
+            var addedNodes = $(mutation.addedNodes);
+            let selector = '#clock';
+            var clockSpan = addedNodes.find(selector).addBack(selector);
+            if (clockSpan.length) {
+                console.log(clockSpan);
+                console.log(clockSpan.get(0).text());
+                let clockValueObserver = new MutationObserver((mutations) => {
+                    $.each(mutations, () => {
+                        var clockValue = clockSpan.get(0).text();
+                        if (parseInt(clockValue.split(':')[clockValue.length - 1]) < 15) {
+                            console.log('Entrei no if!');
+                            $('.game-modal-map').not('.game-modal-disabled').get(0).click();
+                        }
+                    });
+                });
+                clockValueObserver.observe($('#clock').get(0), { childList: true });
+            }
+        });
+    });
+
+    clockObserver.observe($('#rankedModals').get(0), {
+        childList: true,
+        subtree: true,
+    });
 };
 function adicionarBotaoCancelarCriarLobby() {
     $('#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)').html(
