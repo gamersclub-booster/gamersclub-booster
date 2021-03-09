@@ -75,7 +75,7 @@ const initLobby = () => {
     });
 
     let observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
+        $.each(mutations, (i, mutation) => {
             if (!mutation.addedNodes) return;
             chrome.storage.sync.get(
                 ['autoFixarMenuLobby'],
