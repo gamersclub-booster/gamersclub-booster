@@ -1,5 +1,5 @@
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 #### Links úteis:
@@ -57,6 +57,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/RobertaMelo"><img src="https://avatars.githubusercontent.com/u/31969450?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Roberta Melo</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=RobertaMelo" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/lucianocarvalho"><img src="https://avatars.githubusercontent.com/u/14339481?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Luciano Carvalho</b></sub></a><br /><a href="#design-lucianocarvalho" title="Design">🎨</a></td>
     <td align="center"><a href="https://github.com/davidhirle"><img src="https://avatars.githubusercontent.com/u/51386047?v=4?s=100" width="100px;" alt=""/><br /><sub><b>davidhirle</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/issues?q=author%3Adavidhirle" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/matleal"><img src="https://avatars.githubusercontent.com/u/58441113?v=4?s=100" width="100px;" alt=""/><br /><sub><b>matleal</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=matleal" title="Code">💻</a></td>
   </tr>
 </table>
 
