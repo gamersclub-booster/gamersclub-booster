@@ -57,6 +57,7 @@ const initLobby = () => {
         });
     }
     if (opcoes.autoFixarMenuLobby) {
+        let freeuser = document.getElementsByClassName("SettingsMenu SettingsMenu--free");
         let observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 if (!mutation.addedNodes) return;
@@ -65,19 +66,38 @@ const initLobby = () => {
                     let node = mutation.addedNodes[i];
                     if (typeof node.id != 'undefined') {
                         if (node.id.includes('SidebarSala')) {
-                            $(node).css({
-                                position: 'fixed',
-                                top: '10%',
-                                bottom: 'auto',
-                            });
+                            if (freeuser) {
+                                $(node).css({
+                                    position: 'fixed',
+                                    top: '130px',
+                                    bottom: 'auto',
+                                });
+                            }
+                            else {
+                                $(node).css({
+                                    position: 'fixed',
+                                    top: '10%',
+                                    bottom: 'auto',
+                                });
+                            }
                         }
                         if (node.className.includes('sidebar-desafios sidebar-content')) {
-                            $(node).css({
-                                position: 'fixed',
-                                top: '10%',
-                                right: '72px',
-                                bottom: 'auto',
-                            });
+                            if (freeuser) {
+                                $(node).css({
+                                    position: 'fixed',
+                                    top: '130px',
+                                    right: '72px',
+                                    bottom: 'auto',
+                                });
+                            }
+                            else {
+                                $(node).css({
+                                    position: 'fixed',
+                                    top: '10%',
+                                    right: '72px',
+                                    bottom: 'auto',
+                                });
+                            }
                         }
                     }
                 }
