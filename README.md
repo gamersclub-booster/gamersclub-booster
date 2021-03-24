@@ -1,5 +1,5 @@
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 #### Links úteis:
@@ -52,12 +52,13 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/henriquelbsouza"><img src="https://avatars.githubusercontent.com/u/1070818?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Henrique Lauro Bagio de Souza</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/issues?q=author%3Ahenriquelbsouza" title="Bug reports">🐛</a> <a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=henriquelbsouza" title="Code">💻</a> <a href="#maintenance-henriquelbsouza" title="Maintenance">🚧</a> <a href="#mentoring-henriquelbsouza" title="Mentoring">🧑‍🏫</a> </td>
+    <td align="center"><a href="https://github.com/henriquelbsouza"><img src="https://avatars.githubusercontent.com/u/1070818?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Henrique Lauro Bagio de Souza</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/issues?q=author%3Ahenriquelbsouza" title="Bug reports">🐛</a> <a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=henriquelbsouza" title="Code">💻</a> <a href="#maintenance-henriquelbsouza" title="Maintenance">🚧</a> <a href="#mentoring-henriquelbsouza" title="Mentoring">🧑‍🏫</a></td>
     <td align="center"><a href="https://github.com/jvdavim"><img src="https://avatars.githubusercontent.com/u/16657663?v=4?s=100" width="100px;" alt=""/><br /><sub><b>João Victor Davim</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/issues?q=author%3Ajvdavim" title="Bug reports">🐛</a> <a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=jvdavim" title="Code">💻</a> <a href="#maintenance-jvdavim" title="Maintenance">🚧</a></td>
     <td align="center"><a href="https://github.com/RobertaMelo"><img src="https://avatars.githubusercontent.com/u/31969450?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Roberta Melo</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=RobertaMelo" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/lucianocarvalho"><img src="https://avatars.githubusercontent.com/u/14339481?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Luciano Carvalho</b></sub></a><br /><a href="#design-lucianocarvalho" title="Design">🎨</a></td>
     <td align="center"><a href="https://github.com/davidhirle"><img src="https://avatars.githubusercontent.com/u/51386047?v=4?s=100" width="100px;" alt=""/><br /><sub><b>davidhirle</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/issues?q=author%3Adavidhirle" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://github.com/matleal"><img src="https://avatars.githubusercontent.com/u/58441113?v=4?s=100" width="100px;" alt=""/><br /><sub><b>matleal</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=matleal" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/KINZs"><img src="https://avatars.githubusercontent.com/u/48375198?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Bruno Faboci</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=KINZs" title="Code">💻</a></td>
   </tr>
 </table>
 
