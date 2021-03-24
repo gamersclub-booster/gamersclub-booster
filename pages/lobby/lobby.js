@@ -28,7 +28,7 @@ const initLobby = () => {
             subtree: true,
         });
     }
-    
+
     if (opcoes.autoCopiarIp) {
         const intervalCopia = setInterval(function () {
             const buttonCopia = document.getElementById('gameModalCopyServer');
@@ -111,7 +111,7 @@ const initLobby = () => {
     }
 
     //Feature pra criar lobby caso full
-    adicionarBotaoForcarCriarLobby();
+    // adicionarBotaoForcarCriarLobby();
 };
 function adicionarBotaoCancelarCriarLobby() {
     $('#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)').html(
