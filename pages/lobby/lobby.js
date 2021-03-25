@@ -130,7 +130,8 @@ const initLobby = () => {
         });
     }
 
-    adicionarBotaoForcarCriarLobby();
+    //Feature pra criar lobby caso full
+    // adicionarBotaoForcarCriarLobby();
 };
 function adicionarBotaoCancelarCriarLobby() {
     $('#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)').html(
@@ -146,7 +147,6 @@ function adicionarBotaoForcarCriarLobby() {
     $('#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)').html(
         '<button id="forcarCriacaoLobbyBtn" style="color:orange" type="button">Forçar Criação da Lobby</button>'
     );
-    	
     $( "#lobby-create-denied-wrapper" ).remove();
     $( ".overlay" ).remove();
     document.getElementById('forcarCriacaoLobbyBtn').addEventListener('click', function () {
