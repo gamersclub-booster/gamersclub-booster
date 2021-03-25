@@ -177,7 +177,7 @@ function intervalerCriacaoLobby() {
                 const botaoCriarSala = $(
                     '.WasdButton.WasdButton--success.WasdButton--lg.CreateLobbyModalFooterButton.CreateLobbyModalFooterButton--create'
                 );
-                if (botaoCriarSala && botaoCriarSala.text() === 'Criar Sala' || botaoCriarSala && botaoCriarSala.text() === 'Create Room') {
+                if (botaoCriarSala && ['Criar Sala', 'Create Room'].includes(botaoCriarSala.text())) {
                     //TODO: Adicionar opções de pre veto
 
                     //Espera criar o modal... Verificar depois disso se criou mesmo, mas pra isso preciso testar em uma conta free quando tiver lotado....
