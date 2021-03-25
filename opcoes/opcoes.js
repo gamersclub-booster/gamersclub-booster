@@ -156,6 +156,13 @@ function selecionarSons() {
 function adicionarListenersSons() {
     for (const config of configValues) {
         document.getElementById(config).addEventListener('change', function (e) {
+            if (this.value == "custom") {
+                const customObj = document.getElementById(`p-custom${this.id[0].toUpperCase()}${this.id.slice(1)}`)
+                if (customObj) customObj.style.display = "block";
+            } else {
+                const customObj = document.getElementById(`p-custom${this.id[0].toUpperCase()}${this.id.slice(1)}`)
+                if (customObj) customObj.style.display = "none";
+            }
             chrome.storage.sync.set({ [config]: this.value }, function () {});
         });
     }
