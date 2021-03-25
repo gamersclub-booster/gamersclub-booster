@@ -1,6 +1,6 @@
 let opcoes = {};
 chrome.storage.sync.get(
-    ['autoAceitarPreReady', 'autoCopiarIp', 'autoAceitarReady', 'autoConcordarTermosRanked', 'autoFixarMenuLobby'],
+    null,
     function (result) {
         opcoes = result;
         initLobby();
@@ -19,6 +19,11 @@ const initLobby = () => {
                 var preReadyButton = addedNodes.find(selector).addBack(selector);
                 if (preReadyButton.length) {
                     preReadyButton[0].click();
+                    if (opcoes.somPreReady) {
+                        const audio = new Audio(opcoes.somPreReady);
+                        audio.volume = opcoes.volume/100;
+                        audio.play();
+                    }
                 }
             });
         });
@@ -47,6 +52,12 @@ const initLobby = () => {
                 var readyButton = addedNodes.find(selector).addBack(selector);
                 if (readyButton.length) {
                     readyButton[0].click();
+                    if (opcoes.somReady) {
+                        const som = opcoes.somReady === 'custom' ? opcoes.customSomReady : opcoes.somReady;
+                        const audio = new Audio(som);
+                        audio.volume = opcoes.volume/100;
+                        audio.play();
+                    }
                 }
             });
         });
