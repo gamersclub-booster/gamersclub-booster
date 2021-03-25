@@ -28,23 +28,17 @@ const initLobby = () => {
             subtree: true,
         });
     }
-    if (opcoes.autoCopiarIp) {
-        let copyIpObserver = new MutationObserver((mutations) => {
-            $.each(mutations, (i, mutation) => {
-                var addedNodes = $(mutation.addedNodes);
-                let selector = '#gameModalCopyServer';
-                var copyIpButton = addedNodes.find(selector).addBack(selector);
-                if (copyIpButton.length) {
-                    copyIpButton[0].click();
-                }
-            });
-        });
 
-        copyIpObserver.observe($('#rankedModals').get(0), {
-            childList: true,
-            subtree: true,
-        });
+    if (opcoes.autoCopiarIp) {
+        const intervalCopia = setInterval(function () {
+            const buttonCopia = document.getElementById('gameModalCopyServer');
+            if (buttonCopia && buttonCopia.textContent === 'Copiar IP') {
+                buttonCopia.click();
+            }
+        }, 500);
     }
+
+
     if (opcoes.autoAceitarReady) {
         let readyObserver = new MutationObserver((mutations) => {
             $.each(mutations, (i, mutation) => {
@@ -63,6 +57,7 @@ const initLobby = () => {
         });
     }
     if (opcoes.autoFixarMenuLobby) {
+        let freeuser = document.getElementsByClassName("SettingsMenu SettingsMenu--free");
         let observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 if (!mutation.addedNodes) return;
@@ -71,19 +66,38 @@ const initLobby = () => {
                     let node = mutation.addedNodes[i];
                     if (typeof node.id != 'undefined') {
                         if (node.id.includes('SidebarSala')) {
-                            $(node).css({
-                                position: 'fixed',
-                                top: '10%',
-                                bottom: 'auto',
-                            });
+                            if (freeuser) {
+                                $(node).css({
+                                    position: 'fixed',
+                                    top: '130px',
+                                    bottom: 'auto',
+                                });
+                            }
+                            else {
+                                $(node).css({
+                                    position: 'fixed',
+                                    top: '10%',
+                                    bottom: 'auto',
+                                });
+                            }
                         }
                         if (node.className.includes('sidebar-desafios sidebar-content')) {
-                            $(node).css({
-                                position: 'fixed',
-                                top: '10%',
-                                right: '72px',
-                                bottom: 'auto',
-                            });
+                            if (freeuser) {
+                                $(node).css({
+                                    position: 'fixed',
+                                    top: '130px',
+                                    right: '72px',
+                                    bottom: 'auto',
+                                });
+                            }
+                            else {
+                                $(node).css({
+                                    position: 'fixed',
+                                    top: '10%',
+                                    right: '72px',
+                                    bottom: 'auto',
+                                });
+                            }
                         }
                     }
                 }
@@ -116,7 +130,6 @@ const initLobby = () => {
         });
     }
 
-    //Feature pra criar lobby caso full
     adicionarBotaoForcarCriarLobby();
 };
 function adicionarBotaoCancelarCriarLobby() {
@@ -128,10 +141,14 @@ function adicionarBotaoCancelarCriarLobby() {
         adicionarBotaoForcarCriarLobby();
     });
 }
+
 function adicionarBotaoForcarCriarLobby() {
     $('#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)').html(
         '<button id="forcarCriacaoLobbyBtn" style="color:orange" type="button">Forçar Criação da Lobby</button>'
     );
+    	
+    $( "#lobby-create-denied-wrapper" ).remove();
+    $( ".overlay" ).remove();
     document.getElementById('forcarCriacaoLobbyBtn').addEventListener('click', function () {
         lobbyCriada = false;
         intervalCriarLobby = intervalerCriacaoLobby();
@@ -160,7 +177,7 @@ function intervalerCriacaoLobby() {
                 const botaoCriarSala = $(
                     '.WasdButton.WasdButton--success.WasdButton--lg.CreateLobbyModalFooterButton.CreateLobbyModalFooterButton--create'
                 );
-                if (botaoCriarSala && botaoCriarSala.text() === 'Criar Sala') {
+                if (botaoCriarSala && botaoCriarSala.text() === 'Criar Sala' || botaoCriarSala && botaoCriarSala.text() === 'Create Room') {
                     //TODO: Adicionar opções de pre veto
 
                     //Espera criar o modal... Verificar depois disso se criou mesmo, mas pra isso preciso testar em uma conta free quando tiver lotado....
