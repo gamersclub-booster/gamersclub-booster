@@ -20,7 +20,8 @@ const initLobby = () => {
                 if (preReadyButton.length) {
                     preReadyButton[0].click();
                     if (opcoes.somPreReady) {
-                        const audio = new Audio(opcoes.somPreReady);
+                        const som = opcoes.somPreReady === 'custom' ? opcoes.customSomPreReady : opcoes.somPreReady;
+                        const audio = new Audio(som);
                         audio.volume = opcoes.volume/100;
                         audio.play();
                     }
