@@ -51,7 +51,7 @@ const initLobby = () => {
                 var addedNodes = $(mutation.addedNodes);
                 let selector = '#gameModalReadyBtn > button';
                 var readyButton = addedNodes.find(selector).addBack(selector);
-                if (readyButton.length) {
+                if (readyButton.length && readyButton.text() === "Ready") {
                     readyButton[0].click();
                     if (opcoes.somReady) {
                         const som = opcoes.somReady === 'custom' ? opcoes.customSomReady : opcoes.somReady;
