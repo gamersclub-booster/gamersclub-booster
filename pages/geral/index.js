@@ -1,7 +1,7 @@
 const log = (msg) => console.log('[GC Booster]', msg);
 
 let generalOptions = [];
-chrome.storage.sync.get(['autoMostrarLevelProgress'], function (result) {
+chrome.storage.sync.get(null, function (result) {
     generalOptions = result;
     initGcBooster();
 });
@@ -43,9 +43,11 @@ function retrieveWindowVariables(variables) {
 }
 
 const initGcBooster = async () => {
-    if ( generalOptions.autoMostrarLevelProgress ) {
-        var windowVariables = retrieveWindowVariables(["PLAYERID"]);
-        const PlayerID = windowVariables.PLAYERID;      //$(`#GamersClubStatsBox`).attr( "data-prop-player-id" ); old method
+    if ( generalOptions.mostrarLevelProgress ) {
+        var windowVariables = retrieveWindowVariables(['PLAYERID', 'ISSUBSCRIBER']);
+        const PlayerID = windowVariables.PLAYERID;
+        const isSubscriber = windowVariables.ISSUBSCRIBER;
+        log(isSubscriber);
         $.get( "https://gamersclub.com.br/api/box/init/" + parseInt(PlayerID) ).done( function( data ) {
             const playerName = data.playerInfo.nick;
             const playerLevel = data.playerInfo.level;
@@ -63,29 +65,33 @@ const initGcBooster = async () => {
             const strText = playerNextLevel == 21 ? "" : "Skill Level " + playerNextLevel;
             const nextLvl = playerNextLevel == 21 ? "" : playerNextLevel;
 
-            var fixedNum = parseFloat(progressBar).toFixed(4);
-
-            $('.MainHeader__navbarBlock:last').before(`<div style="display: flex;align-items: center;margin-right: 24px;margin-left: 24px;">
+            const fixedNum = parseFloat(progressBar).toFixed(4);
+            const subscriberStyle = isSubscriber === "true" ? 'subscriber' : 'nonSubscriber';
+            $('.MainHeader__navbarBlock:last').before(`<div style="display: flex;align-items: center;font-size: 12px;justify-content: center;width: 100%;">
                 <span title="Skill Level ${playerLevel}" style="display: inline-block;" data-tip-text="Skill Level ${playerLevel}">
-                <div class="PlayerLevel PlayerLevel--${playerLevel} PlayerLevel--nonSubscriber" style="height: 28px; width: 28px; font-size: 12px;"><div class="PlayerLevel__background"><span class="PlayerLevel__text">${playerLevel}</span></div></div>
+                <div class="PlayerLevel PlayerLevel--${playerLevel} PlayerLevel--${subscriberStyle}" style="height: 28px; width: 28px; font-size: 12px;"><div class="PlayerLevel__background"><span class="PlayerLevel__text">${playerLevel}</span></div></div>
                 </span>
                 <div style="margin-right: 4px;margin-left: 4px;">
                     <div class="text-light" style="display: flex; justify-content: space-between;">
-                        <a class="text-sm text-muted bold" style="align-self: flex-end;">
-                            <div style="overflow: hidden;text-overflow: ellipsis;width: 70%;">${playerName}</div>
-                        </a>
-                        <div style="display: flex; align-items: center; justify-content: flex-end;"><span style="cursor: help;" title="Rating atual">${currentRating}</span></div>
+                        <div class="text-sm text-muted bold" style="align-self: flex-end;">&nbsp;</div>
+                        <div style="display: flex; align-items: center; justify-content: flex-end;">
+                            <span style="cursor: help;" title="Rating atual">${currentRating}</span>
+                            <i class="fas fa-chart-line" style="margin-left:4px;"></i>
+                        </div>
                     </div>
                     <div>
                         <div style="margin: 1px 0px;height: 2px;width: 160px;background: rgb(75, 78, 78);">
 
-                            <div style="height: 100%;width:${fixedNum}%; background: linear-gradient(to right, ${levelColor[playerLevel]}, ${levelColor[playerNextLevel]});"></div>
+                            <div style="height: 100%;width:${fixedNum}%; background: linear-gradient(to right, ${levelColor[playerLevel]}, ${levelColor[playerNextLevel] || levelColor[playerLevel]});"></div>
                         </div>
                         <div class="text-sm text-muted bold" style="display: flex; justify-content: space-between;">${minPontos}<span><span style="cursor: help;" title="Quantidade de pontos para cair de Level">${pontosCair}</span>/<span style="cursor: help;" title="Quantidade de pontos para subir de Level">+${pontosSubir}</span></span><span>${maxPontos}</span></div>
                     </div>
                 </div>
-                <span title="${strText}" style="display: inline-block;">
-                <div class="PlayerLevel PlayerLevel--${playerNextLevel} PlayerLevel--nonSubscriber" style="height: 28px; width: 28px; font-size: 12px;"><div class="PlayerLevel__background"><span class="PlayerLevel__text">${nextLvl}</span></div></div>
+                <span title="${strText}" style="display: ${playerNextLevel > 20 ? 'none' : 'inline-block'}">
+                    <div class="PlayerLevel PlayerLevel--${playerNextLevel} PlayerLevel--${subscriberStyle}" style="height: 28px; width: 28px; font-size: 12px;"><div class="PlayerLevel__background"><span class="PlayerLevel__text">${nextLvl}</span></div></div>
+                </span>
+                <span title="${strText}" style="display: ${playerNextLevel > 20 ? 'inline-block' : 'none'}">
+                    <div class="PlayerLevel PlayerLevel--${playerLevel} PlayerLevel--${subscriberStyle}" style="height: 28px; width: 28px; font-size: 12px;"><div class="PlayerLevel__background"><span class="PlayerLevel__text"><i class="far fa-star"></i></span></div></div>
                 </span>
             </div>`);
         });
