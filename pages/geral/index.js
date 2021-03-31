@@ -43,7 +43,7 @@ function retrieveWindowVariables(variables) {
 }
 
 const initGcBooster = async () => {
-    if ( generalOptions.autoMostrarLevelProgress ) {
+    if ( generalOptions.mostrarLevelProgress ) {
         var windowVariables = retrieveWindowVariables(['PLAYERID', 'ISSUBSCRIBER']);
         const PlayerID = windowVariables.PLAYERID;
         const isSubscriber = windowVariables.ISSUBSCRIBER;
