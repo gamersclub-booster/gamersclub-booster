@@ -24,6 +24,11 @@ body {
     margin: 20px;
 }
 
+.pagina li {
+    height: 20px;
+    cursor: pointer;
+}
+
 .titulo {
     font-size: 20px;
     margin-bottom: 20px;

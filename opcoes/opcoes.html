@@ -132,7 +132,15 @@
 
         <div class="pagina" id="lobby">Em breve teremos opções para criação de lobby.</div>
 
-        <div class="pagina" id="mapas">Em breve teremos opções de veto automático de mapas.</div>
+        <div class="pagina" id="mapas">
+          <h3 class="subtitulo">Veto automático</h3>
+          <label class="container" for="autoVeto" title="Veta automáticamente os mapas">
+            <p class="descricao">Habilitar</p>
+            <input type="checkbox" id="autoVeto" />
+            <span class="checkmark"></span>
+          </label>
+          <ol class="drag-container" id="drag-container"></ol>
+        </div>
 
         <div class="pagina" id="contato">
           <a href="https://discord.gg/umx6bbuawh" target="_blank">
@@ -174,4 +182,5 @@
     </div>
   </body>
   <script src="opcoes.js"></script>
+  <script src="../lib/dragonfly.js"></script>
 </html>

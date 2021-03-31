@@ -4,7 +4,8 @@ const features = [
     'autoAceitarReady',
     'autoFixarMenuLobby',
     'autoConcordarTermosRanked',
-    'mostrarLevelProgress'
+    'mostrarLevelProgress',
+    'autoVeto'
 ];
 
 const preVetosMapas = [
@@ -38,6 +39,8 @@ const audios = {
 
 const versao = "1.0.21"
 
+const mapas = ['de_dust2', 'de_nuke', 'de_train', 'de_mirage', 'de_overpass', 'de_inferno', 'de_vertigo', 'de_cbble_classic'];
+
 function iniciarPaginaOpcoes() {
     adicionaVersao();
     marcarCheckboxes();
@@ -48,6 +51,28 @@ function iniciarPaginaOpcoes() {
     popularAudioOptions();
     selecionarSons();
     adicionarListenersSons();
+    adicionaListaDeMapas();
+}
+function adicionaListaDeMapas() {
+    chrome.storage.sync.get(null, (response) => {
+        console.log(response);
+        listaMaps = response.mapas || mapas;
+        for (const mapa of listaMaps) {
+            var node = document.createElement("li");
+            var textnode = document.createTextNode(mapa);
+            node.appendChild(textnode);
+            node.id = mapa;
+            node.class = 'drag-box';
+            document.getElementById('drag-container').appendChild(node);
+        }
+        dragonfly('.drag-container', function () {
+            const mapList = [ ...document.getElementById('drag-container').childNodes];
+            const mapasSalvar = mapList.map(m => m.id);
+            chrome.storage.sync.set({ ['mapas']: mapasSalvar }, function () {});
+        });
+
+    });
+   
 }
 function popularAudioOptions() {
     for (selectId of ['somPreReady', 'somReady']) {
