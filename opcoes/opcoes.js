@@ -4,6 +4,7 @@ const features = [
     'autoAceitarReady',
     'autoFixarMenuLobby',
     'autoConcordarTermosRanked',
+    'autoMostrarLevelProgress',
 ];
 const paginas = ['geral', 'mapas', 'lobby', 'contato', 'sobre'];
 
