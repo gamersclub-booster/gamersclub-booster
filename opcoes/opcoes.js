@@ -8,7 +8,7 @@ const features = [
 ];
 const paginas = ['geral', 'mapas', 'lobby', 'contato', 'sobre'];
 
-const versao = "1.0.18"
+const versao = "1.0.19"
 
 function iniciarPaginaOpcoes() {
     adicionaVersao();

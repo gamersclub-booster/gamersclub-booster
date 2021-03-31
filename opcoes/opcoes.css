@@ -80,6 +80,24 @@ body {
 
 .ativo {
     display: block !important;
+    overflow: auto;
+    height: 255px;
+}
+.ativo::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px #1e2033;
+	background-color: #F5F5F5;
+}
+
+.ativo::-webkit-scrollbar
+{
+	width: 6px;
+	background-color: #F5F5F5;
+}
+
+.ativo::-webkit-scrollbar-thumb
+{
+	background-color: #1e2033;
 }
 
 .pagina a {
