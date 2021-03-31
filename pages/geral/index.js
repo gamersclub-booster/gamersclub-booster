@@ -66,7 +66,7 @@ const initGcBooster = async () => {
 
             const fixedNum = parseFloat(progressBar).toFixed(4);
             const subscriberStyle = isSubscriber ? 'subscriber' : 'nonSubscriber';
-            $('.MainHeader__navbarBlock:last').before(`<div style="display: flex;align-items: center;margin-left: 5px;font-size: 12px;">
+            $('.MainHeader__navbarBlock:last').before(`<div style="display: flex;align-items: center;font-size: 12px;justify-content: center;width: 100%;">
                 <span title="Skill Level ${playerLevel}" style="display: inline-block;" data-tip-text="Skill Level ${playerLevel}">
                 <div class="PlayerLevel PlayerLevel--${playerLevel} PlayerLevel--${subscriberStyle}" style="height: 28px; width: 28px; font-size: 12px;"><div class="PlayerLevel__background"><span class="PlayerLevel__text">${playerLevel}</span></div></div>
                 </span>
