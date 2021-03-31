@@ -45,7 +45,7 @@ function retrieveWindowVariables(variables) {
 const initGcBooster = async () => {
     if ( generalOptions.autoMostrarLevelProgress ) {
         var windowVariables = retrieveWindowVariables(["PLAYERID"]);
-        const PlayerID = windowVariables.PLAYERID;      //$(`#GamersClubStatsBox`).attr( "data-prop-player-id" ); oldmetd
+        const PlayerID = windowVariables.PLAYERID;      //$(`#GamersClubStatsBox`).attr( "data-prop-player-id" ); old method
         $.get( "https://gamersclub.com.br/api/box/init/" + parseInt(PlayerID) ).done( function( data ) {
             const playerName = data.playerInfo.nick;
             const playerLevel = data.playerInfo.level;
@@ -57,8 +57,11 @@ const initGcBooster = async () => {
             const pontosCair = minPontos - currentRating;
             const pontosSubir = maxPontos - currentRating;
 
-            const playerNextLevel = playerLevel == 20 ? "20" : playerLevel + 1;
+            const playerNextLevel = playerLevel == 20 ? 21 : playerLevel + 1;
             const progressBar = maxPontos ? `${((currentRating - minPontos) / (maxPontos - minPontos)) * 100}%` : '100%';
+
+            const strText = playerNextLevel == 21 ? "" : "Skill Level " + playerNextLevel;
+            const nextLvl = playerNextLevel == 21 ? "" : playerNextLevel;
 
             var fixedNum = parseFloat(progressBar).toFixed(4);
 
@@ -69,7 +72,7 @@ const initGcBooster = async () => {
                 <div style="margin-right: 4px;margin-left: 4px;">
                     <div class="text-light" style="display: flex; justify-content: space-between;">
                         <a class="text-sm text-muted bold" style="align-self: flex-end;">
-                            <div>${playerName}</div>
+                            <div style="overflow: hidden;text-overflow: ellipsis;width: 70%;">${playerName}</div>
                         </a>
                         <div style="display: flex; align-items: center; justify-content: flex-end;"><span style="cursor: help;" title="Rating atual">${currentRating}</span></div>
                     </div>
@@ -81,8 +84,8 @@ const initGcBooster = async () => {
                         <div class="text-sm text-muted bold" style="display: flex; justify-content: space-between;">${minPontos}<span><span style="cursor: help;" title="Quantidade de pontos para cair de Level">${pontosCair}</span>/<span style="cursor: help;" title="Quantidade de pontos para subir de Level">+${pontosSubir}</span></span><span>${maxPontos}</span></div>
                     </div>
                 </div>
-                <span title="Skill Level ${playerNextLevel}" style="display: inline-block;" data-tip-text="Skill Level ${playerNextLevel}">
-                <div class="PlayerLevel PlayerLevel--${playerNextLevel} PlayerLevel--nonSubscriber" style="height: 28px; width: 28px; font-size: 12px;"><div class="PlayerLevel__background"><span class="PlayerLevel__text">${playerNextLevel}</span></div></div>
+                <span title="${strText}" style="display: inline-block;">
+                <div class="PlayerLevel PlayerLevel--${playerNextLevel} PlayerLevel--nonSubscriber" style="height: 28px; width: 28px; font-size: 12px;"><div class="PlayerLevel__background"><span class="PlayerLevel__text">${nextLvl}</span></div></div>
                 </span>
             </div>`);
         });
