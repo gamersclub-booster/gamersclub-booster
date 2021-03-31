@@ -5,7 +5,8 @@ const features = [
     'autoFixarMenuLobby',
     'autoConcordarTermosRanked',
     'mostrarLevelProgress',
-    'autoVeto'
+    'autoVeto',
+    'randomizarAutoVeto'
 ];
 
 const preVetosMapas = [
@@ -39,7 +40,7 @@ const audios = {
 
 const versao = "1.0.21"
 
-const mapas = ['de_dust2', 'de_nuke', 'de_train', 'de_mirage', 'de_overpass', 'de_inferno', 'de_vertigo', 'de_cbble_classic'];
+const mapPoolAtual = ['de_dust2', 'de_nuke', 'de_train', 'de_mirage', 'de_overpass', 'de_inferno', 'de_vertigo', 'de_cbble_classic'];
 
 function iniciarPaginaOpcoes() {
     adicionaVersao();
@@ -56,7 +57,7 @@ function iniciarPaginaOpcoes() {
 function adicionaListaDeMapas() {
     chrome.storage.sync.get(null, (response) => {
         console.log(response);
-        listaMaps = response.mapas || mapas;
+        listaMaps = response.mapas || mapPoolAtual;
         for (const mapa of listaMaps) {
             var node = document.createElement("li");
             var textnode = document.createTextNode(mapa);

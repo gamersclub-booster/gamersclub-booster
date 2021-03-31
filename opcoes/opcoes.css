@@ -1,6 +1,6 @@
 body {
     min-height: 100%;
-    height: 400px;
+    height: 500px;
     margin: 0;
     width: 600px;
     color: #ffffff;
@@ -86,7 +86,7 @@ body {
 .ativo {
     display: block !important;
     overflow: auto;
-    height: 255px;
+    height: 90%;
 }
 .ativo::-webkit-scrollbar-track
 {
