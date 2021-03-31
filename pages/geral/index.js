@@ -47,6 +47,7 @@ const initGcBooster = async () => {
         var windowVariables = retrieveWindowVariables(['PLAYERID', 'ISSUBSCRIBER']);
         const PlayerID = windowVariables.PLAYERID;
         const isSubscriber = windowVariables.ISSUBSCRIBER;
+        log(isSubscriber);
         $.get( "https://gamersclub.com.br/api/box/init/" + parseInt(PlayerID) ).done( function( data ) {
             const playerName = data.playerInfo.nick;
             const playerLevel = data.playerInfo.level;
@@ -65,7 +66,7 @@ const initGcBooster = async () => {
             const nextLvl = playerNextLevel == 21 ? "" : playerNextLevel;
 
             const fixedNum = parseFloat(progressBar).toFixed(4);
-            const subscriberStyle = isSubscriber ? 'subscriber' : 'nonSubscriber';
+            const subscriberStyle = isSubscriber === "true" ? 'subscriber' : 'nonSubscriber';
             $('.MainHeader__navbarBlock:last').before(`<div style="display: flex;align-items: center;font-size: 12px;justify-content: center;width: 100%;">
                 <span title="Skill Level ${playerLevel}" style="display: inline-block;" data-tip-text="Skill Level ${playerLevel}">
                 <div class="PlayerLevel PlayerLevel--${playerLevel} PlayerLevel--${subscriberStyle}" style="height: 28px; width: 28px; font-size: 12px;"><div class="PlayerLevel__background"><span class="PlayerLevel__text">${playerLevel}</span></div></div>
