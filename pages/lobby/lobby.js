@@ -18,13 +18,15 @@ const initLobby = () => {
                 let selector = '#setPlayerReady';
                 var preReadyButton = addedNodes.find(selector).addBack(selector);
                 if (preReadyButton.length) {
-                    preReadyButton[0].click();
                     if (opcoes.somPreReady) {
                         const som = opcoes.somPreReady === 'custom' ? opcoes.customSomPreReady : opcoes.somPreReady;
                         const audio = new Audio(som);
                         audio.volume = opcoes.volume/100;
-                        audio.play();
+                        document.getElementById(selector).addEventListener('click', function (e) {
+                            audio.play();
+                        });
                     }
+                    preReadyButton[0].click();
                 }
             });
         });
@@ -52,13 +54,15 @@ const initLobby = () => {
                 let selector = '#gameModalReadyBtn > button';
                 var readyButton = addedNodes.find(selector).addBack(selector);
                 if (readyButton.length && readyButton.text() === "Ready") {
-                    readyButton[0].click();
                     if (opcoes.somReady) {
                         const som = opcoes.somReady === 'custom' ? opcoes.customSomReady : opcoes.somReady;
                         const audio = new Audio(som);
                         audio.volume = opcoes.volume/100;
-                        audio.play();
+                        document.getElementById(selector).addEventListener('click', function (e) {
+                            audio.play();
+                        });
                     }
+                    readyButton[0].click();
                 }
             });
         });
