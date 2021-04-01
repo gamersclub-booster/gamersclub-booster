@@ -22,7 +22,7 @@ const initLobby = () => {
                         const som = opcoes.somPreReady === 'custom' ? opcoes.customSomPreReady : opcoes.somPreReady;
                         const audio = new Audio(som);
                         audio.volume = opcoes.volume/100;
-                        document.getElementById(selector).addEventListener('click', function (e) {
+                        document.getElementById('setPlayerReady').addEventListener('click', function (e) {
                             audio.play();
                         });
                     }
@@ -58,7 +58,7 @@ const initLobby = () => {
                         const som = opcoes.somReady === 'custom' ? opcoes.customSomReady : opcoes.somReady;
                         const audio = new Audio(som);
                         audio.volume = opcoes.volume/100;
-                        document.getElementById(selector).addEventListener('click', function (e) {
+                        document.getElementById('gameModalReadyBtn').addEventListener('click', function (e) {
                             audio.play();
                         });
                     }
