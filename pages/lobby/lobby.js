@@ -53,7 +53,7 @@ const initLobby = () => {
                 var addedNodes = $(mutation.addedNodes);
                 let selector = '#gameModalReadyBtn > button';
                 var readyButton = addedNodes.find(selector).addBack(selector);
-                if (readyButton.length && readyButton.text() === "Ready") {
+                if (readyButton.length && readyButton.text() === "Ready" && !readyButton.disabled) {
                     if (opcoes.somReady) {
                         const som = opcoes.somReady === 'custom' ? opcoes.customSomReady : opcoes.somReady;
                         const audio = new Audio(som);
