@@ -72,6 +72,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "totinato",
+      "name": "totinato",
+      "avatar_url": "https://avatars.githubusercontent.com/u/56313687?v=4",
+      "profile": "https://github.com/totinato",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
