@@ -172,9 +172,9 @@ function intervalerCriacaoLobby() {
                     return;
                 }
                 //Criar lobby por meio de requisição com AXIOS. ozKcs
-                var criarPost = await axios.post("/lobbyBeta/createLobby")
+                const criarPost = await axios.post("/lobbyBeta/createLobby")
                 if (criarPost.data.success) {
-                    var loadLobby = await axios.post("/lobbyBeta/openRoom");
+                    const loadLobby = await axios.post("/lobbyBeta/openRoom");
                     if (loadLobby.data.success) {
                         lobbyCriada = true;
                         location.href="javascript:openLobby(); void 0";
