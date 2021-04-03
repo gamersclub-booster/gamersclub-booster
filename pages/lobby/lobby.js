@@ -131,7 +131,7 @@ const initLobby = () => {
     }
 
     //Feature pra criar lobby caso full
-    // adicionarBotaoForcarCriarLobby();
+    adicionarBotaoForcarCriarLobby();
 };
 function adicionarBotaoCancelarCriarLobby() {
     $('#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)').html(
@@ -155,43 +155,35 @@ function adicionarBotaoForcarCriarLobby() {
 }
 //Criar lobby: https://github.com/LouisRiverstone/gamersclub-lobby_waiter/ com as modificações por causa do layout novo
 function intervalerCriacaoLobby() {
-    return setInterval(() => {
+    return setInterval(async () => {
         if (!lobbyCriada || $('.sidebar-titulo.sidebar-sala-titulo').text().length) {
-            const lobbies = $('span.Tag__tagLabel.Tag__tagLabel--success').text().split('/');
-            //50 free 400 premium
-            const limiteLobby = $('.Cta.Topbar').text() ? 50 : 400;
-            if (lobbies[1] < limiteLobby) {
-                $('button.WasdButton.WasdButton--success.WasdButton--lg.LobbyHeaderButton').click();
+            const lobbies = $(".LobbiesInfo__expanded > .Tag > .Tag__tagLabel")[0].innerText.split('/')[1];
+            const windowVars = retrieveWindowVariables(["LOBBIES_LIMIT"])
+            const limiteLobby = windowVars.LOBBIES_LIMIT
+            if (Number(lobbies) < Number(limiteLobby)) {
 
                 const alertaAc = $(
                     ".noty_bar.noty_type__info.noty_theme__mint.noty_close_with_click.noty_has_timeout.noty_close_with_button:contains('Você precisa estar com o jogo')"
                 );
+
                 if (alertaAc.length) {
                     clearInterval(intervalCriarLobby);
                     adicionarBotaoForcarCriarLobby();
                     return;
                 }
-
-                const botaoCriarSala = $(
-                    '.WasdButton.WasdButton--success.WasdButton--lg.CreateLobbyModalFooterButton.CreateLobbyModalFooterButton--create'
-                );
-                if (botaoCriarSala && botaoCriarSala.text() === 'Criar Sala') {
-                    //TODO: Adicionar opções de pre veto
-
-                    //Espera criar o modal... Verificar depois disso se criou mesmo, mas pra isso preciso testar em uma conta free quando tiver lotado....
-                    setTimeout(() => {
-                        $('.CheckboxContainer__input').click();
-                        botaoCriarSala.click();
-                        const alertaLimite = $(
-                            ".noty_bar.noty_type__info.noty_theme__mint.noty_close_with_click.noty_has_timeout.noty_close_with_button:contains('lobbies_limit_reached×')"
-                        );
-                        if (alertaLimite.length) {
-                            return;
-                        }
+                //Criar lobby por meio de requisição com AXIOS. ozKcs
+                const criarPost = await axios.post("/lobbyBeta/createLobby")
+                if (criarPost.data.success) {
+                    const loadLobby = await axios.post("/lobbyBeta/openRoom");
+                    if (loadLobby.data.success) {
                         lobbyCriada = true;
-                        adicionarBotaoForcarCriarLobby();
-                        clearInterval(intervalCriarLobby);
-                    }, 500);
+                        location.href="javascript:openLobby(); void 0";
+                        setTimeout(async () => {
+                            lobbyCriada = true;
+                            adicionarBotaoForcarCriarLobby();
+                            clearInterval(intervalCriarLobby);
+                        }, 1000);
+                    }
                 }
             }
         } else {
