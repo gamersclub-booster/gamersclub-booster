@@ -131,7 +131,7 @@ const initLobby = () => {
     }
 
     //Feature pra criar lobby caso full
-    // adicionarBotaoForcarCriarLobby();
+    adicionarBotaoForcarCriarLobby();
 };
 function adicionarBotaoCancelarCriarLobby() {
     $('#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)').html(
