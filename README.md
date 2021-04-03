@@ -1,5 +1,5 @@
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 #### Links úteis:
@@ -59,6 +59,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/davidhirle"><img src="https://avatars.githubusercontent.com/u/51386047?v=4?s=100" width="100px;" alt=""/><br /><sub><b>davidhirle</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/issues?q=author%3Adavidhirle" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://github.com/matleal"><img src="https://avatars.githubusercontent.com/u/58441113?v=4?s=100" width="100px;" alt=""/><br /><sub><b>matleal</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=matleal" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/KINZs"><img src="https://avatars.githubusercontent.com/u/48375198?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Bruno Faboci</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=KINZs" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/totinato"><img src="https://avatars.githubusercontent.com/u/56313687?v=4?s=100" width="100px;" alt=""/><br /><sub><b>totinato</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/issues?q=author%3Atotinato" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 
