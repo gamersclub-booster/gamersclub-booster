@@ -155,7 +155,7 @@ function adicionarBotaoForcarCriarLobby() {
 }
 //Criar lobby: https://github.com/LouisRiverstone/gamersclub-lobby_waiter/ com as modificações por causa do layout novo
 function intervalerCriacaoLobby() {
-    return setInterval(() => {
+    return setInterval(async () => {
         if (!lobbyCriada || $('.sidebar-titulo.sidebar-sala-titulo').text().length) {
             const lobbies = $(".LobbiesInfo__expanded > .Tag > .Tag__tagLabel")[0].innerText.split('/')[1];
             const windowVars = retrieveWindowVariables(["LOBBIES_LIMIT"])
