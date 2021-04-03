@@ -16,27 +16,27 @@
     "content_scripts": [
         {
             "matches": ["*://*.gamersclub.com.br/*", "*://csgo.gamersclub.gg/*"],
-            "js": ["lib/jquery.min.js", "pages/geral/index.js"]
+            "js": ["lib/jquery.min.js", "lib/axios.min.js", "pages/geral/index.js"]
         },
 		{
             "matches": ["*://*.gamersclub.com.br/minhas-partidas*", "*://csgo.gamersclub.gg/minhas-partidas*"],
-            "js": ["lib/jquery.min.js", "pages/minhas-partidas/minhas-partidas.js"]
+            "js": ["lib/jquery.min.js", "lib/axios.min.js", "pages/minhas-partidas/minhas-partidas.js"]
         },
 		{
             "matches": ["*://*.gamersclub.com.br/team/matches/*", "*://csgo.gamersclub.gg/team/matches/*"],
-            "js": ["lib/jquery.min.js", "pages/time/partidas.js"]
+            "js": ["lib/jquery.min.js", "lib/axios.min.js", "pages/time/partidas.js"]
         },
 		{
             "matches": ["*://*.gamersclub.com.br/lobby*", "*://csgo.gamersclub.gg/lobby*"],
-            "js": ["lib/jquery.min.js", "pages/lobby/lobby.js"]
+            "js": ["lib/jquery.min.js", "lib/axios.min.js", "pages/lobby/lobby.js"]
         },
 		{
             "matches": ["*://*.gamersclub.com.br/jogador*", "*://csgo.gamersclub.gg/jogador*"],
-            "js": ["lib/jquery.min.js", "pages/profile/profile.js"]
+            "js": ["lib/jquery.min.js", "lib/axios.min.js", "pages/profile/profile.js"]
         },
         {
             "matches": ["*://*.gamersclub.com.br/missoes*", "*://csgo.gamersclub.gg/missoes*"],
-            "js": ["lib/jquery.min.js", "pages/missoes/missoes.js"]
+            "js": ["lib/jquery.min.js", "lib/axios.min.js", "pages/missoes/missoes.js"]
         }
     ],
     "options_page": "opcoes/opcoes.html",
