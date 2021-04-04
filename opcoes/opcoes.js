@@ -72,7 +72,7 @@ function adicionarListenerPreVetos() {
                     } else if (preVetos.length > 2) {
                         //Ja possui 3 pre vetos
                         document.getElementById("prevetoTitle").innerText = "Erro! Máximo 3 mapas"
-                        setTimeout(function () {document.getElementById("prevetoTitle").innerText = "Pré Vetos (3 escolhas)"}, 2 * 1000)
+                        setTimeout(function () {document.getElementById("prevetoTitle").innerText = "Pré Vetos (3 escolhas)"}, 2 * 1000);
                         document.getElementById(idSelector).checked = false;
                         return false;
                     } else if (preVetos.length <= 2) {
