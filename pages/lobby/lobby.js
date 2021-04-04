@@ -172,19 +172,23 @@ function intervalerCriacaoLobby() {
                     return;
                 }
                 //Criar lobby por meio de requisição com AXIOS. ozKcs
-                const criarPost = await axios.post("/lobbyBeta/createLobby")
-                if (criarPost.data.success) {
-                    const loadLobby = await axios.post("/lobbyBeta/openRoom");
-                    if (loadLobby.data.success) {
-                        lobbyCriada = true;
-                        location.href="javascript:openLobby(); void 0";
-                        setTimeout(async () => {
+                chrome.storage.sync.get(["preVetos"], async res => {
+                    console.log(res.preVetos)
+                    const preVetos = res.preVetos ? res.preVetos : []
+                    const criarPost = await axios.post("/lobbyBeta/createLobby", {"max_level_to_join":20,"min_level_to_join":0,"private":0,"region":0,"restriction":1,"team":null,"team_players":[],"type":"newRoom","vetoes":preVetos})
+                    if (criarPost.data.success) {
+                        const loadLobby = await axios.post("/lobbyBeta/openRoom");
+                        if (loadLobby.data.success) {
                             lobbyCriada = true;
-                            adicionarBotaoForcarCriarLobby();
-                            clearInterval(intervalCriarLobby);
-                        }, 1000);
+                            location.href="javascript:openLobby(); void 0";
+                            setTimeout(async () => {
+                                lobbyCriada = true;
+                                adicionarBotaoForcarCriarLobby();
+                                clearInterval(intervalCriarLobby);
+                            }, 1000);
+                        }
                     }
-                }
+                })
             }
         } else {
             adicionarBotaoForcarCriarLobby();
