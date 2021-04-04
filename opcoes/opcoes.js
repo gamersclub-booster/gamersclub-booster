@@ -38,7 +38,7 @@ function adicionaVersao() {
 
 function marcarPreVetos() {
     chrome.storage.sync.get(["preVetos"], (response) => {
-        if (!response) return false;
+        if (!response.preVetos) return false;
         for (var i = 0; i < response.preVetos.length; i++) {
             const codigo = response.preVetos[i]
             const mapaNome = preVetosMapas.filter(e => {return e.codigo === codigo})[0].mapa
