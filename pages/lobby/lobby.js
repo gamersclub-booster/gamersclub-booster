@@ -158,24 +158,24 @@ function intervalerCriacaoLobby() {
     return setInterval(async () => {
         if (!lobbyCriada || $('.sidebar-titulo.sidebar-sala-titulo').text().length) {
             const lobbies = $(".LobbiesInfo__expanded > .Tag > .Tag__tagLabel")[0].innerText.split('/')[1];
-            const windowVars = retrieveWindowVariables(["LOBBIES_LIMIT"])
-            const limiteLobby = windowVars.LOBBIES_LIMIT
+            const windowVars = retrieveWindowVariables(["LOBBIES_LIMIT"]);
+            const limiteLobby = windowVars.LOBBIES_LIMIT;
             if (Number(lobbies) < Number(limiteLobby)) {
-
-                const alertaAc = $(
-                    ".noty_bar.noty_type__info.noty_theme__mint.noty_close_with_click.noty_has_timeout.noty_close_with_button:contains('Você precisa estar com o jogo')"
-                );
-
-                if (alertaAc.length) {
-                    clearInterval(intervalCriarLobby);
-                    adicionarBotaoForcarCriarLobby();
-                    return;
-                }
                 //Criar lobby por meio de requisição com AXIOS. ozKcs
                 chrome.storage.sync.get(["preVetos"], async res => {
-                    console.log(res.preVetos)
-                    const preVetos = res.preVetos ? res.preVetos : []
-                    const criarPost = await axios.post("/lobbyBeta/createLobby", {"max_level_to_join":20,"min_level_to_join":0,"private":0,"region":0,"restriction":1,"team":null,"team_players":[],"type":"newRoom","vetoes":preVetos})
+                    const preVetos = res.preVetos ? res.preVetos : [];
+                    const postData = {
+                        "max_level_to_join":20,
+                        "min_level_to_join":0,
+                        "private":0,
+                        "region":0,
+                        "restriction":1,
+                        "team":null,
+                        "team_players":[],
+                        "type":"newRoom",
+                        "vetoes": preVetos
+                    }
+                    const criarPost = await axios.post("/lobbyBeta/createLobby", postData);
                     if (criarPost.data.success) {
                         const loadLobby = await axios.post("/lobbyBeta/openRoom");
                         if (loadLobby.data.success) {
@@ -186,6 +186,13 @@ function intervalerCriacaoLobby() {
                                 adicionarBotaoForcarCriarLobby();
                                 clearInterval(intervalCriarLobby);
                             }, 1000);
+                        }
+                    } else {
+                        if (criarPost.data.message.includes("Anti-cheat")) {
+                            clearInterval(intervalCriarLobby);
+                            adicionarBotaoForcarCriarLobby();
+                            location.href=`javascript:errorAlert('${criarPost.data.message}'); void 0`;
+                            return;
                         }
                     }
                 })

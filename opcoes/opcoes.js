@@ -16,10 +16,10 @@ const preVetosMapas = [
 { mapa: "de_inferno", codigo: 8 },
 { mapa: "de_vertigo", codigo: 10},
 { mapa: "de_cbble_classic", codigo: 11}
-]
+];
 const paginas = ['geral', 'mapas', 'lobby', 'contato', 'sobre'];
 
-const versao = "1.0.19"
+const versao = "1.0.19";
 
 function iniciarPaginaOpcoes() {
     adicionaVersao();
@@ -38,11 +38,11 @@ function adicionaVersao() {
 
 function marcarPreVetos() {
     chrome.storage.sync.get(["preVetos"], (response) => {
-        if (!response) return false;
+        if (!response.preVetos) return false;
         for (var i = 0; i < response.preVetos.length; i++) {
-            const codigo = response.preVetos[i]
-            const mapaNome = preVetosMapas.filter(e => {return e.codigo === codigo})[0].mapa
-            document.getElementById("preVeto" + mapaNome).checked = true
+            const codigo = response.preVetos[i];
+            const mapaNome = preVetosMapas.filter(e => {return e.codigo === codigo})[0].mapa;
+            document.getElementById("preVeto" + mapaNome).checked = true;
         }
     });
 }
@@ -58,38 +58,37 @@ function marcarCheckboxes() {
 
 function adicionarListenerPreVetos() {
     for (const mapa of preVetosMapas) {
-        const idSelector = "preVeto" + mapa.mapa
+        const idSelector = "preVeto" + mapa.mapa;
 
         document.getElementById(idSelector).addEventListener('change', function (e) {
-            const codigo = document.getElementById(idSelector).getAttribute("codigo")
+            const codigo = document.getElementById(idSelector).getAttribute("codigo");
             chrome.storage.sync.get(["preVetos"], res => {
-                const preVetos = res.preVetos
+                const preVetos = res.preVetos;
                 if (this.checked) {
                     //adicionar
                     if (preVetos === undefined) {
                         //Primeira vez add um pre veto
-                        chrome.storage.sync.set({"preVetos": [Number(codigo)]})
+                        chrome.storage.sync.set({"preVetos": [Number(codigo)]});
                     } else if (preVetos.length > 2) {
                         //Ja possui 3 pre vetos
-                        document.getElementById("prevetoTitle").innerText = "Erro! Máximo 3 mapas"
-                        setTimeout(function () {document.getElementById("prevetoTitle").innerText = "Pré Vetos (3 escolhas)"}, 2 * 1000)
-                        document.getElementById(idSelector).checked = false
-                        return false
+                        document.getElementById("prevetoTitle").innerText = "Erro! Máximo 3 mapas";
+                        setTimeout(function () {document.getElementById("prevetoTitle").innerText = "Pré Vetos (3 escolhas)"}, 2 * 1000);
+                        document.getElementById(idSelector).checked = false;
+                        return false;
                     } else if (preVetos.length <= 2) {
                         //Menor ou igual a 2 vetos = adicionar
                         chrome.storage.sync.get(["preVetos"], res => {
-                            const preVetosAntes = res.preVetos
-                            preVetosAntes.push(Number(codigo))
-                            chrome.storage.sync.set({"preVetos": preVetosAntes})
+                            const preVetosAntes = res.preVetos;
+                            preVetosAntes.push(Number(codigo));
+                            chrome.storage.sync.set({"preVetos": preVetosAntes});
                         })
                     }
                 } else {
                     //desmarquei
-                    const preVetosAntes = preVetos
-                    const preVetosDepois = arrayRemove(preVetosAntes, Number(codigo))
-                    chrome.storage.sync.set({"preVetos": preVetosDepois})
+                    const preVetosAntes = preVetos;
+                    const preVetosDepois = arrayRemove(preVetosAntes, Number(codigo));
+                    chrome.storage.sync.set({"preVetos": preVetosDepois});
                     function arrayRemove(arr, value) { 
-
                         return arr.filter(function(ele){ 
                             return ele != value; 
                         });
