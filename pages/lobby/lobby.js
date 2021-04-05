@@ -1,6 +1,6 @@
 let opcoes = {};
 chrome.storage.sync.get(
-    ['autoAceitarPreReady', 'autoCopiarIp', 'autoAceitarReady', 'autoConcordarTermosRanked', 'autoFixarMenuLobby'],
+    null,
     function (result) {
         opcoes = result;
         initLobby();
@@ -18,6 +18,14 @@ const initLobby = () => {
                 let selector = '#setPlayerReady';
                 var preReadyButton = addedNodes.find(selector).addBack(selector);
                 if (preReadyButton.length) {
+                    if (opcoes.somPreReady) {
+                        const som = opcoes.somPreReady === 'custom' ? opcoes.customSomPreReady : opcoes.somPreReady;
+                        const audio = new Audio(som);
+                        audio.volume = opcoes.volume/100;
+                        document.getElementById('setPlayerReady').addEventListener('click', function (e) {
+                            audio.play();
+                        });
+                    }
                     preReadyButton[0].click();
                 }
             });
@@ -45,7 +53,15 @@ const initLobby = () => {
                 var addedNodes = $(mutation.addedNodes);
                 let selector = '#gameModalReadyBtn > button';
                 var readyButton = addedNodes.find(selector).addBack(selector);
-                if (readyButton.length) {
+                if (readyButton.length && readyButton.text() === "Ready" && !readyButton.disabled) {
+                    if (opcoes.somReady) {
+                        const som = opcoes.somReady === 'custom' ? opcoes.customSomReady : opcoes.somReady;
+                        const audio = new Audio(som);
+                        audio.volume = opcoes.volume/100;
+                        document.getElementById('gameModalReadyBtn').addEventListener('click', function (e) {
+                            audio.play();
+                        });
+                    }
                     readyButton[0].click();
                 }
             });

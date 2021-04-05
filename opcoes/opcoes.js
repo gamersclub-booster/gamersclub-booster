@@ -8,16 +8,33 @@ const features = [
 ];
 
 const preVetosMapas = [
-{ mapa: "de_dust2", codigo: 1 },
-{ mapa: "de_nuke", codigo: 2 },
-{ mapa: "de_train", codigo: 3},
-{ mapa: "de_mirage", codigo: 5},
-{ mapa: "de_overpass", codigo: 7},
-{ mapa: "de_inferno", codigo: 8 },
-{ mapa: "de_vertigo", codigo: 10},
-{ mapa: "de_cbble_classic", codigo: 11}
+    { mapa: "de_dust2", codigo: 1 },
+    { mapa: "de_nuke", codigo: 2 },
+    { mapa: "de_train", codigo: 3},
+    { mapa: "de_mirage", codigo: 5},
+    { mapa: "de_overpass", codigo: 7},
+    { mapa: "de_inferno", codigo: 8 },
+    { mapa: "de_vertigo", codigo: 10},
+    { mapa: "de_cbble_classic", codigo: 11}
 ];
-const paginas = ['geral', 'mapas', 'lobby', 'contato', 'sobre'];
+const configValues = [
+    'somReady',
+    'somPreReady',
+    'volume',
+    'customSomPreReady',
+    'customSomReady'
+]
+const paginas = ['geral', 'mapas', 'lobby', 'contato', 'sobre', 'sons'];
+
+const audios = {
+    "undefined": "Nenhum",
+    "https://www.myinstants.com/media/sounds/esl-pro-league-season-11-north-america-mibr-vs-furia-mapa-iii-mirage-mp3cut.mp3": "Começou - Gaules",
+    "https://www.myinstants.com/media/sounds/wakeup_1QLWl1G.mp3": "Wake Up - TeamSpeak",
+    "https://www.myinstants.com/media/sounds/onarollbrag13.mp3": "Easy Peasy - CS:GO",
+    "https://www.myinstants.com/media/sounds/que-ota_-17.mp3": "Qué Ota? - LUCAS1",
+    "https://www.myinstants.com/media/sounds/tuturu_1.mp3": "Tuturu - Steins;Gate",
+    "custom": "Customizar",
+}
 
 const versao = "1.0.20"
 
@@ -28,6 +45,17 @@ function iniciarPaginaOpcoes() {
     adicionarListenersFeatures();
     adicionarListenersPaginas();
     adicionarListenerPreVetos();
+    popularAudioOptions();
+    selecionarSons();
+    adicionarListenersSons();
+}
+function popularAudioOptions() {
+    for (selectId of ['somPreReady', 'somReady']) {
+        var select = document.getElementById(selectId);
+        for(index in audios) {
+            select.options[select.options.length] = new Option(audios[index], index);
+        }
+    }
 }
 
 function adicionaVersao() {
@@ -102,10 +130,7 @@ function adicionarListenerPreVetos() {
 function adicionarListenersFeatures() {
     for (const feature of features) {
         document.getElementById(feature).addEventListener('change', function (e) {
-            console.log(feature, 'changed');
-            chrome.storage.sync.set({
-                [feature]: this.checked
-            }, function () {});
+            chrome.storage.sync.set({ [feature]: this.checked }, function () {});
         });
     }
 }
@@ -116,6 +141,43 @@ function adicionarListenersPaginas() {
             abrirPagina(pagina);
         });
     }
+}
+
+function selecionarSons() {
+    chrome.storage.sync.get(null, (response) => {
+        console.log({response});
+        if (!response) return false;
+        for (const config of configValues) {
+            document.getElementById(config).value = response[config];
+        }
+    });
+}
+
+function adicionarListenersSons() {
+    for (const config of configValues) {
+        document.getElementById(config).addEventListener('change', function (e) {
+            if (this.value == "custom") {
+                const customObj = document.getElementById(`p-custom${this.id[0].toUpperCase()}${this.id.slice(1)}`)
+                if (customObj) customObj.style.display = "block";
+            } else {
+                const customObj = document.getElementById(`p-custom${this.id[0].toUpperCase()}${this.id.slice(1)}`)
+                if (customObj) customObj.style.display = "none";
+            }
+            chrome.storage.sync.set({ [config]: this.value }, function () {});
+        });
+    }
+    document.getElementById('testarSomPreReady').addEventListener('click', function (e) {
+        const som = document.getElementById('somPreReady').value === 'custom' ? document.getElementById('customSomPreReady').value : document.getElementById('somPreReady').value;
+        const audio = new Audio(som)
+        audio.volume = document.getElementById('volume').value/100;
+        audio.play();
+    });
+    document.getElementById('testarSomReady').addEventListener('click', function (e) {
+        const som = document.getElementById('somReady').value === 'custom' ? document.getElementById('customSomReady').value : document.getElementById('somReady').value;
+        const audio = new Audio(som)
+        audio.volume = document.getElementById('volume').value/100;
+        audio.play();
+    });
 }
 
 function abrirPagina(pagina) {
