@@ -1,3 +1,7 @@
+v1.0.21
+- Adiciona as opções de pré veto na função de "Forçar Criação da Lobby" (Aba Lobby nas opções) (vlw @ozkcs)
+- Adiciona a função *EXPERIMENTAL* de tocar um som ao fazer PreReady e Ready (Aba Sons nas opções)
+
 v1.0.20
 - Corrige o forçar lobby com uma solução mais elegante (vlw @ozkcs)
 

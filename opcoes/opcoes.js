@@ -36,7 +36,7 @@ const audios = {
     "custom": "Customizar",
 }
 
-const versao = "1.0.20"
+const versao = "1.0.21"
 
 function iniciarPaginaOpcoes() {
     adicionaVersao();
