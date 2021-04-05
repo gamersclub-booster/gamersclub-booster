@@ -8,14 +8,14 @@ const features = [
 ];
 
 const preVetosMapas = [
-{ mapa: "de_dust2", codigo: 1 },
-{ mapa: "de_nuke", codigo: 2 },
-{ mapa: "de_train", codigo: 3},
-{ mapa: "de_mirage", codigo: 5},
-{ mapa: "de_overpass", codigo: 7},
-{ mapa: "de_inferno", codigo: 8 },
-{ mapa: "de_vertigo", codigo: 10},
-{ mapa: "de_cbble_classic", codigo: 11}
+    { mapa: "de_dust2", codigo: 1 },
+    { mapa: "de_nuke", codigo: 2 },
+    { mapa: "de_train", codigo: 3},
+    { mapa: "de_mirage", codigo: 5},
+    { mapa: "de_overpass", codigo: 7},
+    { mapa: "de_inferno", codigo: 8 },
+    { mapa: "de_vertigo", codigo: 10},
+    { mapa: "de_cbble_classic", codigo: 11}
 ];
 const configValues = [
     'somReady',
