@@ -171,6 +171,7 @@ function adicionarBotaoForcarCriarLobby(discord) {
             document.getElementById('forcarCriacaoLobbyBtn').addEventListener('click', async function () {
                 const lobbyInfo = await axios.post("/lobbyBeta/openRoom");
                 await lobbySender(opcoes.webhookLink, lobbyInfo.data)
+                location.href = `javascript:successAlert("[Discord] - Enviado com sucesso"); void 0`;
             });
         } else {
             $('#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)').html(
@@ -232,6 +233,7 @@ function intervalerCriacaoLobby() {
                                     if (opcoes.webhookLink) {
                                         const lobbyInfo = await axios.post("/lobbyBeta/openRoom");
                                         await lobbySender(opcoes.webhookLink, lobbyInfo.data)
+                                        location.href = `javascript:successAlert("[Discord] - Enviado com sucesso"); void 0`;
                                     }
                                 }
                             }, 1000);
