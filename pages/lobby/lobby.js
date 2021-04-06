@@ -10,6 +10,9 @@ chrome.storage.sync.get(
 let intervalCriarLobby = null;
 let lobbyCriada = false;
 
+let jaEnviouIP = false;
+let intervalIp = null;
+
 const initLobby = async () => {
     if (opcoes.autoAceitarPreReady) {
         let preReadyObserver = new MutationObserver((mutations) => {
@@ -173,6 +176,11 @@ function adicionarBotaoForcarCriarLobby(discord) {
                 await lobbySender(opcoes.webhookLink, lobbyInfo.data)
                 location.href = `javascript:successAlert("[Discord] - Enviado com sucesso"); void 0`;
             });
+            document.getElementById("lobbyAdmin-btnExcluir").removeAttribute("onclick")
+            document.getElementById("lobbyAdmin-btnExcluir").addEventListener("click", async function() {
+                location.href = "javascript:lobby.removeRoom(); void 0"
+                adicionarBotaoForcarCriarLobby()
+            })
         } else {
             $('#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)').html(
                 '<button id="forcarCriacaoLobbyBtn" style="color:orange" type="button">Forçar Criação da Lobby</button>'
@@ -193,6 +201,36 @@ function adicionarBotaoForcarCriarLobby(discord) {
             adicionarBotaoCancelarCriarLobby();
         });
     }
+}
+
+function ipListener() {
+    return setInterval(async () => {
+        if (!jaEnviouIP) {
+            const IPSelector = "game-modal-command-input"
+            if (opcoes.webhookLink) {
+                const campoIP = document.getElementsByClassName(IPSelector)
+                if (campoIP.value) {
+                    //adicionar botao
+                    const listenGame = (await axios.get("https://gamersclub.com.br/lobbyBeta/openGame")).data;
+                    jaEnviouIP = true;
+                    clearInterval(intervalIp)
+                    if (listenGame.game.live) {
+                        //add button
+                        $(".game-modal-play-command.half-size.clearfix").parent().append('<button id="botaoDiscordnoDOM" class="game-modal-command-btn" data-tip-text="Clique para enviar no discord">Enviar no Discord</button>');
+                        document.getElementById("botaoDiscordnoDOM").addEventListener('click', function (e) {
+                            await enviarDadosPartida(opcoes.webhookLink, listenGame);
+                        })
+                    //enviar automaticamente
+                    if (opcoes.enviarPartida) {
+                        await enviarDadosPartida(opcoes.webhookLink, listenGame);
+                    }
+                    }
+                }
+            }
+        } else {
+            clearInterval(intervalIp)
+        }
+    }, 1000)
 }
 //Criar lobby: https://github.com/LouisRiverstone/gamersclub-lobby_waiter/ com as modificações por causa do layout novo
 function intervalerCriacaoLobby() {
@@ -228,14 +266,17 @@ function intervalerCriacaoLobby() {
                                 adicionarBotaoForcarCriarLobby();
                                 clearInterval(intervalCriarLobby);
                                 adicionarBotaoForcarCriarLobby(true);
-                                if (opcoes.enviarLinkLobby) {
-                                    //Enviar automaticamente o lobby caso criar lobby
-                                    if (opcoes.webhookLink) {
+                                if (opcoes.webhookLink) {
+                                    if (opcoes.enviarLinkLobby) {
                                         const lobbyInfo = await axios.post("/lobbyBeta/openRoom");
                                         await lobbySender(opcoes.webhookLink, lobbyInfo.data)
                                         location.href = `javascript:successAlert("[Discord] - Enviado com sucesso"); void 0`;
                                     }
+                                    if (opcoes.enviarPartida) {
+                                        intervalIp = ipListener()
+                                    }
                                 }
+                                
                             }, 1000);
                         }
                     } else {
