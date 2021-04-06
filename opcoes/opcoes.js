@@ -4,8 +4,9 @@ const features = [
     'autoAceitarReady',
     'autoFixarMenuLobby',
     'autoConcordarTermosRanked',
-    'mostrarLevelProgress'
-];
+    'mostrarLevelProgress',
+    'enviarLinkLobby',
+    'enviarPartida'];
 
 const preVetosMapas = [
     { mapa: "de_dust2", codigo: 1 },
@@ -24,7 +25,7 @@ const configValues = [
     'customSomPreReady',
     'customSomReady'
 ]
-const paginas = ['geral', 'mapas', 'lobby', 'contato', 'sobre', 'sons'];
+const paginas = ['geral', 'mapas', 'lobby', 'contato', 'sobre', 'sons', 'integracoes'];
 
 const audios = {
     "undefined": "Nenhum",
@@ -48,6 +49,7 @@ function iniciarPaginaOpcoes() {
     popularAudioOptions();
     selecionarSons();
     adicionarListenersSons();
+    alterarLinkWebhook();
 }
 function popularAudioOptions() {
     for (selectId of ['somPreReady', 'somReady']) {
@@ -130,6 +132,7 @@ function adicionarListenerPreVetos() {
 function adicionarListenersFeatures() {
     for (const feature of features) {
         document.getElementById(feature).addEventListener('change', function (e) {
+            console.log(feature, " changed")
             chrome.storage.sync.set({ [feature]: this.checked }, function () {});
         });
     }
@@ -145,7 +148,6 @@ function adicionarListenersPaginas() {
 
 function selecionarSons() {
     chrome.storage.sync.get(null, (response) => {
-        console.log({response});
         if (!response) return false;
         for (const config of configValues) {
             document.getElementById(config).value = response[config];
@@ -194,6 +196,49 @@ function abrirPagina(pagina) {
 
     link.classList.add('active');
     paginaAtiva.classList.add('ativo');
+}
+
+//Discord
+
+function alterarLinkWebhook() {
+    chrome.storage.sync.get(["webhookLink"], async e => {
+        if (e.webhookLink !== undefined) {
+            document.getElementById("campoWebhookLink").innerText = e.webhookLink
+            document.getElementById("divDoDiscord").hidden = false
+        }
+    });
+    document.getElementById("campoWebhookLink").addEventListener("keydown", function(event) {
+        var key = event.key;
+        console.log(key)
+        var cmd_key = event.metaKey;
+        var ctrl_key = event.ctrlKey;
+        if ((cmd_key && key == "c") || (ctrl_key && key == "c")) {
+          return true;
+        } else if ((cmd_key && key == "v") || (ctrl_key && key == "v")) {
+          document.getElementById("divDoDiscord").hidden = false
+          return true;
+        } else if ((key == "Backspace") || (key == "Delete")) {
+            return true;
+        } else if ((cmd_key && key == "a") || (ctrl_key && key == "a")) {
+            return true
+        } else {
+          event.preventDefault();
+        }
+      });
+    document.getElementById("campoWebhookLink").addEventListener("paste", function (event) {
+        let paste = (event.clipboardData || window.clipboardData).getData('text');
+        document.getElementById("divDoDiscord").hidden = false;
+        chrome.storage.sync.set({["webhookLink"]: paste}, function () {});
+    });
+
+    document.getElementById("botaoLimparDiscord").addEventListener("click", function (e) {
+        chrome.storage.sync.set({["webhookLink"]: "", ["enviarLinkLobby"]: false, ["enviarPartida"]: false, ["addButtonLobby"]: false})
+        document.getElementById("divDoDiscord").hidden = true;
+        document.getElementById("enviarLinkLobby").checked = false
+        document.getElementById("enviarPartida").checked = false
+        document.getElementById("addButtonLobby").checked = false
+        document.getElementById("campoWebhookLink").value = "";
+    })
 }
 
 iniciarPaginaOpcoes();

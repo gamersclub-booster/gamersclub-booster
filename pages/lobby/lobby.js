@@ -10,7 +10,7 @@ chrome.storage.sync.get(
 let intervalCriarLobby = null;
 let lobbyCriada = false;
 
-const initLobby = () => {
+const initLobby = async () => {
     if (opcoes.autoAceitarPreReady) {
         let preReadyObserver = new MutationObserver((mutations) => {
             $.each(mutations, (i, mutation) => {
@@ -21,7 +21,7 @@ const initLobby = () => {
                     if (opcoes.somPreReady) {
                         const som = opcoes.somPreReady === 'custom' ? opcoes.customSomPreReady : opcoes.somPreReady;
                         const audio = new Audio(som);
-                        audio.volume = opcoes.volume/100;
+                        audio.volume = opcoes.volume / 100;
                         document.getElementById('setPlayerReady').addEventListener('click', function (e) {
                             audio.play();
                         });
@@ -57,7 +57,7 @@ const initLobby = () => {
                     if (opcoes.somReady) {
                         const som = opcoes.somReady === 'custom' ? opcoes.customSomReady : opcoes.somReady;
                         const audio = new Audio(som);
-                        audio.volume = opcoes.volume/100;
+                        audio.volume = opcoes.volume / 100;
                         document.getElementById('gameModalReadyBtn').addEventListener('click', function (e) {
                             audio.play();
                         });
@@ -88,8 +88,7 @@ const initLobby = () => {
                                     top: '130px',
                                     bottom: 'auto',
                                 });
-                            }
-                            else {
+                            } else {
                                 $(node).css({
                                     position: 'fixed',
                                     top: '10%',
@@ -105,8 +104,7 @@ const initLobby = () => {
                                     right: '72px',
                                     bottom: 'auto',
                                 });
-                            }
-                            else {
+                            } else {
                                 $(node).css({
                                     position: 'fixed',
                                     top: '10%',
@@ -146,9 +144,14 @@ const initLobby = () => {
         });
     }
 
+    if (opcoes.enviarPartida) {
+        //Enviar automaticamente a partida
+    }
+
     //Feature pra criar lobby caso full
     adicionarBotaoForcarCriarLobby();
 };
+
 function adicionarBotaoCancelarCriarLobby() {
     $('#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)').html(
         '<span style="color:orange">FORÇANDO CRIAÇÃO DA LOBBY...</span><button id="cancelarCriacaoLobbyBtn" style="color:red" type="button">Cancelar</button>'
@@ -159,15 +162,36 @@ function adicionarBotaoCancelarCriarLobby() {
     });
 }
 
-function adicionarBotaoForcarCriarLobby() {
-    $('#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)').html(
-        '<button id="forcarCriacaoLobbyBtn" style="color:orange" type="button">Forçar Criação da Lobby</button>'
-    );
-    document.getElementById('forcarCriacaoLobbyBtn').addEventListener('click', function () {
-        lobbyCriada = false;
-        intervalCriarLobby = intervalerCriacaoLobby();
-        adicionarBotaoCancelarCriarLobby();
-    });
+function adicionarBotaoForcarCriarLobby(discord) {
+    if (discord) {
+        if (opcoes.webhookLink.startsWith("http")) {
+            $('#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)').html(
+                '<button id="forcarCriacaoLobbyBtn" style="color:orange" type="button">Enviar lobby no Discord</button>'
+            );
+            document.getElementById('forcarCriacaoLobbyBtn').addEventListener('click', async function () {
+                const lobbyInfo = await axios.post("/lobbyBeta/openRoom");
+                await lobbySender(opcoes.webhookLink, lobbyInfo.data)
+            });
+        } else {
+            $('#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)').html(
+                '<button id="forcarCriacaoLobbyBtn" style="color:orange" type="button">Forçar Criação da Lobby</button>'
+            );
+            document.getElementById('forcarCriacaoLobbyBtn').addEventListener('click', function () {
+                lobbyCriada = false;
+                intervalCriarLobby = intervalerCriacaoLobby();
+                adicionarBotaoCancelarCriarLobby();
+            });
+        }
+    } else {
+        $('#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)').html(
+            '<button id="forcarCriacaoLobbyBtn" style="color:orange" type="button">Forçar Criação da Lobby</button>'
+        );
+        document.getElementById('forcarCriacaoLobbyBtn').addEventListener('click', function () {
+            lobbyCriada = false;
+            intervalCriarLobby = intervalerCriacaoLobby();
+            adicionarBotaoCancelarCriarLobby();
+        });
+    }
 }
 //Criar lobby: https://github.com/LouisRiverstone/gamersclub-lobby_waiter/ com as modificações por causa do layout novo
 function intervalerCriacaoLobby() {
@@ -181,14 +205,14 @@ function intervalerCriacaoLobby() {
                 chrome.storage.sync.get(["preVetos"], async res => {
                     const preVetos = res.preVetos ? res.preVetos : [];
                     const postData = {
-                        "max_level_to_join":20,
-                        "min_level_to_join":0,
-                        "private":0,
-                        "region":0,
-                        "restriction":1,
-                        "team":null,
-                        "team_players":[],
-                        "type":"newRoom",
+                        "max_level_to_join": 20,
+                        "min_level_to_join": 0,
+                        "private": 0,
+                        "region": 0,
+                        "restriction": 1,
+                        "team": null,
+                        "team_players": [],
+                        "type": "newRoom",
                         "vetoes": preVetos
                     }
                     const criarPost = await axios.post("/lobbyBeta/createLobby", postData);
@@ -196,18 +220,27 @@ function intervalerCriacaoLobby() {
                         const loadLobby = await axios.post("/lobbyBeta/openRoom");
                         if (loadLobby.data.success) {
                             lobbyCriada = true;
-                            location.href="javascript:openLobby(); void 0";
+                            location.href = "javascript:openLobby(); void 0";
                             setTimeout(async () => {
+                                //Lobby criada com sucesso e entrado na janela da lobby já
                                 lobbyCriada = true;
                                 adicionarBotaoForcarCriarLobby();
                                 clearInterval(intervalCriarLobby);
+                                adicionarBotaoForcarCriarLobby(true);
+                                if (opcoes.enviarLinkLobby) {
+                                    //Enviar automaticamente o lobby caso criar lobby
+                                    if (opcoes.webhookLink) {
+                                        const lobbyInfo = await axios.post("/lobbyBeta/openRoom");
+                                        await lobbySender(opcoes.webhookLink, lobbyInfo.data)
+                                    }
+                                }
                             }, 1000);
                         }
                     } else {
                         if (criarPost.data.message.includes("Anti-cheat")) {
                             clearInterval(intervalCriarLobby);
                             adicionarBotaoForcarCriarLobby();
-                            location.href=`javascript:errorAlert('${criarPost.data.message}'); void 0`;
+                            location.href = `javascript:errorAlert('${criarPost.data.message}'); void 0`;
                             return;
                         }
                     }

@@ -28,7 +28,7 @@
         },
 		{
             "matches": ["*://*.gamersclub.com.br/lobby*", "*://csgo.gamersclub.gg/lobby*"],
-            "js": ["lib/jquery.min.js", "lib/axios.min.js", "pages/lobby/lobby.js"]
+            "js": ["lib/jquery.min.js", "lib/axios.min.js", "pages/lobby/lobby.js", "integracoes/discord.js"]
         },
 		{
             "matches": ["*://*.gamersclub.com.br/jogador*", "*://csgo.gamersclub.gg/jogador*"],

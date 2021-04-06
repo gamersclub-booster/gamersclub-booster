@@ -22,6 +22,7 @@
             <li id="link-sons"><a href="#sons">Sons</a></li>
             <li id="link-mapas"><a href="#mapas">Mapas</a></li>
             <li id="link-lobby"><a href="#lobby">Lobby</a></li>
+            <li id="link-integracoes"><a href="#integracoes">Integrações</a></li>
             <li id="link-contato"><a href="#contato">Contato</a></li>
             <li id="link-sobre"><a href="#sobre">Sobre</a></li>
           </ul>
@@ -127,6 +128,28 @@
           <div>
             <p>* Todos os sons estão sendo executados diretamente do site: myinstants.com</p>
             <p>* Você pode customizar utilizando outros sons de lá copiando a URL do link "Download MP3" abaixo do botão.</p>
+          </div>
+        </div>
+
+        <div class="pagina" id="integracoes">
+          <h3 class="subtitulo">Discord</h3>
+          <div>
+            <p>Link do Discord Webhook</p>
+            <textarea id="campoWebhookLink" placeholder="Cole aqui a URL do seu WebHook"></textarea>
+            <div id="divDoDiscord" hidden="true">
+              <h2 class="subtituloh2">Enviar automaticamente no Discord</h2>
+              <label class="container" for="enviarLinkLobby" title="Envia automaticamente o link da lobby com as informações no discord programado">
+                <p class="descricao">Lobby (Link, KD's dos Jogadores)</p>
+                <input type="checkbox" id="enviarLinkLobby"/>
+                <span class="checkmark"></span>
+              </label>
+              <label class="container" for="enviarPartida" title="Envia automaticamente a partida com as informações no discord programado">
+                <p class="descricao">Partida (IP, Times)</p>
+                <input type="checkbox" id="enviarPartida"/>
+                <span class="checkmark"></span>
+              </label>
+            </div>
+            <button id="botaoLimparDiscord">Redefinir</button>
           </div>
         </div>
 

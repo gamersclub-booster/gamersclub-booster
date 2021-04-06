@@ -111,6 +111,13 @@ body {
     text-transform: uppercase;
 }
 
+.pagina .subtituloh2 {
+    color:#2196f3;
+    margin: 0px;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
 .pagina .descricao {
     color: #fff;
 }
@@ -135,6 +142,25 @@ body {
     cursor: pointer;
     height: 0;
     width: 0;
+}
+
+#campoWebhookLink {
+    resize: none;
+    height: 15px;
+    width: 300px;
+    background-color: inherit;
+    border: solid 2px #247eb9;
+    border-radius: 3px;
+    color: white;
+}
+
+#botaoLimparDiscord {
+    height: 30px;
+    width: 90px;
+    background-color: inherit;
+    border: solid 2px #247eb9;
+    border-radius: 3px;
+    color: white;
 }
 
 /* Create a custom checkbox */
