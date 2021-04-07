@@ -29,6 +29,7 @@ const paginas = ['geral', 'mapas', 'lobby', 'contato', 'sobre', 'sons', 'integra
 
 const audios = {
     "undefined": "Nenhum",
+    "https://www.myinstants.com/media/sounds/whatsapp_ptt_2021-04-04_at_21.mp3": "Partida encontrada",
     "https://www.myinstants.com/media/sounds/esl-pro-league-season-11-north-america-mibr-vs-furia-mapa-iii-mirage-mp3cut.mp3": "Começou - Gaules",
     "https://www.myinstants.com/media/sounds/wakeup_1QLWl1G.mp3": "Wake Up - TeamSpeak",
     "https://www.myinstants.com/media/sounds/onarollbrag13.mp3": "Easy Peasy - CS:GO",

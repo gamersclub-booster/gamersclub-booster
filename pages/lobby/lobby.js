@@ -49,6 +49,24 @@ const initLobby = async () => {
         }, 500);
     }
 
+    if (opcoes.enviarPartida) {
+        let readyObserver2 = new MutationObserver((mutations) => {
+            $.each(mutations, (i, mutation) => {
+                var addedNodes = $(mutation.addedNodes);
+                let selector = '#gameModalReadyBtn > button';
+                var readyButton = addedNodes.find(selector).addBack(selector);
+                if (readyButton.length && readyButton.text() === "Ready" && !readyButton.disabled) {
+                    intervalIp = ipListener()
+                }
+            });
+        });
+
+        readyObserver2.observe($('#rankedModals').get(0), {
+            childList: true,
+            subtree: true,
+        });
+    }
+
 
     if (opcoes.autoAceitarReady) {
         let readyObserver = new MutationObserver((mutations) => {
@@ -147,10 +165,6 @@ const initLobby = async () => {
         });
     }
 
-    if (opcoes.enviarPartida) {
-        //Enviar automaticamente a partida
-    }
-
     //Feature pra criar lobby caso full
     adicionarBotaoForcarCriarLobby();
 };
@@ -205,6 +219,7 @@ function adicionarBotaoForcarCriarLobby(discord) {
 
 function ipListener() {
     return setInterval(async () => {
+        console.log("[GC Booster] - Aguardando info da partida")
         if (!jaEnviouIP) {
             const IPSelector = "game-modal-command-input"
             if (opcoes.webhookLink) {
@@ -217,7 +232,7 @@ function ipListener() {
                     if (listenGame.game.live) {
                         //add button
                         $(".game-modal-play-command.half-size.clearfix").parent().append('<button id="botaoDiscordnoDOM" class="game-modal-command-btn" data-tip-text="Clique para enviar no discord">Enviar no Discord</button>');
-                        document.getElementById("botaoDiscordnoDOM").addEventListener('click', function (e) {
+                        document.getElementById("botaoDiscordnoDOM").addEventListener('click', async function (e) {
                             await enviarDadosPartida(opcoes.webhookLink, listenGame);
                         })
                     //enviar automaticamente
@@ -246,7 +261,7 @@ function intervalerCriacaoLobby() {
                     const postData = {
                         "max_level_to_join": 20,
                         "min_level_to_join": 0,
-                        "private": 0,
+                        "private": 1,
                         "region": 0,
                         "restriction": 1,
                         "team": null,
@@ -271,9 +286,6 @@ function intervalerCriacaoLobby() {
                                         const lobbyInfo = await axios.post("/lobbyBeta/openRoom");
                                         await lobbySender(opcoes.webhookLink, lobbyInfo.data)
                                         location.href = `javascript:successAlert("[Discord] - Enviado com sucesso"); void 0`;
-                                    }
-                                    if (opcoes.enviarPartida) {
-                                        intervalIp = ipListener()
                                     }
                                 }
                                 

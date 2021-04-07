@@ -144,6 +144,50 @@ body {
     width: 0;
 }
 
+.column {
+    float: left;
+    width: 50%;
+  }
+  
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+#testarSomPreReady{
+    background-color: inherit;
+    border: solid 2px #247eb9;
+    border-radius: 3px;
+    color: white;
+    background-color: #247eb9;
+}
+
+#testarSomReady{
+    background-color: inherit;
+    border: solid 2px #247eb9;
+    border-radius: 3px;
+    color: white;
+    background-color: #247eb9;
+}
+
+#somPreReady{
+    background-color: inherit;
+    border: solid 2px #247eb9;
+    border-radius: 3px;
+    color: white;
+    background-color: #247eb9;
+}
+
+#somReady{
+    background-color: inherit;
+    border: solid 2px #247eb9;
+    border-radius: 3px;
+    color: white;
+    background-color: #247eb9;
+}
+
 #campoWebhookLink {
     resize: none;
     height: 15px;
