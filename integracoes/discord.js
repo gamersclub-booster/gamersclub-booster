@@ -6,10 +6,12 @@ async function enviarDiscord(url, body) {
 
 async function lobbySender(url, lobbyInfo) {
     //var lobbyInfo = (await axios.post("/lobbyBeta/openRoom")).data;
+    console.log(lobbyInfo)
     if (url.length == 0) return false;
     if (typeof lobbyInfo !== "object") {
         return false;
     }
+    const mapasVetados = lobbyInfo.preVetoedMaps.length != 0 ? lobbyInfo.preVetoedMaps.map(each => {return each.name}).join(", ").slice(0, -2) : "Nenhum pré veto"
     await enviarDiscord(url, {
         "title": "Clique aqui para abrir a lobby",
         "url": `https://gamersclub.com.br/j/${lobbyInfo.lobby.lobbyID}/${lobbyInfo.lobby.password}`,
@@ -20,6 +22,15 @@ async function lobbySender(url, lobbyInfo) {
             {
                 "name": "Admin da sala:",
                 "value": `${lobbyInfo.admin.nick} | ${lobbyInfo.admin.level}`
+            },
+            {
+                "name": "Lobby:",
+                "value": 
+`Sequencia de viória do admin: ${lobbyInfo.lobby.adminVictorySequence}`
+            },
+            {
+                "name": "Pré vetos",
+                "value": `${mapasVetados}`
             },
             {
                 "name": "Membros:",
