@@ -112,10 +112,11 @@ body {
 }
 
 .pagina .subtituloh2 {
-    color:#2196f3;
+    color: white;
     margin: 0px;
     font-size: 12px;
     text-transform: uppercase;
+    text-decoration: white;
 }
 
 .pagina .descricao {
