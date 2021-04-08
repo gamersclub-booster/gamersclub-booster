@@ -27,7 +27,7 @@ const initLobby = async () => {
                 }
             }
         });
-        criarObserver("#rankedModals", copiarIpFunc)
+        const copiarIP = criarObserver("#rankedModals", copiarIpFunc)
     }
 
     if (opcoes.somPreReady) {
@@ -44,7 +44,7 @@ const initLobby = async () => {
                 });
             }
         });
-        criarObserver("#rankedModals", somPreReadyFunc)
+        const somPreReady = criarObserver("#rankedModals", somPreReadyFunc)
     }
 
     if (opcoes.somReady) {
@@ -61,7 +61,7 @@ const initLobby = async () => {
                 });
             }
         });
-        criarObserver("#rankedModals", somReadyFunc)
+        const somReady = criarObserver("#rankedModals", somReadyFunc)
     }
 
     if (opcoes.autoAceitarPreReady) {
@@ -73,7 +73,7 @@ const initLobby = async () => {
                 setTimeout(function() {preReadyButton[0].click();}, 500)
             }
         });
-        criarObserver('#rankedModals', autoAceitarPreReadyFunc);
+        const autoAceitarPreReady = criarObserver('#rankedModals', autoAceitarPreReadyFunc);
     }
 
     if (opcoes.autoAceitarReady) {
@@ -85,7 +85,7 @@ const initLobby = async () => {
                 setTimeout(function() {readyButton[0].click();}, 500)
             }
         });
-        criarObserver("#rankedModals", autoAceitarReadyFunc);
+        const autoAceitarReady = criarObserver("#rankedModals", autoAceitarReadyFunc);
     }
 
     if (opcoes.autoFixarMenuLobby) {
@@ -131,7 +131,7 @@ const initLobby = async () => {
                 }
             }
         });
-        criarObserver("#lobbyContent", autoFixarMenuLobbyFunc);
+        const autoFixarMenuLobby = criarObserver("#lobbyContent", autoFixarMenuLobbyFunc);
     }
 
     if (opcoes.autoConcordarTermosRanked) {
@@ -143,7 +143,7 @@ const initLobby = async () => {
                 concordarButton[0].click();
             }
         });
-        criarObserver('#rankedModals', autoConcordarTermosRankedFunc);
+        const autoConcordarTermosRanked = criarObserver('#rankedModals', autoConcordarTermosRankedFunc);
     }
 
     if (opcoes.webhookLink.length !== 0) {
@@ -209,8 +209,8 @@ const initLobby = async () => {
                 }
             }
         });
-        criarObserver("#rankedModals", partidaInfoFunc);
-        criarObserver("#lobbyContent", lobbyLinkFunc);
+        const partidaInfo = criarObserver("#rankedModals", partidaInfoFunc);
+        const lobbyLink = criarObserver("#lobbyContent", lobbyLinkFunc);
     }
 
     //Feature pra criar lobby caso full
