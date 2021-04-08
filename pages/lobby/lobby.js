@@ -49,25 +49,6 @@ const initLobby = async () => {
         }, 500);
     }
 
-    if (opcoes.enviarPartida) {
-        let readyObserver2 = new MutationObserver((mutations) => {
-            $.each(mutations, (i, mutation) => {
-                var addedNodes = $(mutation.addedNodes);
-                let selector = '#gameModalReadyBtn > button';
-                var readyButton = addedNodes.find(selector).addBack(selector);
-                if (readyButton.length && readyButton.text() === "Ready" && !readyButton.disabled) {
-                    intervalIp = ipListener()
-                }
-            });
-        });
-
-        readyObserver2.observe($('#rankedModals').get(0), {
-            childList: true,
-            subtree: true,
-        });
-    }
-
-
     if (opcoes.autoAceitarReady) {
         let readyObserver = new MutationObserver((mutations) => {
             $.each(mutations, (i, mutation) => {
@@ -165,6 +146,65 @@ const initLobby = async () => {
         });
     }
 
+    if (opcoes.webhookLink.length !== 0) {
+        let partidaInfo = new MutationObserver((mutations) => {
+            $.each(mutations, (i, mutation) => {
+                var addedNodes = $(mutation.addedNodes);
+                let selector = '#gameModalCopyServer';
+                var ipInput = addedNodes.find(selector).addBack(selector);
+                if (ipInput.length) {
+                    console.log(ipInput)
+                }
+            });
+        });
+
+        let lobbyLink = new MutationObserver((mutations) => {
+            mutations.forEach(async (mutation) => {
+                if (!mutation.addedNodes) return;
+                for (let i = 0; i < mutation.addedNodes.length; i++) {
+                    let node = mutation.addedNodes[i];
+                    if (node.nextElementSibling && node.nextElementSibling.className && node.nextElementSibling.className.includes('sidebar-desafios sidebar-content')) {
+                        if (opcoes.webhookLink.startsWith("http")) {
+                            if (opcoes.enviarLinkLobby) {
+                                const lobbyInfo = await axios.post("/lobbyBeta/openRoom");
+                                await lobbySender(opcoes.webhookLink, lobbyInfo.data)
+                                location.href = `javascript:successAlert("[Discord] - Enviado com sucesso"); void 0`;
+                            }
+                            document.getElementsByClassName("sidebar-titulo sidebar-sala-titulo")[0].setAttribute("style", "font-size: 12px;")
+                            $(".btn-radial.btn-blue.btn-copiar-link").parent().append('<span class="btn-radial btn-blue btn-copiar-link" id="discordLobbyButton" title="Enviar lobby Discord" data-jsaction="gcCommonTooltip" data-tip-text="Convidar Amigos"><img src="https://img.icons8.com/material-sharp/18/ffffff/discord-logo.png"/></span>');
+
+                            document.getElementById('discordLobbyButton').addEventListener('click', async function () {
+                                const lobbyInfo = await axios.post("/lobbyBeta/openRoom");
+                                await lobbySender(opcoes.webhookLink, lobbyInfo.data)
+                                location.href = `javascript:successAlert("[Discord] - Enviado com sucesso"); void 0`;
+                            });
+                            const selectorDeleteLobby = "lobbyAdmin-btnExcluir"
+                            if (document.getElementById(selectorDeleteLobby)) {
+                                document.getElementById(selectorDeleteLobby).removeAttribute("onclick")
+                                document.getElementById(selectorDeleteLobby).addEventListener("click", async function () {
+                                    location.href = "javascript:lobby.removeRoom(); void 0"
+                                    adicionarBotaoForcarCriarLobby()
+                                })
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+        partidaInfo.observe($('#rankedModals').get(0), {
+            childList: true,
+            subtree: true,
+        });
+
+        lobbyLink.observe($('#lobbyContent').get(0), {
+            childList: true,
+            subtree: true,
+            attributes: false,
+            characterData: false,
+        });
+    }
+
     //Feature pra criar lobby caso full
     adicionarBotaoForcarCriarLobby();
 };
@@ -179,42 +219,15 @@ function adicionarBotaoCancelarCriarLobby() {
     });
 }
 
-function adicionarBotaoForcarCriarLobby(discord) {
-    if (discord) {
-        if (opcoes.webhookLink.startsWith("http")) {
-            $('#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)').html(
-                '<button id="forcarCriacaoLobbyBtn" style="color:orange" type="button">Enviar lobby no Discord</button>'
-            );
-            document.getElementById('forcarCriacaoLobbyBtn').addEventListener('click', async function () {
-                const lobbyInfo = await axios.post("/lobbyBeta/openRoom");
-                await lobbySender(opcoes.webhookLink, lobbyInfo.data)
-                location.href = `javascript:successAlert("[Discord] - Enviado com sucesso"); void 0`;
-            });
-            document.getElementById("lobbyAdmin-btnExcluir").removeAttribute("onclick")
-            document.getElementById("lobbyAdmin-btnExcluir").addEventListener("click", async function() {
-                location.href = "javascript:lobby.removeRoom(); void 0"
-                adicionarBotaoForcarCriarLobby()
-            })
-        } else {
-            $('#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)').html(
-                '<button id="forcarCriacaoLobbyBtn" style="color:orange" type="button">Forçar Criação da Lobby</button>'
-            );
-            document.getElementById('forcarCriacaoLobbyBtn').addEventListener('click', function () {
-                lobbyCriada = false;
-                intervalCriarLobby = intervalerCriacaoLobby();
-                adicionarBotaoCancelarCriarLobby();
-            });
-        }
-    } else {
-        $('#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)').html(
-            '<button id="forcarCriacaoLobbyBtn" style="color:orange" type="button">Forçar Criação da Lobby</button>'
-        );
-        document.getElementById('forcarCriacaoLobbyBtn').addEventListener('click', function () {
-            lobbyCriada = false;
-            intervalCriarLobby = intervalerCriacaoLobby();
-            adicionarBotaoCancelarCriarLobby();
-        });
-    }
+function adicionarBotaoForcarCriarLobby() {
+    $('#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)').html(
+        '<button id="forcarCriacaoLobbyBtn" style="color:orange" type="button">Forçar Criação da Lobby</button>'
+    );
+    document.getElementById('forcarCriacaoLobbyBtn').addEventListener('click', function () {
+        lobbyCriada = false;
+        intervalCriarLobby = intervalerCriacaoLobby();
+        adicionarBotaoCancelarCriarLobby();
+    });
 }
 
 function ipListener() {
@@ -235,10 +248,10 @@ function ipListener() {
                         document.getElementById("botaoDiscordnoDOM").addEventListener('click', async function (e) {
                             await enviarDadosPartida(opcoes.webhookLink, listenGame);
                         })
-                    //enviar automaticamente
-                    if (opcoes.enviarPartida) {
-                        await enviarDadosPartida(opcoes.webhookLink, listenGame);
-                    }
+                        //enviar automaticamente
+                        if (opcoes.enviarPartida) {
+                            await enviarDadosPartida(opcoes.webhookLink, listenGame);
+                        }
                     }
                 }
             }
@@ -280,15 +293,7 @@ function intervalerCriacaoLobby() {
                                 lobbyCriada = true;
                                 adicionarBotaoForcarCriarLobby();
                                 clearInterval(intervalCriarLobby);
-                                adicionarBotaoForcarCriarLobby(true);
-                                if (opcoes.webhookLink) {
-                                    if (opcoes.enviarLinkLobby) {
-                                        const lobbyInfo = await axios.post("/lobbyBeta/openRoom");
-                                        await lobbySender(opcoes.webhookLink, lobbyInfo.data)
-                                        location.href = `javascript:successAlert("[Discord] - Enviado com sucesso"); void 0`;
-                                    }
-                                }
-                                
+                                adicionarBotaoForcarCriarLobby();
                             }, 1000);
                         }
                     } else {
