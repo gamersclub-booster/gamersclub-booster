@@ -157,17 +157,19 @@ const initLobby = async () => {
                         const campoIP = document.getElementsByClassName(IPSelector)
                         console.log(campoIP)
                         if (campoIP[0].value) {
-                            //adicionar botao
                             const listenGame = await axios.get("https://gamersclub.com.br/lobbyBeta/openGame")
                             if (listenGame.data.game.live) {
-                                //add button
-                                $(".game-modal-play-command.half-size.clearfix").parent().append('<button id="botaoDiscordnoDOM" class="game-modal-command-btn" data-tip-text="Clique para enviar no discord">Enviar no Discord</button>');
-                                document.getElementById("botaoDiscordnoDOM").addEventListener('click', async function (e) {
-                                    await enviarDadosPartida(opcoes.webhookLink, listenGame.data);
-                                })
-                                //enviar automaticamente
-                                if (opcoes.enviarPartida) {
-                                    await enviarDadosPartida(opcoes.webhookLink, listenGame.data);
+                                if (document.getElementById("botaoDiscordnoDOM")){
+                                    return false;
+                                } else {
+                                    $(".game-modal-play-command.half-size.clearfix").parent().append('<button id="botaoDiscordnoDOM" class="game-modal-command-btn" data-tip-text="Clique para enviar no discord">Enviar no Discord</button>');
+                                    document.getElementById("botaoDiscordnoDOM").addEventListener('click', async function (e) {
+                                        await enviarDadosPartida(opcoes.webhookLink, listenGame.data);
+                                    })
+                                    //enviar automaticamente
+                                    if (opcoes.enviarPartida) {
+                                        await enviarDadosPartida(opcoes.webhookLink, listenGame.data);
+                                    }
                                 }
                             }
                         }
@@ -182,26 +184,33 @@ const initLobby = async () => {
                     let node = mutation.addedNodes[i];
                     if (node.nextElementSibling && node.nextElementSibling.className && node.nextElementSibling.className.includes('sidebar-desafios sidebar-content')) {
                         if (opcoes.webhookLink.startsWith("http")) {
-                            if (opcoes.enviarLinkLobby) {
-                                const lobbyInfo = await axios.post("/lobbyBeta/openRoom");
-                                await lobbySender(opcoes.webhookLink, lobbyInfo.data)
-                                location.href = `javascript:successAlert("[Discord] - Enviado com sucesso"); void 0`;
-                            }
-                            document.getElementsByClassName("sidebar-titulo sidebar-sala-titulo")[0].setAttribute("style", "font-size: 12px;")
-                            $(".btn-radial.btn-blue.btn-copiar-link").parent().append('<span class="btn-radial btn-blue btn-copiar-link" id="discordLobbyButton" title="Enviar lobby Discord" data-jsaction="gcCommonTooltip" data-tip-text="Convidar Amigos"><img src="https://img.icons8.com/material-sharp/18/ffffff/discord-logo.png"/></span>');
-
-                            document.getElementById('discordLobbyButton').addEventListener('click', async function () {
-                                const lobbyInfo = await axios.post("/lobbyBeta/openRoom");
-                                await lobbySender(opcoes.webhookLink, lobbyInfo.data)
-                                location.href = `javascript:successAlert("[Discord] - Enviado com sucesso"); void 0`;
-                            });
-                            const selectorDeleteLobby = "lobbyAdmin-btnExcluir"
-                            if (document.getElementById(selectorDeleteLobby)) {
-                                document.getElementById(selectorDeleteLobby).removeAttribute("onclick")
-                                document.getElementById(selectorDeleteLobby).addEventListener("click", async function () {
-                                    location.href = "javascript:lobby.removeRoom(); void 0"
-                                    adicionarBotaoForcarCriarLobby()
-                                })
+                            if (document.getElementById("discordLobbyButton")) {
+                                //ja tem o botao
+                                log("Teste pra ve se foi kk")
+                                return false;
+                            } else {
+                                if (opcoes.enviarLinkLobby) {
+                                    const lobbyInfo = await axios.post("/lobbyBeta/openRoom");
+                                    await lobbySender(opcoes.webhookLink, lobbyInfo.data)
+                                    location.href = `javascript:successAlert("[Discord] - Enviado com sucesso"); void 0`;
+                                }
+                                document.getElementsByClassName("sidebar-titulo sidebar-sala-titulo")[0].setAttribute("style", "font-size: 12px;")
+                                $(".btn-radial.btn-blue.btn-copiar-link").parent().append('<span class="btn-radial btn-blue btn-copiar-link" id="discordLobbyButton" title="Enviar lobby Discord" data-jsaction="gcCommonTooltip" data-tip-text="Convidar Amigos"><img src="https://img.icons8.com/material-sharp/18/ffffff/discord-logo.png"/></span>');
+    
+                                document.getElementById('discordLobbyButton').addEventListener('click', async function () {
+                                    const lobbyInfo = await axios.post("/lobbyBeta/openRoom");
+                                    await lobbySender(opcoes.webhookLink, lobbyInfo.data)
+                                    location.href = `javascript:successAlert("[Discord] - Enviado com sucesso"); void 0`;
+                                });
+    
+                                const selectorDeleteLobby = "lobbyAdmin-btnExcluir"
+                                if (document.getElementById(selectorDeleteLobby)) {
+                                    document.getElementById(selectorDeleteLobby).removeAttribute("onclick")
+                                    document.getElementById(selectorDeleteLobby).addEventListener("click", async function () {
+                                        location.href = "javascript:lobby.removeRoom(); void 0"
+                                        adicionarBotaoForcarCriarLobby()
+                                    })
+                                }
                             }
                         }
                     }
@@ -247,36 +256,6 @@ function adicionarBotaoForcarCriarLobby() {
     });
 }
 
-function ipListener() {
-    return setInterval(async () => {
-        console.log("[GC Booster] - Aguardando info da partida")
-        if (!jaEnviouIP) {
-            const IPSelector = "game-modal-command-input"
-            if (opcoes.webhookLink) {
-                const campoIP = document.getElementsByClassName(IPSelector)
-                if (campoIP.value) {
-                    //adicionar botao
-                    const listenGame = (await axios.get("https://gamersclub.com.br/lobbyBeta/openGame")).data;
-                    jaEnviouIP = true;
-                    clearInterval(intervalIp)
-                    if (listenGame.game.live) {
-                        //add button
-                        $(".game-modal-play-command.half-size.clearfix").parent().append('<button id="botaoDiscordnoDOM" class="game-modal-command-btn" data-tip-text="Clique para enviar no discord">Enviar no Discord</button>');
-                        document.getElementById("botaoDiscordnoDOM").addEventListener('click', async function (e) {
-                            await enviarDadosPartida(opcoes.webhookLink, listenGame);
-                        })
-                        //enviar automaticamente
-                        if (opcoes.enviarPartida) {
-                            await enviarDadosPartida(opcoes.webhookLink, listenGame);
-                        }
-                    }
-                }
-            }
-        } else {
-            clearInterval(intervalIp)
-        }
-    }, 1000)
-}
 //Criar lobby: https://github.com/LouisRiverstone/gamersclub-lobby_waiter/ com as modificações por causa do layout novo
 function intervalerCriacaoLobby() {
     return setInterval(async () => {
