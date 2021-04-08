@@ -10,9 +10,6 @@ chrome.storage.sync.get(
 let intervalCriarLobby = null;
 let lobbyCriada = false;
 
-let jaEnviouIP = false;
-let intervalIp = null;
-
 const initLobby = async () => {
     if (opcoes.autoAceitarPreReady) {
         let preReadyObserver = new MutationObserver((mutations) => {
@@ -166,7 +163,6 @@ const initLobby = async () => {
                                     document.getElementById("botaoDiscordnoDOM").addEventListener('click', async function (e) {
                                         await enviarDadosPartida(opcoes.webhookLink, listenGame.data);
                                     })
-                                    //enviar automaticamente
                                     if (opcoes.enviarPartida) {
                                         await enviarDadosPartida(opcoes.webhookLink, listenGame.data);
                                     }
@@ -185,8 +181,6 @@ const initLobby = async () => {
                     if (node.nextElementSibling && node.nextElementSibling.className && node.nextElementSibling.className.includes('sidebar-desafios sidebar-content')) {
                         if (opcoes.webhookLink.startsWith("http")) {
                             if (document.getElementById("discordLobbyButton")) {
-                                //ja tem o botao
-                                log("Teste pra ve se foi kk")
                                 return false;
                             } else {
                                 if (opcoes.enviarLinkLobby) {
@@ -265,12 +259,13 @@ function intervalerCriacaoLobby() {
             const limiteLobby = windowVars.LOBBIES_LIMIT;
             if (Number(lobbies) < Number(limiteLobby)) {
                 //Criar lobby por meio de requisição com AXIOS. ozKcs
-                chrome.storage.sync.get(["preVetos"], async res => {
+                chrome.storage.sync.get(["preVetos", 'lobbyPrivada'], async res => {
                     const preVetos = res.preVetos ? res.preVetos : [];
+                    const lobbyPrivada = res.lobbyPrivada ? res.lobbyPrivada : false
                     const postData = {
                         "max_level_to_join": 20,
                         "min_level_to_join": 0,
-                        "private": 1,
+                        "private": lobbyPrivada,
                         "region": 0,
                         "restriction": 1,
                         "team": null,

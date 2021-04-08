@@ -47,9 +47,7 @@ const initGcBooster = async () => {
         var windowVariables = retrieveWindowVariables(['PLAYERID', 'ISSUBSCRIBER']);
         const PlayerID = windowVariables.PLAYERID;
         const isSubscriber = windowVariables.ISSUBSCRIBER;
-        log(isSubscriber);
         $.get( "https://gamersclub.com.br/api/box/init/" + parseInt(PlayerID) ).done( function( data ) {
-            const playerName = data.playerInfo.nick;
             const playerLevel = data.playerInfo.level;
             const currentRating = data.playerInfo.rating;
 

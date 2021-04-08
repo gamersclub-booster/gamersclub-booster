@@ -6,7 +6,8 @@ const features = [
     'autoConcordarTermosRanked',
     'mostrarLevelProgress',
     'enviarLinkLobby',
-    'enviarPartida'];
+    'enviarPartida',
+    'lobbyPrivada'];
 
 const preVetosMapas = [
     { mapa: "de_dust2", codigo: 1 },
