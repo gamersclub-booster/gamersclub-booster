@@ -148,12 +148,29 @@ const initLobby = async () => {
 
     if (opcoes.webhookLink.length !== 0) {
         let partidaInfo = new MutationObserver((mutations) => {
-            $.each(mutations, (i, mutation) => {
+            $.each(mutations, async (i, mutation) => {
                 var addedNodes = $(mutation.addedNodes);
                 let selector = '#gameModalCopyServer';
                 var ipInput = addedNodes.find(selector).addBack(selector);
                 if (ipInput.length) {
-                    console.log(ipInput)
+                    const IPSelector = "game-modal-command-input"
+                        const campoIP = document.getElementsByClassName(IPSelector)
+                        console.log(campoIP)
+                        if (campoIP[0].value) {
+                            //adicionar botao
+                            const listenGame = await axios.get("https://gamersclub.com.br/lobbyBeta/openGame")
+                            if (listenGame.data.game.live) {
+                                //add button
+                                $(".game-modal-play-command.half-size.clearfix").parent().append('<button id="botaoDiscordnoDOM" class="game-modal-command-btn" data-tip-text="Clique para enviar no discord">Enviar no Discord</button>');
+                                document.getElementById("botaoDiscordnoDOM").addEventListener('click', async function (e) {
+                                    await enviarDadosPartida(opcoes.webhookLink, listenGame.data);
+                                })
+                                //enviar automaticamente
+                                if (opcoes.enviarPartida) {
+                                    await enviarDadosPartida(opcoes.webhookLink, listenGame.data);
+                                }
+                            }
+                        }
                 }
             });
         });
