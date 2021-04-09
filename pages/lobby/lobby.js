@@ -8,7 +8,6 @@ chrome.storage.sync.get(
 );
 
 let intervalCriarLobby = null;
-let lobbyCriada = false;
 
 const initLobby = async () => {
     if (opcoes.autoCopiarIp) {
@@ -197,15 +196,6 @@ const initLobby = async () => {
                                 await lobbySender(opcoes.webhookLink, lobbyInfo.data)
                                 location.href = `javascript:successAlert("[Discord] - Enviado com sucesso"); void 0`;
                             });
-
-                            const selectorDeleteLobby = "lobbyAdmin-btnExcluir"
-                            if (document.getElementById(selectorDeleteLobby)) {
-                                document.getElementById(selectorDeleteLobby).removeAttribute("onclick")
-                                document.getElementById(selectorDeleteLobby).addEventListener("click", async function () {
-                                    location.href = "javascript:lobby.removeRoom(); void 0"
-                                    adicionarBotaoForcarCriarLobby()
-                                })
-                            }
                         }
                     }
                 }
@@ -247,7 +237,6 @@ function adicionarBotaoForcarCriarLobby() {
         '<button id="forcarCriacaoLobbyBtn" style="color:orange" type="button">Forçar Criação da Lobby</button>'
     );
     document.getElementById('forcarCriacaoLobbyBtn').addEventListener('click', function () {
-        lobbyCriada = false;
         intervalCriarLobby = intervalerCriacaoLobby();
         adicionarBotaoCancelarCriarLobby();
     });
@@ -256,7 +245,7 @@ function adicionarBotaoForcarCriarLobby() {
 //Criar lobby: https://github.com/LouisRiverstone/gamersclub-lobby_waiter/ com as modificações por causa do layout novo
 function intervalerCriacaoLobby() {
     return setInterval(async () => {
-        if (!lobbyCriada || $('.sidebar-titulo.sidebar-sala-titulo').text().length) {
+        if (!$('.sidebar-titulo.sidebar-sala-titulo').text().length) {
             const lobbies = $(".LobbiesInfo__expanded > .Tag > .Tag__tagLabel")[0].innerText.split('/')[1];
             const windowVars = retrieveWindowVariables(["LOBBIES_LIMIT"]);
             const limiteLobby = windowVars.LOBBIES_LIMIT;
@@ -280,14 +269,11 @@ function intervalerCriacaoLobby() {
                     if (criarPost.data.success) {
                         const loadLobby = await axios.post("/lobbyBeta/openRoom");
                         if (loadLobby.data.success) {
-                            lobbyCriada = true;
                             location.href = "javascript:openLobby(); void 0";
                             setTimeout(async () => {
                                 //Lobby criada com sucesso e entrado na janela da lobby já
-                                lobbyCriada = true;
                                 adicionarBotaoForcarCriarLobby();
                                 clearInterval(intervalCriarLobby);
-                                adicionarBotaoForcarCriarLobby();
                             }, 1000);
                         }
                     } else {
