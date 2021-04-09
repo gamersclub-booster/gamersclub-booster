@@ -277,7 +277,7 @@ function intervalerCriacaoLobby() {
                             }, 1000);
                         }
                     } else {
-                        if (criarPost.data.message.includes("Anti-cheat")) {
+                        if (criarPost.data.message.includes("Anti-cheat") || criarPost.data.message.includes("banned")) {
                             clearInterval(intervalCriarLobby);
                             adicionarBotaoForcarCriarLobby();
                             location.href = `javascript:errorAlert('${criarPost.data.message}'); void 0`;
