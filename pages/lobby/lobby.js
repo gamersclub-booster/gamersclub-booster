@@ -38,7 +38,8 @@ const initLobby = async () => {
             if (preReadyButton.length) {
                 const som = opcoes.somPreReady === 'custom' ? opcoes.customSomPreReady : opcoes.somPreReady;
                 const audio = new Audio(som);
-                audio.volume = opcoes.volume / 100;
+                const volume = opcoes.volume || 100;
+                audio.volume = volume/100;
                 document.getElementById('setPlayerReady').addEventListener('click', function (e) {
                     audio.play();
                 });
@@ -55,7 +56,8 @@ const initLobby = async () => {
             if (readyButton.length && readyButton.text() === "Ready" && !readyButton.disabled) {
                 const som = opcoes.somReady === 'custom' ? opcoes.customSomReady : opcoes.somReady;
                 const audio = new Audio(som);
-                audio.volume = opcoes.volume / 100;
+                const volume = opcoes.volume || 100;
+                audio.volume = volume/100;
                 document.getElementById('gameModalReadyBtn').addEventListener('click', function (e) {
                     audio.play();
                 });
