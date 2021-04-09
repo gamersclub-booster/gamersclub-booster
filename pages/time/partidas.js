@@ -39,7 +39,6 @@ const baixarDemo = async (partida, campeonato, tentativas = 0) => {
             $('body').remove(link);
           });
     } catch (e) {
-        log('Deu erro, tentando dnv');
         revelarMapa(partida, campeonato, tentativas + 1);
     }
 }
@@ -59,7 +58,6 @@ const revelarMapa = async (partida, elemento, tentativas = 0) => {
         }
         elemento.addClass('finished');
     } catch (e) {
-        log('Deu erro, tentando dnv');
         revelarMapa(partida, elemento, tentativas + 1);
     }
 };

@@ -15,9 +15,7 @@ async function teste(url) {
 }
 
 async function lobbySender(url, lobbyInfo) {
-    //var lobbyInfo = (await axios.post("/lobbyBeta/openRoom")).data;
-    console.log(lobbyInfo)
-    if (url.length == 0) return false;
+    if (url && url.length == 0) return false;
     if (typeof lobbyInfo !== "object") {
         return false;
     }
