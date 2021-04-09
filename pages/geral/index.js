@@ -48,7 +48,6 @@ const initGcBooster = async () => {
         const PlayerID = windowVariables.PLAYERID;
         const isSubscriber = windowVariables.ISSUBSCRIBER;
         $.get( `//${GC_URL}/api/box/init/` + parseInt(PlayerID) ).done( function( data ) {
-            const playerName = data.playerInfo.nick;
             const playerLevel = data.playerInfo.level;
             const currentRating = data.playerInfo.rating;
 

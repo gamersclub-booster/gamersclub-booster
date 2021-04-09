@@ -111,6 +111,14 @@ body {
     text-transform: uppercase;
 }
 
+.pagina .subtituloh2 {
+    color: white;
+    margin: 0px;
+    font-size: 12px;
+    text-transform: uppercase;
+    text-decoration: white;
+}
+
 .pagina .descricao {
     color: #fff;
 }
@@ -135,6 +143,84 @@ body {
     cursor: pointer;
     height: 0;
     width: 0;
+}
+
+.column {
+    float: left;
+    width: 50%;
+  }
+  
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+#salvarWebhook {
+    background-color: inherit;
+    border: solid 2px #247eb9;
+    border-radius: 3px;
+    color: white;
+    background-color: #247eb9;
+}
+
+#testarWebhook {
+    background-color: inherit;
+    border: solid 2px #247eb9;
+    border-radius: 3px;
+    color: white;
+    background-color: #247eb9;
+}
+
+#testarSomPreReady{
+    background-color: inherit;
+    border: solid 2px #247eb9;
+    border-radius: 3px;
+    color: white;
+    background-color: #247eb9;
+}
+
+#testarSomReady{
+    background-color: inherit;
+    border: solid 2px #247eb9;
+    border-radius: 3px;
+    color: white;
+    background-color: #247eb9;
+}
+
+#somPreReady{
+    background-color: inherit;
+    border: solid 2px #247eb9;
+    border-radius: 3px;
+    color: white;
+    background-color: #247eb9;
+}
+
+#somReady{
+    background-color: inherit;
+    border: solid 2px #247eb9;
+    border-radius: 3px;
+    color: white;
+    background-color: #247eb9;
+}
+
+#campoWebhookLink {
+    resize: none;
+    height: 15px;
+    width: 300px;
+    background-color: inherit;
+    border: solid 2px #247eb9;
+    border-radius: 3px;
+    color: white;
+}
+
+#botaoLimparDiscord {
+    height: 30px;
+    width: 90px;
+    background-color: inherit;
+    border: solid 2px #247eb9;
+    border-radius: 3px;
+    color: white;
 }
 
 /* Create a custom checkbox */
