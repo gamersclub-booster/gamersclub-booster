@@ -1,5 +1,5 @@
 const log = (msg) => console.log('[GC Booster]', msg);
-
+const GC_URL = window.location.hostname;
 let generalOptions = [];
 chrome.storage.sync.get(null, function (result) {
     generalOptions = result;
@@ -47,9 +47,7 @@ const initGcBooster = async () => {
         var windowVariables = retrieveWindowVariables(['PLAYERID', 'ISSUBSCRIBER']);
         const PlayerID = windowVariables.PLAYERID;
         const isSubscriber = windowVariables.ISSUBSCRIBER;
-        log(isSubscriber);
-        $.get( "https://gamersclub.com.br/api/box/init/" + parseInt(PlayerID) ).done( function( data ) {
-            const playerName = data.playerInfo.nick;
+        $.get( `//${GC_URL}/api/box/init/` + parseInt(PlayerID) ).done( function( data ) {
             const playerLevel = data.playerInfo.level;
             const currentRating = data.playerInfo.rating;
 
@@ -94,6 +92,6 @@ const initGcBooster = async () => {
                     <div class="PlayerLevel PlayerLevel--${playerLevel} PlayerLevel--${subscriberStyle}" style="height: 28px; width: 28px; font-size: 12px;"><div class="PlayerLevel__background"><span class="PlayerLevel__text"><i class="far fa-star"></i></span></div></div>
                 </span>
             </div>`);
-        });
+        }).fail(e=>log({e}));
     }
 };

@@ -1,5 +1,5 @@
-const GC_API_URL = '//gamersclub.com.br/campeonatos/getEndedMatchMaps';
-const DEMO_URL = '//gamersclub.com.br/api/ebacon2/stats/scoreboards'
+const GC_API_URL = `//${GC_URL}/campeonatos/getEndedMatchMaps`;
+const DEMO_URL = `//${GC_URL}/api/ebacon2/stats/scoreboards`
 const SELETOR_LINK_PARTIDAS = 'a:contains("Ver partida")';
 
 const pegarIdPartida = (link) => link.split('/')[7];

@@ -4,8 +4,10 @@ const features = [
     'autoAceitarReady',
     'autoFixarMenuLobby',
     'autoConcordarTermosRanked',
-    'mostrarLevelProgress'
-];
+    'mostrarLevelProgress',
+    'enviarLinkLobby',
+    'enviarPartida',
+    'lobbyPrivada'];
 
 const preVetosMapas = [
     { mapa: "de_dust2", codigo: 1 },
@@ -24,10 +26,11 @@ const configValues = [
     'customSomPreReady',
     'customSomReady'
 ]
-const paginas = ['geral', 'mapas', 'lobby', 'contato', 'sobre', 'sons'];
+const paginas = ['geral', 'mapas', 'lobby', 'contato', 'sobre', 'sons', 'integracoes'];
 
 const audios = {
     "undefined": "Nenhum",
+    "https://www.myinstants.com/media/sounds/whatsapp_ptt_2021-04-04_at_21.mp3": "Partida encontrada",
     "https://www.myinstants.com/media/sounds/esl-pro-league-season-11-north-america-mibr-vs-furia-mapa-iii-mirage-mp3cut.mp3": "Começou - Gaules",
     "https://www.myinstants.com/media/sounds/wakeup_1QLWl1G.mp3": "Wake Up - TeamSpeak",
     "https://www.myinstants.com/media/sounds/onarollbrag13.mp3": "Easy Peasy - CS:GO",
@@ -48,6 +51,8 @@ function iniciarPaginaOpcoes() {
     popularAudioOptions();
     selecionarSons();
     adicionarListenersSons();
+    //alterarLinkWebhook();
+    loadWebhook();
 }
 function popularAudioOptions() {
     for (selectId of ['somPreReady', 'somReady']) {
@@ -130,6 +135,7 @@ function adicionarListenerPreVetos() {
 function adicionarListenersFeatures() {
     for (const feature of features) {
         document.getElementById(feature).addEventListener('change', function (e) {
+            console.log(feature, " changed")
             chrome.storage.sync.set({ [feature]: this.checked }, function () {});
         });
     }
@@ -145,7 +151,6 @@ function adicionarListenersPaginas() {
 
 function selecionarSons() {
     chrome.storage.sync.get(null, (response) => {
-        console.log({response});
         if (!response) return false;
         for (const config of configValues) {
             document.getElementById(config).value = response[config];
@@ -194,6 +199,47 @@ function abrirPagina(pagina) {
 
     link.classList.add('active');
     paginaAtiva.classList.add('ativo');
+}
+
+//Discord
+
+function loadWebhook() {
+    chrome.storage.sync.get(["webhookLink"], function (data) {
+        if (data.webhookLink) {
+            document.getElementById("campoWebhookLink").value = data.webhookLink
+            document.getElementById("statusWebhook").innerText = "OK"
+            document.getElementById("divDoDiscord").removeAttribute("hidden")
+        } else {
+            document.getElementById("campoWebhookLink").value = ""
+            document.getElementById("statusWebhook").innerText = "Sem URL salva"
+        }
+    })
+    document.getElementById("testarWebhook").addEventListener("click", async function(e) {
+        const url = document.getElementById("campoWebhookLink").value
+        if (url.length != 0) {
+            try {
+                await teste(url)
+                document.getElementById("statusWebhook").innerText = "OK! Salvando a URL"
+                chrome.storage.sync.set({["statusWebhook"]: "OK", ["webhookLink"]: url}, async function (e) {
+                    document.getElementById("statusWebhook").innerText = "OK"
+                    document.getElementById("divDoDiscord").setAttribute("hidden", true)
+                })
+            } catch (e) {
+                console.log(e)
+                document.getElementById("statusWebhook").innerText = "Erro na URL, tente novamente."
+                document.getElementById("divDoDiscord").setAttribute("hidden", true)
+                console.log("Erro")
+            }
+        } else {
+            chrome.storage.sync.get(["statusWebhook"], function (e) {
+                if (e.statusWebhook) {
+                    document.getElementById("statusWebhook").innerText = e.statusWebhook
+                } else {
+                    document.getElementById("statusWebhook").innerText = "Sem URL salva"
+                }
+            })
+        }
+    })
 }
 
 iniciarPaginaOpcoes();

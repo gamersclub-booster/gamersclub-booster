@@ -17,6 +17,10 @@
 ## GamersClub Booster é uma extensão com o intuito de melhorar a plataforma.
 
 ### O que ela faz?
+- Geral
+  - Adiciona o quanto falta para você upar ou cair, no menu superior das abas
+  - Integra o discord com a gamersclub
+    - Deve adicionar sua URL de webhook no menu da extensão
 - Página Minhas Partidas
   - Verifica em cada partida se tem jogador banido
     - Icone :warning: caso tenha algum jogador banido
@@ -34,6 +38,7 @@
   - Ready Automático
   - Copiar IP Automático
   - Opção de manter o lobby em posição fixa na tela. Evita aquele comportamento chato de ficar sumindo e aparecendo a aba do lobby.
+  - Pré vetos
   - Adiciona um botão pra forçar a criação da lobby (pra quando tem mais do que o limite, 50 free ou 400 premium)
   ![image](https://user-images.githubusercontent.com/1070818/108875916-70c2c680-75dc-11eb-94df-2746d7348a53.png)
 
