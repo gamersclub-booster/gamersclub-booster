@@ -16,7 +16,7 @@ const initLobby = async () => {
             var addedNodes = $(mutation.addedNodes);
             let selector = '#gameModalCopyServer';
             var ipInput = addedNodes.find(selector).addBack(selector);
-            if (ipInput.length) {
+            if (ipInput && ipInput.length) {
                 const IPSelector = "game-modal-command-input"
                 const campoIP = document.getElementsByClassName(IPSelector)
                 if (campoIP[0].value) {
@@ -35,7 +35,7 @@ const initLobby = async () => {
             var addedNodes = $(mutation.addedNodes);
             let selector = '#setPlayerReady';
             var preReadyButton = addedNodes.find(selector).addBack(selector);
-            if (preReadyButton.length) {
+            if (preReadyButton && preReadyButton.length) {
                 const som = opcoes.somPreReady === 'custom' ? opcoes.customSomPreReady : opcoes.somPreReady;
                 const audio = new Audio(som);
                 const volume = opcoes.volume || 100;
@@ -53,7 +53,7 @@ const initLobby = async () => {
             var addedNodes = $(mutation.addedNodes);
             let selector = '#gameModalReadyBtn > button';
             var readyButton = addedNodes.find(selector).addBack(selector);
-            if (readyButton.length && readyButton.text() === "Ready" && !readyButton.disabled) {
+            if (readyButton && readyButton.length && readyButton.text() === "Ready" && !readyButton.disabled) {
                 const som = opcoes.somReady === 'custom' ? opcoes.customSomReady : opcoes.somReady;
                 const audio = new Audio(som);
                 const volume = opcoes.volume || 100;
@@ -71,7 +71,7 @@ const initLobby = async () => {
             var addedNodes = $(mutation.addedNodes);
             let selector = '#setPlayerReady';
             var preReadyButton = addedNodes.find(selector).addBack(selector);
-            if (preReadyButton.length) {
+            if (preReadyButton && preReadyButton.length) {
                 setTimeout(function() {preReadyButton[0].click();}, 500)
             }
         });
@@ -83,7 +83,7 @@ const initLobby = async () => {
             var addedNodes = $(mutation.addedNodes);
             let selector = '#gameModalReadyBtn > button';
             var readyButton = addedNodes.find(selector).addBack(selector);
-            if (readyButton.length && readyButton.text() === "Ready" && !readyButton.disabled) {
+            if (readyButton && readyButton.length && readyButton.text() === "Ready" && !readyButton.disabled) {
                 setTimeout(function() {readyButton[0].click();}, 500)
             }
         });
@@ -141,19 +141,19 @@ const initLobby = async () => {
             const addedNodes = $(mutation.addedNodes);
             let selector = '.ranked-modal-agree.container-fluid > a';
             const concordarButton = addedNodes.find(selector).addBack(selector);
-            if (concordarButton.length) {
+            if (concordarButton && concordarButton.length) {
                 concordarButton[0].click();
             }
         });
         const autoConcordarTermosRanked = criarObserver('#rankedModals', autoConcordarTermosRankedFunc);
     }
 
-    if (opcoes.webhookLink.length !== 0) {
+    if (opcoes.webhookLink && opcoes.webhookLink.length !== 0) {
         const partidaInfoFunc = mutations => $.each(mutations, async (i, mutation) => {
             var addedNodes = $(mutation.addedNodes);
             let selector = '#gameModalCopyServer';
             var ipInput = addedNodes.find(selector).addBack(selector);
-            if (ipInput.length) {
+            if (ipInput && ipInput.length) {
                 const IPSelector = "game-modal-command-input"
                 const campoIP = document.getElementsByClassName(IPSelector)
                 console.log(campoIP)
