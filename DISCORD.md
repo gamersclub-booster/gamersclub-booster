@@ -18,4 +18,6 @@
 - **Clicar** em **COPIAR URL DO WEBHOOK**
 - Após isso, **volte no menu da extensão**
 - Acesse a aba **Integrações**
-- **Cole** sua **URL** no campo **Insira sua URL do Webhook**
+- **Cole** sua **URL** no campo **URL**
+- Clique em **Testar e salvar**
+- Verifique o status, se der OK, deu tudo certo

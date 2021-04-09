@@ -156,6 +156,21 @@ body {
     display: table;
     clear: both;
   }
+#salvarWebhook {
+    background-color: inherit;
+    border: solid 2px #247eb9;
+    border-radius: 3px;
+    color: white;
+    background-color: #247eb9;
+}
+
+#testarWebhook {
+    background-color: inherit;
+    border: solid 2px #247eb9;
+    border-radius: 3px;
+    color: white;
+    background-color: #247eb9;
+}
 
 #testarSomPreReady{
     background-color: inherit;

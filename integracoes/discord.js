@@ -1,7 +1,17 @@
 async function enviarDiscord(url, body) {
-    await axios.post(url, {
+    return await axios.post(url, {
         embeds: [body]
     });
+}
+
+async function teste(url) {
+    return await enviarDiscord(url, {
+        "title": "Teste de integração",
+        "fields": [{
+            "name": "Status",
+            "value": "OK, o link inserido funcionou"
+        }]
+    })
 }
 
 async function lobbySender(url, lobbyInfo) {

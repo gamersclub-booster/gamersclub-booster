@@ -51,7 +51,8 @@ function iniciarPaginaOpcoes() {
     popularAudioOptions();
     selecionarSons();
     adicionarListenersSons();
-    alterarLinkWebhook();
+    //alterarLinkWebhook();
+    loadWebhook();
 }
 function popularAudioOptions() {
     for (selectId of ['somPreReady', 'somReady']) {
@@ -202,44 +203,42 @@ function abrirPagina(pagina) {
 
 //Discord
 
-function alterarLinkWebhook() {
-    chrome.storage.sync.get(["webhookLink"], async e => {
-        if (e.webhookLink !== undefined) {
-            document.getElementById("campoWebhookLink").innerText = e.webhookLink
-            document.getElementById("divDoDiscord").hidden = false
-        }
-    });
-    document.getElementById("campoWebhookLink").addEventListener("keydown", function(event) {
-        var key = event.key;
-        console.log(key)
-        var cmd_key = event.metaKey;
-        var ctrl_key = event.ctrlKey;
-        if ((cmd_key && key == "c") || (ctrl_key && key == "c")) {
-          return true;
-        } else if ((cmd_key && key == "v") || (ctrl_key && key == "v")) {
-          document.getElementById("divDoDiscord").hidden = false
-          return true;
-        } else if ((key == "Backspace") || (key == "Delete")) {
-            return true;
-        } else if ((cmd_key && key == "a") || (ctrl_key && key == "a")) {
-            return true
+function loadWebhook() {
+    chrome.storage.sync.get(["webhookLink"], function (data) {
+        if (data.webhookLink) {
+            document.getElementById("campoWebhookLink").value = data.webhookLink
+            document.getElementById("statusWebhook").innerText = "OK"
+            document.getElementById("divDoDiscord").removeAttribute("hidden")
         } else {
-          event.preventDefault();
+            document.getElementById("campoWebhookLink").value = ""
+            document.getElementById("statusWebhook").innerText = "Sem URL salva"
         }
-      });
-    document.getElementById("campoWebhookLink").addEventListener("paste", function (event) {
-        let paste = (event.clipboardData || window.clipboardData).getData('text');
-        document.getElementById("divDoDiscord").hidden = false;
-        chrome.storage.sync.set({["webhookLink"]: paste}, function () {});
-    });
-
-    document.getElementById("botaoLimparDiscord").addEventListener("click", function (e) {
-        chrome.storage.sync.set({["webhookLink"]: "", ["enviarLinkLobby"]: false, ["enviarPartida"]: false, ["addButtonLobby"]: false})
-        document.getElementById("divDoDiscord").hidden = true;
-        document.getElementById("enviarLinkLobby").checked = false
-        document.getElementById("enviarPartida").checked = false
-        document.getElementById("addButtonLobby").checked = false
-        document.getElementById("campoWebhookLink").value = "";
+    })
+    document.getElementById("testarWebhook").addEventListener("click", async function(e) {
+        const url = document.getElementById("campoWebhookLink").value
+        if (url.length != 0) {
+            try {
+                await teste(url)
+                document.getElementById("statusWebhook").innerText = "OK! Salvando a URL"
+                chrome.storage.sync.set({["statusWebhook"]: "OK", ["webhookLink"]: url}, async function (e) {
+                    document.getElementById("statusWebhook").innerText = "OK"
+                    document.getElementById("divDoDiscord").setAttribute("hidden", true)
+                })
+            } catch (e) {
+                console.log(e)
+                document.getElementById("statusWebhook").innerText = "Erro na URL, tente novamente."
+                document.getElementById("divDoDiscord").setAttribute("hidden", true)
+                console.log("Erro")
+            }
+        } else {
+            chrome.storage.sync.get(["statusWebhook"], function (e) {
+                if (e.statusWebhook) {
+                    document.getElementById("statusWebhook").innerText = e.statusWebhook
+                } else {
+                    document.getElementById("statusWebhook").innerText = "Sem URL salva"
+                }
+            })
+        }
     })
 }
 

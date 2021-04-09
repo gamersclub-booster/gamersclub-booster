@@ -149,12 +149,15 @@
       </div>
 
       <div class="pagina" id="integracoes">
-        <h3 class="subtitulo">Discord</h3>
+        <h3 class="subtitulo">Discord <a class="subtituloh2" href="https://github.com/gamersclub-booster/gamersclub-booster/blob/master/DISCORD.md" target="_blank">Como criar sua webhook</a></h3>
         <div>
-          <p>Link do Discord Webhook</p>
-          <textarea id="campoWebhookLink" placeholder="Cole aqui a URL do seu WebHook"></textarea>
-          <h2 class="subtituloh2"><a class="subtituloh2" href="https://github.com/gamersclub-booster/gamersclub-booster/blob/master/DISCORD.md" target="_blank">Como criar sua webhook</a></h2>
-          <br>
+          <p>URL: <input id="campoWebhookLink" placeholder="Cole aqui a URL do seu WebHook"></input></p>
+          <div>
+            <p style="display: inline-block; ">Status do url:</p>
+            <p style="display: inline-block; "id="statusWebhook"></p>
+          </div>
+          <button id="testarWebhook">Testar e Salvar</button>
+          <br></br>
           <div id="divDoDiscord" hidden="true">
             <h3 class="subtitulo">Enviar automaticamente no Discord</h2>
             <label class="container" for="enviarLinkLobby"
@@ -219,5 +222,6 @@
   </div>
 </body>
 <script src="opcoes.js"></script>
-
+<script src="../integracoes/discord.js"></script>
+<script src="../lib/axios.min.js"></script>
 </html>
