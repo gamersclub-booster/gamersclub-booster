@@ -91,6 +91,16 @@
         "code",
         "bug"
       ]
+    },
+    {
+      "login": "feliperugai",
+      "name": "Felipe Rugai",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11398105?v=4",
+      "profile": "https://average.digital",
+      "contributions": [
+        "code",
+        "design"
+      ]
     }
   ],
   "contributorsPerLine": 7,
