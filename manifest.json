@@ -1,56 +1,77 @@
 {
-    "manifest_version": 2,
-    "name": "GamersClub Booster",
-    "description": "Extensão para o Google Chrome que adiciona algumas melhorias na plataforma da GamersClub.",
-    "version": "1.0.22",
-    "icons": {
-      "16": "icons/icon_16.png",
-      "48": "icons/icon_48.png",
-      "128": "icons/icon_128.png"
+  "manifest_version": 2,
+  "name": "GamersClub Booster",
+  "description": "Extensão para o Google Chrome que adiciona algumas melhorias na plataforma da GamersClub.",
+  "version": "1.0.22",
+  "icons": {
+    "16": "images/icon_16.png",
+    "48": "images/icon_48.png",
+    "128": "images/icon_128.png"
+  },
+  "permissions": [
+    "https://gamersclub.com.br/",
+    "https://csgo.gamersclub.gg/",
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://*.gamersclub.com.br/*", "*://csgo.gamersclub.gg/*"],
+      "js": ["content-scripts/main.js"],
+      "run_at": "document_end"
     },
-    "permissions": [
-        "https://gamersclub.com.br/",
-        "https://csgo.gamersclub.gg/",
-        "storage"
-    ],
-    "content_scripts": [
-        {
-            "matches": ["*://*.gamersclub.com.br/*", "*://csgo.gamersclub.gg/*"],
-            "js": ["lib/jquery.min.js", "lib/axios.min.js", "pages/geral/index.js"]
-        },
-		{
-            "matches": ["*://*.gamersclub.com.br/minhas-partidas*", "*://csgo.gamersclub.gg/minhas-partidas*"],
-            "js": ["lib/jquery.min.js", "lib/axios.min.js", "pages/minhas-partidas/minhas-partidas.js"]
-        },
-		{
-            "matches": ["*://*.gamersclub.com.br/team/matches/*", "*://csgo.gamersclub.gg/team/matches/*"],
-            "js": ["lib/jquery.min.js", "lib/axios.min.js", "pages/time/partidas.js"]
-        },
-		{
-            "matches": ["*://*.gamersclub.com.br/lobby*", "*://csgo.gamersclub.gg/lobby*"],
-            "js": ["lib/jquery.min.js", "lib/axios.min.js", "pages/lobby/lobby.js", "integracoes/discord.js"]
-        },
-		{
-            "matches": ["*://*.gamersclub.com.br/jogador*", "*://csgo.gamersclub.gg/jogador*"],
-            "js": ["lib/jquery.min.js", "lib/axios.min.js", "pages/profile/profile.js"]
-        },
-        {
-            "matches": ["*://*.gamersclub.com.br/missoes*", "*://csgo.gamersclub.gg/missoes*"],
-            "js": ["lib/jquery.min.js", "lib/axios.min.js", "pages/missoes/missoes.js"]
-        }
-    ],
-    "options_page": "opcoes/opcoes.html",
-	"options_ui": {
-	  "page": "opcoes/opcoes.html"
-	},
-	"browser_action": {
-		"default_icon": {
-			"16": "icons/icon_16.png",
-			"48": "icons/icon_48.png",
-			"128": "icons/icon_128.png"
-		},
-		"default_popup": "opcoes/opcoes.html",
-		"browser_style": true,
-		"chrome_style": true
-	}
+    {
+      "matches": [
+        "*://*.gamersclub.com.br/minhas-partidas*",
+        "*://csgo.gamersclub.gg/minhas-partidas*"
+      ],
+      "js": ["content-scripts/my-matches.js"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://*.gamersclub.com.br/team/matches/*",
+        "*://csgo.gamersclub.gg/team/matches/*"
+      ],
+      "js": ["content-scripts/matches.js"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://*.gamersclub.com.br/lobby*",
+        "*://csgo.gamersclub.gg/lobby*"
+      ],
+      "js": ["content-scripts/lobby.js"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://*.gamersclub.com.br/jogador*",
+        "*://csgo.gamersclub.gg/jogador*"
+      ],
+      "js": ["content-scripts/profile.js"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://*.gamersclub.com.br/missoes*",
+        "*://csgo.gamersclub.gg/missoes*"
+      ],
+      "js": ["content-scripts/missions.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "options_page": "index.html",
+  "options_ui": {
+    "page": "index.html"
+  },
+  "browser_action": {
+    "default_icon": {
+      "16": "images/icon_16.png",
+      "48": "images/icon_48.png",
+      "128": "images/icon_128.png"
+    },
+    "default_popup": "index.html",
+    "browser_style": true,
+    "chrome_style": true
+  }
 }

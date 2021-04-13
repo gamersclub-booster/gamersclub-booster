@@ -3,19 +3,22 @@
 <meta charset="utf-8" />
 <html>
   <head>
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700|Oswald:300,400,700|Teko" rel="stylesheet" />
-    <link rel="stylesheet" href="opcoes.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700|Oswald:300,400,700|Teko"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
   </head>
 
   <body>
-    <div class="body">
+    <div class="wrapper">
       <div class="header">
         <a href="#default" class="logo">Gamers Club Booster </a>
         <div class="img">
           <img src="../icons/icon_48.png" alt="Gamers club booster" />
         </div>
       </div>
-      <div class="conteudo">
+      <div class="content">
         <div class="menu">
           <ul>
             <li id="link-geral" class="active"><a href="#geral">Geral</a></li>
@@ -32,34 +35,58 @@
 
         <div class="pagina ativo" id="geral">
           <h3 class="subtitulo">Automações</h3>
-          <label class="container" for="autoAceitarPreReady" title="Aceita automaticamente o pré-ready">
+          <label
+            class="container"
+            for="autoAceitarPreReady"
+            title="Aceita automaticamente o pré-ready"
+          >
             <p class="descricao">Aceitar Pre Ready</p>
             <input type="checkbox" id="autoAceitarPreReady" />
             <span class="checkmark"></span>
           </label>
-          <label class="container" for="autoAceitarReady" title="Aceita automaticamente o ready">
+          <label
+            class="container"
+            for="autoAceitarReady"
+            title="Aceita automaticamente o ready"
+          >
             <p class="descricao">Aceitar Ready</p>
             <input type="checkbox" id="autoAceitarReady" />
             <span class="checkmark"></span>
           </label>
-          <label class="container" for="autoCopiarIp" title="Copia o IP automáticamente assim que disponível">
+          <label
+            class="container"
+            for="autoCopiarIp"
+            title="Copia o IP automáticamente assim que disponível"
+          >
             <p class="descricao">Copiar IP</p>
             <input type="checkbox" id="autoCopiarIp" />
             <span class="checkmark"></span>
           </label>
-          <label class="container" for="autoConcordarTermosRanked" title="Acita automaticamente os termos da ranked">
+          <label
+            class="container"
+            for="autoConcordarTermosRanked"
+            title="Acita automaticamente os termos da ranked"
+          >
             <p class="descricao">Aceitar Termos da Ranked</p>
             <input type="checkbox" id="autoConcordarTermosRanked" />
             <span class="checkmark"></span>
           </label>
           <br />
           <h3 class="subtitulo">Melhorias</h3>
-          <label class="container" for="autoFixarMenuLobby" title="Trava a lobby e os desáfios no topo melhorando a usabilidade">
+          <label
+            class="container"
+            for="autoFixarMenuLobby"
+            title="Trava a lobby e os desáfios no topo melhorando a usabilidade"
+          >
             <p class="descricao">Fixar Menu do Lobby</p>
             <input type="checkbox" id="autoFixarMenuLobby" />
             <span class="checkmark"></span>
           </label>
-          <label class="container" for="mostrarLevelProgress" title="Mostra seu Level, Rating atual, e quantos pontos é preciso para chegar ao proximo Level.">
+          <label
+            class="container"
+            for="mostrarLevelProgress"
+            title="Mostra seu Level, Rating atual, e quantos pontos é preciso para chegar ao proximo Level."
+          >
             <p class="descricao">Mostrar seu progresso no menu</p>
             <input type="checkbox" id="mostrarLevelProgress" />
             <span class="checkmark"></span>
@@ -76,51 +103,88 @@
           <h3 class="subtitulo" id="prevetoTitle">Pré Vetos (3 escolhas)</h3>
           <div class="row">
             <div class="column">
-              <label class="container" for="preVetode_dust2" title="Pré veta o mapa Dust 2">
+              <label
+                class="container"
+                for="preVetode_dust2"
+                title="Pré veta o mapa Dust 2"
+              >
                 <p class="descricao">de_dust2</p>
                 <input type="checkbox" id="preVetode_dust2" codigo="1" />
                 <span class="checkmark"></span>
               </label>
-              <label class="container" for="preVetode_nuke" title="Pré veta o mapa Nuke">
+              <label
+                class="container"
+                for="preVetode_nuke"
+                title="Pré veta o mapa Nuke"
+              >
                 <p class="descricao">de_nuke</p>
                 <input type="checkbox" id="preVetode_nuke" codigo="2" />
                 <span class="checkmark"></span>
               </label>
-              <label class="container" for="preVetode_train" title="Pré veta o mapa Train">
+              <label
+                class="container"
+                for="preVetode_train"
+                title="Pré veta o mapa Train"
+              >
                 <p class="descricao">de_train</p>
                 <input type="checkbox" id="preVetode_train" codigo="3" />
                 <span class="checkmark"></span>
               </label>
-              <label class="container" for="preVetode_mirage" title="Pré veta o mapa Mirage">
+              <label
+                class="container"
+                for="preVetode_mirage"
+                title="Pré veta o mapa Mirage"
+              >
                 <p class="descricao">de_mirage</p>
                 <input type="checkbox" id="preVetode_mirage" codigo="5" />
                 <span class="checkmark"></span>
               </label>
             </div>
             <div class="column">
-              <label class="container" for="preVetode_overpass" title="Pré veta o mapa Overpass">
+              <label
+                class="container"
+                for="preVetode_overpass"
+                title="Pré veta o mapa Overpass"
+              >
                 <p class="descricao">de_overpass</p>
                 <input type="checkbox" id="preVetode_overpass" codigo="7" />
                 <span class="checkmark"></span>
               </label>
-              <label class="container" for="preVetode_inferno" title="Pré veta o mapa Inferno">
+              <label
+                class="container"
+                for="preVetode_inferno"
+                title="Pré veta o mapa Inferno"
+              >
                 <p class="descricao">de_inferno</p>
                 <input type="checkbox" id="preVetode_inferno" codigo="8" />
                 <span class="checkmark"></span>
               </label>
-              <label class="container" for="preVetode_vertigo" title="Pré veta o mapa Vertigo">
+              <label
+                class="container"
+                for="preVetode_vertigo"
+                title="Pré veta o mapa Vertigo"
+              >
                 <p class="descricao">de_vertigo</p>
                 <input type="checkbox" id="preVetode_vertigo" codigo="10" />
                 <span class="checkmark"></span>
               </label>
-              <label class="container" for="preVetode_cbble_classic" title="Pré veta o mapa Cobblestone">
+              <label
+                class="container"
+                for="preVetode_cbble_classic"
+                title="Pré veta o mapa Cobblestone"
+              >
                 <p class="descricao">de_cbble_classic</p>
-                <input type="checkbox" id="preVetode_cbble_classic" codigo="11" />
+                <input
+                  type="checkbox"
+                  id="preVetode_cbble_classic"
+                  codigo="11"
+                />
                 <span class="checkmark"></span>
               </label>
             </div>
           </div>
         </div>
+        
         <div class="pagina" id="sons">
           <h3 class="subtitulo">Sons (Experimental)</h3>
           <div>
@@ -130,8 +194,14 @@
                 <select id="somPreReady"></select>
               </div>
             </div>
-            <button class="btn btn-primary" id="testarSomPreReady">Testar</button>
-            <div id="p-customSomPreReady" class="form-input" style="display: none; margin-top: 10px">
+            <button class="btn btn-primary" id="testarSomPreReady">
+              Testar
+            </button>
+            <div
+              id="p-customSomPreReady"
+              class="form-input"
+              style="display: none; margin-top: 10px"
+            >
               <span>URL Som customizado:</span>
               <div class="input-container">
                 <input type="text" id="customSomPreReady" />
@@ -146,7 +216,11 @@
               </div>
             </div>
             <button class="btn btn-primary" id="testarSomReady">Testar</button>
-            <div id="p-customSomReady" class="form-input" style="display: none; margin-top: 10px">
+            <div
+              id="p-customSomReady"
+              class="form-input"
+              style="display: none; margin-top: 10px"
+            >
               <span>URL Som customizado:</span>
               <div class="input-container">
                 <input type="text" id="customSomReady" />
@@ -158,21 +232,37 @@
             <input type="range" id="volume" name="volume" min="0" max="100" />
           </div>
           <div>
-            <p>* Todos os sons estão sendo executados diretamente do site: myinstants.com</p>
-            <p>* Você pode customizar utilizando outros sons de lá copiando a URL do link "Download MP3" abaixo do botão.</p>
+            <p>
+              * Todos os sons estão sendo executados diretamente do site:
+              myinstants.com
+            </p>
+            <p>
+              * Você pode customizar utilizando outros sons de lá copiando a URL
+              do link "Download MP3" abaixo do botão.
+            </p>
           </div>
         </div>
 
         <div class="pagina" id="integracoes">
           <h3 class="subtitulo">
             Discord
-            <a class="subtituloh2" href="https://github.com/gamersclub-booster/gamersclub-booster/blob/master/DISCORD.md" target="_blank">&nbsp; Como criar sua webhook</a>
+            <a
+              class="subtituloh2"
+              href="https://github.com/gamersclub-booster/gamersclub-booster/blob/master/DISCORD.md"
+              target="_blank"
+              >&nbsp; Como criar sua webhook</a
+            >
           </h3>
           <div>
             <div class="form-input">
               <span>URL</span>
               <div class="input-container">
-                <input type="text" id="campoWebhookLink" placeholder="Cole aqui a URL do seu WebHook" class="input-form-gray form-control" />
+                <input
+                  type="text"
+                  id="campoWebhookLink"
+                  placeholder="Cole aqui a URL do seu WebHook"
+                  class="input-form-gray form-control"
+                />
               </div>
             </div>
 
@@ -180,54 +270,93 @@
               <p style="display: inline-block">Status do url:</p>
               <p style="display: inline-block" id="statusWebhook"></p>
             </div>
-            <button class="btn btn-success" id="testarWebhook">Testar e Salvar</button>
+            <button class="btn btn-success" id="testarWebhook">
+              Testar e Salvar
+            </button>
             <br /><br />
             <div id="divDoDiscord" hidden="true">
               <h3 class="subtitulo">Enviar automaticamente no Discord</h3>
-              <label class="container" for="enviarLinkLobby" title="Envia automaticamente o link da lobby com as informações no discord programado">
+              <label
+                class="container"
+                for="enviarLinkLobby"
+                title="Envia automaticamente o link da lobby com as informações no discord programado"
+              >
                 <p class="descricao">Lobby (Link, KD's dos Jogadores)</p>
                 <input type="checkbox" id="enviarLinkLobby" />
                 <span class="checkmark"></span>
               </label>
-              <label class="container" for="enviarPartida" title="Envia automaticamente a partida com as informações no discord programado">
+              <label
+                class="container"
+                for="enviarPartida"
+                title="Envia automaticamente a partida com as informações no discord programado"
+              >
                 <p class="descricao">Partida (IP, Times)</p>
                 <input type="checkbox" id="enviarPartida" />
                 <span class="checkmark"></span>
               </label>
             </div>
-            <button class="btn btn-warning" id="botaoLimparDiscord">Redefinir</button>
+            <button class="btn btn-warning" id="botaoLimparDiscord">
+              Redefinir
+            </button>
           </div>
         </div>
 
-        <div class="pagina" id="lobby">Em breve teremos opções para criação de lobby.</div>
+        <div class="pagina" id="lobby">
+          Em breve teremos opções para criação de lobby.
+        </div>
 
-        <div class="pagina" id="mapas">Em breve teremos opções de veto automático de mapas.</div>
+        <div class="pagina" id="mapas">
+          Em breve teremos opções de veto automático de mapas.
+        </div>
 
         <div class="pagina" id="contato">
           <a href="https://discord.gg/umx6bbuawh" target="_blank">
             <h3 class="subtitulo">Discord</h3>
-            <p class="descricao">Entre no nosso discord e tire duvidas, informe bugs, deixe uma sugestão ou feedback.</p>
+            <p class="descricao">
+              Entre no nosso discord e tire duvidas, informe bugs, deixe uma
+              sugestão ou feedback.
+            </p>
           </a>
-          <a href="https://github.com/gamersclub-booster/gamersclub-booster/issues" target="_blank">
+          <a
+            href="https://github.com/gamersclub-booster/gamersclub-booster/issues"
+            target="_blank"
+          >
             <h3 class="subtitulo">Informe um bug ou abra uma solicitação</h3>
-            <p class="descricao">Abra uma issue no github explicando em detalhes o seu problema/solicitação de melhoria</p>
+            <p class="descricao">
+              Abra uma issue no github explicando em detalhes o seu
+              problema/solicitação de melhoria
+            </p>
           </a>
           <br />
-          <a href="https://github.com/gamersclub-booster/gamersclub-booster/" target="_blank">
+          <a
+            href="https://github.com/gamersclub-booster/gamersclub-booster/"
+            target="_blank"
+          >
             <h3 class="subtitulo">Quer contribuir?</h3>
-            <p class="descricao">Esta é uma extensão de código aberto e toda contribuição da comunidade é bem vinda</p>
+            <p class="descricao">
+              Esta é uma extensão de código aberto e toda contribuição da
+              comunidade é bem vinda
+            </p>
           </a>
         </div>
 
         <div class="pagina" id="sobre">
-          <a href="https://github.com/gamersclub-booster/gamersclub-booster" target="_blank">
+          <a
+            href="https://github.com/gamersclub-booster/gamersclub-booster"
+            target="_blank"
+          >
             <h3 class="subtitulo">Código fonte</h3>
             <p class="descricao">GitHub</p>
           </a>
           <br />
-          <a href="https://github.com/gamersclub-booster/gamersclub-booster/#contributors-" target="_blank">
+          <a
+            href="https://github.com/gamersclub-booster/gamersclub-booster/#contributors-"
+            target="_blank"
+          >
             <h3 class="subtitulo">Colaboradores</h3>
-            <p class="descricao">Veja quem são as pessoas que fazem parte desse projeto</p>
+            <p class="descricao">
+              Veja quem são as pessoas que fazem parte desse projeto
+            </p>
           </a>
           <br />
           <h3 class="subtitulo">Versão</h3>
@@ -240,7 +369,5 @@
       </div>
     </div>
   </body>
-  <script src="opcoes.js"></script>
-  <script src="../integracoes/discord.js"></script>
-  <script src="../lib/axios.min.js"></script>
+  <script src="index.js"></script>
 </html>
