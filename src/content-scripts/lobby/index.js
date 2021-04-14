@@ -205,6 +205,7 @@ const initLobby = async () => {
               if (document.getElementById('discordLobbyButton')) {
                 return false;
               } else {
+                if (document.getElementsByClassName(".btn-radial.btn-blue.btn-copiar-link").length === 0) return false;
                 if (opcoes.enviarLinkLobby) {
                   const lobbyInfo = await axios.post('/lobbyBeta/openRoom');
                   await sendLobby(opcoes.webhookLink, lobbyInfo.data);

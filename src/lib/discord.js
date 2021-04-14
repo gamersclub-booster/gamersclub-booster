@@ -41,7 +41,7 @@ export async function sendLobby(url, lobbyInfo) {
   await send(url, {
     title: 'Clique aqui para abrir a lobby',
     color: "2391737",
-    url: `//${GC_URL}/j/${lobbyInfo.lobby.lobbyID}/${lobbyInfo.lobby.password}`,
+    url: `https://${GC_URL}/j/${lobbyInfo.lobby.lobbyID}/${lobbyInfo.lobby.password}`,
     fields: [
       {
         name: 'Tipo da sala:',
@@ -107,11 +107,11 @@ export async function sendMatchInfo(url, gcMatch) {
       },
       {
         name: 'Mapa:',
-        value: mapa,
+        value: map,
       },
       {
         name: 'Link da partida',
-        value: `//${GC_URL}/lobby/partida/${gcMatch.game.gameID}`,
+        value: `https://${GC_URL}/lobby/partida/${gcMatch.game.gameID}`,
       },
     ],
     image: {
