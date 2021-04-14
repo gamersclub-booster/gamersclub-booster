@@ -65,7 +65,7 @@ const initGcBooster = async () => {
             </span>
             <div style="margin-right: 4px;margin-left: 4px;">
                 <div class="text-light" style="display: flex; justify-content: space-between;"> 
-                    <div class="text-sm text-muted bold" style="align-self: flex-end;"><a href="https://gamersclub.com.br/lobby/partida/${matchId}"><span style="${colorTxt}cursor: pointer;" title="${
+                    <div class="text-sm text-muted bold" style="align-self: flex-end;"><a href="//${GC_URL}/lobby/partida/${matchId}"><span style="${colorTxt}cursor: pointer;" title="${
       rating_points.includes('-')
         ? 'Pontos que você perdeu na ultima partida' + qwertText
         : 'Pontos que você ganhou na ultima partida' + qwertText

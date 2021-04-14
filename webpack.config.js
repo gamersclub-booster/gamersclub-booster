@@ -16,11 +16,11 @@ module.exports = {
     'content-scripts/my-matches': contentScripts('my-matches'),
     'content-scripts/profile': contentScripts('profile'),
   },
+  devtool: 'source-map',
   output: {
     clean: true,
     filename: '[name].js',
     path: path.resolve(__dirname, './dist'),
-    clean: true,
   },
   experiments: { topLevelAwait: true },
   plugins: [

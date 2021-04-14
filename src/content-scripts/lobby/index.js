@@ -1,5 +1,6 @@
 import { retrieveWindowVariables } from '../../lib/dom';
 import { sendLobby, sendMatchInfo } from '../../lib/discord'
+import { GC_URL } from '../../lib/constants';
 import axios from 'axios';
 
 let opcoes = {};
@@ -168,9 +169,8 @@ const initLobby = async () => {
         if (ipInput && ipInput.length) {
           const IPSelector = 'game-modal-command-input';
           const campoIP = document.getElementsByClassName(IPSelector);
-          console.log(campoIP);
           if (campoIP[0].value) {
-            const listenGame = await axios.get('https://gamersclub.com.br/lobbyBeta/openGame');
+            const listenGame = await axios.get(`//${GC_URL}/lobbyBeta/openGame`);
             if (listenGame.data.game.live) {
               if (document.getElementById('botaoDiscordnoDOM')) {
                 return false;

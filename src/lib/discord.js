@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getMapImage } from './maps';
+import { GC_URL } from './constants';
 
 export async function send(url, body) {
   return await axios.post(url, {
@@ -40,7 +41,7 @@ export async function sendLobby(url, lobbyInfo) {
   await send(url, {
     title: 'Clique aqui para abrir a lobby',
     color: "2391737",
-    url: `https://gamersclub.com.br/j/${lobbyInfo.lobby.lobbyID}/${lobbyInfo.lobby.password}`,
+    url: `//${GC_URL}/j/${lobbyInfo.lobby.lobbyID}/${lobbyInfo.lobby.password}`,
     fields: [
       {
         name: 'Tipo da sala:',
@@ -110,7 +111,7 @@ export async function sendMatchInfo(url, gcMatch) {
       },
       {
         name: 'Link da partida',
-        value: 'https://gamersclub.com.br/lobby/partida/' + gcMatch.game.gameID,
+        value: `//${GC_URL}/lobby/partida/${gcMatch.game.gameID}`,
       },
     ],
     image: {

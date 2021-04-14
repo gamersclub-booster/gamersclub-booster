@@ -1,3 +1,4 @@
+import { GC_URL } from '../../lib/constants';
 const GC_API_URL = `//${GC_URL}/campeonatos/getEndedMatchMaps`;
 const DEMO_URL = `//${GC_URL}/api/ebacon2/stats/scoreboards`
 const SELETOR_LINK_PARTIDAS = 'a:contains("Ver partida")';
@@ -10,14 +11,14 @@ const adicioanrLinks = () => {
         if ($(this).attr('class').includes('finished')) {
             const idPartida = pegarIdPartida(this.href);
             const botaoRevelarMapa = $(`<a class="button-date-table" style="margin-top:4px">Mapa</a>`);
-            botaoRevelarMapa.click(function () {
+            botaoRevelarMapa.on('click', function () {
                 revelarMapa(idPartida, botaoRevelarMapa);
             });
             $(this).parent().append(botaoRevelarMapa);
 
             const idCamp = this.href.split('/')[5];
             const botaoDemo = $('<a class="button-date-table" style="margin:4px">Demo</a>');
-            botaoDemo.click(function(){
+            botaoDemo.on('click', function(){
                 baixarDemo(idPartida,idCamp);
             });
             $(this).parent().append(botaoDemo);

@@ -102,3 +102,4 @@ export const audios = {
   'https://www.myinstants.com/media/sounds/tuturu_1.mp3': 'Tuturu - Steins;Gate',
   'custom': 'Customizar',
 };
+export const GC_URL = window.location.hostname;
