@@ -1,4 +1,5 @@
 import { levelRatingXP, levelColor } from '../../lib/constants';
+import { retrieveWindowVariables } from '../../lib/dom';
 
 const GC_URL = window.location.hostname;
 let generalOptions = [];
@@ -12,39 +13,6 @@ function XpRangeFromLevel(level) {
     minRating: levelRatingXP[level - 1],
     maxRating: levelRatingXP[level],
   };
-}
-
-// Um helper para pegar a var necessaria.
-function retrieveWindowVariables(variables) {
-  var ret = {};
-
-  var scriptContent = '';
-  for (var i = 0; i < variables.length; i++) {
-    var currVariable = variables[i];
-    scriptContent +=
-      'if (typeof ' +
-      currVariable +
-      " !== 'undefined') $('body').attr('tmp_" +
-      currVariable +
-      "', " +
-      currVariable +
-      ');\n';
-  }
-
-  var script = document.createElement('script');
-  script.id = 'tmpScript';
-  script.appendChild(document.createTextNode(scriptContent));
-  (document.body || document.head || document.documentElement).appendChild(script);
-
-  for (var i = 0; i < variables.length; i++) {
-    var currVariable = variables[i];
-    ret[currVariable] = $('body').attr('tmp_' + currVariable);
-    $('body').removeAttr('tmp_' + currVariable);
-  }
-
-  $('#tmpScript').remove();
-
-  return ret;
 }
 
 const grabPlayerLastMatch = async (matchUrl) => {
