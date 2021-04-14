@@ -10,10 +10,11 @@ export async function send(url, body) {
 export async function testWebhook(url) {
   return await send(url, {
     title: 'Gamers Club Booster',
+    color: "4961603",
     fields: [
       {
         name: 'Status',
-        value: 'OK, webhook integrado',
+        value: 'OK, se você recebeu essa mensagem está tudo certo e seu webhook foi integrado',
       },
     ],
   });
@@ -38,6 +39,7 @@ export async function sendLobby(url, lobbyInfo) {
 
   await send(url, {
     title: 'Clique aqui para abrir a lobby',
+    color: "2391737",
     url: `https://gamersclub.com.br/j/${lobbyInfo.lobby.lobbyID}/${lobbyInfo.lobby.password}`,
     fields: [
       {
@@ -88,6 +90,7 @@ export async function sendMatchInfo(url, gcMatch) {
   })[0].name;
 
   await send(url, {
+    color: "2391737",
     fields: [
       {
         name: 'Time A',

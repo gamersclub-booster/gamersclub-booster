@@ -183,7 +183,15 @@ function loadWebhook() {
     } else {
       document.getElementById('campoWebhookLink').value = '';
       document.getElementById('statusWebhook').innerText = 'Sem URL salva';
+      document.getElementById('divDoDiscord').setAttribute('hidden', true);
     }
+  });
+  document.getElementById("botaoLimparDiscord").addEventListener("click", async () => {
+    chrome.storage.sync.set({["webhookLink"]: "", ["enviarLinkLobby"]: false, ["enviarPartida"]: false});
+    document.getElementById("divDoDiscord").hidden = true;
+    document.getElementById("enviarLinkLobby").checked = false;
+    document.getElementById("enviarPartida").checked = false;
+    document.getElementById("campoWebhookLink").value = "";
   });
   document.getElementById('testarWebhook').addEventListener('click', async function (e) {
     const url = document.getElementById('campoWebhookLink').value;
@@ -193,7 +201,7 @@ function loadWebhook() {
         document.getElementById('statusWebhook').innerText = 'OK! Salvando a URL';
         chrome.storage.sync.set({ ['statusWebhook']: 'OK', ['webhookLink']: url }, async function (e) {
           document.getElementById('statusWebhook').innerText = 'OK';
-          document.getElementById('divDoDiscord').setAttribute('hidden', true);
+          document.getElementById('divDoDiscord').removeAttribute("hidden");
         });
       } catch (e) {
         console.log(e);
