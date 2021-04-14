@@ -1,4 +1,6 @@
 import { retrieveWindowVariables } from '../../lib/dom';
+import { sendLobby, sendMatchInfo } from '../../lib/discord'
+import axios from 'axios';
 
 let opcoes = {};
 chrome.storage.sync.get(null, function (result) {
@@ -179,10 +181,10 @@ const initLobby = async () => {
                     '<button id="botaoDiscordnoDOM" class="game-modal-command-btn" data-tip-text="Clique para enviar no discord">Enviar no Discord</button>'
                   );
                 document.getElementById('botaoDiscordnoDOM').addEventListener('click', async function (e) {
-                  await enviarDadosPartida(opcoes.webhookLink, listenGame.data);
+                  await sendMatchInfo(opcoes.webhookLink, listenGame.data);
                 });
                 if (opcoes.enviarPartida) {
-                  await enviarDadosPartida(opcoes.webhookLink, listenGame.data);
+                  await sendMatchInfo(opcoes.webhookLink, listenGame.data);
                 }
               }
             }
@@ -205,7 +207,7 @@ const initLobby = async () => {
               } else {
                 if (opcoes.enviarLinkLobby) {
                   const lobbyInfo = await axios.post('/lobbyBeta/openRoom');
-                  await lobbySender(opcoes.webhookLink, lobbyInfo.data);
+                  await sendLobby(opcoes.webhookLink, lobbyInfo.data);
                   location.href = `javascript:successAlert("[Discord] - Enviado com sucesso"); void 0`;
                 }
                 document
@@ -219,7 +221,7 @@ const initLobby = async () => {
 
                 document.getElementById('discordLobbyButton').addEventListener('click', async function () {
                   const lobbyInfo = await axios.post('/lobbyBeta/openRoom');
-                  await lobbySender(opcoes.webhookLink, lobbyInfo.data);
+                  await sendLobby(opcoes.webhookLink, lobbyInfo.data);
                   location.href = `javascript:successAlert("[Discord] - Enviado com sucesso"); void 0`;
                 });
               }
