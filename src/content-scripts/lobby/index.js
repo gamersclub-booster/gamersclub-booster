@@ -205,12 +205,12 @@ const initLobby = async () => {
               if (document.getElementById('discordLobbyButton')) {
                 return false;
               } else {
-                if (document.getElementsByClassName(".btn-radial.btn-blue.btn-copiar-link").length === 0) return false;
                 if (opcoes.enviarLinkLobby) {
                   const lobbyInfo = await axios.post('/lobbyBeta/openRoom');
                   await sendLobby(opcoes.webhookLink, lobbyInfo.data);
                   location.href = `javascript:successAlert("[Discord] - Enviado com sucesso"); void 0`;
                 }
+                if (document.getElementsByClassName(".btn-radial.btn-blue.btn-copiar-link").length === 0) return false;
                 document
                   .getElementsByClassName('sidebar-titulo sidebar-sala-titulo')[0]
                   .setAttribute('style', 'font-size: 12px;');
