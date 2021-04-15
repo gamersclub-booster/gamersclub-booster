@@ -30,3 +30,5 @@ export function retrieveWindowVariables(variables) {
 
   return ret;
 }
+
+export const log = (msg) => console.log('[GC Booster]', msg);

@@ -1,4 +1,4 @@
-const log = (msg) => console.log('[GC Booster]', msg);
+import { log } from '../../lib/dom';
 
 const GC_API_URL = '';
 const SELETOR_LINK_PARTIDAS = 'a:contains("Ver partida")';
