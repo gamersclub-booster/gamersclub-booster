@@ -1,7 +1,6 @@
 import { features, preVetosMapas, configValues, paginas, audios } from '../lib/constants';
 import { testWebhook } from '../lib/discord';
-
-const versao = '1.0.22';
+import manifest from '../../manifest.json';
 
 function iniciarPaginaOpcoes() {
   adicionaVersao();
@@ -26,7 +25,7 @@ function popularAudioOptions() {
 
 function adicionaVersao() {
   Array.from(document.getElementsByClassName('versao')).forEach((v) => {
-    v.textContent = versao;
+    v.textContent = manifest.version;
   });
 }
 
