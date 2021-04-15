@@ -100,7 +100,7 @@ const initLobby = async () => {
   }
 
   if (opcoes.autoFixarMenuLobby) {
-    let freeuser = document.getElementsByClassName('SettingsMenu SettingsMenu--free');
+    let isSubscriber = retrieveWindowVariables(['ISSUBSCRIBER']);
     const autoFixarMenuLobbyFunc = (mutations) =>
       mutations.forEach((mutation) => {
         if (!mutation.addedNodes) return;
@@ -109,7 +109,7 @@ const initLobby = async () => {
           let node = mutation.addedNodes[i];
           if (typeof node.id != 'undefined') {
             if (node.id.includes('SidebarSala')) {
-              if (freeuser) {
+              if (!isSubscriber) {
                 $(node).css({
                   position: 'fixed',
                   top: '130px',
@@ -124,7 +124,7 @@ const initLobby = async () => {
               }
             }
             if (node.className.includes('sidebar-desafios sidebar-content')) {
-              if (freeuser) {
+              if (!isSubscriber) {
                 $(node).css({
                   position: 'fixed',
                   top: '130px',
