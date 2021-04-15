@@ -28,6 +28,7 @@ jobs:
         uses: mathieudutour/github-tag-action@v5.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          release_branches: 'feature/ci-cd'
 
       - name: Zip release files
         uses: papeloto/action-zip@v1
@@ -50,4 +51,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Release ${{ steps.tag_version.outputs.new_tag }}
-          path: release.zip
+          path: dist
