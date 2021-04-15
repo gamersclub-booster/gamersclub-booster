@@ -2,8 +2,7 @@ name: Bundle, zip and release on Github
 on:
   push:
     branches:
-      - master
-      - main
+      - development
 jobs:
   publish:
     name: Build and release
@@ -28,7 +27,7 @@ jobs:
         uses: mathieudutour/github-tag-action@v5.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          release_branches: 'feature/ci-cd'
+          release_branches: 'development'
 
       - name: Zip release files
         uses: papeloto/action-zip@v1
