@@ -20,7 +20,7 @@ const grabPlayerLastMatch = async (matchUrl) => {
   const data = await response.json();
 
   var playerInfo = [];
-  playerInfo['name'] = data.currentUser.nick;
+  playerInfo['name'] = data.currentUser ? data.currentUser.nick : undefined;
   playerInfo['level'] = parseInt(data.currentUser.level);
   playerInfo['matchId'] = data.lista[0].idlobby_game;
   playerInfo['currentRating'] = data.lista[0].rating_final;
