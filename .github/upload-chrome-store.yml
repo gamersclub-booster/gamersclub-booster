@@ -1,0 +1,27 @@
+name: Download release and upload to Chrome Store
+on:
+  release:
+    types: [published]
+jobs:
+  publish:
+    name: Release to Chrome Store
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Github release
+        uses: dsaltares/fetch-gh-release-asset@master
+        with:
+          repo: "gamersclub-booster/gamersclub-booster"
+          version: "latest"
+          file: "release.zip"
+          target: "release.zip"
+          token: ${{ secrets.YOUR_TOKEN }}
+
+      - name: Upload to Chrome Store
+        uses: Klemensas/chrome-extension-upload-action@$VERSION
+        with:
+          app-id: ${{ secrets.CHROME_STORE_APP_ID }}
+          refresh-token: ${{ secrets.CHROME_STORE_REFRESH_TOKEN }}
+          client-id: ${{ secrets.CHROME_STORE_CLIENT_ID }}
+          client-secret: ${{ secrets.CHROME_STORE_CLIENT_SECRET }}
+          file-name: "./release.zip"
+          publish: true
