@@ -2,7 +2,8 @@ name: Bundle, zip and release on Github
 on:
   push:
     branches:
-      - feature/ci-cd
+      - master
+      - main
 jobs:
   publish:
     name: Build and release
@@ -35,15 +36,15 @@ jobs:
           recursive: true
           dest: release.zip
 
-      # - name: Create a GitHub release
-      #   uses: ncipollo/release-action@v1
-      #   with:
-      #     name: Release ${{ steps.tag_version.outputs.new_tag }}
-      #     tag: ${{ steps.tag_version.outputs.new_tag }}
-      #     artifacts: "release.zip"
-      #     allowUpdates: true
-      #     body: ${{github.event.head_commit.message}}
-      #     token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          artifacts: "release.zip"
+          allowUpdates: true
+          body: ${{github.event.head_commit.message}}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
