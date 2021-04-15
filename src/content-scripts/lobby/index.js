@@ -6,6 +6,7 @@ import axios from 'axios';
 let opcoes = {};
 chrome.storage.sync.get(null, function (result) {
   opcoes = result;
+  if (window.location.pathname.includes("partida")) return;
   initLobby();
 });
 
@@ -62,9 +63,7 @@ const initLobby = async () => {
           const audio = new Audio(som);
           const volume = opcoes.volume || 100;
           audio.volume = volume / 100;
-          document.getElementById('gameModalReadyBtn').addEventListener('click', function (e) {
-            audio.play();
-          });
+          $('#gameModalReadyBtn > button:contains("Ready")').on('click', function (e) { audio.play(); });
         }
       });
     const somReady = criarObserver('#rankedModals', somReadyFunc);
