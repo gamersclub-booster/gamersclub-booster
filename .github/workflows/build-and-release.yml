@@ -2,7 +2,7 @@ name: Bundle, zip and release on Github
 on:
   push:
     branches:
-      - main
+      - feature/ci-cd
 jobs:
   publish:
     name: Build and release
