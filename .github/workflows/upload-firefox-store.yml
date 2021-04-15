@@ -1,0 +1,26 @@
+name: Download release and upload to Firefox Store
+on:
+  release:
+    types: [published]
+jobs:
+  publish:
+    name: Release to Firefox Store
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Github release
+        uses: dsaltares/fetch-gh-release-asset@master
+        with:
+          repo: "gamersclub-booster/gamersclub-booster"
+          version: "latest"
+          file: "release.zip"
+          target: "release.zip"
+          token: ${{ secrets.YOUR_TOKEN }}
+
+      - name: Upload to Firefox Store
+        uses: trmcnvn/firefox-addon@v1
+        with:
+          uuid: ${{ secrets.FIREFOX_STORE_UUID }}
+          xpi: build/my-addon.xpi
+          manifest: manifest.json
+          api-key: ${{ secrets.FIREFOX_STORE_API_KEY }}
+          api-secret: ${{ secrets.FIREFOX_STORE_API_SECRET }}

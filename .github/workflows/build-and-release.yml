@@ -1,0 +1,53 @@
+name: Bundle, zip and release on Github
+on:
+  push:
+    branches:
+      - development
+jobs:
+  publish:
+    name: Build and release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+
+      - name: Setup NodeJS 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Bundle with Webpack
+        run: npm run build
+
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v5.3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          release_branches: 'development'
+
+      - name: Zip release files
+        uses: papeloto/action-zip@v1
+        with:
+          files: dist
+          recursive: true
+          dest: release.zip
+
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          artifacts: "release.zip"
+          allowUpdates: true
+          body: ${{github.event.head_commit.message}}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          path: dist
