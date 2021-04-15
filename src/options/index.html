@@ -4,7 +4,7 @@
 <html>
   <head>
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700|Oswald:300,400,700|Teko" rel="stylesheet" />
-    <link rel="stylesheet" href="opcoes.css" />
+    <link rel="stylesheet" href="styles.css" />
   </head>
 
   <body>
@@ -12,7 +12,7 @@
       <div class="header">
         <a href="#default" class="logo">Gamers Club Booster </a>
         <div class="img">
-          <img src="../icons/icon_48.png" alt="Gamers club booster" />
+          <img src="images/icon_48.png" alt="Gamers club booster" />
         </div>
       </div>
       <div class="conteudo">
@@ -122,7 +122,7 @@
           </div>
         </div>
         <div class="pagina" id="sons">
-          <h3 class="subtitulo">Sons (Experimental)</h3>
+          <h3 class="subtitulo">Sons</h3>
           <div>
             <div class="form-input">
               <span>Ao Aceitar Pré Ready</span>
@@ -175,12 +175,12 @@
                 <input type="text" id="campoWebhookLink" placeholder="Cole aqui a URL do seu WebHook" class="input-form-gray form-control" />
               </div>
             </div>
-
             <div>
               <p style="display: inline-block">Status do url:</p>
               <p style="display: inline-block" id="statusWebhook"></p>
             </div>
             <button class="btn btn-success" id="testarWebhook">Testar e Salvar</button>
+            <button class="btn btn-warning" id="botaoLimparDiscord">Redefinir</button>
             <br /><br />
             <div id="divDoDiscord" hidden="true">
               <h3 class="subtitulo">Enviar automaticamente no Discord</h3>
@@ -195,7 +195,6 @@
                 <span class="checkmark"></span>
               </label>
             </div>
-            <button class="btn btn-warning" id="botaoLimparDiscord">Redefinir</button>
           </div>
         </div>
 
@@ -240,7 +239,5 @@
       </div>
     </div>
   </body>
-  <script src="opcoes.js"></script>
-  <script src="../integracoes/discord.js"></script>
-  <script src="../lib/axios.min.js"></script>
+  <script src="index.js"></script>
 </html>
