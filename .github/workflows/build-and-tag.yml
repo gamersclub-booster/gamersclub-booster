@@ -25,7 +25,7 @@ jobs:
         id: find_and_replace
         uses: jacobtomlinson/gha-find-replace@master
         with:
-          find: "${{ steps.tag_version.outputs.previous_version  }}"
+          find: "%%APP_VERSION%%"
           replace: "${{ steps.tag_version.outputs.new_version }}"
 
       - run: echo "Modified files ${{ steps.find_and_replace.outputs.modifiedFiles  }}"
