@@ -1,42 +1,58 @@
-name: Bundle, zip and create tag on Github
+name: Bundle, bump version and create tag on Github
 on:
   push:
     branches:
       - feature/ci-cd
 jobs:
   publish:
-    name: Build and release
+    name: Build and tag
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
 
-      - name: Bump version and push tag
+      - name: Bump version and create tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v5.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           release_branches: "feature/ci-cd"
 
-      - run: echo "Previous version ${{ steps.tag_version.outputs.previous_version  }}"
-      - run: echo "New version ${{ steps.tag_version.outputs.new_version  }}"
-
-      - name: Bump version in project files
+      - name: Replace version in project files
         id: find_and_replace
         uses: jacobtomlinson/gha-find-replace@master
         with:
           find: "${{ steps.tag_version.outputs.previous_version }}"
           replace: "${{ steps.tag_version.outputs.new_version }}"
+          exclude: node_modules
 
-      - run: echo "Modified files ${{ steps.find_and_replace.outputs.modifiedFiles  }}"
 
-      - run: cat package.json
-      - run: cat manifest.json
-
+      - name: Rollback tag if fail
+        if: ${{ failure() }}
+        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        with:
+          tag_name: ${{ steps.tag_version.outputs.new_tag }} 
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
       - name: Commit version bump
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          file_pattern: package.json manifest.json
           commit_message: Version ${{ steps.tag_version.outputs.new_version }} [skip ci]
+          commit_user_name: Version Bot
+          file_pattern: package.json manifest.json
           skip_dirty_check: true
           skip_fetch: true
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Bundle with Webpack
+        run: npm run build
+
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          path: dist
+
