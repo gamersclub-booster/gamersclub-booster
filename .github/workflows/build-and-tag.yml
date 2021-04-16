@@ -16,7 +16,7 @@ jobs:
         uses: mathieudutour/github-tag-action@v5.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          release_branches: "feature/ci-cd"        
+          release_branches: "feature/ci-cd"
 
       - run: echo "Previous version ${{ steps.tag_version.outputs.previous_version  }}"
       - run: echo "New version ${{ steps.tag_version.outputs.new_version  }}"
@@ -25,10 +25,26 @@ jobs:
         id: find_and_replace
         uses: jacobtomlinson/gha-find-replace@master
         with:
-          find: "%%APP_VERSION%%"
+          find: "${{ steps.tag_version.outputs.previous_version }}"
           replace: "${{ steps.tag_version.outputs.new_version }}"
 
       - run: echo "Modified files ${{ steps.find_and_replace.outputs.modifiedFiles  }}"
 
       - run: cat package.json
       - run: cat manifest.json
+
+      - name: Commit version bump
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          # Optional but recommended
+          # Defaults to "Apply automatic changes"
+          commit_message: Bump version to ${{ steps.tag_version.outputs.new_version }} [skip ci]
+
+          commit_user_name: Version Bot # defaults to "GitHub Actions"
+          commit_user_email: bot@gamersclubbooster.io # defaults to "actions@github.com"
+
+          # Optional: Disable dirty check and always try to create a commit and push
+          skip_dirty_check: true
+
+          # Optional: Skip internal call to `git fetch`
+          skip_fetch: true
