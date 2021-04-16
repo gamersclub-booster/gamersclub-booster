@@ -18,8 +18,8 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           release_branches: "feature/ci-cd"        
 
-      - run:  echo "Previous version ${{ steps.tag_version.outputs.previous_version  }}"
-      - run: echo "New version ${{ steps.tag_version.outputs.previous_version  }}"
+      - run: echo "Previous version ${{ steps.tag_version.outputs.previous_version  }}"
+      - run: echo "New version ${{ steps.tag_version.outputs.new_version  }}"
 
       - name: Bump version in package.json file
         id: find_and_replace
@@ -27,14 +27,14 @@ jobs:
         with:
           find: "${{ steps.tag_version.outputs.previous_version  }}"
           replace: "${{ steps.tag_version.outputs.new_version }}"
-          include: "package.json"
+          include: "/package.json"
 
       - name: Bump version in manifest.json file
         uses: jacobtomlinson/gha-find-replace@master
         with:
           find: "${{ steps.tag_version.outputs.previous_version  }}"
           replace: "${{ steps.tag_version.outputs.new_version }}"
-          include: "manifest.json"
+          include: "/manifest.json"
 
       - run: cat package.json
       - run: cat manifest.json
