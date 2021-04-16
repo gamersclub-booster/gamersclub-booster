@@ -24,16 +24,6 @@ jobs:
         with:
           find: "${{ steps.tag_version.outputs.previous_version }}"
           replace: "${{ steps.tag_version.outputs.new_version }}"
-          exclude: node_modules
-
-      - name: Commit version bump
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          file_pattern: package.json manifest.json
-          commit_message: Version ${{ steps.tag_version.outputs.new_version }} [skip ci]
-          skip_dirty_check: true
-          skip_fetch: true
-
       - name: Install Dependencies
         run: npm install
 
@@ -45,3 +35,12 @@ jobs:
         with:
           name: Release ${{ steps.tag_version.outputs.new_tag }}
           path: dist
+
+      - name: Commit version bump
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          file_pattern: package.json manifest.json
+          commit_message: Versão ${{ steps.tag_version.outputs.new_version }} [skip ci]
+          commit_options: "--no-verify"
+          skip_dirty_check: true
+          skip_fetch: false
