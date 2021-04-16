@@ -26,21 +26,19 @@ jobs:
           replace: "${{ steps.tag_version.outputs.new_version }}"
           exclude: node_modules
 
-
       - name: Rollback tag if fail
         if: ${{ failure() }}
         uses: dev-drprasad/delete-tag-and-release@v0.2.0
         with:
-          tag_name: ${{ steps.tag_version.outputs.new_tag }} 
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Commit version bump
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: Version ${{ steps.tag_version.outputs.new_version }} [skip ci]
-          commit_user_name: Version Bot
           file_pattern: package.json manifest.json
+          commit_message: Version ${{ steps.tag_version.outputs.new_version }} [skip ci]
           skip_dirty_check: true
           skip_fetch: true
 
@@ -55,4 +53,3 @@ jobs:
         with:
           name: Release ${{ steps.tag_version.outputs.new_tag }}
           path: dist
-
