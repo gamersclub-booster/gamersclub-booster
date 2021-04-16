@@ -1,11 +1,11 @@
-name: Bundle, zip and create tag on Github
+name: Bundle, bump version and create tag on Github
 on:
   push:
     branches:
       - development
 jobs:
   publish:
-    name: Build and release
+    name: Build and tag
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
@@ -16,35 +16,46 @@ jobs:
         with:
           node-version: 12.x
 
-      - name: Install Dependencies
+      - name: Install Dependencies with npm
         run: npm install
 
-      - name: Bump version and push tag
+      - name: Bump version and create tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v5.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           release_branches: "development"
 
-      - name: Bump version in project files
+      - name: Replace ${{ steps.tag_version.outputs.previous_version }} with ${{ steps.tag_version.outputs.new_version }} in project files
+        id: find_and_replace
         uses: jacobtomlinson/gha-find-replace@master
         with:
-          find: "${{ steps.tag_version.outputs.previous_version  }}" 
+          find: "${{ steps.tag_version.outputs.previous_version }}"
           replace: "${{ steps.tag_version.outputs.new_version }}"
-          exclude: "/node_modules"
+          exclude: node_modules
 
       - name: Bundle with Webpack
         run: npm run build
 
-      - name: Zip release files
-        uses: papeloto/action-zip@v1
-        with:
-          files: dist
-          recursive: true
-          dest: release.zip
-
-      - name: Upload artifact
+      - name: Upload release artifact
         uses: actions/upload-artifact@v2
         with:
           name: Release ${{ steps.tag_version.outputs.new_tag }}
           path: dist
+
+      - name: Delete tag if job fails
+        if: ${{ failure() }}
+        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        with:
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit version ${{ steps.tag_version.outputs.new_version }}
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          file_pattern: package.json manifest.json
+          commit_message: Versão ${{ steps.tag_version.outputs.new_version }} [skip ci]
+          commit_options: "--no-verify"
+          skip_dirty_check: true
+          skip_fetch: false
