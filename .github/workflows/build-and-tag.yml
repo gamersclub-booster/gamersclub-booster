@@ -2,7 +2,7 @@ name: Bundle, bump version and create tag on Github
 on:
   push:
     branches:
-      - feature/ci-cd
+      - development
 jobs:
   publish:
     name: Build and tag
@@ -24,9 +24,9 @@ jobs:
         uses: mathieudutour/github-tag-action@v5.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          release_branches: "feature/ci-cd"
+          release_branches: "development"
 
-      - name: Replace {{ steps.tag_version.outputs.new_version }} with ${{ steps.tag_version.outputs.new_version }} in project files
+      - name: Replace ${{ steps.tag_version.outputs.previous_version }} with ${{ steps.tag_version.outputs.new_version }} in project files
         id: find_and_replace
         uses: jacobtomlinson/gha-find-replace@master
         with:
@@ -43,7 +43,7 @@ jobs:
           name: Release ${{ steps.tag_version.outputs.new_tag }}
           path: dist
 
-      - name: Delete ${{ steps.tag_version.outputs.new_tag }}
+      - name: Delete tag if job fails
         if: ${{ failure() }}
         uses: dev-drprasad/delete-tag-and-release@v0.2.0
         with:
