@@ -19,8 +19,8 @@ jobs:
           release_branches: "feature/ci-cd"        
 
       - name: Debug
-        run:  echo "${{ steps.tag_version.outputs.previous_version  }}"
-             | echo "${{ steps.tag_version.outputs.previous_version  }}"
+      - run:  echo "Previous version ${{ steps.tag_version.outputs.previous_version  }}"
+      - run: echo "New version ${{ steps.tag_version.outputs.previous_version  }}"
 
       - name: Bump version in package.json file
         id: find_and_replace
@@ -37,18 +37,6 @@ jobs:
           replace: "${{ steps.tag_version.outputs.new_version }}"
           include: "manifest.json"
 
-      - name: Bundle with Webpack
-        run: npm run build
-
-      - name: Zip release files
-        uses: papeloto/action-zip@v1
-        with:
-          files: dist
-          recursive: true
-          dest: release.zip
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: Release ${{ steps.tag_version.outputs.new_tag }}
-          path: dist
+      - name: Debug 2 
+      - run: cat package.json
+      - run: cat manifest.json
