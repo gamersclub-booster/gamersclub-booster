@@ -29,10 +29,10 @@ jobs:
       - name: Bump version in project files
         uses: jacobtomlinson/gha-find-replace@master
         with:
-          find: ${{ steps.tag_version.outputs.previous_version  }}
-          replace: ${{ steps.tag_version.outputs.new_version }}
+          find: "${{ steps.tag_version.outputs.previous_version  }}" 
+          replace: "${{ steps.tag_version.outputs.new_version }}"
           include: "*.json"
-          exclude: "node_modules"
+          exclude: "/node_modules"
 
       - name: Bundle with Webpack
         run: npm run build
