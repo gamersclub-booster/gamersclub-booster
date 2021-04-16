@@ -26,17 +26,24 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           release_branches: "feature/ci-cd"
 
-      - name: Bump version in project files
+      - name: Bump version in package.json file
         id: find_and_replace
         uses: jacobtomlinson/gha-find-replace@master
         with:
           find: "${{ steps.tag_version.outputs.previous_version  }}"
           replace: "${{ steps.tag_version.outputs.new_version }}"
           include: "package.json"
-          exclude: "/node_modules"
+
+      - name: Bump version in manifest.json file
+        id: find_and_replace
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "${{ steps.tag_version.outputs.previous_version  }}"
+          replace: "${{ steps.tag_version.outputs.new_version }}"
+          include: "manifest.json"
 
       - name: Debug
-        run: echo ${{ steps.find_and_replace.modifiedFiles }}
+        run: echo "${{ steps.find_and_replace.modifiedFiles }}"
 
       - name: Bundle with Webpack
         run: npm run build
