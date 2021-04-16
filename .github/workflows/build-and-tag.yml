@@ -2,7 +2,7 @@ name: Bundle, zip and create tag on Github
 on:
   push:
     branches:
-      - development
+      - feature/ci-cd
 jobs:
   publish:
     name: Build and release
@@ -24,14 +24,19 @@ jobs:
         uses: mathieudutour/github-tag-action@v5.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          release_branches: "development"
+          release_branches: "feature/ci-cd"
 
       - name: Bump version in project files
+        id: find_and_replace
         uses: jacobtomlinson/gha-find-replace@master
         with:
-          find: "${{ steps.tag_version.outputs.previous_version  }}" 
+          find: "${{ steps.tag_version.outputs.previous_version  }}"
           replace: "${{ steps.tag_version.outputs.new_version }}"
+          include: "package.json"
           exclude: "/node_modules"
+
+      - name: Debug
+        run: echo ${{ steps.find_and_replace.modifiedFiles }}
 
       - name: Bundle with Webpack
         run: npm run build
