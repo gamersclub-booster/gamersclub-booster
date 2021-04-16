@@ -18,7 +18,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           release_branches: "feature/ci-cd"        
 
-      - name: Debug
       - run:  echo "Previous version ${{ steps.tag_version.outputs.previous_version  }}"
       - run: echo "New version ${{ steps.tag_version.outputs.previous_version  }}"
 
@@ -37,6 +36,5 @@ jobs:
           replace: "${{ steps.tag_version.outputs.new_version }}"
           include: "manifest.json"
 
-      - name: Debug 2 
       - run: cat package.json
       - run: cat manifest.json
