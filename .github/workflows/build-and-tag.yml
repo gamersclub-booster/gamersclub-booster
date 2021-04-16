@@ -35,7 +35,6 @@ jobs:
           include: "package.json"
 
       - name: Bump version in manifest.json file
-        id: find_and_replace
         uses: jacobtomlinson/gha-find-replace@master
         with:
           find: "${{ steps.tag_version.outputs.previous_version  }}"
