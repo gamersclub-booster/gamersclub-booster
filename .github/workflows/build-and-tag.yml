@@ -27,14 +27,8 @@ jobs:
         with:
           find: "${{ steps.tag_version.outputs.previous_version  }}"
           replace: "${{ steps.tag_version.outputs.new_version }}"
-          include: "/package.json"
 
-      - name: Bump version in manifest.json file
-        uses: jacobtomlinson/gha-find-replace@master
-        with:
-          find: "${{ steps.tag_version.outputs.previous_version  }}"
-          replace: "${{ steps.tag_version.outputs.new_version }}"
-          include: "/manifest.json"
+      - run: echo "Modified files ${{ steps.find_and_replace.outputs.modifiedFiles  }}"
 
       - run: cat package.json
       - run: cat manifest.json
