@@ -11,20 +11,16 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v2
 
-      - name: Setup NodeJS 12.x
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
-
-      - name: Install Dependencies
-        run: npm install
-
       - name: Bump version and push tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v5.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          release_branches: "feature/ci-cd"
+          release_branches: "feature/ci-cd"        
+
+      - name: Debug
+        run:  echo "${{ steps.tag_version.outputs.previous_version  }}"
+             | echo "${{ steps.tag_version.outputs.previous_version  }}"
 
       - name: Bump version in package.json file
         id: find_and_replace
@@ -40,9 +36,6 @@ jobs:
           find: "${{ steps.tag_version.outputs.previous_version  }}"
           replace: "${{ steps.tag_version.outputs.new_version }}"
           include: "manifest.json"
-
-      - name: Debug
-        run: echo "${{ steps.find_and_replace.modifiedFiles }}"
 
       - name: Bundle with Webpack
         run: npm run build
