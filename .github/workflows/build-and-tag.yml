@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: 12.x
 
-      - name: Install Dependencies
+      - name: Install Dependencies with npm
         run: npm install
 
       - name: Bump version and create tag
@@ -26,7 +26,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           release_branches: "feature/ci-cd"
 
-      - name: Replace version in project files
+      - name: Replace {{ steps.tag_version.outputs.new_version }} with ${{ steps.tag_version.outputs.new_version }} in project files
         id: find_and_replace
         uses: jacobtomlinson/gha-find-replace@master
         with:
@@ -43,7 +43,15 @@ jobs:
           name: Release ${{ steps.tag_version.outputs.new_tag }}
           path: dist
 
-      - name: Commit version bump
+      - name: Delete ${{ steps.tag_version.outputs.new_tag }}
+        if: ${{ failure() }}
+        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        with:
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit version ${{ steps.tag_version.outputs.new_version }}
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           file_pattern: package.json manifest.json
