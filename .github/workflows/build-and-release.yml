@@ -30,11 +30,17 @@ jobs:
           recursive: true
           dest: release.zip
 
+      - uses: oprypin/find-latest-tag@v1
+        with:
+          repository: octokit/rest.js
+          releases-only: false
+        id: latest_tag 
+
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
         with:
-          name: Release ${{ steps.tag_version.outputs.new_tag }}
-          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.latest_tag.outputs.tag }}
+          tag: ${{ steps.latest_tag.outputs.tag }}
           artifacts: "release.zip"
           allowUpdates: true
           body: ${{github.event.head_commit.message}}
@@ -43,5 +49,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.latest_tag.outputs.tag }}
           path: dist
