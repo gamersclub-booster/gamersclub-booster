@@ -31,10 +31,11 @@ jobs:
           dest: release.zip
 
       - uses: oprypin/find-latest-tag@v1
+        id: latest_tag
         with:
-          repository: octokit/rest.js
+          repository: gamersclub-booster/gamersclub-booster
           releases-only: false
-        id: latest_tag 
+          prefix: "v"
 
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
