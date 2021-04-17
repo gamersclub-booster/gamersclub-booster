@@ -15,5 +15,6 @@ jobs:
         with:
           repository: gamersclub-booster/gamersclub-booster
           releases-only: false
+          prefix: "v"
 
       - run: echo "The latest tag is ${{ steps.latest_tag.outputs.tag }}"
