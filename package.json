@@ -1,6 +1,6 @@
 {
   "name": "gamersclub-booster",
-  "description": "Extensão para o Gosogle Chrome que adiciona algumas melhorias na plataforma da GamersClub",
+  "description": "Extensão para navegadores que adiciona algumas melhorias na plataforma da GamersClub",
   "repository": "https://github.com/gamersclub-booster/gamersclub-booster",
   "version": "2.1.0",
   "main": "index.js",
