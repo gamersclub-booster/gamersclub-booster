@@ -20,14 +20,7 @@ const initLobby = async () => {
         let selector = '#gameModalCopyServer';
         var ipInput = addedNodes.find(selector).addBack(selector);
         if (ipInput && ipInput.length) {
-          const IPSelector = 'game-modal-command-input';
-          const campoIP = document.getElementsByClassName(IPSelector);
-          if (campoIP[0].value) {
-            const buttonCopia = document.getElementById('gameModalCopyServer');
-            if (buttonCopia && buttonCopia.textContent === 'Copiar IP') {
-              buttonCopia.click();
-            }
-          }
+          ipInput[0].click();
         }
       });
     const copiarIP = criarObserver('#rankedModals', copiarIpFunc);
