@@ -1,7 +1,11 @@
 name: Download release and upload to Chrome Store
 on:
-  release:
-    types: [published]
+ release:
+    types:
+      - published
+      - created
+      - edited
+      - released
 jobs:
   publish:
     name: Release to Chrome Store
