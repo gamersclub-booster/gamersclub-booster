@@ -1,5 +1,6 @@
 name: Download release and upload to Chrome Store
 on:
+ workflow_dispatch:
  release:
     types:
       - published
