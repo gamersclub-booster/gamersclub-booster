@@ -23,12 +23,6 @@ jobs:
       - name: Bundle with Webpack
         run: npm run build
 
-      - name: Bump version and push tag
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v5.3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Zip release files
         uses: papeloto/action-zip@v1
         with:
@@ -36,11 +30,18 @@ jobs:
           recursive: true
           dest: release.zip
 
+      - uses: oprypin/find-latest-tag@v1
+        id: latest_tag
+        with:
+          repository: gamersclub-booster/gamersclub-booster
+          releases-only: false
+          prefix: "v"
+
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
         with:
-          name: Release ${{ steps.tag_version.outputs.new_tag }}
-          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.latest_tag.outputs.tag }}
+          tag: ${{ steps.latest_tag.outputs.tag }}
           artifacts: "release.zip"
           allowUpdates: true
           body: ${{github.event.head_commit.message}}
@@ -49,5 +50,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.latest_tag.outputs.tag }}
           path: dist
