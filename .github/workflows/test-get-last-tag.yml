@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - fix_build
-      - main
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -17,4 +16,4 @@ jobs:
           repository: gamersclub-booster/gamersclub-booster
           releases-only: false
 
-      - run: echo ${{ steps.latest_tag.outputs.tag }}"
+      - run: echo "The latest tag is ${{ steps.latest_tag.outputs.tag }}"
