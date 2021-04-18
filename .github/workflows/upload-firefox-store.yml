@@ -1,5 +1,6 @@
 name: Download release and upload to Firefox Store
 on:
+  workflow_dispatch:
   release:
     types: [published]
 jobs:
@@ -20,7 +21,6 @@ jobs:
         uses: trmcnvn/firefox-addon@v1
         with:
           uuid: ${{ secrets.FIREFOX_STORE_UUID }}
-          xpi: build/my-addon.xpi
           manifest: manifest.json
           api-key: ${{ secrets.FIREFOX_STORE_API_KEY }}
           api-secret: ${{ secrets.FIREFOX_STORE_API_SECRET }}
