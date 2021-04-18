@@ -13,144 +13,160 @@ chrome.storage.sync.get(null, function (result) {
 let intervalCriarLobby = null;
 
 const initLobby = async () => {
-  if (opcoes.autoCopiarIp) {
-    const copiarIpFunc = (mutations) =>
-      $.each(mutations, async (i, mutation) => {
-        var addedNodes = $(mutation.addedNodes);
-        let selector = '#gameModalCopyServer';
-        var ipInput = addedNodes.find(selector).addBack(selector);
-        if (ipInput && ipInput.length) {
-          ipInput[0].click();
-        }
-      });
-    const copiarIP = criarObserver('#rankedModals', copiarIpFunc);
-  }
+  const copiarIpFunc = (mutations) =>
+    chrome.storage.sync.get(['autoCopiarIp'], function (result) {
+      if (result.autoCopiarIp) {
+        $.each(mutations, async (i, mutation) => {
+            var addedNodes = $(mutation.addedNodes);
+            let selector = '#gameModalCopyServer';
+            var ipInput = addedNodes.find(selector).addBack(selector);
+            if (ipInput && ipInput.length) {
+              ipInput[0].click();
+            }
+        });
+      }
+    });
+  const copiarIP = criarObserver('#rankedModals', copiarIpFunc);
 
-  if (opcoes.somPreReady) {
-    const somPreReadyFunc = (mutations) =>
-      $.each(mutations, (i, mutation) => {
-        var addedNodes = $(mutation.addedNodes);
-        let selector = '#setPlayerReady';
-        var preReadyButton = addedNodes.find(selector).addBack(selector);
-        if (preReadyButton && preReadyButton.length) {
-          const som = opcoes.somPreReady === 'custom' ? opcoes.customSomPreReady : opcoes.somPreReady;
-          const audio = new Audio(som);
-          const volume = opcoes.volume || 100;
-          audio.volume = volume / 100;
-          document.getElementById('setPlayerReady').addEventListener('click', function (e) {
-            audio.play();
+  const somPreReadyFunc = (mutations) =>
+    chrome.storage.sync.get(['somPreReady', 'customSomPreReady', 'volume'], function (result) {
+      if (result.somPreReady) {
+        $.each(mutations, (i, mutation) => {
+          var addedNodes = $(mutation.addedNodes);
+          let selector = '#setPlayerReady';
+          var preReadyButton = addedNodes.find(selector).addBack(selector);
+          if (preReadyButton && preReadyButton.length) {
+            const som = result.somPreReady === 'custom' ? result.customSomPreReady : result.somPreReady;
+            const audio = new Audio(som);
+            const volume = result.volume || 100;
+            audio.volume = volume / 100;
+            document.getElementById('setPlayerReady').addEventListener('click', function (e) {
+              audio.play();
+            });
+          }
+        });
+      }
+    });
+  const somPreReady = criarObserver('#rankedModals', somPreReadyFunc);
+
+    const somReadyFunc = (mutations) =>
+      chrome.storage.sync.get(['somReady', 'customSomReady', 'volume'], function (result) {
+        if (result.somReady) {
+          $.each(mutations, (i, mutation) => {
+            var addedNodes = $(mutation.addedNodes);
+            let selector = '#gameModalReadyBtn > button';
+            var readyButton = addedNodes.find(selector).addBack(selector);
+            if (readyButton && readyButton.length && readyButton.text() === 'Ready' && !readyButton.disabled) {
+              const som = result.somReady === 'custom' ? result.customSomReady : result.somReady;
+              const audio = new Audio(som);
+              const volume = result.volume || 100;
+              audio.volume = volume / 100;
+              $('#gameModalReadyBtn > button:contains("Ready")').on('click', function (e) { audio.play(); });
+            }
           });
         }
       });
-    const somPreReady = criarObserver('#rankedModals', somPreReadyFunc);
-  }
+  const somReady = criarObserver('#rankedModals', somReadyFunc);
 
-  if (opcoes.somReady) {
-    const somReadyFunc = (mutations) =>
-      $.each(mutations, (i, mutation) => {
-        var addedNodes = $(mutation.addedNodes);
-        let selector = '#gameModalReadyBtn > button';
-        var readyButton = addedNodes.find(selector).addBack(selector);
-        if (readyButton && readyButton.length && readyButton.text() === 'Ready' && !readyButton.disabled) {
-          const som = opcoes.somReady === 'custom' ? opcoes.customSomReady : opcoes.somReady;
-          const audio = new Audio(som);
-          const volume = opcoes.volume || 100;
-          audio.volume = volume / 100;
-          $('#gameModalReadyBtn > button:contains("Ready")').on('click', function (e) { audio.play(); });
-        }
-      });
-    const somReady = criarObserver('#rankedModals', somReadyFunc);
-  }
-
-  if (opcoes.autoAceitarPreReady) {
     const autoAceitarPreReadyFunc = (mutations) =>
-      $.each(mutations, (i, mutation) => {
-        var addedNodes = $(mutation.addedNodes);
-        let selector = '#setPlayerReady';
-        var preReadyButton = addedNodes.find(selector).addBack(selector);
-        if (preReadyButton && preReadyButton.length) {
-          setTimeout(function () {
-            preReadyButton[0].click();
-          }, 500);
-        }
-      });
-    const autoAceitarPreReady = criarObserver('#rankedModals', autoAceitarPreReadyFunc);
-  }
-
-  if (opcoes.autoAceitarReady) {
-    const autoAceitarReadyFunc = (mutations) =>
-      $.each(mutations, (i, mutation) => {
-        var addedNodes = $(mutation.addedNodes);
-        let selector = '#gameModalReadyBtn > button';
-        var readyButton = addedNodes.find(selector).addBack(selector);
-        if (readyButton && readyButton.length && readyButton.text() === 'Ready' && !readyButton.disabled) {
-          setTimeout(function () {
-            readyButton[0].click();
-          }, 500);
-        }
-      });
-    const autoAceitarReady = criarObserver('#rankedModals', autoAceitarReadyFunc);
-  }
-
-  if (opcoes.autoFixarMenuLobby) {
-    let isSubscriber = retrieveWindowVariables(['ISSUBSCRIBER']);
-    const autoFixarMenuLobbyFunc = (mutations) =>
-      mutations.forEach((mutation) => {
-        if (!mutation.addedNodes) return;
-
-        for (let i = 0; i < mutation.addedNodes.length; i++) {
-          let node = mutation.addedNodes[i];
-          if (typeof node.id != 'undefined') {
-            if (node.id.includes('SidebarSala')) {
-              if (!isSubscriber) {
-                $(node).css({
-                  position: 'fixed',
-                  top: '130px',
-                  bottom: 'auto',
-                });
-              } else {
-                $(node).css({
-                  position: 'fixed',
-                  top: '10%',
-                  bottom: 'auto',
-                });
-              }
+      chrome.storage.sync.get(['autoAceitarPreReady'], function (result) {
+        if (result.autoAceitarPreReady) {
+          $.each(mutations, (i, mutation) => {
+            var addedNodes = $(mutation.addedNodes);
+            let selector = '#setPlayerReady';
+            var preReadyButton = addedNodes.find(selector).addBack(selector);
+            if (preReadyButton && preReadyButton.length) {
+              setTimeout(function () {
+                preReadyButton[0].click();
+              }, 500);
             }
-            if (node.className.includes('sidebar-desafios sidebar-content')) {
-              if (!isSubscriber) {
-                $(node).css({
-                  position: 'fixed',
-                  top: '130px',
-                  right: '72px',
-                  bottom: 'auto',
-                });
-              } else {
-                $(node).css({
-                  position: 'fixed',
-                  top: '10%',
-                  right: '72px',
-                  bottom: 'auto',
-                });
+          });
+      }
+    });
+  const autoAceitarPreReady = criarObserver('#rankedModals', autoAceitarPreReadyFunc);
+
+
+  const autoAceitarReadyFunc = (mutations) =>
+    chrome.storage.sync.get(['autoAceitarReady'], function (result) {
+      if (result.autoAceitarReady) {
+        $.each(mutations, (i, mutation) => {
+          var addedNodes = $(mutation.addedNodes);
+          let selector = '#gameModalReadyBtn > button';
+          var readyButton = addedNodes.find(selector).addBack(selector);
+          if (readyButton && readyButton.length && readyButton.text() === 'Ready' && !readyButton.disabled) {
+            setTimeout(function () {
+              readyButton[0].click();
+            }, 500);
+          }
+        });
+      }
+    });
+  const autoAceitarReady = criarObserver('#rankedModals', autoAceitarReadyFunc);
+
+
+  const autoFixarMenuLobbyFunc = (mutations) =>
+    chrome.storage.sync.get(['autoFixarMenuLobby'], function (result) {
+      if (result.autoFixarMenuLobby) {
+        const isSubscriber = retrieveWindowVariables(['ISSUBSCRIBER']);
+        mutations.forEach((mutation) => {
+          if (!mutation.addedNodes) return;
+
+          for (let i = 0; i < mutation.addedNodes.length; i++) {
+            let node = mutation.addedNodes[i];
+            if (typeof node.id != 'undefined') {
+              if (node.id.includes('SidebarSala')) {
+                if (!isSubscriber) {
+                  $(node).css({
+                    position: 'fixed',
+                    top: '130px',
+                    bottom: 'auto',
+                  });
+                } else {
+                  $(node).css({
+                    position: 'fixed',
+                    top: '10%',
+                    bottom: 'auto',
+                  });
+                }
+              }
+              if (node.className.includes('sidebar-desafios sidebar-content')) {
+                if (!isSubscriber) {
+                  $(node).css({
+                    position: 'fixed',
+                    top: '130px',
+                    right: '72px',
+                    bottom: 'auto',
+                  });
+                } else {
+                  $(node).css({
+                    position: 'fixed',
+                    top: '10%',
+                    right: '72px',
+                    bottom: 'auto',
+                  });
+                }
               }
             }
           }
-        }
-      });
-    const autoFixarMenuLobby = criarObserver('#lobbyContent', autoFixarMenuLobbyFunc);
-  }
+        });
+      }
+    });
+  const autoFixarMenuLobby = criarObserver('#lobbyContent', autoFixarMenuLobbyFunc);
 
-  if (opcoes.autoConcordarTermosRanked) {
-    const autoConcordarTermosRankedFunc = (mutations) =>
-      $.each(mutations, (i, mutation) => {
-        const addedNodes = $(mutation.addedNodes);
-        let selector = '.ranked-modal-agree.container-fluid > a';
-        const concordarButton = addedNodes.find(selector).addBack(selector);
-        if (concordarButton && concordarButton.length) {
-          concordarButton[0].click();
-        }
-      });
-    const autoConcordarTermosRanked = criarObserver('#rankedModals', autoConcordarTermosRankedFunc);
-  }
+  const autoConcordarTermosRankedFunc = (mutations) =>
+    chrome.storage.sync.get(['autoConcordarTermosRanked'], function (result) {
+      if (result.autoConcordarTermosRanked) {
+        $.each(mutations, (i, mutation) => {
+          const addedNodes = $(mutation.addedNodes);
+          let selector = '.ranked-modal-agree.container-fluid > a';
+          const concordarButton = addedNodes.find(selector).addBack(selector);
+          if (concordarButton && concordarButton.length) {
+            concordarButton[0].click();
+          }
+        });
+      }
+    });
+  const autoConcordarTermosRanked = criarObserver('#rankedModals', autoConcordarTermosRankedFunc);
 
   if (opcoes.webhookLink && opcoes.webhookLink.length !== 0) {
     const partidaInfoFunc = (mutations) =>
