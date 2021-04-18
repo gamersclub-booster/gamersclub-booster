@@ -29,16 +29,16 @@ const initLobby = async () => {
   const copiarIP = criarObserver('#rankedModals', copiarIpFunc);
 
   const somPreReadyFunc = (mutations) =>
-    chrome.storage.sync.get(['somPreReady'], function (result) {
+    chrome.storage.sync.get(['somPreReady', 'customSomPreReady', 'volume'], function (result) {
       if (result.somPreReady) {
         $.each(mutations, (i, mutation) => {
           var addedNodes = $(mutation.addedNodes);
           let selector = '#setPlayerReady';
           var preReadyButton = addedNodes.find(selector).addBack(selector);
           if (preReadyButton && preReadyButton.length) {
-            const som = opcoes.somPreReady === 'custom' ? opcoes.customSomPreReady : opcoes.somPreReady;
+            const som = result.somPreReady === 'custom' ? result.customSomPreReady : result.somPreReady;
             const audio = new Audio(som);
-            const volume = opcoes.volume || 100;
+            const volume = result.volume || 100;
             audio.volume = volume / 100;
             document.getElementById('setPlayerReady').addEventListener('click', function (e) {
               audio.play();
@@ -50,16 +50,16 @@ const initLobby = async () => {
   const somPreReady = criarObserver('#rankedModals', somPreReadyFunc);
 
     const somReadyFunc = (mutations) =>
-      chrome.storage.sync.get(['somReady'], function (result) {
+      chrome.storage.sync.get(['somReady', 'customSomReady', 'volume'], function (result) {
         if (result.somReady) {
           $.each(mutations, (i, mutation) => {
             var addedNodes = $(mutation.addedNodes);
             let selector = '#gameModalReadyBtn > button';
             var readyButton = addedNodes.find(selector).addBack(selector);
             if (readyButton && readyButton.length && readyButton.text() === 'Ready' && !readyButton.disabled) {
-              const som = opcoes.somReady === 'custom' ? opcoes.customSomReady : opcoes.somReady;
+              const som = result.somReady === 'custom' ? result.customSomReady : result.somReady;
               const audio = new Audio(som);
-              const volume = opcoes.volume || 100;
+              const volume = result.volume || 100;
               audio.volume = volume / 100;
               $('#gameModalReadyBtn > button:contains("Ready")').on('click', function (e) { audio.play(); });
             }
