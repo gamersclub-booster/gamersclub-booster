@@ -16,7 +16,9 @@
   "scripts": {
     "dev": "webpack --watch",
     "build": "webpack",
-    "precommit": "commitlint -E HUSKY_GIT_PARAMS"
+    "precommit": "commitlint -E HUSKY_GIT_PARAMS",
+    "lint": "eslint --config ./.eslintrc ./src",
+    "lint:fix": "eslint --fix --config ./.eslintrc ./src"
   },
   "dependencies": {
     "axios": "^0.21.1",
@@ -26,6 +28,7 @@
     "@commitlint/cli": "^12.1.1",
     "@commitlint/config-conventional": "^12.1.1",
     "copy-webpack-plugin": "^8.1.1",
+    "eslint": "^7.24.0",
     "husky": "^4.2.3",
     "rimraf": "^3.0.2",
     "webpack": "^5.32.0",

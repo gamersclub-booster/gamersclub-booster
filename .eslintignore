@@ -1,0 +1,8 @@
+node_modules/**
+**/node_modules/**
+**/docs/**
+**/coverage/**
+coverage/**
+dist/**
+**/dist/**
+.github/**

@@ -1,11 +1,5 @@
-let options = {};
-chrome.storage.sync.get(['ocultarMissoes'], function (result) {
-    opcoes = result;
-    ocultarMissoesAddButton();
-});
-
 const ocultarMissoesAddButton = () => {
-    $('ul.WasdTabs.WasdTabs__navigationBar.WasdTabs--noContent').append(`
+  $( 'ul.WasdTabs.WasdTabs__navigationBar.WasdTabs--noContent' ).append( `
         <li>
             <Button 
                 id="ocultarMissoesBtn" 
@@ -34,12 +28,14 @@ const ocultarMissoesAddButton = () => {
                 Expandir Progressos
             </Button>
         </li>
-    `);
+    ` );
 
-    document.getElementById('ocultarMissoesBtn').addEventListener('click', function () {
-        $('button:contains("Ver desafios") > svg:not(.MissionsCardBox__actionsIcon--expanded)').parent().click();
-    });
-    document.getElementById('expandirMissoesBtn').addEventListener('click', function () {
-        $('button:contains("Ver desafios") > svg.MissionsCardBox__actionsIcon--expanded').parent().click();
-    });
+  document.getElementById( 'ocultarMissoesBtn' ).addEventListener( 'click', function () {
+    $( 'button:contains("Ver desafios") > svg:not(.MissionsCardBox__actionsIcon--expanded)' ).parent().click();
+  } );
+  document.getElementById( 'expandirMissoesBtn' ).addEventListener( 'click', function () {
+    $( 'button:contains("Ver desafios") > svg.MissionsCardBox__actionsIcon--expanded' ).parent().click();
+  } );
 };
+
+ocultarMissoesAddButton();

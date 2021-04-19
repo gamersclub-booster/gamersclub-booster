@@ -19,7 +19,7 @@ export const levelRatingXP = [
   2544,
   2688,
   2840,
-  2999,
+  2999
 ];
 export const levelColor = [
   '#000',
@@ -42,7 +42,7 @@ export const levelColor = [
   '#f0bc00',
   '#f89a06',
   '#f46e12',
-  '#eb2f2f',
+  '#eb2f2f'
 ];
 export const features = [
   'autoAceitarPreReady',
@@ -53,44 +53,44 @@ export const features = [
   'mostrarLevelProgress',
   'enviarLinkLobby',
   'enviarPartida',
-  'lobbyPrivada',
+  'lobbyPrivada'
 ];
 export const preVetosMapas = [
   {
     mapa: 'de_dust2',
-    codigo: 1,
+    codigo: 1
   },
   {
     mapa: 'de_nuke',
-    codigo: 2,
+    codigo: 2
   },
   {
     mapa: 'de_train',
-    codigo: 3,
+    codigo: 3
   },
   {
     mapa: 'de_mirage',
-    codigo: 5,
+    codigo: 5
   },
   {
     mapa: 'de_overpass',
-    codigo: 7,
+    codigo: 7
   },
   {
     mapa: 'de_inferno',
-    codigo: 8,
+    codigo: 8
   },
   {
     mapa: 'de_vertigo',
-    codigo: 10,
+    codigo: 10
   },
   {
     mapa: 'de_cbble_classic',
-    codigo: 11,
-  },
+    codigo: 11
+  }
 ];
-export const configValues = ['somReady', 'somPreReady', 'volume', 'customSomPreReady', 'customSomReady'];
-export const paginas = ['geral', 'mapas', 'lobby', 'contato', 'sobre', 'sons', 'integracoes'];
+export const configValues = [ 'somReady', 'somPreReady', 'volume', 'customSomPreReady', 'customSomReady' ];
+export const paginas = [ 'geral', 'mapas', 'lobby', 'contato', 'sobre', 'sons', 'integracoes' ];
 export const audios = {
   'undefined': 'Nenhum',
   'https://www.myinstants.com/media/sounds/whatsapp_ptt_2021-04-04_at_21.mp3': 'Partida encontrada',
@@ -100,6 +100,6 @@ export const audios = {
   'https://www.myinstants.com/media/sounds/onarollbrag13.mp3': 'Easy Peasy - CS:GO',
   'https://www.myinstants.com/media/sounds/que-ota_-17.mp3': 'Qué Ota? - LUCAS1',
   'https://www.myinstants.com/media/sounds/tuturu_1.mp3': 'Tuturu - Steins;Gate',
-  'custom': 'Customizar',
+  'custom': 'Customizar'
 };
 export const GC_URL = window.location.hostname;
