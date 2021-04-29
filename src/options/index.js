@@ -1,6 +1,14 @@
 import { features, preVetosMapas, configValues, paginas, audios } from '../lib/constants';
 import { testWebhook } from '../lib/discord';
 import manifest from '../../manifest.json';
+import pt from '../translations/pt.json';
+import en from '../translations/pt.json';
+import es from '../translations/pt.json';
+const translations = {
+  'pt': pt,
+  'en': en,
+  'es': es
+};
 
 function iniciarPaginaOpcoes() {
   adicionaVersao();
@@ -13,6 +21,22 @@ function iniciarPaginaOpcoes() {
   selecionarSons();
   adicionarListenersSons();
   loadWebhook();
+}
+
+document.addEventListener( 'DOMContentLoaded', () => {
+  carregarTraducao( 'pt' );
+} );
+function carregarTraducao( language = 'pt' ) {
+  const translation = translations[language];
+  const translateArray = document.querySelectorAll( '[translation-key]' );
+  translateArray.forEach( element => {
+    const key = element.getAttribute( 'translation-key' );
+    const attr = element.getAttribute( 'translation-attr' ) || 'innerHTML';
+    const text = translation[key];
+    if ( text ) {
+      element[attr] = text;
+    }
+  } );
 }
 function popularAudioOptions() {
   for ( const selectId of [ 'somPreReady', 'somReady' ] ) {
