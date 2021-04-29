@@ -2,7 +2,7 @@ import { features, preVetosMapas, configValues, paginas, audios } from '../lib/c
 import { testWebhook } from '../lib/discord';
 import manifest from '../../manifest.json';
 import pt from '../translations/pt.json';
-import en from '../translations/pt.json';
+import en from '../translations/en.json';
 import es from '../translations/pt.json';
 const translations = {
   'pt': pt,
@@ -21,10 +21,26 @@ function iniciarPaginaOpcoes() {
   selecionarSons();
   adicionarListenersSons();
   loadWebhook();
+  adicionarListenerTraducao();
 }
-
+function adicionarListenerTraducao() {
+  Object.keys( translations ).forEach( lang => {
+    document.getElementById( `traducao-${lang}` ).addEventListener( 'click', function () {
+      chrome.storage.sync.set( { traducao: lang } );
+      carregarTraducao( lang );
+      Array.from( document.getElementsByClassName( 'translate-active' ) ).forEach( el => {
+        el.classList.remove( 'translate-active' );
+      } );
+      this.classList.add( 'translate-active' );
+    } );
+  } );
+}
 document.addEventListener( 'DOMContentLoaded', () => {
-  carregarTraducao( 'pt' );
+  chrome.storage.sync.get( [ 'traducao' ], response => {
+    carregarTraducao( response.traducao );
+    document.getElementById( `traducao-${response.traducao || 'pt'}` ).classList.add( 'translate-active' );
+  } );
+
 } );
 function carregarTraducao( language = 'pt' ) {
   const translation = translations[language];
