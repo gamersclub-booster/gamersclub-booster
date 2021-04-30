@@ -37,7 +37,7 @@ function adicionarListenerTraducao() {
 }
 document.addEventListener( 'DOMContentLoaded', () => {
   chrome.storage.sync.get( [ 'traducao' ], response => {
-    const lang = (response.traducao || navigator.language || 'pt').slice(0,2);
+    const lang = ( response.traducao || navigator.language || 'pt' ).slice( 0, 2 );
     carregarTraducao( lang );
     document.getElementById( `traducao-${lang}` ).classList.add( 'translate-active' );
   } );
