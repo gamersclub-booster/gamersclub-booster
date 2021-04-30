@@ -3,7 +3,7 @@ import { testWebhook } from '../lib/discord';
 import manifest from '../../manifest.json';
 import pt from '../translations/pt.json';
 import en from '../translations/en.json';
-import es from '../translations/pt.json';
+import es from '../translations/es.json';
 const translations = {
   'pt': pt,
   'en': en,
@@ -37,8 +37,9 @@ function adicionarListenerTraducao() {
 }
 document.addEventListener( 'DOMContentLoaded', () => {
   chrome.storage.sync.get( [ 'traducao' ], response => {
-    carregarTraducao( response.traducao );
-    document.getElementById( `traducao-${response.traducao || 'pt'}` ).classList.add( 'translate-active' );
+    const lang = (response.traducao || navigator.language || 'pt').slice(0,2);
+    carregarTraducao( lang );
+    document.getElementById( `traducao-${lang}` ).classList.add( 'translate-active' );
   } );
 
 } );
