@@ -11,6 +11,7 @@ const translations = {
 };
 
 function iniciarPaginaOpcoes() {
+  limparOpcoesInvalidas();
   adicionaVersao();
   marcarCheckboxes();
   marcarPreVetos();
@@ -22,6 +23,16 @@ function iniciarPaginaOpcoes() {
   adicionarListenersSons();
   loadWebhook();
   adicionarListenerTraducao();
+}
+function limparOpcoesInvalidas() {
+  chrome.storage.sync.get( [ 'preVetos' ], res => {
+    const index = res.preVetos.indexOf( 11 );
+    if ( index > -1 ) {
+      const mapas = res.preVetos;
+      mapas.splice( index, 1 );
+      chrome.storage.sync.set( { preVetos: mapas } );
+    }
+  } );
 }
 function adicionarListenerTraducao() {
   Object.keys( translations ).forEach( lang => {
