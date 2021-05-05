@@ -86,9 +86,13 @@ export const preVetosMapas = [
     mapa: 'de_vertigo',
     codigo: 10
   },
+  // {
+  //   mapa: 'de_cbble_classic',
+  //   codigo: 11
+  // }
   {
-    mapa: 'de_cbble_classic',
-    codigo: 11
+    mapa: 'de_ancient',
+    codigo: 12
   }
 ];
 export const configValues = [ 'somReady', 'somPreReady', 'volume', 'customSomPreReady', 'customSomReady' ];
