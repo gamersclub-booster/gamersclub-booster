@@ -23,10 +23,10 @@ export function getMapImage( map ) {
 
   case 'de_cbble_classic':
     return 'https://www.esportelandia.com.br/wp-content/uploads/2020/01/posi%C3%A7%C3%B5es-csgo-cobblestone.jpg?ezimgfmt=ng:webp/ngcb2';
-  
+
   case 'de_ancient':
-      return 'https://pbs.twimg.com/media/E0joah7WQAALf5n?format=png&name=large';
-  
+    return 'https://pbs.twimg.com/media/E0joah7WQAALf5n?format=png&name=large';
+
   default:
     return '';
   }
