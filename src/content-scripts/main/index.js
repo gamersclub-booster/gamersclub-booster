@@ -48,15 +48,15 @@ const initGcBooster = async () => {
     const pontosSubir = maxPontos - currentRating;
 
     const playerNextLevel = playerLevel + 1;
-    const progressBar = maxPontos ? `${( ( currentRating - minPontos ) / ( maxPontos - minPontos ) ) * 100}%` : '100%';
 
-    const strText = playerNextLevel > 20 ? '' : 'Skill Level ' + playerNextLevel;
-    const nextLvl = playerNextLevel > 20 ? '' : playerNextLevel;
+    const strText = playerNextLevel > 21 ? '' : 'Skill Level ' + playerNextLevel;
+    const nextLvl = playerNextLevel > 21 ? '' : playerNextLevel;
 
     const colorTxt = ratingPoints.includes( '-' ) ? 'color: #ef2f2f;' : 'color: #839800;';
     const qwertText = '\nClique aqui para ir para a partida!';
 
-    const fixedNum = parseFloat( progressBar ).toFixed( 4 );
+    const progressBar = maxPontos ? `${( ( currentRating - minPontos ) / ( maxPontos - minPontos ) ) * 100}%` : '100%';
+    const fixedNum = parseFloat( progressBar ).toFixed( 4 ) < 100 ? parseFloat( progressBar ).toFixed( 4 ) : 100;
     const subscriberStyle = isSubscriber === 'true' ? 'subscriber' : 'nonSubscriber';
     $( '.MainHeader__navbarBlock:last' )
       .before( `<div style="display: flex;align-items: center;font-size: 12px;justify-content: center;width: 100%;">
@@ -89,16 +89,16 @@ const initGcBooster = async () => {
                     <span style="cursor: help;" title="Quantidade de pontos para cair de Level">
                       ${pontosCair}
                     </span>/<span style="cursor: help;" title="Quantidade de pontos para subir de Level">+${pontosSubir}</span>
-                    </span><span>${maxPontos}</span></div>
+                    </span><span>${[ 2999, 3000 ].includes( maxPontos ) ? '∞' : maxPontos}</span></div>
                 </div>
             </div>
-            <span title="${strText}" style="cursor: help;display: ${playerNextLevel > 20 ? 'none' : 'inline-block'}">
+            <span title="${strText}" style="cursor: help;display: ${playerNextLevel > 21 ? 'none' : 'inline-block'}">
                 <div class="PlayerLevel PlayerLevel--${playerNextLevel} PlayerLevel--${subscriberStyle}" 
                   style="height: 28px; width: 28px; font-size: 12px;"><div class="PlayerLevel__background">
                   <span class="PlayerLevel__text">${nextLvl}</span>
                 </div></div>
             </span>
-            <span title="${strText}" style="cursor: help;display: ${playerNextLevel > 20 ? 'inline-block' : 'none'}">
+            <span title="${strText}" style="cursor: help;display: ${playerNextLevel > 21 ? 'inline-block' : 'none'}">
                 <div class="PlayerLevel PlayerLevel--${playerLevel} PlayerLevel--${subscriberStyle}"
                   style="height: 28px; width: 28px; font-size: 12px;"><div class="PlayerLevel__background">
                   <span class="PlayerLevel__text"><i class="far fa-star"></i></span></div></div>

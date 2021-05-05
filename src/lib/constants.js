@@ -19,7 +19,8 @@ export const levelRatingXP = [
   2544,
   2688,
   2840,
-  2999
+  2999,
+  3000
 ];
 export const levelColor = [
   '#000',
@@ -42,7 +43,8 @@ export const levelColor = [
   '#f0bc00',
   '#f89a06',
   '#f46e12',
-  '#eb2f2f'
+  '#eb2f2f',
+  '#ff00c0'
 ];
 export const features = [
   'autoAceitarPreReady',
