@@ -1,6 +1,14 @@
 import { features, preVetosMapas, configValues, paginas, audios } from '../lib/constants';
 import { testWebhook } from '../lib/discord';
 import manifest from '../../manifest.json';
+import pt from '../translations/pt.json';
+import en from '../translations/en.json';
+import es from '../translations/es.json';
+const translations = {
+  'pt': pt,
+  'en': en,
+  'es': es
+};
 
 function iniciarPaginaOpcoes() {
   adicionaVersao();
@@ -13,6 +21,39 @@ function iniciarPaginaOpcoes() {
   selecionarSons();
   adicionarListenersSons();
   loadWebhook();
+  adicionarListenerTraducao();
+}
+function adicionarListenerTraducao() {
+  Object.keys( translations ).forEach( lang => {
+    document.getElementById( `traducao-${lang}` ).addEventListener( 'click', function () {
+      chrome.storage.sync.set( { traducao: lang } );
+      carregarTraducao( lang );
+      Array.from( document.getElementsByClassName( 'translate-active' ) ).forEach( el => {
+        el.classList.remove( 'translate-active' );
+      } );
+      this.classList.add( 'translate-active' );
+    } );
+  } );
+}
+document.addEventListener( 'DOMContentLoaded', () => {
+  chrome.storage.sync.get( [ 'traducao' ], response => {
+    const lang = ( response.traducao || navigator.language || 'pt' ).slice( 0, 2 );
+    carregarTraducao( lang );
+    document.getElementById( `traducao-${lang}` ).classList.add( 'translate-active' );
+  } );
+
+} );
+function carregarTraducao( language = 'pt' ) {
+  const translation = translations[language];
+  const translateArray = document.querySelectorAll( '[translation-key]' );
+  translateArray.forEach( element => {
+    const key = element.getAttribute( 'translation-key' );
+    const attr = element.getAttribute( 'translation-attr' ) || 'innerHTML';
+    const text = translation[key];
+    if ( text ) {
+      element[attr] = text;
+    }
+  } );
 }
 function popularAudioOptions() {
   for ( const selectId of [ 'somPreReady', 'somReady' ] ) {

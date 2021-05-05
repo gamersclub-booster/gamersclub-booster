@@ -1,6 +1,6 @@
 body {
     min-height: 100%;
-    height: 450px;
+    height: 470px;
     margin: 0;
     width: 600px;
     color: #ffffff;
@@ -133,6 +133,7 @@ input {
     display: flex;
     flex-direction: row;
     margin: 20px;
+    margin-bottom: 0px;
 }
 
 .titulo {
@@ -378,9 +379,40 @@ input {
     float: right;
 }
 
-.version {
-    padding: 10px;
-    position: absolute;
-    bottom: 0;
-    left: 90%;
+.footer {
+    margin: 20px;
+    line-height: 1.5;
+    font-style: normal;
+    font-weight: 400;
+    text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    font-family: Poppins, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    direction: ltr;
+}
+.versao {
+    color: rgb(36, 126, 187);
+}
+#versao {
+    float: left;
+}
+.versao-texto {
+    color: gray;
+}
+#translate {
+    float:right;
+}
+.translate {
+    color: #FFF;
+}
+.translate-option {
+    color: gray;
+    transition: 0.3s;
+}
+.translate-option:hover {
+    color: rgb(194, 191, 191);
+    cursor: pointer;
+}
+.translate-active {
+    color: #FFF;
 }
