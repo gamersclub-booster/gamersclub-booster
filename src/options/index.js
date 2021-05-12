@@ -26,7 +26,7 @@ function iniciarPaginaOpcoes() {
 }
 function limparOpcoesInvalidas() {
   chrome.storage.sync.get( [ 'preVetos' ], res => {
-    if (res.preVetos.length > 0) {
+    if ( res.preVetos && res.preVetos.length > 0 ) {
       const index = res.preVetos.indexOf( 11 );
       if ( index > -1 ) {
         const mapas = res.preVetos;
