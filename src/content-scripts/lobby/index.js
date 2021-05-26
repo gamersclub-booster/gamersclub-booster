@@ -1,11 +1,11 @@
 import { retrieveWindowVariables } from '../../lib/dom';
-import { sendLobby, sendMatchInfo } from '../../lib/discord';
-import { GC_URL } from '../../lib/constants';
+// import { sendLobby, sendMatchInfo } from '../../lib/discord';
+// import { GC_URL } from '../../lib/constants';
 import axios from 'axios';
 
-let opcoes = {};
-chrome.storage.sync.get( null, function ( result ) {
-  opcoes = result;
+// let opcoes = {};
+chrome.storage.sync.get( null, function ( _result ) {
+  // opcoes = result;
   if ( window.location.pathname.includes( 'partida' ) ) { return; }
   initLobby();
 } );
@@ -13,101 +13,75 @@ chrome.storage.sync.get( null, function ( result ) {
 let intervalCriarLobby = null;
 
 const initLobby = async () => {
-  const copiarIpFunc = mutations =>
-    chrome.storage.sync.get( [ 'autoCopiarIp' ], function ( result ) {
-      if ( result.autoCopiarIp ) {
-        $.each( mutations, async ( i, mutation ) => {
-          const addedNodes = $( mutation.addedNodes );
-          const selector = '#gameModalCopyServer';
-          const ipInput = addedNodes.find( selector ).addBack( selector );
-          if ( ipInput && ipInput.length ) {
-            ipInput[0].click();
-          }
-        } );
-      }
-    } );
-  criarObserver( '#rankedModals', copiarIpFunc );
+  // const copiarIpFunc = mutations =>
+  //   chrome.storage.sync.get( [ 'autoCopiarIp' ], function ( result ) {
+  //     if ( result.autoCopiarIp ) {
+  //       $.each( mutations, async ( i, mutation ) => {
+  //         const addedNodes = $( mutation.addedNodes );
+  //         const selector = '#gameModalCopyServer';
+  //         const ipInput = addedNodes.find( selector ).addBack( selector );
+  //         if ( ipInput && ipInput.length ) {
+  //           ipInput[0].click();
+  //         }
+  //       } );
+  //     }
+  //   } );
+  // criarObserver( '#rankedModals', copiarIpFunc );
 
-  const somPreReadyFunc = mutations =>
-    chrome.storage.sync.get( [ 'somPreReady', 'customSomPreReady', 'volume' ], function ( result ) {
-      if ( result.somPreReady ) {
-        $.each( mutations, ( i, mutation ) => {
-          const addedNodes = $( mutation.addedNodes );
-          const selector = '#setPlayerReady';
-          const preReadyButton = addedNodes.find( selector ).addBack( selector );
-          if ( preReadyButton && preReadyButton.length ) {
-            const som = result.somPreReady === 'custom' ? result.customSomPreReady : result.somPreReady;
-            const audio = new Audio( som );
-            const volume = result.volume || 100;
-            audio.volume = volume / 100;
-            document.getElementById( 'setPlayerReady' ).addEventListener( 'click', function () {
-              audio.play();
-            } );
-          }
-        } );
-      }
-    } );
-  criarObserver( '#rankedModals', somPreReadyFunc );
+  // const somReadyFunc = mutations =>
+  //   chrome.storage.sync.get( [ 'somReady', 'customSomReady', 'volume' ], function ( result ) {
+  //     if ( result.somReady ) {
+  //       $.each( mutations, ( i, mutation ) => {
+  //         const addedNodes = $( mutation.addedNodes );
+  //         const selector = '#gameModalReadyBtn > button';
+  //         const readyButton = addedNodes.find( selector ).addBack( selector );
+  //         if ( readyButton && readyButton.length && readyButton.text() === 'Ready' && !readyButton.disabled ) {
+  //           const som = result.somReady === 'custom' ? result.customSomReady : result.somReady;
+  //           const audio = new Audio( som );
+  //           const volume = result.volume || 100;
+  //           audio.volume = volume / 100;
+  //           $( '#gameModalReadyBtn > button:contains("Ready")' ).on( 'click', function () { audio.play(); } );
+  //         }
+  //       } );
+  //     }
+  //   } );
+  // criarObserver( '#rankedModals', somReadyFunc );
 
-  const somReadyFunc = mutations =>
-    chrome.storage.sync.get( [ 'somReady', 'customSomReady', 'volume' ], function ( result ) {
-      if ( result.somReady ) {
-        $.each( mutations, ( i, mutation ) => {
-          const addedNodes = $( mutation.addedNodes );
-          const selector = '#gameModalReadyBtn > button';
-          const readyButton = addedNodes.find( selector ).addBack( selector );
-          if ( readyButton && readyButton.length && readyButton.text() === 'Ready' && !readyButton.disabled ) {
-            const som = result.somReady === 'custom' ? result.customSomReady : result.somReady;
-            const audio = new Audio( som );
-            const volume = result.volume || 100;
-            audio.volume = volume / 100;
-            $( '#gameModalReadyBtn > button:contains("Ready")' ).on( 'click', function () { audio.play(); } );
-          }
-        } );
-      }
-    } );
-  criarObserver( '#rankedModals', somReadyFunc );
+  // const autoAceitarReadyFunc = mutations =>
+  //   chrome.storage.sync.get( [ 'autoAceitarReady' ], function ( result ) {
+  //     if ( result.autoAceitarReady ) {
+  //       $.each( mutations, ( i, mutation ) => {
+  //         const addedNodes = $( mutation.addedNodes );
+  //         const selector = '#gameModalReadyBtn > button';
+  //         const readyButton = addedNodes.find( selector ).addBack( selector );
+  //         if ( readyButton && readyButton.length && readyButton.text() === 'Ready' && !readyButton.disabled ) {
+  //           setTimeout( function () {
+  //             readyButton[0].click();
+  //           }, 500 );
+  //         }
+  //       } );
+  //     }
+  //   } );
+  // criarObserver( '#rankedModals', autoAceitarReadyFunc );
 
-  const autoAceitarPreReadyFunc = mutations =>
-    chrome.storage.sync.get( [ 'autoAceitarPreReady' ], function ( result ) {
-      if ( result.autoAceitarPreReady ) {
-        $.each( mutations, ( i, mutation ) => {
-          const addedNodes = $( mutation.addedNodes );
-          const selector = '#setPlayerReady';
-          const preReadyButton = addedNodes.find( selector ).addBack( selector );
-          if ( preReadyButton && preReadyButton.length ) {
-            setTimeout( function () {
-              preReadyButton[0].click();
-            }, 500 );
-          }
-        } );
-      }
-    } );
-  criarObserver( '#rankedModals', autoAceitarPreReadyFunc );
-
-
-  const autoAceitarReadyFunc = mutations =>
+  //Clicar automáticamente no Ready, temporário.
+  setInterval( async () => {
     chrome.storage.sync.get( [ 'autoAceitarReady' ], function ( result ) {
       if ( result.autoAceitarReady ) {
-        $.each( mutations, ( i, mutation ) => {
-          const addedNodes = $( mutation.addedNodes );
-          const selector = '#gameModalReadyBtn > button';
-          const readyButton = addedNodes.find( selector ).addBack( selector );
-          if ( readyButton && readyButton.length && readyButton.text() === 'Ready' && !readyButton.disabled ) {
-            setTimeout( function () {
-              readyButton[0].click();
-            }, 500 );
-          }
-        } );
+        // eslint-disable-next-line
+        const button = $( "button:contains('Ready')" );
+        if ( button.length ) {
+          button.trigger( 'click' );
+        }
       }
     } );
-  criarObserver( '#rankedModals', autoAceitarReadyFunc );
-
+  }, 1000 );
 
   const autoFixarMenuLobbyFunc = mutations =>
     chrome.storage.sync.get( [ 'autoFixarMenuLobby' ], function ( result ) {
       if ( result.autoFixarMenuLobby ) {
-        const isSubscriber = retrieveWindowVariables( [ 'ISSUBSCRIBER' ] );
+        const windowVariables = retrieveWindowVariables( [ 'ISSUBSCRIBER' ] );
+        const isSubscriber = windowVariables.ISSUBSCRIBER;
         mutations.forEach( mutation => {
           if ( !mutation.addedNodes ) { return; }
 
@@ -158,7 +132,7 @@ const initLobby = async () => {
       if ( result.autoConcordarTermosRanked ) {
         $.each( mutations, ( i, mutation ) => {
           const addedNodes = $( mutation.addedNodes );
-          const selector = '.ranked-modal-agree.container-fluid > a';
+          const selector = '.RankedRules__button';
           const concordarButton = addedNodes.find( selector ).addBack( selector );
           if ( concordarButton && concordarButton.length ) {
             concordarButton[0].click();
@@ -166,85 +140,85 @@ const initLobby = async () => {
         } );
       }
     } );
-  criarObserver( '#rankedModals', autoConcordarTermosRankedFunc );
+  criarObserver( '#GamersClubCSApp-modals-rankedModal', autoConcordarTermosRankedFunc );
 
-  if ( opcoes.webhookLink && opcoes.webhookLink.length !== 0 ) {
-    const partidaInfoFunc = mutations =>
-      $.each( mutations, async ( _i, mutation ) => {
-        const addedNodes = $( mutation.addedNodes );
-        const selector = '#gameModalCopyServer';
-        const ipInput = addedNodes.find( selector ).addBack( selector );
-        if ( ipInput && ipInput.length ) {
-          const IPSelector = 'game-modal-command-input';
-          const campoIP = document.getElementsByClassName( IPSelector );
-          if ( campoIP[0].value ) {
-            const listenGame = await axios.get( `//${GC_URL}/lobbyBeta/openGame` );
-            if ( listenGame.data.game.live ) {
-              if ( document.getElementById( 'botaoDiscordnoDOM' ) ) {
-                return false;
-              } else {
-                $( '.game-modal-play-command.half-size.clearfix' )
-                  .parent()
-                  .append(
-                    `<button id="botaoDiscordnoDOM" class="game-modal-command-btn"
-                      data-tip-text="Clique para enviar no discord">Enviar no Discord</button>`
-                  );
-                document.getElementById( 'botaoDiscordnoDOM' ).addEventListener( 'click', async function () {
-                  await sendMatchInfo( opcoes.webhookLink, listenGame.data );
-                } );
-                if ( opcoes.enviarPartida ) {
-                  await sendMatchInfo( opcoes.webhookLink, listenGame.data );
-                }
-              }
-            }
-          }
-        }
-      } );
-    const lobbyLinkFunc = mutations =>
-      mutations.forEach( async mutation => {
-        if ( !mutation.addedNodes ) { return; }
-        for ( let i = 0; i < mutation.addedNodes.length; i++ ) {
-          const node = mutation.addedNodes[i];
-          if (
-            node.nextElementSibling &&
-            node.nextElementSibling.className &&
-            node.nextElementSibling.className.includes( 'sidebar-desafios sidebar-content' )
-          ) {
-            if ( opcoes.webhookLink.startsWith( 'http' ) ) {
-              if ( document.getElementById( 'discordLobbyButton' ) ) {
-                return false;
-              } else {
-                if ( opcoes.enviarLinkLobby ) {
-                  const lobbyInfo = await axios.post( '/lobbyBeta/openRoom' );
-                  await sendLobby( opcoes.webhookLink, lobbyInfo.data );
-                  location.href = 'javascript:successAlert("[Discord] - Enviado com sucesso"); void 0';
-                }
-                if ( $( '.btn-radial.btn-blue.btn-copiar-link' ).length === 0 ) { return false; }
-                document
-                  .getElementsByClassName( 'sidebar-titulo sidebar-sala-titulo' )[0]
-                  .setAttribute( 'style', 'font-size: 12px;' );
-                $( '.btn-radial.btn-blue.btn-copiar-link' )
-                  .parent()
-                  .append(
-                    `<span class="btn-radial btn-blue btn-copiar-link" id="discordLobbyButton"
-                      title="Enviar lobby Discord" data-jsaction="gcCommonTooltip" data-tip-text="Convidar Amigos">
-                        <img src="https://img.icons8.com/material-sharp/18/ffffff/discord-logo.png"/>
-                    </span>`
-                  );
+  // if ( opcoes.webhookLink && opcoes.webhookLink.length !== 0 ) {
+  //   const partidaInfoFunc = mutations =>
+  //     $.each( mutations, async ( _i, mutation ) => {
+  //       const addedNodes = $( mutation.addedNodes );
+  //       const selector = '#gameModalCopyServer';
+  //       const ipInput = addedNodes.find( selector ).addBack( selector );
+  //       if ( ipInput && ipInput.length ) {
+  //         const IPSelector = 'game-modal-command-input';
+  //         const campoIP = document.getElementsByClassName( IPSelector );
+  //         if ( campoIP[0].value ) {
+  //           const listenGame = await axios.get( `//${GC_URL}/lobbyBeta/openGame` );
+  //           if ( listenGame.data.game.live ) {
+  //             if ( document.getElementById( 'botaoDiscordnoDOM' ) ) {
+  //               return false;
+  //             } else {
+  //               $( '.game-modal-play-command.half-size.clearfix' )
+  //                 .parent()
+  //                 .append(
+  //                   `<button id="botaoDiscordnoDOM" class="game-modal-command-btn"
+  //                     data-tip-text="Clique para enviar no discord">Enviar no Discord</button>`
+  //                 );
+  //               document.getElementById( 'botaoDiscordnoDOM' ).addEventListener( 'click', async function () {
+  //                 await sendMatchInfo( opcoes.webhookLink, listenGame.data );
+  //               } );
+  //               if ( opcoes.enviarPartida ) {
+  //                 await sendMatchInfo( opcoes.webhookLink, listenGame.data );
+  //               }
+  //             }
+  //           }
+  //         }
+  //       }
+  //     } );
+  //   const lobbyLinkFunc = mutations =>
+  //     mutations.forEach( async mutation => {
+  //       if ( !mutation.addedNodes ) { return; }
+  //       for ( let i = 0; i < mutation.addedNodes.length; i++ ) {
+  //         const node = mutation.addedNodes[i];
+  //         if (
+  //           node.nextElementSibling &&
+  //           node.nextElementSibling.className &&
+  //           node.nextElementSibling.className.includes( 'sidebar-desafios sidebar-content' )
+  //         ) {
+  //           if ( opcoes.webhookLink.startsWith( 'http' ) ) {
+  //             if ( document.getElementById( 'discordLobbyButton' ) ) {
+  //               return false;
+  //             } else {
+  //               if ( opcoes.enviarLinkLobby ) {
+  //                 const lobbyInfo = await axios.post( '/lobbyBeta/openRoom' );
+  //                 await sendLobby( opcoes.webhookLink, lobbyInfo.data );
+  //                 location.href = 'javascript:successAlert("[Discord] - Enviado com sucesso"); void 0';
+  //               }
+  //               if ( $( '.btn-radial.btn-blue.btn-copiar-link' ).length === 0 ) { return false; }
+  //               document
+  //                 .getElementsByClassName( 'sidebar-titulo sidebar-sala-titulo' )[0]
+  //                 .setAttribute( 'style', 'font-size: 12px;' );
+  //               $( '.btn-radial.btn-blue.btn-copiar-link' )
+  //                 .parent()
+  //                 .append(
+  //                   `<span class="btn-radial btn-blue btn-copiar-link" id="discordLobbyButton"
+  //                     title="Enviar lobby Discord" data-jsaction="gcCommonTooltip" data-tip-text="Convidar Amigos">
+  //                       <img src="https://img.icons8.com/material-sharp/18/ffffff/discord-logo.png"/>
+  //                   </span>`
+  //                 );
 
-                document.getElementById( 'discordLobbyButton' ).addEventListener( 'click', async function () {
-                  const lobbyInfo = await axios.post( '/lobbyBeta/openRoom' );
-                  await sendLobby( opcoes.webhookLink, lobbyInfo.data );
-                  location.href = 'javascript:successAlert("[Discord] - Enviado com sucesso"); void 0';
-                } );
-              }
-            }
-          }
-        }
-      } );
-    criarObserver( '#rankedModals', partidaInfoFunc );
-    criarObserver( '#lobbyContent', lobbyLinkFunc );
-  }
+  //               document.getElementById( 'discordLobbyButton' ).addEventListener( 'click', async function () {
+  //                 const lobbyInfo = await axios.post( '/lobbyBeta/openRoom' );
+  //                 await sendLobby( opcoes.webhookLink, lobbyInfo.data );
+  //                 location.href = 'javascript:successAlert("[Discord] - Enviado com sucesso"); void 0';
+  //               } );
+  //             }
+  //           }
+  //         }
+  //       }
+  //     } );
+  //   criarObserver( '#rankedModals', partidaInfoFunc );
+  //   criarObserver( '#lobbyContent', lobbyLinkFunc );
+  // }
 
   //Feature pra criar lobby caso full
   adicionarBotaoForcarCriarLobby();

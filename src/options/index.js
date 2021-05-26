@@ -69,7 +69,7 @@ function carregarTraducao( language = 'pt' ) {
   } );
 }
 function popularAudioOptions() {
-  for ( const selectId of [ 'somPreReady', 'somReady' ] ) {
+  for ( const selectId of [ 'somReady' ] ) {
     const select = document.getElementById( selectId );
     for ( const index in audios ) {
       select.options[select.options.length] = new Option( audios[index], index );
@@ -190,15 +190,6 @@ function adicionarListenersSons() {
       chrome.storage.sync.set( { [config]: this.value }, function () {} );
     } );
   }
-  document.getElementById( 'testarSomPreReady' ).addEventListener( 'click', function () {
-    const som =
-      document.getElementById( 'somPreReady' ).value === 'custom' ?
-        document.getElementById( 'customSomPreReady' ).value :
-        document.getElementById( 'somPreReady' ).value;
-    const audio = new Audio( som );
-    audio.volume = document.getElementById( 'volume' ).value / 100;
-    audio.play();
-  } );
   document.getElementById( 'testarSomReady' ).addEventListener( 'click', function () {
     const som =
       document.getElementById( 'somReady' ).value === 'custom' ?

@@ -14,7 +14,7 @@
     }
   },
   "scripts": {
-    "dev": "webpack --watch",
+    "dev": "webpack --watch --config webpack.dev.js",
     "build": "webpack",
     "precommit": "commitlint -E HUSKY_GIT_PARAMS",
     "lint": "eslint --config ./.eslintrc ./src",

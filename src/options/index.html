@@ -19,10 +19,10 @@
         <div class="menu">
           <ul>
             <li id="link-geral" class="active"><a href="#geral" translation-key="geral"></a></li>
-            <li id="link-sons"><a href="#sons" translation-key="sons"></a></li>
-            <li id="link-mapas"><a href="#mapas" translation-key="mapas"></a></li>
+            <li id="link-sons" style="display:none"><a href="#sons" translation-key="sons"></a></li>
+            <li id="link-mapas" style="display:none"><a href="#mapas" translation-key="mapas"></a></li>
             <li id="link-lobby"><a href="#lobby" translation-key="lobby"></a></li>
-            <li id="link-integracoes">
+            <li id="link-integracoes" style="display:none">
               <a href="#integracoes" translation-key="integracoes"></a>
             </li>
             <li id="link-contato"><a href="#contato" translation-key="contato"></a></li>
@@ -32,17 +32,12 @@
 
         <div class="pagina ativo" id="geral">
           <h3 class="subtitulo" translation-key="automacoes"></h3>
-          <label class="container" for="autoAceitarPreReady" translation-attr="title" translation-key="aceita-automaticamente-o-pre-ready">
-            <p class="descricao" translation-key="aceitar-pre-ready"></p>
-            <input type="checkbox" id="autoAceitarPreReady" />
-            <span class="checkmark"></span>
-          </label>
           <label class="container" for="autoAceitarReady" title="Aceita automaticamente o ready">
             <p class="descricao" translation-key="aceitar-ready"></p>
             <input type="checkbox" id="autoAceitarReady" />
             <span class="checkmark"></span>
           </label>
-          <label class="container" for="autoCopiarIp" title="Copia o IP automáticamente assim que disponível">
+          <label class="container" for="autoCopiarIp" title="Copia o IP automáticamente assim que disponível" style="display:none">
             <p class="descricao" translation-key="copiar-ip"></p>
             <input type="checkbox" id="autoCopiarIp" />
             <span class="checkmark"></span>
@@ -129,21 +124,6 @@
         <div class="pagina" id="sons">
           <h3 class="subtitulo" translation-key="sons"></h3>
           <div>
-            <div class="form-input">
-              <span translation-key="ao-aceitar-pre-ready"></span>
-              <div class="input-container">
-                <select id="somPreReady"></select>
-              </div>
-            </div>
-            <button class="btn btn-primary" id="testarSomPreReady" translation-key="testar"></button>
-            <div id="p-customSomPreReady" class="form-input" style="display: none; margin-top: 10px">
-              <span translation-key="url-som-customizado"></span>
-              <div class="input-container">
-                <input type="text" id="customSomPreReady" />
-              </div>
-            </div>
-          </div>
-          <div style="margin-top: 15px">
             <div class="form-input">
               <span translation-key="ao-aceitar-ready"></span>
               <div class="input-container">

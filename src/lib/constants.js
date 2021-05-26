@@ -47,7 +47,6 @@ export const levelColor = [
   '#ff00c0'
 ];
 export const features = [
-  'autoAceitarPreReady',
   'autoCopiarIp',
   'autoAceitarReady',
   'autoFixarMenuLobby',
@@ -95,7 +94,7 @@ export const preVetosMapas = [
     codigo: 12
   }
 ];
-export const configValues = [ 'somReady', 'somPreReady', 'volume', 'customSomPreReady', 'customSomReady' ];
+export const configValues = [ 'somReady', 'volume', 'customSomReady' ];
 export const paginas = [ 'geral', 'mapas', 'lobby', 'contato', 'sobre', 'sons', 'integracoes' ];
 export const audios = {
   'undefined': 'Nenhum',
