@@ -75,7 +75,7 @@ const initLobby = async () => {
         }
       }
     } );
-  }, 1000 );
+  }, 300 );
 
   const autoFixarMenuLobbyFunc = mutations =>
     chrome.storage.sync.get( [ 'autoFixarMenuLobby' ], function ( result ) {
