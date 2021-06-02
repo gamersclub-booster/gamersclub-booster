@@ -47,35 +47,35 @@ const initLobby = async () => {
   //   } );
   // criarObserver( '#rankedModals', somReadyFunc );
 
-  // const autoAceitarReadyFunc = mutations =>
-  //   chrome.storage.sync.get( [ 'autoAceitarReady' ], function ( result ) {
-  //     if ( result.autoAceitarReady ) {
-  //       $.each( mutations, ( i, mutation ) => {
-  //         const addedNodes = $( mutation.addedNodes );
-  //         const selector = '#gameModalReadyBtn > button';
-  //         const readyButton = addedNodes.find( selector ).addBack( selector );
-  //         if ( readyButton && readyButton.length && readyButton.text() === 'Ready' && !readyButton.disabled ) {
-  //           setTimeout( function () {
-  //             readyButton[0].click();
-  //           }, 500 );
-  //         }
-  //       } );
-  //     }
-  //   } );
-  // criarObserver( '#rankedModals', autoAceitarReadyFunc );
-
-  //Clicar automáticamente no Ready, temporário.
-  setInterval( async () => {
+  const autoAceitarReadyFunc = mutations =>
     chrome.storage.sync.get( [ 'autoAceitarReady' ], function ( result ) {
       if ( result.autoAceitarReady ) {
-        // eslint-disable-next-line
-        const button = $( "button:contains('Ready')" );
-        if ( button.length ) {
-          button.trigger( 'click' );
-        }
+        $.each( mutations, ( i, mutation ) => {
+          const addedNodes = $( mutation.addedNodes );
+          //eslint-disable-next-line
+          const selector = "button:contains('Ready')";
+          const readyButton = addedNodes.find( selector ).addBack( selector );
+          if ( readyButton && readyButton.length && !readyButton.disabled ) {
+            readyButton[0].click();
+            readyButton[0].trigger( 'click' );
+          }
+        } );
       }
     } );
-  }, 300 );
+  criarObserver( '.lobby,.ranking', autoAceitarReadyFunc );
+
+  //Clicar automáticamente no Ready, temporário.
+  // setInterval( async () => {
+  //   chrome.storage.sync.get( [ 'autoAceitarReady' ], function ( result ) {
+  //     if ( result.autoAceitarReady ) {
+  //       // eslint-disable-next-line
+  //       const button = $( "button:contains('Ready')" );
+  //       if ( button.length ) {
+  //         button.trigger( 'click' );
+  //       }
+  //     }
+  //   } );
+  // }, 300 );
 
   const autoFixarMenuLobbyFunc = mutations =>
     chrome.storage.sync.get( [ 'autoFixarMenuLobby' ], function ( result ) {
@@ -140,7 +140,7 @@ const initLobby = async () => {
         } );
       }
     } );
-  criarObserver( '#GamersClubCSApp-modals-rankedModal', autoConcordarTermosRankedFunc );
+  criarObserver( '.lobby,.ranking', autoConcordarTermosRankedFunc );
 
   // if ( opcoes.webhookLink && opcoes.webhookLink.length !== 0 ) {
   //   const partidaInfoFunc = mutations =>
@@ -225,16 +225,17 @@ const initLobby = async () => {
 };
 
 const criarObserver = ( seletor, exec ) => {
-  const observer = new MutationObserver( mutations => {
-    exec( mutations );
-  } );
-
-  observer.observe( $( seletor ).get( 0 ), {
-    childList: true,
-    subtree: true,
-    attributes: false,
-    characterData: false
-  } );
+  if ( $( seletor ).length > 0 ) {
+    const observer = new MutationObserver( mutations => {
+      exec( mutations );
+    } );
+    observer.observe( $( seletor ).get( 0 ), {
+      childList: true,
+      subtree: true,
+      attributes: false,
+      characterData: false
+    } );
+  }
 };
 
 function adicionarBotaoCancelarCriarLobby() {
@@ -249,13 +250,15 @@ function adicionarBotaoCancelarCriarLobby() {
 }
 
 function adicionarBotaoForcarCriarLobby() {
-  $( '#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)' ).html(
-    '<button id="forcarCriacaoLobbyBtn" style="color:orange" type="button">Forçar Criação da Lobby</button>'
-  );
-  document.getElementById( 'forcarCriacaoLobbyBtn' ).addEventListener( 'click', function () {
-    intervalCriarLobby = intervalerCriacaoLobby();
-    adicionarBotaoCancelarCriarLobby();
-  } );
+  if ( $( '#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)' ).length > 0 ) {
+    $( '#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)' ).html(
+      '<button id="forcarCriacaoLobbyBtn" style="color:orange" type="button">Forçar Criação da Lobby</button>'
+    );
+    document.getElementById( 'forcarCriacaoLobbyBtn' ).addEventListener( 'click', function () {
+      intervalCriarLobby = intervalerCriacaoLobby();
+      adicionarBotaoCancelarCriarLobby();
+    } );
+  }
 }
 
 //Criar lobby: https://github.com/LouisRiverstone/gamersclub-lobby_waiter/ com as modificações por causa do layout novo
