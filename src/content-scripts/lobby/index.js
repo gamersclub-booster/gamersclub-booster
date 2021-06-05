@@ -64,18 +64,18 @@ const initLobby = async () => {
     } );
   criarObserver( '.lobby,.ranking', autoAceitarReadyFunc );
 
-  //Clicar automáticamente no Ready, temporário.
-  // setInterval( async () => {
-  //   chrome.storage.sync.get( [ 'autoAceitarReady' ], function ( result ) {
-  //     if ( result.autoAceitarReady ) {
-  //       // eslint-disable-next-line
-  //       const button = $( "button:contains('Ready')" );
-  //       if ( button.length ) {
-  //         button.trigger( 'click' );
-  //       }
-  //     }
-  //   } );
-  // }, 300 );
+  // Clicar automáticamente no Ready, temporário.
+  setInterval( async () => {
+    chrome.storage.sync.get( [ 'autoAceitarReady' ], function ( result ) {
+      if ( result.autoAceitarReady ) {
+        // eslint-disable-next-line
+        const button = $( "button:contains('Ready')" );
+        if ( button.length ) {
+          button.trigger( 'click' );
+        }
+      }
+    } );
+  }, 300 );
 
   const autoFixarMenuLobbyFunc = mutations =>
     chrome.storage.sync.get( [ 'autoFixarMenuLobby' ], function ( result ) {
