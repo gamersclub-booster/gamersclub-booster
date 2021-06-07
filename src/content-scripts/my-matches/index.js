@@ -9,7 +9,10 @@ const buscaLinksDasPartidas = () => {
   return partidas;
 };
 
-const verificarBans = async ( partida, statsColumns ) => {
+const verificarBans = async ( partida, statsColumns, retries = 0 ) => {
+  if ( retries > 3 ) {
+    return;
+  }
   try {
     const resposta = await fetch( partida + '/1' );
     const dadosPartida = await resposta.json();
@@ -45,7 +48,9 @@ const verificarBans = async ( partida, statsColumns ) => {
     }
   } catch ( e ) {
     log( 'Fetch errored, trying again.' );
-    return verificarBans( partida, statsColumns );
+    return setTimeout( async () => {
+      verificarBans( partida, statsColumns, retries + 1 );
+    }, 1000 );
   }
 };
 
@@ -53,7 +58,13 @@ const verificarBans = async ( partida, statsColumns ) => {
 const initVerificarBans = async () => {
   const partidas = buscaLinksDasPartidas();
   const statsColumns = $( SELETOR_LINK_PARTIDAS ).parent().parent();
-  const promises = partidas.map( ( partida, index ) => verificarBans( partida, statsColumns[index] ) );
+  let waitTime = 0;
+  const promises = partidas.map( ( partida, index ) => {
+    waitTime += 100;
+    return setTimeout( async () => {
+      return verificarBans( partida, statsColumns[index] );
+    }, waitTime );
+  } );
   await Promise.all( promises );
 };
 const colorirPartidas = () => {
@@ -80,17 +91,13 @@ const colorirPartidas = () => {
   } );
 };
 ( async () => {
-  // CSS
-  // background-image: linear-gradient(to right, red 0.1%,#181a29 15%, #181A28);
-
   $( 'body' ).on( 'DOMNodeInserted', '#myMatchesPagination', async function () {
-    //Wait 5 seconds before start;
-    log( 'Page changed, running.' );
     await new Promise( r => setTimeout( r, 3000 ) );
     initVerificarBans();
     colorirPartidas();
   } );
-
-  initVerificarBans();
+  await new Promise( r => setTimeout( r, 3000 ) );
   colorirPartidas();
+  await initVerificarBans();
+
 } )();
