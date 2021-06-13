@@ -28,24 +28,24 @@ const initLobby = async () => {
   //   } );
   // criarObserver( '#rankedModals', copiarIpFunc );
 
-  // const somReadyFunc = mutations =>
-  //   chrome.storage.sync.get( [ 'somReady', 'customSomReady', 'volume' ], function ( result ) {
-  //     if ( result.somReady ) {
-  //       $.each( mutations, ( i, mutation ) => {
-  //         const addedNodes = $( mutation.addedNodes );
-  //         const selector = '#gameModalReadyBtn > button';
-  //         const readyButton = addedNodes.find( selector ).addBack( selector );
-  //         if ( readyButton && readyButton.length && readyButton.text() === 'Ready' && !readyButton.disabled ) {
-  //           const som = result.somReady === 'custom' ? result.customSomReady : result.somReady;
-  //           const audio = new Audio( som );
-  //           const volume = result.volume || 100;
-  //           audio.volume = volume / 100;
-  //           $( '#gameModalReadyBtn > button:contains("Ready")' ).on( 'click', function () { audio.play(); } );
-  //         }
-  //       } );
-  //     }
-  //   } );
-  // criarObserver( '#rankedModals', somReadyFunc );
+  const somReadyFunc = mutations =>
+    chrome.storage.sync.get( [ 'somReady', 'customSomReady', 'volume' ], function ( result ) {
+      if ( result.somReady ) {
+        $.each( mutations, ( _i, mutation ) => {
+          const addedNodes = $( mutation.addedNodes );
+          const selector = 'button:contains(\'Ready\')';
+          const readyButton = addedNodes.find( selector ).addBack( selector );
+          if ( readyButton && readyButton.length && readyButton.text() === 'Ready' && !readyButton.disabled ) {
+            const som = result.somReady === 'custom' ? result.customSomReady : result.somReady;
+            const audio = new Audio( som );
+            const volume = result.volume || 100;
+            audio.volume = volume / 100;
+            $( selector ).on( 'click', function () { audio.play(); } );
+          }
+        } );
+      }
+    } );
+  criarObserver( '.lobby,.ranking', somReadyFunc );
 
   const autoAceitarReadyFunc = mutations =>
     chrome.storage.sync.get( [ 'autoAceitarReady' ], function ( result ) {
@@ -56,8 +56,10 @@ const initLobby = async () => {
           const selector = "button:contains('Ready')";
           const readyButton = addedNodes.find( selector ).addBack( selector );
           if ( readyButton && readyButton.length && !readyButton.disabled ) {
-            readyButton[0].click();
-            readyButton[0].trigger( 'click' );
+            setTimeout( () => {
+              readyButton[0].click();
+              readyButton[0].trigger( 'click' );
+            }, 150 );
           }
         } );
       }
@@ -69,9 +71,12 @@ const initLobby = async () => {
     chrome.storage.sync.get( [ 'autoAceitarReady' ], function ( result ) {
       if ( result.autoAceitarReady ) {
         // eslint-disable-next-line
-        const button = $( "button:contains('Ready')" );
-        if ( button.length ) {
-          button.trigger( 'click' );
+        const readyButton = $( "button:contains('Ready')" );
+        if ( readyButton.length ) {
+          setTimeout( () => {
+            readyButton[0].click();
+            readyButton[0].trigger( 'click' );
+          }, 150 );
         }
       }
     } );
