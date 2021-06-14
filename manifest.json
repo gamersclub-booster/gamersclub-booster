@@ -26,7 +26,14 @@
       "run_at": "document_end"
     },
     {
-      "matches": ["*://*.gamersclub.com.br/lobby*", "*://csgo.gamersclub.gg/lobby*", "*://*.gamersclub.com.br/ranked*", "*://csgo.gamersclub.gg/ranked*"],
+      "matches": [
+        "*://*.gamersclub.com.br/lobby*",
+        "*://csgo.gamersclub.gg/lobby*",
+        "*://*.gamersclub.com.br/ranked*",
+        "*://csgo.gamersclub.gg/ranked*",
+        "*://*.gamersclub.com.br/match*",
+        "*://csgo.gamersclub.gg/match*"
+      ],
       "js": ["content-scripts/lobby.js"],
       "run_at": "document_end"
     },
