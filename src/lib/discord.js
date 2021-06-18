@@ -72,10 +72,9 @@ export async function sendLobby( url, lobbyInfo ) {
 }
 
 function getTeamInfo( data ) {
-  const membersFull = data.members;
-  const membersArray = Object.values( membersFull );
-  const membersString = membersArray.map( function ( e ) {
-    return `${e.level} - ${e.nick} | ${e.kdr} \n`;
+  const membersFull = data.players;
+  const membersString = membersFull.map( function ( e ) {
+    return `${e.level} - ${e.nick} \n`;
   } );
 
   return membersString.join( '' );
@@ -86,36 +85,32 @@ export async function sendMatchInfo( url, gcMatch ) {
     return false;
   }
 
-  const map = Object.values( gcMatch.maps ).filter( function ( e ) {
-    return e.vetoed === undefined;
-  } )[0].name;
-
   await send( url, {
     color: '2391737',
     fields: [
       {
-        name: 'Time A',
-        value: getTeamInfo( gcMatch.room_a )
+        name: 'Time A - ' + gcMatch.teamA.averageLevel,
+        value: getTeamInfo( gcMatch.teamA )
       },
       {
-        name: 'Time B',
-        value: getTeamInfo( gcMatch.room_b )
+        name: 'Time B - ' + gcMatch.teamB.averageLevel,
+        value: getTeamInfo( gcMatch.teamB )
       },
       {
         name: 'IP da partida:',
-        value: `connect ${gcMatch.game.live.ip};password ${gcMatch.game.live.password}`
+        value: `connect ${gcMatch.ip};password ${gcMatch.password}`
       },
       {
         name: 'Mapa:',
-        value: map
+        value: gcMatch.map.name
       },
       {
         name: 'Link da partida',
-        value: `https://${GC_URL}/lobby/partida/${gcMatch.game.gameID}`
+        value: `https://${GC_URL}/lobby/partida/${gcMatch.gameId}`
       }
     ],
     image: {
-      url: getMapImage( map )
+      url: getMapImage( gcMatch.map.name )
     }
   } );
 }
