@@ -1,6 +1,5 @@
 import { retrieveWindowVariables } from '../../lib/dom';
 import { sendLobby, sendMatchInfo } from '../../lib/discord';
-import { GC_URL } from '../../lib/constants';
 import axios from 'axios';
 
 // let opcoes = {};
@@ -147,72 +146,71 @@ const initLobby = async () => {
     } );
   criarObserver( '.lobby,.ranking', autoConcordarTermosRankedFunc );
 
-  
+
   const partidaInfoFunc = mutations => {
-    chrome.storage.sync.get(["webhookLink", "enviarPartida"], function (result) {
-      if (result.webhookLink && result.webhookLink.length > 0) {
-        $.each(mutations, async (_i, mutation) => {
-          const addedNodes = $(mutation.addedNodes);
+    chrome.storage.sync.get( [ 'webhookLink', 'enviarPartida' ], function ( result ) {
+      if ( result.webhookLink && result.webhookLink.length > 0 ) {
+        $.each( mutations, async ( _i, mutation ) => {
+          const addedNodes = $( mutation.addedNodes );
           const selector = '.CopyButton-sc-1ylcea4-3';
-          const ipInput = addedNodes.find(selector).addBack(selector);
-          if (ipInput) {
-            if ( document.getElementById( 'botaoDiscordnoDOM') ) {
+          const ipInput = addedNodes.find( selector ).addBack( selector );
+          if ( ipInput ) {
+            if ( document.getElementById( 'botaoDiscordnoDOM' ) ) {
               return false;
             } else {
               const listenGame = await axios.get( '/api/lobby/match' );
-              if (listenGame.data.data.step === "onServerReady") {
+              if ( listenGame.data.data.step === 'onServerReady' ) {
                 $( '.Container-sc-1ylcea4-0' )
-                .parent()
-                .append(
-                  `<button id="botaoDiscordnoDOM" class="WasdButton WasdButton--success WasdButton--lg botaoDiscordnoDOM-sc-1ylcea4-4"
+                  .parent()
+                  .append(
+                    `<button id="botaoDiscordnoDOM" class="WasdButton WasdButton--success WasdButton--lg botaoDiscordnoDOM-sc-1ylcea4-4"
                   data-tip-text="Clique para enviar no discord">Enviar no Discord</button>`
-                );
+                  );
                 document.getElementById( 'botaoDiscordnoDOM' ).addEventListener( 'click', async function () {
-                  await sendMatchInfo(result.webhookLink, listenGame.data.data );
+                  await sendMatchInfo( result.webhookLink, listenGame.data.data );
                 } );
-                if (result.enviarPartida) {
-                  await sendMatchInfo(result.webhookLink, listenGame.data.data);
+                if ( result.enviarPartida ) {
+                  await sendMatchInfo( result.webhookLink, listenGame.data.data );
                 }
               }
             }
           }
-        });
+        } );
       }
-    });
-  }
-  criarObserver('#matchMainContainer', partidaInfoFunc);
+    } );
+  };
+  criarObserver( '#matchMainContainer', partidaInfoFunc );
 
   const lobbyLinkFunc = mutations =>
-    chrome.storage.sync.get(["webhookLink", "enviarLinkLobby"], function (result) {
-      if (result.webhookLink && result.webhookLink.length > 0) {
-        mutations.forEach(async mutation => {
-          if (!mutation.addedNodes) {
+    chrome.storage.sync.get( [ 'webhookLink', 'enviarLinkLobby' ], function ( result ) {
+      if ( result.webhookLink && result.webhookLink.length > 0 ) {
+        mutations.forEach( async mutation => {
+          if ( !mutation.addedNodes ) {
             return;
           }
-          for (let i = 0; i < mutation.addedNodes.length; i++) {
+          for ( let i = 0; i < mutation.addedNodes.length; i++ ) {
             const node = mutation.addedNodes[i];
             if (
               node.nextElementSibling &&
               node.nextElementSibling.className &&
-              node.nextElementSibling.className.includes('sidebar-desafios sidebar-content')
+              node.nextElementSibling.className.includes( 'sidebar-desafios sidebar-content' )
             ) {
-              if (result.webhookLink.startsWith('http')) {
-                if (document.getElementById('discordLobbyButton')) {
+              if ( result.webhookLink.startsWith( 'http' ) ) {
+                if ( document.getElementById( 'discordLobbyButton' ) ) {
                   return false;
                 } else {
-                  if (result.enviarLinkLobby) {
-                    const lobbyInfo = await axios.post('/lobbyBeta/openRoom');
-                    console.log(lobbyInfo.data)
-                    await sendLobby(result.webhookLink, lobbyInfo.data);
+                  if ( result.enviarLinkLobby ) {
+                    const lobbyInfo = await axios.post( '/lobbyBeta/openRoom' );
+                    await sendLobby( result.webhookLink, lobbyInfo.data );
                     location.href = 'javascript:successAlert("[Discord] - Enviado com sucesso"); void 0';
                   }
-                  if ($('.btn-radial.btn-blue.btn-copiar-link').length === 0) {
+                  if ( $( '.btn-radial.btn-blue.btn-copiar-link' ).length === 0 ) {
                     return false;
                   }
                   document
-                    .getElementsByClassName('sidebar-titulo sidebar-sala-titulo')[0]
-                    .setAttribute('style', 'font-size: 12px;');
-                  $('.btn-radial.btn-blue.btn-copiar-link')
+                    .getElementsByClassName( 'sidebar-titulo sidebar-sala-titulo' )[0]
+                    .setAttribute( 'style', 'font-size: 12px;' );
+                  $( '.btn-radial.btn-blue.btn-copiar-link' )
                     .parent()
                     .append(
                       `<span class="btn-radial btn-blue btn-copiar-link" id="discordLobbyButton"
@@ -221,19 +219,19 @@ const initLobby = async () => {
                        </span>`
                     );
 
-                  document.getElementById('discordLobbyButton').addEventListener('click', async function () {
-                    const lobbyInfo = await axios.post('/lobbyBeta/openRoom');
-                    await sendLobby(result.webhookLink, lobbyInfo.data);
+                  document.getElementById( 'discordLobbyButton' ).addEventListener( 'click', async function () {
+                    const lobbyInfo = await axios.post( '/lobbyBeta/openRoom' );
+                    await sendLobby( result.webhookLink, lobbyInfo.data );
                     location.href = 'javascript:successAlert("[Discord] - Enviado com sucesso"); void 0';
-                  });
+                  } );
                 }
               }
             }
           }
-        });
+        } );
       }
-    });
-  criarObserver('#lobbyContent', lobbyLinkFunc);
+    } );
+  criarObserver( '#lobbyContent', lobbyLinkFunc );
 
   //Feature pra criar lobby caso full
   adicionarBotaoForcarCriarLobby();
