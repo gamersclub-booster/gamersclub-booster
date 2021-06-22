@@ -23,6 +23,7 @@ function iniciarPaginaOpcoes() {
   adicionarListenersSons();
   loadWebhook();
   adicionarListenerTraducao();
+  loadBlockList();
 }
 function limparOpcoesInvalidas() {
   chrome.storage.sync.get( [ 'preVetos' ], res => {
@@ -262,6 +263,67 @@ function loadWebhook() {
           document.getElementById( 'statusWebhook' ).innerText = 'Sem URL salva';
         }
       } );
+    }
+  } );
+}
+
+//Block List
+
+function loadBlockList() {
+  chrome.storage.sync.get( [ 'listaNegra' ], function ( data ) {
+    const listHTML = document.getElementById( 'lista' );
+    if ( data.listaNegra ) {
+      if ( typeof data.listaNegra === 'object' && data.listaNegra.length > 0 ) {
+        data.listaNegra.forEach( each => {
+          const { id, avatarURL, nick } = each;
+          listHTML.innerHTML += `<div class="jogador ${id}">
+                                  <img src="${avatarURL}" alt="" class="circle"></img>
+                                  <span>${nick}</span>
+                                  <button class="buttonListaNegra button-${id}">Remover</button>
+                                 </div>`;
+          $( document ).on( 'click', '.button-' + id, function () {
+            console.log( 'oioioi' );
+            apagarListaNegra( id );
+          } );
+        } );
+      } else {
+        listHTML.innerHTML += `
+        <div>
+          <li translation-key="ninguemNaLista"></li>
+          <li translation-key="comoAddnaLista"></li>
+          <li translation-key="notificacao"></li>
+        </div>`;
+      }
+    } else {
+
+      listHTML.innerHTML += `
+      <div>
+        <li translation-key="ninguemNaLista"></li>
+        <li translation-key="comoAddnaLista"></li>
+        <li translation-key="notificacao"></li>
+      </div>`;
+    }
+  } );
+}
+
+function apagarListaNegra( id ) {
+  const selector = document.getElementsByClassName( id )[0];
+  console.log( selector );
+  selector.parentNode.removeChild( selector );
+  //Remover da lista negra
+  function removerID( arr, value ) {
+    return arr.filter( function ( ele ) {
+      return ele.id !== value.id;
+    } );
+  }
+  chrome.storage.sync.get( [ 'listaNegra' ], function ( result ) {
+    if ( result.listaNegra ) {
+      const array = result['listaNegra'] ? result['listaNegra'] : [];
+      const obj = { id };
+      const arrayNovo = array.find( e => e.id === id ) ? removerID( array, obj ) : array;
+      const listaObj = {};
+      listaObj['listaNegra'] = arrayNovo;
+      chrome.storage.sync.set( listaObj, function ( ) { } );
     }
   } );
 }

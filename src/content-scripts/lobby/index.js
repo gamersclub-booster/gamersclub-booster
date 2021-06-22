@@ -5,11 +5,115 @@ import axios from 'axios';
 // let opcoes = {};
 chrome.storage.sync.get( null, function ( _result ) {
   // opcoes = result;
-  if ( window.location.pathname.includes( 'partida' ) ) { return; }
-  initLobby();
+  if ( window.location.pathname.includes( 'partida' ) ) {
+    initLobbyPartida();
+  } else {
+    initLobby();
+  }
 } );
 
 let intervalCriarLobby = null;
+
+const initLobbyPartida = async () => {
+  //Helpers
+  function atualizarArray( valor, antigo ) {
+    const novo = new Array( valor );
+    for ( let i = 0; i < antigo.length; ++i ) {
+      novo.push( antigo[i] );
+    }
+    return novo;
+  }
+  function removerID( arr, value ) {
+    return arr.filter( function ( ele ) {
+      return ele.id !== value.id;
+    } );
+  }
+  //Antes de inciiar, preparar o array do banco de dados
+  chrome.storage.sync.get( [ 'listaNegra' ], async function ( result ) {
+    if ( !result.listaNegra ) {
+      chrome.storage.sync.set( { listaNegra: [] }, async function ( ) { await initDarkListButton( ); } );
+    } else {
+      await initDarkListButton();
+    }
+  } );
+
+  async function initDarkListButton() {
+  //Quando iniciar, adicionar os botoes da lista negra
+    const playerSelector = $( '.tableMatch__leftColumn' );
+    for ( let i = 0; i < playerSelector.length; i++ ) {
+      const botaoHTML = $( '<button data="preAlready" class="botaoListaNegra">Adicionar a lista de bloqueio</button>' );
+      botaoHTML.insertAfter( playerSelector[i] );
+    }
+    //Verificar quais já estão marcados
+    chrome.storage.sync.get( [ 'listaNegra' ], function ( result ) {
+      if ( result.listaNegra ) {
+        const botaoListaNegra = document.getElementsByClassName( 'botaoListaNegra' );
+        for ( let i = 0; i < botaoListaNegra.length; i++ ) {
+          //Verificar se é você
+          const userNick = document.getElementsByClassName( 'MainHeader__playerNickname' )[0].innerText;
+          const nick = botaoListaNegra[i].offsetParent.children[0].children[0].children[2].innerText;
+          //Verificar se já existe no array
+          const id = botaoListaNegra[i].offsetParent.children[0].children[0].children[2].href.replace( 'https://gamersclub.com.br/jogador/', '' );
+          const avatarURL = botaoListaNegra[i].offsetParent.children[0].children[0].children[0].children[1].currentSrc;
+
+          const ids = result.listaNegra.map( e => { return e.id; } );
+          if ( ids.includes( id ) ) {
+            botaoListaNegra[i].innerText = 'Remover da lista de bloqueio';
+            botaoListaNegra[i].setAttribute( 'data', 'alreadyListed' );
+          } else {
+            botaoListaNegra[i].innerText = 'Adicionar a lista de bloqueio';
+            botaoListaNegra[i].setAttribute( 'data', 'notAlreadyListed' );
+          }
+          //Adicionar o listener de clique
+          botaoListaNegra[i].addEventListener( 'click', function ( click ) {
+            const prefix = '[ Lista de Bloqueio ]';
+            const prefixRed = `<a style='color: yellow;'>${prefix}</a>`;
+            const state = botaoListaNegra[i].attributes[0].value;
+
+            if ( state === 'alreadyListed' ) {
+              //Remover da lista
+              chrome.storage.sync.get( [ 'listaNegra' ], function ( result ) {
+                if ( result['listaNegra'] ) {
+                  const array = result['listaNegra'] ? result['listaNegra'] : [];
+                  const obj = { id, nick, avatarURL };
+                  const arrayNovo = array.find( e => e.id === id ) ? removerID( array, obj ) : array;
+                  const listaObj = {};
+                  listaObj['listaNegra'] = arrayNovo;
+                  chrome.storage.sync.set( listaObj, function ( ) {
+                    const nickName = `<a style='color: yellow;'>${click.path[1].outerText.split( '\n' )[0]}</a>`;
+                    botaoListaNegra[i].innerText = 'Adicionar a lista de bloqueio';
+                    botaoListaNegra[i].setAttribute( 'data', 'notAlreadyListed' );
+                    alertaMsg( prefixRed + ' - Removido o(a) ' + nickName + ' da lista negra.' );
+                  } );
+                }
+              } );
+            } else {
+              //Adicionar a lista
+              chrome.storage.sync.get( [ 'listaNegra' ], function ( result ) {
+                if ( result['listaNegra'] ) {
+                  const array = result['listaNegra'] ? result['listaNegra'] : [];
+                  const obj = { id, nick, avatarURL };
+                  const arrayNovo = array.find( e => e.id === id ) ? array : atualizarArray( obj, array );
+                  const listaObj = {};
+                  listaObj['listaNegra'] = arrayNovo;
+                  chrome.storage.sync.set( listaObj, function ( ) {
+                    const nickName = `<a style='color: yellow;'>${click.path[1].outerText.split( '\n' )[0]}</a>`;
+                    botaoListaNegra[i].innerText = 'Remover da lista de bloqueio';
+                    botaoListaNegra[i].setAttribute( 'data', 'alreadyListed' );
+                    alertaMsg( prefixRed + ' - Adicionado o(a) ' + nickName + ' na lista negra.' );
+                  } );
+                }
+              } );
+            }
+          } );
+          if ( nick === userNick ) {
+            botaoListaNegra[i].parentNode.removeChild( botaoListaNegra[i] );
+          }
+        }
+      }
+    } );
+  }
+};
 
 const initLobby = async () => {
   // const copiarIpFunc = mutations =>
@@ -202,7 +306,7 @@ const initLobby = async () => {
                   if ( result.enviarLinkLobby ) {
                     const lobbyInfo = await axios.post( '/lobbyBeta/openRoom' );
                     await sendLobby( result.webhookLink, lobbyInfo.data );
-                    location.href = 'javascript:successAlert("[Discord] - Enviado com sucesso"); void 0';
+                    alertaMsg( '[Discord] - Enviado com sucesso' );
                   }
                   if ( $( '.btn-radial.btn-blue.btn-copiar-link' ).length === 0 ) {
                     return false;
@@ -222,7 +326,7 @@ const initLobby = async () => {
                   document.getElementById( 'discordLobbyButton' ).addEventListener( 'click', async function () {
                     const lobbyInfo = await axios.post( '/lobbyBeta/openRoom' );
                     await sendLobby( result.webhookLink, lobbyInfo.data );
-                    location.href = 'javascript:successAlert("[Discord] - Enviado com sucesso"); void 0';
+                    alertaMsg( '[Discord] - Enviado com sucesso' );
                   } );
                 }
               }
@@ -233,9 +337,55 @@ const initLobby = async () => {
     } );
   criarObserver( '#lobbyContent', lobbyLinkFunc );
 
+  const listaNegraFunc = mutations =>
+    chrome.storage.sync.get( [ 'listaNegra' ], function ( ) {
+      const prefix = '[ Lista de Bloqueio ] - ';
+      const prefixRed = `<a style='color: yellow;'>${prefix}</a>`;
+      mutations.forEach( async mutation => {
+        if ( !mutation.addedNodes ) {
+          return;
+        }
+        for ( let i = 0; i < mutation.addedNodes.length; i++ ) {
+          const node = mutation.addedNodes[i];
+          if ( node.className && node.className.includes( 'sidebar-item' ) ) {
+            chrome.storage.sync.get( [ 'listaNegra' ], function ( res ) {
+              if ( res.listaNegra ) {
+                const id = node.querySelector( 'a' ).getAttribute( 'href' ).replace( '/jogador/', '' );
+                const nick = node.querySelector( 'a' ).getAttribute( 'title' ).split( ' | ' )[0];
+                console.log( 'Entrou o ID ' + id + ' nick: ' + nick );
+                if ( res.listaNegra.includes( id ) ) {
+                  console.log( 'Entrou uma pessoa da sua lista negra com o id ' + id + ' nick: ' + nick );
+                  alertaMsg( prefixRed + ': Essa pessoa: ' + nick + ' está na sua lista de bloqueio' );
+                }
+              }
+            } );
+          }
+        }
+      } );
+    } );
+  criarObserver( '#lobbyContent', listaNegraFunc );
   //Feature pra criar lobby caso full
   adicionarBotaoForcarCriarLobby();
 };
+
+function alertaMsg( msg ) {
+  const cfgNoty = {
+    'text': msg,
+    'layout': 'center',
+    'theme': 'relax',
+    'dismissQueue': true,
+    'timeout': 5000,
+    'type': 'success',
+    'animation': {
+      'open': 'animated bounceInRight',
+      'close': 'animated bounceOutRight'
+    }
+  };
+  const cfgNotyStr = JSON.stringify( cfgNoty );
+  const jqueryString = '$("#noty_center_layout_container").css("z-index",99999999999)';
+  const stringToPass = 'javascript:function successAlert(msg){ noty(' + cfgNotyStr + ');' + jqueryString + ';};successAlert("' + msg + '"); void 0';
+  location.href = stringToPass;
+}
 
 const criarObserver = ( seletor, exec ) => {
   if ( $( seletor ).length > 0 ) {
