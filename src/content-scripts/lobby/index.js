@@ -29,85 +29,85 @@ const initLobbyPartida = async () => {
     } );
   }
   //Antes de inciiar, preparar o array do banco de dados
-  chrome.storage.sync.get( [ 'listaNegra' ], async function ( result ) {
-    if ( !result.listaNegra ) {
-      chrome.storage.sync.set( { listaNegra: [] }, async function ( ) { await initDarkListButton( ); } );
+  chrome.storage.sync.get( [ 'blockList' ], async function ( result ) {
+    if ( !result.blockList ) {
+      chrome.storage.sync.set( { blockList: [] }, async function ( ) { await initDarkListButton( ); } );
     } else {
       await initDarkListButton();
     }
   } );
 
   async function initDarkListButton() {
-  //Quando iniciar, adicionar os botoes da lista negra
+  //Quando iniciar, adicionar os botoes da lista de bloqueio
     const playerSelector = $( '.tableMatch__leftColumn' );
     for ( let i = 0; i < playerSelector.length; i++ ) {
-      const botaoHTML = $( '<button data="preAlready" class="botaoListaNegra">Adicionar a lista de bloqueio</button>' );
+      const botaoHTML = $( '<button data="preAlready" class="botaoListaDeBloqueio">Adicionar a lista de bloqueio</button>' );
       botaoHTML.insertAfter( playerSelector[i] );
     }
     //Verificar quais já estão marcados
-    chrome.storage.sync.get( [ 'listaNegra' ], function ( result ) {
-      if ( result.listaNegra ) {
-        const botaoListaNegra = document.getElementsByClassName( 'botaoListaNegra' );
-        for ( let i = 0; i < botaoListaNegra.length; i++ ) {
+    chrome.storage.sync.get( [ 'blockList' ], function ( result ) {
+      if ( result.blockList ) {
+        const botaoLista = document.getElementsByClassName( 'botaoListaDeBloqueio' );
+        for ( let i = 0; i < botaoLista.length; i++ ) {
           //Verificar se é você
           const userNick = document.getElementsByClassName( 'MainHeader__playerNickname' )[0].innerText;
-          const nick = botaoListaNegra[i].offsetParent.children[0].children[0].children[2].innerText;
+          const nick = botaoLista[i].offsetParent.children[0].children[0].children[2].innerText;
           //Verificar se já existe no array
-          const id = botaoListaNegra[i].offsetParent.children[0].children[0].children[2].href.replace( 'https://gamersclub.com.br/jogador/', '' );
-          const avatarURL = botaoListaNegra[i].offsetParent.children[0].children[0].children[0].children[1].currentSrc;
+          const id = botaoLista[i].offsetParent.children[0].children[0].children[2].href.replace( 'https://gamersclub.com.br/jogador/', '' );
+          const avatarURL = botaoLista[i].offsetParent.children[0].children[0].children[0].children[1].currentSrc;
 
-          const ids = result.listaNegra.map( e => { return e.id; } );
+          const ids = result.blockList.map( e => { return e.id; } );
           if ( ids.includes( id ) ) {
-            botaoListaNegra[i].innerText = 'Remover da lista de bloqueio';
-            botaoListaNegra[i].setAttribute( 'data', 'alreadyListed' );
+            botaoLista[i].innerText = 'Remover da lista de bloqueio';
+            botaoLista[i].setAttribute( 'data', 'alreadyListed' );
           } else {
-            botaoListaNegra[i].innerText = 'Adicionar a lista de bloqueio';
-            botaoListaNegra[i].setAttribute( 'data', 'notAlreadyListed' );
+            botaoLista[i].innerText = 'Adicionar a lista de bloqueio';
+            botaoLista[i].setAttribute( 'data', 'notAlreadyListed' );
           }
           //Adicionar o listener de clique
-          botaoListaNegra[i].addEventListener( 'click', function ( click ) {
+          botaoLista[i].addEventListener( 'click', function ( click ) {
             const prefix = '[ Lista de Bloqueio ]';
             const prefixRed = `<a style='color: yellow;'>${prefix}</a>`;
-            const state = botaoListaNegra[i].attributes[0].value;
+            const state = botaoLista[i].attributes[0].value;
 
             if ( state === 'alreadyListed' ) {
               //Remover da lista
-              chrome.storage.sync.get( [ 'listaNegra' ], function ( result ) {
-                if ( result['listaNegra'] ) {
-                  const array = result['listaNegra'] ? result['listaNegra'] : [];
+              chrome.storage.sync.get( [ 'blockList' ], function ( result ) {
+                if ( result['blockList'] ) {
+                  const array = result['blockList'] ? result['blockList'] : [];
                   const obj = { id, nick, avatarURL };
                   const arrayNovo = array.find( e => e.id === id ) ? removerID( array, obj ) : array;
                   const listaObj = {};
-                  listaObj['listaNegra'] = arrayNovo;
+                  listaObj['blockList'] = arrayNovo;
                   chrome.storage.sync.set( listaObj, function ( ) {
                     const nickName = `<a style='color: yellow;'>${click.path[1].outerText.split( '\n' )[0]}</a>`;
-                    botaoListaNegra[i].innerText = 'Adicionar a lista de bloqueio';
-                    botaoListaNegra[i].setAttribute( 'data', 'notAlreadyListed' );
-                    alertaMsg( prefixRed + ' - Removido o(a) ' + nickName + ' da lista negra.' );
+                    botaoLista[i].innerText = 'Adicionar a lista de bloqueio';
+                    botaoLista[i].setAttribute( 'data', 'notAlreadyListed' );
+                    alertaMsg( prefixRed + ' - Removido o(a) ' + nickName + ' na sua lista de bloqueio.' );
                   } );
                 }
               } );
             } else {
               //Adicionar a lista
-              chrome.storage.sync.get( [ 'listaNegra' ], function ( result ) {
-                if ( result['listaNegra'] ) {
-                  const array = result['listaNegra'] ? result['listaNegra'] : [];
+              chrome.storage.sync.get( [ 'blockList' ], function ( result ) {
+                if ( result['blockList'] ) {
+                  const array = result['blockList'] ? result['blockList'] : [];
                   const obj = { id, nick, avatarURL };
                   const arrayNovo = array.find( e => e.id === id ) ? array : atualizarArray( obj, array );
                   const listaObj = {};
-                  listaObj['listaNegra'] = arrayNovo;
+                  listaObj['blockList'] = arrayNovo;
                   chrome.storage.sync.set( listaObj, function ( ) {
                     const nickName = `<a style='color: yellow;'>${click.path[1].outerText.split( '\n' )[0]}</a>`;
-                    botaoListaNegra[i].innerText = 'Remover da lista de bloqueio';
-                    botaoListaNegra[i].setAttribute( 'data', 'alreadyListed' );
-                    alertaMsg( prefixRed + ' - Adicionado o(a) ' + nickName + ' na lista negra.' );
+                    botaoLista[i].innerText = 'Remover da lista de bloqueio';
+                    botaoLista[i].setAttribute( 'data', 'alreadyListed' );
+                    alertaMsg( prefixRed + ' - Adicionado o(a) ' + nickName + ' na sua lista de bloqueio.' );
                   } );
                 }
               } );
             }
           } );
           if ( nick === userNick ) {
-            botaoListaNegra[i].parentNode.removeChild( botaoListaNegra[i] );
+            botaoLista[i].parentNode.removeChild( botaoLista[i] );
           }
         }
       }
@@ -337,8 +337,8 @@ const initLobby = async () => {
     } );
   criarObserver( '#lobbyContent', lobbyLinkFunc );
 
-  const listaNegraFunc = mutations =>
-    chrome.storage.sync.get( [ 'listaNegra' ], function ( ) {
+  const listaDeBloqueioFunc = mutations =>
+    chrome.storage.sync.get( [ 'blockList' ], function ( ) {
       const prefix = '[ Lista de Bloqueio ] - ';
       const prefixRed = `<a style='color: yellow;'>${prefix}</a>`;
       mutations.forEach( async mutation => {
@@ -348,13 +348,12 @@ const initLobby = async () => {
         for ( let i = 0; i < mutation.addedNodes.length; i++ ) {
           const node = mutation.addedNodes[i];
           if ( node.className && node.className.includes( 'sidebar-item' ) ) {
-            chrome.storage.sync.get( [ 'listaNegra' ], function ( res ) {
-              if ( res.listaNegra ) {
+            chrome.storage.sync.get( [ 'blockList' ], function ( res ) {
+              if ( res.blockList ) {
                 const id = node.querySelector( 'a' ).getAttribute( 'href' ).replace( '/jogador/', '' );
                 const nick = node.querySelector( 'a' ).getAttribute( 'title' ).split( ' | ' )[0];
                 console.log( 'Entrou o ID ' + id + ' nick: ' + nick );
-                if ( res.listaNegra.includes( id ) ) {
-                  console.log( 'Entrou uma pessoa da sua lista negra com o id ' + id + ' nick: ' + nick );
+                if ( res.blockList.includes( id ) ) {
                   alertaMsg( prefixRed + ': Essa pessoa: ' + nick + ' está na sua lista de bloqueio' );
                 }
               }
@@ -363,7 +362,7 @@ const initLobby = async () => {
         }
       } );
     } );
-  criarObserver( '#lobbyContent', listaNegraFunc );
+  criarObserver( '#lobbyContent', listaDeBloqueioFunc );
   //Feature pra criar lobby caso full
   adicionarBotaoForcarCriarLobby();
 };
