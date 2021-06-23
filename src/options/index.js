@@ -270,20 +270,19 @@ function loadWebhook() {
 //Block List
 
 function loadBlockList() {
-  chrome.storage.sync.get( [ 'listaNegra' ], function ( data ) {
+  chrome.storage.sync.get( [ 'blockList' ], function ( data ) {
     const listHTML = document.getElementById( 'lista' );
-    if ( data.listaNegra ) {
-      if ( typeof data.listaNegra === 'object' && data.listaNegra.length > 0 ) {
-        data.listaNegra.forEach( each => {
+    if ( data.blockList ) {
+      if ( typeof data.blockList === 'object' && data.blockList.length > 0 ) {
+        data.blockList.forEach( each => {
           const { id, avatarURL, nick } = each;
           listHTML.innerHTML += `<div class="jogador ${id}">
                                   <img src="${avatarURL}" alt="" class="circle"></img>
                                   <span>${nick}</span>
-                                  <button class="buttonListaNegra button-${id}">Remover</button>
+                                  <button class="buttonBlockLista button-${id}">Remover</button>
                                  </div>`;
           $( document ).on( 'click', '.button-' + id, function () {
-            console.log( 'oioioi' );
-            apagarListaNegra( id );
+            apagarblockList( id );
           } );
         } );
       } else {
@@ -306,23 +305,23 @@ function loadBlockList() {
   } );
 }
 
-function apagarListaNegra( id ) {
+function apagarblockList( id ) {
   const selector = document.getElementsByClassName( id )[0];
   console.log( selector );
   selector.parentNode.removeChild( selector );
-  //Remover da lista negra
+  //Remover da lista de bloqueio
   function removerID( arr, value ) {
     return arr.filter( function ( ele ) {
       return ele.id !== value.id;
     } );
   }
-  chrome.storage.sync.get( [ 'listaNegra' ], function ( result ) {
-    if ( result.listaNegra ) {
-      const array = result['listaNegra'] ? result['listaNegra'] : [];
+  chrome.storage.sync.get( [ 'blockList' ], function ( result ) {
+    if ( result.blockList ) {
+      const array = result['blockList'] ? result['blockList'] : [];
       const obj = { id };
       const arrayNovo = array.find( e => e.id === id ) ? removerID( array, obj ) : array;
       const listaObj = {};
-      listaObj['listaNegra'] = arrayNovo;
+      listaObj['blockList'] = arrayNovo;
       chrome.storage.sync.set( listaObj, function ( ) { } );
     }
   } );

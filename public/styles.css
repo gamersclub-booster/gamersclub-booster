@@ -431,7 +431,7 @@ input {
     -webkit-clip-path: circle(20px at center);
 }
 
-.buttonListaNegra {
+.buttonBlockLista {
     font-family: Teko, sans-serif;
     border-radius: 3px;
     cursor: pointer;
