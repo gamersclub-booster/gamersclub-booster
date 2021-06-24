@@ -1,9 +1,12 @@
 import { features, preVetosMapas, configValues, paginas, audios } from '../lib/constants';
+import { saveJson, loadJson } from '../lib/blockList';
+import { removerDaLista } from '../lib/blockList';
 import { testWebhook } from '../lib/discord';
 import manifest from '../../manifest.json';
 import pt from '../translations/pt.json';
 import en from '../translations/en.json';
 import es from '../translations/es.json';
+
 const translations = {
   'pt': pt,
   'en': en,
@@ -24,6 +27,7 @@ function iniciarPaginaOpcoes() {
   loadWebhook();
   adicionarListenerTraducao();
   loadBlockList();
+  listenerButtonBlockList();
 }
 function limparOpcoesInvalidas() {
   chrome.storage.sync.get( [ 'preVetos' ], res => {
@@ -269,7 +273,62 @@ function loadWebhook() {
 
 //Block List
 
+function listenerButtonBlockList() {
+  const buttonImport = document.getElementById( 'importButton' );
+  const buttonExport = document.getElementById( 'exportButton' );
+  const importOrig = document.getElementById( 'importOrig' );
+
+  buttonImport.addEventListener( 'click', function () {
+    importOrig.click();
+  } );
+
+  importOrig.addEventListener( 'change', function ( e ) {
+    loadJson( e, function ( data ) {
+      if ( data ) {
+        chrome.storage.sync.set( data, function () {
+          buttonImport.innerText = 'Sucesso';
+          iniciarPaginaOpcoes();
+          document.querySelector( '[href*="#geral"]' ).click();
+          setTimeout( () => {
+            carregarTraducao();
+          }, 3000 );
+        } );
+      } else {
+        buttonImport.innerText = 'Erro';
+        setTimeout( () => {
+          carregarTraducao();
+        }, 3000 );
+      }
+    } );
+  }, false );
+
+  buttonExport.addEventListener( 'click', function () {
+    chrome.storage.sync.get( null, function ( result ) {
+      const array = result ? result : {};
+      if ( array ) {
+        saveJson( array );
+        buttonExport.innerText = 'Salvo com sucesso!';
+        setTimeout( () => {
+          carregarTraducao();
+        }, 3000 );
+      } else {
+        buttonExport.innerText = 'Erro ao salvar!';
+        setTimeout( () => {
+          carregarTraducao();
+        }, 3000 );
+      }
+    } );
+  } );
+}
+
 function loadBlockList() {
+  const blackBlackList = `
+  <div>
+    <li translation-key="ninguemNaLista"></li>
+    <li translation-key="comoAddnaLista"></li>
+    <li translation-key="notificacao"></li>
+  </div>`;
+
   chrome.storage.sync.get( [ 'blockList' ], function ( data ) {
     const listHTML = document.getElementById( 'lista' );
     if ( data.blockList ) {
@@ -282,47 +341,24 @@ function loadBlockList() {
                                   <button class="buttonBlockLista button-${id}">Remover</button>
                                  </div>`;
           $( document ).on( 'click', '.button-' + id, function () {
-            apagarblockList( id );
+            // Remover a DIV do respectivo player
+            const selector = document.getElementsByClassName( id )[0];
+            console.log( selector );
+            selector.parentNode.removeChild( selector );
+            //Remover da lista de bloqueio
+            removerDaLista( { id, avatarURL, nick }, function ( tamanho ) {
+              if ( tamanho === 0 ) {
+                listHTML.innerHTML += blackBlackList;
+                carregarTraducao();
+              }
+            } );
           } );
         } );
       } else {
-        listHTML.innerHTML += `
-        <div>
-          <li translation-key="ninguemNaLista"></li>
-          <li translation-key="comoAddnaLista"></li>
-          <li translation-key="notificacao"></li>
-        </div>`;
+        listHTML.innerHTML += blackBlackList;
       }
     } else {
-
-      listHTML.innerHTML += `
-      <div>
-        <li translation-key="ninguemNaLista"></li>
-        <li translation-key="comoAddnaLista"></li>
-        <li translation-key="notificacao"></li>
-      </div>`;
-    }
-  } );
-}
-
-function apagarblockList( id ) {
-  const selector = document.getElementsByClassName( id )[0];
-  console.log( selector );
-  selector.parentNode.removeChild( selector );
-  //Remover da lista de bloqueio
-  function removerID( arr, value ) {
-    return arr.filter( function ( ele ) {
-      return ele.id !== value.id;
-    } );
-  }
-  chrome.storage.sync.get( [ 'blockList' ], function ( result ) {
-    if ( result.blockList ) {
-      const array = result['blockList'] ? result['blockList'] : [];
-      const obj = { id };
-      const arrayNovo = array.find( e => e.id === id ) ? removerID( array, obj ) : array;
-      const listaObj = {};
-      listaObj['blockList'] = arrayNovo;
-      chrome.storage.sync.set( listaObj, function ( ) { } );
+      listHTML.innerHTML += blackBlackList;
     }
   } );
 }

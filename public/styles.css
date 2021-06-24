@@ -1,6 +1,6 @@
 body {
     min-height: 100%;
-    height: 470px;
+    height: 500px;
     margin: 0;
     width: 600px;
     color: #ffffff;
@@ -416,16 +416,7 @@ input {
 .translate-active {
     color: #FFF;
 }
-.jogador {
-    display: flex;
-    justify-content: space-between;
-    border-width: 2px;
-    border-style: solid;
-    border-color: #1C6EA4;
-    border-radius: 17px;
-    align-items: center;
-}
-  
+
 .circle {
     clip-path: circle(20px at center);
     -webkit-clip-path: circle(20px at center);
@@ -450,4 +441,32 @@ input {
     cursor: pointer;
     background-color: #f44336; /* Green */
     margin-right: 12px;
+}
+
+.jogador {
+    display: flex;
+    justify-content: space-between;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #1C6EA4;
+    border-radius: 17px;
+    align-items: center;
+    margin: 5 0;
+}
+
+.listaBlocks {
+    padding-top: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+    flex: 1;
+}
+
+.export {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.import {
+    display: flex;
+    flex-direction: column;
 }
