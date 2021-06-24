@@ -42,21 +42,13 @@ const initLobbyPartida = async () => {
           const id = botaoLista[i].offsetParent.children[0].children[0].children[2].href.replace( 'https://gamersclub.com.br/jogador/', '' );
           const avatarURL = botaoLista[i].offsetParent.children[0].children[0].children[0].children[1].currentSrc;
 
-          function mudarBotaoParaRemover( condicao ) {
-            if ( condicao ) {
-              botaoLista[i].innerText = 'Remover da lista de bloqueio';
-              botaoLista[i].setAttribute( 'data', 'alreadyListed' );
-            } else {
-              botaoLista[i].innerText = 'Adicionar a lista de bloqueio';
-              botaoLista[i].setAttribute( 'data', 'notAlreadyListed' );
-            }
-          }
-
           const listaDeTodosOsIDs = result.blockList.map( e => { return e.id; } );
           if ( listaDeTodosOsIDs.includes( id ) ) {
-            mudarBotaoParaRemover( true );
+            botaoLista[i].innerText = 'Remover da lista de bloqueio';
+            botaoLista[i].setAttribute( 'data', 'alreadyListed' );
           } else {
-            mudarBotaoParaRemover( false );
+            botaoLista[i].innerText = 'Adicionar a lista de bloqueio';
+            botaoLista[i].setAttribute( 'data', 'notAlreadyListed' );
           }
           //Adicionar o listener de clique
           botaoLista[i].addEventListener( 'click', function ( click ) {
@@ -67,14 +59,16 @@ const initLobbyPartida = async () => {
               //Remover da lista
               removerDaLista( { id, nick, avatarURL }, function ( ) {
                 const nickName = `<a style='color: yellow;'>${click.path[1].outerText.split( '\n' )[0]}</a>`;
-                mudarBotaoParaRemover( false );
+                botaoLista[i].innerText = 'Adicionar a lista de bloqueio';
+                botaoLista[i].setAttribute( 'data', 'notAlreadyListed' );
                 alertaMsg( prefix + ' - Removido o(a) ' + nickName + ' na sua lista de bloqueio.' );
               } );
             } else {
               //Adicionar a lista
               adicionarNaLista( { id, nick, avatarURL }, function ( ) {
                 const nickName = `<a style='color: yellow;'>${click.path[1].outerText.split( '\n' )[0]}</a>`;
-                mudarBotaoParaRemover ( true );
+                botaoLista[i].innerText = 'Remover da lista de bloqueio';
+                botaoLista[i].setAttribute( 'data', 'alreadyListed' );
                 alertaMsg( prefix + ' - Adicionado o(a) ' + nickName + ' na sua lista de bloqueio.' );
               } );
             }
