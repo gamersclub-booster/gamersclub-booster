@@ -1,5 +1,6 @@
 import { retrieveWindowVariables } from '../../lib/dom';
 import { sendLobby, sendMatchInfo } from '../../lib/discord';
+import { adicionarNaLista, removerDaLista, alertaMsg } from '../../lib/blockList';
 import axios from 'axios';
 
 // let opcoes = {};
@@ -15,19 +16,6 @@ chrome.storage.sync.get( null, function ( _result ) {
 let intervalCriarLobby = null;
 
 const initLobbyPartida = async () => {
-  //Helpers
-  function atualizarArray( valor, antigo ) {
-    const novo = new Array( valor );
-    for ( let i = 0; i < antigo.length; ++i ) {
-      novo.push( antigo[i] );
-    }
-    return novo;
-  }
-  function removerID( arr, value ) {
-    return arr.filter( function ( ele ) {
-      return ele.id !== value.id;
-    } );
-  }
   //Antes de inciiar, preparar o array do banco de dados
   chrome.storage.sync.get( [ 'blockList' ], async function ( result ) {
     if ( !result.blockList ) {
@@ -49,15 +37,13 @@ const initLobbyPartida = async () => {
       if ( result.blockList ) {
         const botaoLista = document.getElementsByClassName( 'botaoListaDeBloqueio' );
         for ( let i = 0; i < botaoLista.length; i++ ) {
-          //Verificar se é você
-          const userNick = document.getElementsByClassName( 'MainHeader__playerNickname' )[0].innerText;
-          const nick = botaoLista[i].offsetParent.children[0].children[0].children[2].innerText;
           //Verificar se já existe no array
+          const nick = botaoLista[i].offsetParent.children[0].children[0].children[2].innerText;
           const id = botaoLista[i].offsetParent.children[0].children[0].children[2].href.replace( 'https://gamersclub.com.br/jogador/', '' );
           const avatarURL = botaoLista[i].offsetParent.children[0].children[0].children[0].children[1].currentSrc;
 
-          const ids = result.blockList.map( e => { return e.id; } );
-          if ( ids.includes( id ) ) {
+          const listaDeTodosOsIDs = result.blockList.map( e => { return e.id; } );
+          if ( listaDeTodosOsIDs.includes( id ) ) {
             botaoLista[i].innerText = 'Remover da lista de bloqueio';
             botaoLista[i].setAttribute( 'data', 'alreadyListed' );
           } else {
@@ -66,47 +52,29 @@ const initLobbyPartida = async () => {
           }
           //Adicionar o listener de clique
           botaoLista[i].addEventListener( 'click', function ( click ) {
-            const prefix = '[ Lista de Bloqueio ]';
-            const prefixRed = `<a style='color: yellow;'>${prefix}</a>`;
+            const prefix = '<a style="color: yellow;">[ Lista de Bloqueio ]</a>';
             const state = botaoLista[i].attributes[0].value;
 
             if ( state === 'alreadyListed' ) {
               //Remover da lista
-              chrome.storage.sync.get( [ 'blockList' ], function ( result ) {
-                if ( result['blockList'] ) {
-                  const array = result['blockList'] ? result['blockList'] : [];
-                  const obj = { id, nick, avatarURL };
-                  const arrayNovo = array.find( e => e.id === id ) ? removerID( array, obj ) : array;
-                  const listaObj = {};
-                  listaObj['blockList'] = arrayNovo;
-                  chrome.storage.sync.set( listaObj, function ( ) {
-                    const nickName = `<a style='color: yellow;'>${click.path[1].outerText.split( '\n' )[0]}</a>`;
-                    botaoLista[i].innerText = 'Adicionar a lista de bloqueio';
-                    botaoLista[i].setAttribute( 'data', 'notAlreadyListed' );
-                    alertaMsg( prefixRed + ' - Removido o(a) ' + nickName + ' na sua lista de bloqueio.' );
-                  } );
-                }
+              removerDaLista( { id, nick, avatarURL }, function ( ) {
+                const nickName = `<a style='color: yellow;'>${click.path[1].outerText.split( '\n' )[0]}</a>`;
+                botaoLista[i].innerText = 'Adicionar a lista de bloqueio';
+                botaoLista[i].setAttribute( 'data', 'notAlreadyListed' );
+                alertaMsg( prefix + ' - Removido o(a) ' + nickName + ' na sua lista de bloqueio.' );
               } );
             } else {
               //Adicionar a lista
-              chrome.storage.sync.get( [ 'blockList' ], function ( result ) {
-                if ( result['blockList'] ) {
-                  const array = result['blockList'] ? result['blockList'] : [];
-                  const obj = { id, nick, avatarURL };
-                  const arrayNovo = array.find( e => e.id === id ) ? array : atualizarArray( obj, array );
-                  const listaObj = {};
-                  listaObj['blockList'] = arrayNovo;
-                  chrome.storage.sync.set( listaObj, function ( ) {
-                    const nickName = `<a style='color: yellow;'>${click.path[1].outerText.split( '\n' )[0]}</a>`;
-                    botaoLista[i].innerText = 'Remover da lista de bloqueio';
-                    botaoLista[i].setAttribute( 'data', 'alreadyListed' );
-                    alertaMsg( prefixRed + ' - Adicionado o(a) ' + nickName + ' na sua lista de bloqueio.' );
-                  } );
-                }
+              adicionarNaLista( { id, nick, avatarURL }, function ( ) {
+                const nickName = `<a style='color: yellow;'>${click.path[1].outerText.split( '\n' )[0]}</a>`;
+                botaoLista[i].innerText = 'Remover da lista de bloqueio';
+                botaoLista[i].setAttribute( 'data', 'alreadyListed' );
+                alertaMsg( prefix + ' - Adicionado o(a) ' + nickName + ' na sua lista de bloqueio.' );
               } );
             }
           } );
-          if ( nick === userNick ) {
+          const seuNickReal = document.getElementsByClassName( 'MainHeader__playerNickname' )[0].innerText;
+          if ( nick === seuNickReal ) {
             botaoLista[i].parentNode.removeChild( botaoLista[i] );
           }
         }
@@ -339,8 +307,7 @@ const initLobby = async () => {
 
   const listaDeBloqueioFunc = mutations =>
     chrome.storage.sync.get( [ 'blockList' ], function ( ) {
-      const prefix = '[ Lista de Bloqueio ] - ';
-      const prefixRed = `<a style='color: yellow;'>${prefix}</a>`;
+      const prefix = '<a style="color: yellow;">[ Lista de Bloqueio ] - </a>';
       mutations.forEach( async mutation => {
         if ( !mutation.addedNodes ) {
           return;
@@ -354,7 +321,7 @@ const initLobby = async () => {
                 const nick = node.querySelector( 'a' ).getAttribute( 'title' ).split( ' | ' )[0];
                 console.log( 'Entrou o ID ' + id + ' nick: ' + nick );
                 if ( res.blockList.includes( id ) ) {
-                  alertaMsg( prefixRed + ': Essa pessoa: ' + nick + ' está na sua lista de bloqueio' );
+                  alertaMsg( prefix + ': Essa pessoa: ' + nick + ' está na sua lista de bloqueio' );
                 }
               }
             } );
@@ -366,25 +333,6 @@ const initLobby = async () => {
   //Feature pra criar lobby caso full
   adicionarBotaoForcarCriarLobby();
 };
-
-function alertaMsg( msg ) {
-  const cfgNoty = {
-    'text': msg,
-    'layout': 'center',
-    'theme': 'relax',
-    'dismissQueue': true,
-    'timeout': 5000,
-    'type': 'success',
-    'animation': {
-      'open': 'animated bounceInRight',
-      'close': 'animated bounceOutRight'
-    }
-  };
-  const cfgNotyStr = JSON.stringify( cfgNoty );
-  const jqueryString = '$("#noty_center_layout_container").css("z-index",99999999999)';
-  const stringToPass = 'javascript:function successAlert(msg){ noty(' + cfgNotyStr + ');' + jqueryString + ';};successAlert("' + msg + '"); void 0';
-  location.href = stringToPass;
-}
 
 const criarObserver = ( seletor, exec ) => {
   if ( $( seletor ).length > 0 ) {
