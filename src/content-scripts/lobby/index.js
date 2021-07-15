@@ -1,4 +1,5 @@
 import { retrieveWindowVariables } from '../../lib/dom';
+import { GC_URL } from '../../lib/constants';
 import { sendLobby, sendMatchInfo } from '../../lib/discord';
 import { adicionarNaLista, removerDaLista, alertaMsg } from '../../lib/blockList';
 import axios from 'axios';
@@ -230,7 +231,7 @@ const initLobby = async () => {
             if ( document.getElementById( 'botaoDiscordnoDOM' ) ) {
               return false;
             } else {
-              const listenGame = await axios.get( '/api/lobby/match' );
+              const listenGame = await axios.get( `https://${ GC_URL }/api/lobby/match` );
               if ( listenGame.data.data.step === 'onServerReady' ) {
                 $( '.Container-sc-1ylcea4-0' )
                   .parent()
@@ -272,7 +273,7 @@ const initLobby = async () => {
                   return false;
                 } else {
                   if ( result.enviarLinkLobby ) {
-                    const lobbyInfo = await axios.post( '/lobbyBeta/openRoom' );
+                    const lobbyInfo = await axios.post( `https://${ GC_URL }/lobbyBeta/openRoom` );
                     await sendLobby( result.webhookLink, lobbyInfo.data );
                     alertaMsg( '[Discord] - Enviado com sucesso' );
                   }
@@ -292,7 +293,7 @@ const initLobby = async () => {
                     );
 
                   document.getElementById( 'discordLobbyButton' ).addEventListener( 'click', async function () {
-                    const lobbyInfo = await axios.post( '/lobbyBeta/openRoom' );
+                    const lobbyInfo = await axios.post( `https://${ GC_URL }/lobbyBeta/openRoom` );
                     await sendLobby( result.webhookLink, lobbyInfo.data );
                     alertaMsg( '[Discord] - Enviado com sucesso' );
                   } );
@@ -394,9 +395,9 @@ function intervalerCriacaoLobby() {
             type: 'newRoom',
             vetoes: preVetos
           };
-          const criarPost = await axios.post( '/lobbyBeta/createLobby', postData );
+          const criarPost = await axios.post( `https://${ GC_URL }/lobbyBeta/createLobby`, postData );
           if ( criarPost.data.success ) {
-            const loadLobby = await axios.post( '/lobbyBeta/openRoom' );
+            const loadLobby = await axios.post( `https://${ GC_URL }/lobbyBeta/openRoom` );
             if ( loadLobby.data.success ) {
               location.href = 'javascript:openLobby(); void 0';
               setTimeout( async () => {
