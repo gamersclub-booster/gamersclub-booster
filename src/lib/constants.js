@@ -49,6 +49,7 @@ export const levelColor = [
 export const features = [
   'autoCopiarIp',
   'autoAceitarReady',
+  'autoAceitarComplete',
   'autoFixarMenuLobby',
   'autoConcordarTermosRanked',
   'mostrarLevelProgress',

@@ -3,9 +3,7 @@ import { sendLobby, sendMatchInfo } from '../../lib/discord';
 import { adicionarNaLista, removerDaLista, alertaMsg } from '../../lib/blockList';
 import axios from 'axios';
 
-// let opcoes = {};
 chrome.storage.sync.get( null, function ( _result ) {
-  // opcoes = result;
   if ( window.location.pathname.includes( 'partida' ) ) {
     initLobbyPartida();
   } else {
@@ -19,14 +17,14 @@ const initLobbyPartida = async () => {
   //Antes de inciiar, preparar o array do banco de dados
   chrome.storage.sync.get( [ 'blockList' ], async function ( result ) {
     if ( !result.blockList ) {
-      chrome.storage.sync.set( { blockList: [] }, async function ( ) { await initDarkListButton( ); } );
+      chrome.storage.sync.set( { blockList: [] }, async function () { await initDarkListButton(); } );
     } else {
       await initDarkListButton();
     }
   } );
 
   async function initDarkListButton() {
-  //Quando iniciar, adicionar os botoes da lista de bloqueio
+    //Quando iniciar, adicionar os botoes da lista de bloqueio
     const playerSelector = $( '.tableMatch__leftColumn' );
     for ( let i = 0; i < playerSelector.length; i++ ) {
       const botaoHTML = $( '<button data="preAlready" class="botaoListaDeBloqueio">Adicionar a lista de bloqueio</button>' );
@@ -57,7 +55,7 @@ const initLobbyPartida = async () => {
 
             if ( state === 'alreadyListed' ) {
               //Remover da lista
-              removerDaLista( { id, nick, avatarURL }, function ( ) {
+              removerDaLista( { id, nick, avatarURL }, function () {
                 const nickName = `<a style='color: yellow;'>${click.path[1].outerText.split( '\n' )[0]}</a>`;
                 botaoLista[i].innerText = 'Adicionar a lista de bloqueio';
                 botaoLista[i].setAttribute( 'data', 'notAlreadyListed' );
@@ -65,7 +63,7 @@ const initLobbyPartida = async () => {
               } );
             } else {
               //Adicionar a lista
-              adicionarNaLista( { id, nick, avatarURL }, function ( ) {
+              adicionarNaLista( { id, nick, avatarURL }, function () {
                 const nickName = `<a style='color: yellow;'>${click.path[1].outerText.split( '\n' )[0]}</a>`;
                 botaoLista[i].innerText = 'Remover da lista de bloqueio';
                 botaoLista[i].setAttribute( 'data', 'alreadyListed' );
@@ -84,20 +82,6 @@ const initLobbyPartida = async () => {
 };
 
 const initLobby = async () => {
-  // const copiarIpFunc = mutations =>
-  //   chrome.storage.sync.get( [ 'autoCopiarIp' ], function ( result ) {
-  //     if ( result.autoCopiarIp ) {
-  //       $.each( mutations, async ( i, mutation ) => {
-  //         const addedNodes = $( mutation.addedNodes );
-  //         const selector = '#gameModalCopyServer';
-  //         const ipInput = addedNodes.find( selector ).addBack( selector );
-  //         if ( ipInput && ipInput.length ) {
-  //           ipInput[0].click();
-  //         }
-  //       } );
-  //     }
-  //   } );
-  // criarObserver( '#rankedModals', copiarIpFunc );
 
   const somReadyFunc = mutations =>
     chrome.storage.sync.get( [ 'somReady', 'customSomReady', 'volume' ], function ( result ) {
@@ -142,7 +126,7 @@ const initLobby = async () => {
     chrome.storage.sync.get( [ 'autoAceitarReady' ], function ( result ) {
       if ( result.autoAceitarReady ) {
         // eslint-disable-next-line
-        const readyButton = $( "button:contains('Ready')" );
+        const readyButton = $("button:contains('Ready')");
         if ( readyButton.length ) {
           setTimeout( () => {
             readyButton[0].click();
@@ -152,6 +136,26 @@ const initLobby = async () => {
       }
     } );
   }, 300 );
+
+  const autoAceitarCompleteFunc = mutations =>
+    chrome.storage.sync.get( [ 'autoAceitarComplete' ], function ( result ) {
+      if ( result.autoAceitarReady ) {
+        mutations.forEach( mutation => {
+          if ( !mutation.addedNodes ) { return; }
+
+          for ( let i = 0; i < mutation.addedNodes.length; i++ ) {
+            const node = mutation.addedNodes[i];
+            if ( typeof node.className !== 'undefined' ) {
+              if ( node.className.includes( 'scroll-content' ) ) {
+                $( '.scroll-content > li > .btn-actions > a.accept-btn' ).get( 0 ).click();
+                $( '#completePlayerModal > div > div.buttons > button.sm-button-accept.btn.btn-success' ).get( 0 ).click();
+              }
+            }
+          }
+        } );
+      }
+    } );
+  criarObserver( '.complete-player', autoAceitarCompleteFunc );
 
   const autoFixarMenuLobbyFunc = mutations =>
     chrome.storage.sync.get( [ 'autoFixarMenuLobby' ], function ( result ) {
@@ -306,7 +310,7 @@ const initLobby = async () => {
   criarObserver( '#lobbyContent', lobbyLinkFunc );
 
   const listaDeBloqueioFunc = mutations =>
-    chrome.storage.sync.get( [ 'blockList' ], function ( ) {
+    chrome.storage.sync.get( [ 'blockList' ], function () {
       const prefix = '<a style="color: yellow;">[ Lista de Bloqueio ] - </a>';
       mutations.forEach( async mutation => {
         if ( !mutation.addedNodes ) {
