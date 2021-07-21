@@ -1,4 +1,5 @@
 import { sendMatchInfo } from '../../lib/discord';
+import axios from 'axios';
 
 export const partidaInfo = mutations => {
   chrome.storage.sync.get( [ 'webhookLink', 'enviarPartida' ], function ( result ) {
