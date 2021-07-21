@@ -1,5 +1,6 @@
 import { sendLobby } from '../../lib/discord';
 import { alertaMsg } from '../../lib/blockList';
+import axios from 'axios';
 
 export const lobbyLink = mutations =>
   chrome.storage.sync.get( [ 'webhookLink', 'enviarLinkLobby' ], function ( result ) {
