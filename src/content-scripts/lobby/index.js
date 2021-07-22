@@ -7,6 +7,7 @@ import { lobbyLink } from './lobbyLink';
 import { listaBloqueio } from './listaBloqueio';
 import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
 import { initListaBloqueio } from './botaoListaBloqueio';
+import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
 
 chrome.storage.sync.get( null, function ( _result ) {
   if ( window.location.pathname.includes( 'partida' ) ) {
@@ -33,6 +34,8 @@ const initLobby = async () => {
   autoAceitarReadySetInterval();
   //Feature pra criar lobby caso full
   adicionarBotaoForcarCriarLobby();
+  // Feature para aceitar complete automatico
+  adicionarBotaoAutoComplete();
 };
 
 const criarObserver = ( seletor, exec ) => {
