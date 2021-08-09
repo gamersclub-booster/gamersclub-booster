@@ -53,7 +53,7 @@ export async function sendLobby( url, lobbyInfo ) {
       },
       {
         name: 'Lobby:',
-        value: `Sequencia de viória do admin: ${lobbyInfo.lobby.adminVictorySequence}`
+        value: `Sequencia de vitória do admin: ${lobbyInfo.lobby.adminVictorySequence}`
       },
       {
         name: 'Pré vetos',
