@@ -16,7 +16,12 @@
       "run_at": "document_end"
     },
     {
-      "matches": ["*://*.gamersclub.com.br/minhas-partidas*", "*://csgo.gamersclub.gg/minhas-partidas*"],
+      "matches": [
+        "*://*.gamersclub.com.br/minhas-partidas*",
+        "*://csgo.gamersclub.gg/minhas-partidas*",
+        "*://*.gamersclub.com.br/my-matches*",
+        "*://csgo.gamersclub.gg/my-matches*"
+      ],
       "js": ["content-scripts/my-matches.js"],
       "run_at": "document_end"
     },
