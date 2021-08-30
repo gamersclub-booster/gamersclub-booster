@@ -91,7 +91,12 @@ const colorirPartidas = () => {
   } );
 };
 ( async () => {
-  $( 'body' ).on( 'DOMNodeInserted', '#myMatchesPagination', async function () {
+  $( 'body' ).on( 'change', '#dateFilterMatches, #myMatchesPagination .block-mobile', async function () {
+    await new Promise( r => setTimeout( r, 3000 ) );
+    initVerificarBans();
+    colorirPartidas();
+  } );
+  $( 'body' ).on( 'click', '#myMatchesPagination', async function () {
     await new Promise( r => setTimeout( r, 3000 ) );
     initVerificarBans();
     colorirPartidas();
