@@ -2,7 +2,7 @@ let interval = 1000;
 let intervalId;
 
 export function adicionarBotaoAutoComplete() {
-  if ( !$( '#autoCompleteBtn' ).length ) {
+  if ( !$( '#autoCompleteBtn' ).length ) { // Se precisa criar o botão e adicionar na página
     $( '#gcbooster_cabecalho' )
       .append( $( '<div/>', { 'class': 'FilterLobby_section__3UmYp' } )
         .append( $( '<p/>', { 'class': 'FilterLobby_sectionLabel__1zPew', 'text': 'GamersClub Booster', 'css': { 'color': 'orange' } } ) )
@@ -14,7 +14,7 @@ export function adicionarBotaoAutoComplete() {
           'text': 'Completar Partida'
         } ) ) );
     addListeners();
-  } else {
+  } else { // Se precisa apenas modificar o botão que já existe
     $( '#autoCompleteBtn' )
       .css( { 'background-color': 'orange', 'border-radius': '4px' } )
       .text( 'Completar Partida' )
@@ -31,13 +31,16 @@ function adicionarBotaoCancelar() {
 
 function addListeners() {
   $( '#autoCompleteBtn' ).on( 'click', function () {
-    if ( $( '#autoCompleteBtn' ).hasClass( 'Cancelar' ) ) {
+    if ( $( '#autoCompleteBtn' ).hasClass( 'Cancelar' ) ) { // Se já estiver buscando
       clearInterval( intervalId );
       adicionarBotaoAutoComplete();
-    } else {
-      // Cria intervalo com valor inicial
-      intervalerAutoComplete( interval );
-      adicionarBotaoCancelar();
+    } else { // Se não estiver buscando ainda
+      if ( !$( '#SidebarSala' ).length ) { // Se não estiver em lobby
+        intervalerAutoComplete( interval );
+        adicionarBotaoCancelar();
+      } else { // Se estiver em lobby e tentar clicar no botão de complete
+        alert( 'Você está em um lobby! Saia para buscar por complete!' );
+      }
     }
   } );
 }
