@@ -8,6 +8,7 @@ import { listaBloqueio } from './listaBloqueio';
 import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
 import { initListaBloqueio } from './botaoListaBloqueio';
 import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
+import { addCabecalho } from './addCabecalho';
 
 chrome.storage.sync.get( null, function ( _result ) {
   if ( window.location.pathname.includes( 'partida' ) ) {
@@ -30,6 +31,8 @@ const initLobby = async () => {
   criarObserver( '#lobbyContent', lobbyLink );
   criarObserver( '#lobbyContent', listaBloqueio );
 
+  // Cria seção de cabeçalho para botões da extensão
+  addCabecalho();
   // Clicar automáticamente no Ready, temporário.
   autoAceitarReadySetInterval();
   //Feature pra criar lobby caso full
