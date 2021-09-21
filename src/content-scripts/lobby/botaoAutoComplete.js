@@ -1,4 +1,5 @@
-let intervalAutoComplete = null;
+let interval = 1000;
+let intervalId;
 
 export function adicionarBotaoAutoComplete() {
   if ( !$( '#autoCompleteBtn' ).length ) {
@@ -29,20 +30,33 @@ function adicionarBotaoCancelar() {
 }
 
 function addListeners() {
-  document.getElementById( 'autoCompleteBtn' ).addEventListener( 'click', function () {
+  $( '#autoCompleteBtn' ).on( 'click', function () {
     if ( $( '#autoCompleteBtn' ).hasClass( 'Cancelar' ) ) {
-      clearInterval( intervalAutoComplete );
+      clearInterval( intervalId );
       adicionarBotaoAutoComplete();
     } else {
-      intervalAutoComplete = intervalerAutoComplete();
+      // Cria intervalo com valor inicial
+      intervalerAutoComplete( interval );
       adicionarBotaoCancelar();
     }
   } );
 }
 
-function intervalerAutoComplete() {
-  setInterval( async () => {
-    $( '.scroll-content > li > .btn-actions > a.accept-btn' ).get( 0 ).click();
-    $( '#completePlayerModal > div > div.buttons > button.sm-button-accept.btn.btn-success' ).get( 0 ).click();
-  }, 500 );
+function intervalerAutoComplete( _interval ) {
+  intervalId = setInterval( function () {
+    if ( $( '.scroll-content > li > .btn-actions > a.accept-btn' ).length ) {
+      $( '.scroll-content > li > .btn-actions > a.accept-btn' ).get( 0 ).click();
+      $( '#completePlayerModal > div > div.buttons > button.sm-button-accept.btn.btn-success' ).get( 0 ).click();
+    }
+    // Escolhe um novo intervalo aleatório entre 1s e 5s
+    interval = randomIntFromInterval( 1000, 5000 );
+    // Remove intervalo anterior
+    clearInterval( intervalId );
+    // Cria intervalo com novo valor
+    intervalerAutoComplete( interval );
+  }, _interval );
+}
+
+function randomIntFromInterval( min, max ) {
+  return Math.floor( ( Math.random() * ( max - min + 1 ) ) + min );
 }
