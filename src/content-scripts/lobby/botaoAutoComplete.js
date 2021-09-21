@@ -36,7 +36,7 @@ function addListeners() {
       adicionarBotaoAutoComplete();
     } else { // Se não estiver buscando ainda
       if ( !$( '#SidebarSala' ).length ) { // Se não estiver em lobby
-        intervalerAutoComplete( interval );
+        intervalerAutoComplete();
         adicionarBotaoCancelar();
       } else { // Se estiver em lobby e tentar clicar no botão de complete
         alert( 'Você está em um lobby! Saia para buscar por complete!' );
@@ -45,24 +45,21 @@ function addListeners() {
   } );
 }
 
-function intervalerAutoComplete( _interval ) {
+function intervalerAutoComplete() {
   intervalId = setInterval( function () {
     if ( !$( '#SidebarSala' ).length ) { // Se não estiver em lobby ( acontece quando cria lobby e já está buscando complete )
+      interval = randomIntFromInterval( 750, 4750 ); // Escolhe um novo intervalo aleatório entre 1s e 5s
       if ( $( '.scroll-content > li > .btn-actions > a.accept-btn' ).length ) {
-        $( '.scroll-content > li > .btn-actions > a.accept-btn' ).get( 0 ).click();
-        $( '#completePlayerModal > div > div.buttons > button.sm-button-accept.btn.btn-success' ).get( 0 ).click();
+        setTimeout( function () { // Espera tempo aleatório entre 1 e 5 segundos
+          $( '.scroll-content > li > .btn-actions > a.accept-btn' ).get( 0 ).click();
+          $( '#completePlayerModal > div > div.buttons > button.sm-button-accept.btn.btn-success' ).get( 0 ).click();
+        }, interval );
       }
-      // Escolhe um novo intervalo aleatório entre 1s e 5s
-      interval = randomIntFromInterval( 1000, 5000 );
-      // Remove intervalo anterior
-      clearInterval( intervalId );
-      // Cria intervalo com novo valor
-      intervalerAutoComplete( interval );
     } else {
       clearInterval( intervalId );
       adicionarBotaoAutoComplete();
     }
-  }, _interval );
+  }, 250 );
 }
 
 function randomIntFromInterval( min, max ) {
