@@ -47,16 +47,21 @@ function addListeners() {
 
 function intervalerAutoComplete( _interval ) {
   intervalId = setInterval( function () {
-    if ( $( '.scroll-content > li > .btn-actions > a.accept-btn' ).length ) {
-      $( '.scroll-content > li > .btn-actions > a.accept-btn' ).get( 0 ).click();
-      $( '#completePlayerModal > div > div.buttons > button.sm-button-accept.btn.btn-success' ).get( 0 ).click();
+    if ( !$( '#SidebarSala' ).length ) { // Se não estiver em lobby ( acontece quando cria lobby e já está buscando complete )
+      if ( $( '.scroll-content > li > .btn-actions > a.accept-btn' ).length ) {
+        $( '.scroll-content > li > .btn-actions > a.accept-btn' ).get( 0 ).click();
+        $( '#completePlayerModal > div > div.buttons > button.sm-button-accept.btn.btn-success' ).get( 0 ).click();
+      }
+      // Escolhe um novo intervalo aleatório entre 1s e 5s
+      interval = randomIntFromInterval( 1000, 5000 );
+      // Remove intervalo anterior
+      clearInterval( intervalId );
+      // Cria intervalo com novo valor
+      intervalerAutoComplete( interval );
+    } else {
+      clearInterval( intervalId );
+      adicionarBotaoAutoComplete();
     }
-    // Escolhe um novo intervalo aleatório entre 1s e 5s
-    interval = randomIntFromInterval( 1000, 5000 );
-    // Remove intervalo anterior
-    clearInterval( intervalId );
-    // Cria intervalo com novo valor
-    intervalerAutoComplete( interval );
   }, _interval );
 }
 
