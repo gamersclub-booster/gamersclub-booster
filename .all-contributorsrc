@@ -101,6 +101,15 @@
         "code",
         "design"
       ]
+    },
+    {
+      "login": "fedebabrauskas",
+      "name": "Federico Babrauskas",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19313864?v=4",
+      "profile": "http://babrauskas.dev",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
