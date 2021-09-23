@@ -1,5 +1,6 @@
 import { retrieveWindowVariables } from '../../lib/dom';
 import { GC_URL, isFirefox } from '../../lib/constants';
+import { alertaMsg } from '../../lib/messageAlerts';
 import axios from 'axios';
 
 let intervalCriarLobby = null;
@@ -37,12 +38,8 @@ function addListeners() {
       clearInterval( intervalCriarLobby );
       adicionarBotaoForcarCriarLobby();
     } else {
-      if ( !$( '#SidebarSala' ).length ) {
-        intervalCriarLobby = intervalerCriacaoLobby();
-        adicionarBotaoCancelarCriarLobby();
-      } else {
-        alert( 'Você está em um lobby! Saia para buscar por complete!' );
-      }
+      intervalCriarLobby = intervalerCriacaoLobby();
+      adicionarBotaoCancelarCriarLobby();
     }
   } );
 }
@@ -89,12 +86,7 @@ function intervalerCriacaoLobby() {
             if ( criarPost.data.message.includes( 'Anti-cheat' ) || criarPost.data.message.includes( 'banned' ) ) {
               clearInterval( intervalCriarLobby );
               adicionarBotaoForcarCriarLobby();
-              console.log( window.wrappedJSObject );
-              if ( isFirefox ) {
-                window.wrappedJSObject.errorAlert( criarPost.data.message );
-              } else {
-                location.href = `javascript:errorAlert('${criarPost.data.message}'); void 0`;
-              }
+              alertaMsg( criarPost.data.message );
               return;
             }
           }
