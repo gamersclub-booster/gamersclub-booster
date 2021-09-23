@@ -1,5 +1,5 @@
 import { sendLobby } from '../../lib/discord';
-import { alertaMsg } from '../../lib/blockList';
+import { alertaMsg } from '../../lib/messageAlerts';
 import { GC_URL } from '../../lib/constants';
 import axios from 'axios';
 

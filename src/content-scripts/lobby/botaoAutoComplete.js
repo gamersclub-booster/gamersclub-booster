@@ -1,3 +1,5 @@
+import { alertaMsg } from '../../lib/messageAlerts';
+
 let interval = 1000;
 let intervalId;
 
@@ -37,7 +39,7 @@ function addListeners() {
         intervalerAutoComplete();
         adicionarBotaoCancelar();
       } else { // Se estiver em lobby e tentar clicar no botão de complete
-        alert( 'Você está em um lobby! Saia para buscar por complete!' );
+        alertaMsg( 'Você está em um lobby! Saia para buscar por complete!' );
       }
     }
   } );
