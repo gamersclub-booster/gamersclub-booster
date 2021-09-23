@@ -2,7 +2,7 @@
   "name": "gamersclub-booster",
   "description": "Extensão para navegadores que adiciona algumas melhorias na plataforma da GamersClub",
   "repository": "https://github.com/gamersclub-booster/gamersclub-booster",
-  "version": "2.7.3",
+  "version": "2.7.4",
   "main": "index.js",
   "license": "GPL-3.0",
   "commitlint": {
