@@ -1,4 +1,4 @@
-import { alertaMsg } from '../../lib/blockList';
+import { alertaMsg } from '../../lib/messageAlerts';
 
 export const listaBloqueio = mutations =>
   chrome.storage.sync.get( [ 'blockList' ], function ( ) {
