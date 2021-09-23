@@ -3,16 +3,14 @@ let intervalId;
 
 export function adicionarBotaoAutoComplete() {
   if ( !$( '#autoCompleteBtn' ).length ) { // Se precisa criar o botão e adicionar na página
-    $( '#gcbooster_cabecalho' )
-      .append( $( '<div/>', { 'class': 'FilterLobby_section__3UmYp' } )
-        .append( $( '<p/>', { 'class': 'FilterLobby_sectionLabel__1zPew', 'text': 'GamersClub Booster', 'css': { 'color': 'orange' } } ) )
-        .append( $( '<button/>', {
-          'id': 'autoCompleteBtn',
-          'class': 'WasdButton',
-          'css': { 'background-color': 'orange', 'border-radius': '4px' },
-          'type': 'button',
-          'text': 'Completar Partida'
-        } ) ) );
+    $( '#gcbooster_botoes' )
+      .append( $( '<button/>', {
+        'id': 'autoCompleteBtn',
+        'class': 'WasdButton',
+        'css': { 'background-color': 'orange', 'border-radius': '4px' },
+        'type': 'button',
+        'text': 'Completar Partida'
+      } ) );
     addListeners();
   } else { // Se precisa apenas modificar o botão que já existe
     $( '#autoCompleteBtn' )

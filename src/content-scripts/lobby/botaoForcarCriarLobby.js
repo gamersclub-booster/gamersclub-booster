@@ -1,29 +1,49 @@
 import { retrieveWindowVariables } from '../../lib/dom';
-import { GC_URL } from '../../lib/constants';
+import { GC_URL, isFirefox } from '../../lib/constants';
 import axios from 'axios';
 
 let intervalCriarLobby = null;
 
 export function adicionarBotaoForcarCriarLobby() {
-  if ( $( '#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)' ).length > 0 ) {
-    $( '#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)' ).html(
-      '<button id="forcarCriacaoLobbyBtn" style="color:orange" type="button">Forçar Criação da Lobby</button>'
+  if ( !$( '#criarLobbyBtn' ).length ) {
+    $( '#gcbooster_botoes' ).append(
+      $( '<button/>', {
+        'id': 'criarLobbyBtn',
+        'class': 'WasdButton',
+        'css': { 'background-color': 'orange', 'border-radius': '4px' },
+        'type': 'button',
+        'text': 'Criar Lobby Pre Configurada'
+      } )
     );
-    document.getElementById( 'forcarCriacaoLobbyBtn' ).addEventListener( 'click', function () {
-      intervalCriarLobby = intervalerCriacaoLobby();
-      adicionarBotaoCancelarCriarLobby();
-    } );
+    addListeners();
+  } else {
+    $( '#criarLobbyBtn' )
+      .css( { 'background-color': 'orange', 'border-radius': '4px' } )
+      .text( 'Criar Lobby Pre Configurada' )
+      .removeClass( 'Cancelar' );
   }
 }
 
 function adicionarBotaoCancelarCriarLobby() {
-  $( '#lobbyContent > div.row.lobby-rooms-content > div > div > div:nth-child(3)' ).html(
-    `<span style="color:orange">FORÇANDO CRIAÇÃO DA LOBBY...</span>
-      <button id="cancelarCriacaoLobbyBtn" style="color:red" type="button">Cancelar</button>`
-  );
-  document.getElementById( 'cancelarCriacaoLobbyBtn' ).addEventListener( 'click', function () {
-    clearInterval( intervalCriarLobby );
-    adicionarBotaoForcarCriarLobby();
+  $( '#criarLobbyBtn' )
+    .css( { 'background-color': 'red', 'border-radius': '4px' } )
+    .text( 'Cancelar Criação...' )
+    .addClass( 'Cancelar' );
+}
+
+function addListeners() {
+  $( '#criarLobbyBtn' ).on( 'click', function () {
+    if ( $( '#criarLobbyBtn' ).hasClass( 'Cancelar' ) ) {
+      clearInterval( intervalCriarLobby );
+      adicionarBotaoForcarCriarLobby();
+    } else {
+      if ( !$( '#SidebarSala' ).length ) {
+        intervalCriarLobby = intervalerCriacaoLobby();
+        adicionarBotaoCancelarCriarLobby();
+      } else {
+        alert( 'Você está em um lobby! Saia para buscar por complete!' );
+      }
+    }
   } );
 }
 
@@ -54,7 +74,11 @@ function intervalerCriacaoLobby() {
           if ( criarPost.data.success ) {
             const loadLobby = await axios.post( `https://${ GC_URL }/lobbyBeta/openRoom` );
             if ( loadLobby.data.success ) {
-              location.href = 'javascript:openLobby(); void 0';
+              if ( isFirefox ) {
+                window.wrappedJSObject.openLobby();
+              } else {
+                location.href = 'javascript:openLobby(); void 0';
+              }
               setTimeout( async () => {
                 //Lobby criada com sucesso e entrado na janela da lobby já
                 adicionarBotaoForcarCriarLobby();
@@ -65,7 +89,12 @@ function intervalerCriacaoLobby() {
             if ( criarPost.data.message.includes( 'Anti-cheat' ) || criarPost.data.message.includes( 'banned' ) ) {
               clearInterval( intervalCriarLobby );
               adicionarBotaoForcarCriarLobby();
-              location.href = `javascript:errorAlert('${criarPost.data.message}'); void 0`;
+              console.log( window.wrappedJSObject );
+              if ( isFirefox ) {
+                window.wrappedJSObject.errorAlert( criarPost.data.message );
+              } else {
+                location.href = `javascript:errorAlert('${criarPost.data.message}'); void 0`;
+              }
               return;
             }
           }
