@@ -1,6 +1,6 @@
 import { retrieveWindowVariables } from '../../lib/dom';
+import { GC_URL } from '../../lib/constants';
 import axios from 'axios';
-
 
 let intervalCriarLobby = null;
 
@@ -50,9 +50,9 @@ function intervalerCriacaoLobby() {
             type: 'newRoom',
             vetoes: preVetos
           };
-          const criarPost = await axios.post( '/lobbyBeta/createLobby', postData );
+          const criarPost = await axios.post( `https://${ GC_URL }/lobbyBeta/createLobby`, postData );
           if ( criarPost.data.success ) {
-            const loadLobby = await axios.post( '/lobbyBeta/openRoom' );
+            const loadLobby = await axios.post( `https://${ GC_URL }/lobbyBeta/openRoom` );
             if ( loadLobby.data.success ) {
               location.href = 'javascript:openLobby(); void 0';
               setTimeout( async () => {
