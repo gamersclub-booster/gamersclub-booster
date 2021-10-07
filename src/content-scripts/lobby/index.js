@@ -9,6 +9,7 @@ import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
 import { initListaBloqueio } from './botaoListaBloqueio';
 import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
 import { addCabecalho } from './addCabecalho';
+import { mostrarKdr } from './mostrarKdr';
 
 chrome.storage.sync.get( null, function ( _result ) {
   if ( window.location.pathname.includes( 'partida' ) ) {
@@ -30,6 +31,7 @@ const initLobby = async () => {
   criarObserver( '#matchMainContainer', partidaInfo );
   criarObserver( '#lobbyContent', lobbyLink );
   criarObserver( '#lobbyContent', listaBloqueio );
+  criarObserver( '.list-avaliable-teams', mostrarKdr );
 
   // Cria seção de cabeçalho para botões da extensão
   addCabecalho();
@@ -39,6 +41,8 @@ const initLobby = async () => {
   adicionarBotaoAutoComplete();
   //Feature pra criar lobby caso full
   adicionarBotaoForcarCriarLobby();
+  // Feature para mostrar kdr dos players
+  mostrarKdr();
 };
 
 const criarObserver = ( seletor, exec ) => {
