@@ -1,4 +1,5 @@
-import { adicionarNaLista, removerDaLista, alertaMsg } from '../../lib/blockList';
+import { adicionarNaLista, removerDaLista } from '../../lib/blockList';
+import { alertaMsg } from '../../lib/messageAlerts';
 
 export async function initListaBloqueio() {
   chrome.storage.sync.get( [ 'blockList' ], async function ( result ) {

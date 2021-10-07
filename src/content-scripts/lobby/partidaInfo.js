@@ -1,4 +1,5 @@
 import { sendMatchInfo } from '../../lib/discord';
+import { GC_URL } from '../../lib/constants';
 import axios from 'axios';
 
 export const partidaInfo = mutations => {
@@ -12,7 +13,7 @@ export const partidaInfo = mutations => {
           if ( document.getElementById( 'botaoDiscordnoDOM' ) ) {
             return false;
           } else {
-            const listenGame = await axios.get( '/api/lobby/match' );
+            const listenGame = await axios.get( `https://${ GC_URL }/api/lobby/match` );
             if ( listenGame.data.data.step === 'onServerReady' ) {
               $( '.Container-sc-1ylcea4-0' )
                 .parent()

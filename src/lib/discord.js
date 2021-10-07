@@ -28,15 +28,7 @@ export async function sendLobby( url, lobbyInfo ) {
     return false;
   }
 
-  const mapasVetados =
-    lobbyInfo.preVetoedMaps.length !== 0 ?
-      lobbyInfo.preVetoedMaps
-        .map( each => {
-          return each.name;
-        } )
-        .join( ', ' )
-        .slice( 0, -2 ) :
-      'Nenhum pré veto';
+  const mapasVetados = lobbyInfo.lobby.preVetoedMaps || 'Nenhum pré veto';
 
   await send( url, {
     title: 'Clique aqui para abrir a lobby',

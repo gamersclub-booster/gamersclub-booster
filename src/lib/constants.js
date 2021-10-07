@@ -108,3 +108,28 @@ export const audios = {
   'custom': 'Customizar'
 };
 export const GC_URL = window.location.hostname;
+
+// Opera 8.0+ (tested on Opera 42.0)
+export const isOpera = ( !!window.opr && !!opr.addons ) || !!window.opera ||
+                navigator.userAgent.indexOf( ' OPR/' ) >= 0;
+
+// Firefox 1.0+ (tested on Firefox 45 - 53)
+export const isFirefox = typeof InstallTrigger !== 'undefined';
+
+// Internet Explorer 6-11
+//   Untested on IE (of course). Here because it shows some logic for isEdge.
+export const isIE = /*@cc_on!@*/false || !!document.documentMode;
+
+// Edge 20+ (tested on Edge 38.14393.0.0)
+export const isEdge = !isIE && !!window.StyleMedia;
+
+// Chrome 1+ (tested on Chrome 55.0.2883.87)
+// This does not work in an extension:
+//export const isChrome = !!window.chrome && !!window.chrome.webstore;
+// The other browsers are trying to be more like Chrome, so picking
+// capabilities which are in Chrome, but not in others is a moving
+// target.  Just default to Chrome if none of the others is detected.
+export const isChrome = !isOpera && !isFirefox && !isIE && !isEdge;
+
+// Blink engine detection (tested on Chrome 55.0.2883.87 and Opera 42.0)
+export const isBlink = ( isChrome || isOpera ) && !!window.CSS;

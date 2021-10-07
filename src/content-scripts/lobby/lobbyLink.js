@@ -1,5 +1,6 @@
 import { sendLobby } from '../../lib/discord';
-import { alertaMsg } from '../../lib/blockList';
+import { alertaMsg } from '../../lib/messageAlerts';
+import { GC_URL } from '../../lib/constants';
 import axios from 'axios';
 
 export const lobbyLink = mutations =>
@@ -21,7 +22,7 @@ export const lobbyLink = mutations =>
                 return false;
               } else {
                 if ( result.enviarLinkLobby ) {
-                  const lobbyInfo = await axios.post( '/lobbyBeta/openRoom' );
+                  const lobbyInfo = await axios.post( `https://${ GC_URL }/lobbyBeta/openRoom` );
                   await sendLobby( result.webhookLink, lobbyInfo.data );
                   alertaMsg( '[Discord] - Enviado com sucesso' );
                 }
@@ -36,12 +37,12 @@ export const lobbyLink = mutations =>
                   .append(
                     `<span class="btn-radial btn-blue btn-copiar-link" id="discordLobbyButton"
                      title="Enviar lobby Discord" data-jsaction="gcCommonTooltip" data-tip-text="Convidar Amigos">
-                       <img src="https:img.icons8.com/material-sharp/18/ffffff/discord-logo.png"/>
+                       <img src="https://img.icons8.com/material-sharp/18/ffffff/discord-logo.png"/>
                    </span>`
                   );
 
                 document.getElementById( 'discordLobbyButton' ).addEventListener( 'click', async function () {
-                  const lobbyInfo = await axios.post( '/lobbyBeta/openRoom' );
+                  const lobbyInfo = await axios.post( `https://${ GC_URL }/lobbyBeta/openRoom` );
                   await sendLobby( result.webhookLink, lobbyInfo.data );
                   alertaMsg( '[Discord] - Enviado com sucesso' );
                 } );

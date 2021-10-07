@@ -2,7 +2,7 @@
   "name": "gamersclub-booster",
   "description": "Extensão para navegadores que adiciona algumas melhorias na plataforma da GamersClub",
   "repository": "https://github.com/gamersclub-booster/gamersclub-booster",
-  "version": "2.7.0",
+  "version": "2.7.4",
   "main": "index.js",
   "license": "GPL-3.0",
   "commitlint": {
@@ -21,7 +21,7 @@
     "lint:fix": "eslint --fix --config ./.eslintrc ./src"
   },
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^0.21.4",
     "jquery": "^3.6.0"
   },
   "devDependencies": {

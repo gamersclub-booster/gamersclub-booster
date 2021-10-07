@@ -37,10 +37,10 @@ const initLobby = async () => {
   addCabecalho();
   // Clicar automáticamente no Ready, temporário.
   autoAceitarReadySetInterval();
-  //Feature pra criar lobby caso full
-  adicionarBotaoForcarCriarLobby();
   // Feature para aceitar complete automatico
   adicionarBotaoAutoComplete();
+  //Feature pra criar lobby caso full
+  adicionarBotaoForcarCriarLobby();
   // Feature para mostrar kdr dos players
   mostrarKdr();
 };
