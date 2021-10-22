@@ -32,7 +32,8 @@ jobs:
         with:
           find: "${{ steps.tag_version.outputs.previous_version }}"
           replace: "${{ steps.tag_version.outputs.new_version }}"
-          exclude: node_modules
+          exclude: "node_modules"
+          include: "*.json"
 
       - name: Bundle with Webpack
         run: npm run build
