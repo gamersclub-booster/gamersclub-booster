@@ -14,6 +14,7 @@ const translations = {
 };
 
 function iniciarPaginaOpcoes() {
+  mostrarMensagemAtencao();
   limparOpcoesInvalidas();
   adicionaVersao();
   marcarCheckboxes();
@@ -28,6 +29,33 @@ function iniciarPaginaOpcoes() {
   adicionarListenerTraducao();
   loadBlockList();
   listenerButtonBlockList();
+}
+function mostrarMensagemAtencao() {
+  chrome.storage.sync.get ( [ 'mensagemLida' ], response => {
+    if ( !response.mensagemLida ) {
+      $( '.conteudo' ).css( 'display', 'none' );
+      const container = $( '<div id=messageContainer/>' ).css( {
+        'display': 'flex',
+        'align-items': 'center',
+        'flex-direction': 'column',
+        'height': '100%',
+        'width': '100%',
+        'justify-content': 'center'
+      } ).insertAfter( '.header' );
+      container.append( $( '<div id=messageBox/>' ).text( 'Atenção! Você está usando a extensão GamersClub Booster,\
+       que é um projeto INDEPENDENTE da Gamers Club, e modifica o comportamento da plataforma na tentativa de torná-la\
+       um pouco melhor. Pedimos que eventuais problemas não sejam reportados na plataforma, e sim em um dos canais de\
+       comunicação próprios da extensão. Lembrando que nós que desenvolvemos também somos jogadores de CS:GO, e nem\
+       sempre temos tempo para atualizar a extensão devido a nossas agendas pessoais. Contamos com a compreensão de\
+       todos, e esperamos que a extensão possa ajudá-los na experiência de forma positiva.' ).css( {
+        'height': '150px',
+        'width': '400px',
+        'border': '1px solid #ccc',
+        'overflow': 'auto'
+      } ) );
+      //show message
+    }
+  } );
 }
 function limparOpcoesInvalidas() {
   chrome.storage.sync.get( [ 'preVetos' ], res => {
