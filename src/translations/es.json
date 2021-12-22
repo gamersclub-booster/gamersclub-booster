@@ -61,5 +61,7 @@
     "veja-quem-sao": "Mira quienes son las personas que haces parte del proyecto",
     "versao": "Versión",
     "versao-footer": "VERSIÓN: ",
-    "idioma": "IDIOMA: "
+    "idioma": "IDIOMA: ",
+    "mensagemDeEntendi": "¡Advertencia! Estás utilizando la extensión GamersClub Booster, que NO está desarrollada por Gamers Club. Somos desarrolladores independientes y le pedimos que informe los problemas en los propios canales de comunicación de la extensión. Teniendo en cuenta que los desarrolladores también somos jugadores de CS: GO, y no siempre tenemos tiempo para actualizar la extensión debido a nuestros horarios personales. Contamos con la comprensión de todos y esperamos que la extensión pueda ayudarlo a tener una mejor experiencia.",
+    "botaoDeEntendi": "ENTIENDO"
 }
