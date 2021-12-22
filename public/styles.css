@@ -51,6 +51,7 @@ body {
 .btn-primary {
     background-color: rgb(36, 126, 185);
 }
+
 .btn-primary:hover {
     background-color: rgba(36, 126, 185, 0.5);
 }
@@ -86,7 +87,7 @@ body {
 }
 
 .input-container input,
-.input-container select {
+input-container select {
     text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
     direction: ltr;
@@ -111,6 +112,7 @@ body {
     background: rgba(255, 255, 255, 0.13);
     color: #efefef;
 }
+
 .input-container select {
     cursor: pointer;
 }
@@ -124,10 +126,11 @@ input {
     padding: 0.5rem !important;
     height: 2.5rem !important;
 }
+
 .body {
     display: flex;
     flex-direction: column;
-    height:100%;
+    height: 100%;
 }
 
 .conteudo {
@@ -204,6 +207,7 @@ input {
     overflow: auto;
     height: 300px;
 }
+
 .ativo::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px #1e2033;
     box-shadow: inset 0 0 6px #1e2033;
@@ -275,6 +279,7 @@ input {
     display: table;
     clear: both;
 }
+
 #salvarWebhook {
     background-color: inherit;
     border: solid 2px #247eb9;
@@ -303,7 +308,7 @@ input {
 }
 
 /* Show the checkmark when checked */
-.container input:checked ~ .checkmark:after {
+.container input:checked~.checkmark:after {
     display: block;
 }
 
@@ -391,29 +396,37 @@ input {
     -webkit-font-smoothing: antialiased;
     direction: ltr;
 }
+
 .versao {
     color: rgb(36, 126, 187);
 }
+
 #versao {
     float: left;
 }
+
 .versao-texto {
     color: gray;
 }
+
 #translate {
-    float:right;
+    float: right;
 }
+
 .translate {
     color: #FFF;
 }
+
 .translate-option {
     color: gray;
     transition: 0.3s;
 }
+
 .translate-option:hover {
     color: rgb(194, 191, 191);
     cursor: pointer;
 }
+
 .translate-active {
     color: #FFF;
 }
@@ -430,7 +443,8 @@ input {
     font-size: 1.25rem;
     color: #fff;
     box-shadow: inset 0 1px 0 0 hsl(0deg 0% 100% / 25%), inset 0 0 0 1px hsl(0deg 0% 100% / 10%),
-        0 1px 1px 0 rgb(0 0 0 / 25%), 0 2px 4px 0 rgb(0 0 0 / 25%);
+        0 1px 1px 0 rgb(0 0 0 / 25%),
+        0 2px 4px 0 rgb(0 0 0 / 25%);
     margin: 0;
     padding: 5px 24px 3px;
     line-height: 1.2em;
@@ -440,7 +454,8 @@ input {
     border: none;
     outline: none;
     cursor: pointer;
-    background-color: #f44336; /* Green */
+    background-color: #f44336;
+    /* Green */
     margin-right: 12px;
 }
 
@@ -467,7 +482,120 @@ input {
     flex-direction: column;
     justify-content: center;
 }
+
 .import {
     display: flex;
     flex-direction: column;
+}
+
+.containerMensagem {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    justify-content: center
+}
+
+.caixaMensagem {
+    height: 150px;
+    width: 400px;
+    border: 1px solid #ccc;
+    overflow: auto;
+}
+
+.botaoEntendi {
+    align-items: center;
+    background-color: rgb(156, 192, 12);
+    border-block-end-color: rgba(255, 255, 255, 0.16);
+    border-block-end-style: solid;
+    border-block-end-width: 1px;
+    border-block-start-color: rgba(255, 255, 255, 0.32);
+    border-block-start-style: solid;
+    border-block-start-width: 1px;
+    border-bottom-color: rgba(255, 255, 255, 0.16);
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-end-end-radius: 2px;
+    border-end-start-radius: 2px;
+    border-inline-end-color: rgba(255, 255, 255, 0.16);
+    border-inline-end-style: solid;
+    border-inline-end-width: 1px;
+    border-inline-start-color: rgba(255, 255, 255, 0.16);
+    border-inline-start-style: solid;
+    border-inline-start-width: 1px;
+    border-left-color: rgba(255, 255, 255, 0.16);
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-right-color: rgba(255, 255, 255, 0.16);
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-start-end-radius: 2px;
+    border-start-start-radius: 2px;
+    border-top-color: rgba(255, 255, 255, 0.32);
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-top-style: solid;
+    border-top-width: 1px;
+    bottom: 0px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 2px 2px 0px, rgba(0, 0, 0, 0.08) 0px 4px 4px 0px;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    display: flex;
+    fill: rgb(0, 0, 0);
+    fill-opacity: 1;
+    flex-direction: row;
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-wrap: nowrap;
+    flood-color: rgb(0, 0, 0);
+    flood-opacity: 1;
+    font-family: Teko, sans-serif;
+    font-size: 20px;
+    font-stretch: 100%;
+    font-weight: 400;
+    height: 40px;
+    inline-size: 137.641px;
+    justify-content: center;
+    lighting-color: rgb(255, 255, 255);
+    line-height: 24px;
+    list-style-position: outside;
+    list-style-type: disc;
+    margin-block-end: 0px;
+    margin-block-start: 0px;
+    margin-bottom: 0px;
+    margin-inline-end: 0px;
+    margin-inline-start: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 20px;
+    min-inline-size: 40px;
+    min-width: 40px;
+    mix-blend-mode: normal;
+    object-fit: fill;
+    object-position: 50% 50%;
+    offset-rotate: auto 0deg;
+    opacity: 1;
+    order: 0;
+    orphans: 2;
+    outline-color: rgb(255, 255, 255);
+    padding-block-start: 4px;
+    padding-bottom: 0px;
+    padding-inline-end: 16px;
+    padding-inline-start: 16px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 4px;
+    stroke-width: 1px;
+    tab-size: 8;
+    text-align: center;
+    text-anchor: start;
+    text-decoration: none solid rgb(255, 255, 255);
+    text-decoration-color: rgb(255, 255, 255);
+    text-decoration-skip-ink: auto;
+    text-decoration-style: solid;
+    widows: 2;
+    width: 137.641px;
 }

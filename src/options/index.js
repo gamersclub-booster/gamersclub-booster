@@ -34,121 +34,13 @@ function mostrarMensagemAtencao() {
   chrome.storage.sync.get ( [ 'mensagemLida' ], response => {
     if ( !response.mensagemLida ) {
       $( '.conteudo' ).css( 'display', 'none' );
-      const container = $( '<div id=messageContainer/>' ).css( {
-        'display': 'flex',
-        'align-items': 'center',
-        'flex-direction': 'column',
-        'height': '100%',
-        'width': '100%',
-        'justify-content': 'center'
-      } ).insertAfter( '.header' );
-      container.append( $( '<div id=messageBox/>' ).text( 'Atenção! Você está usando a extensão GamersClub Booster,\
-       que é um projeto INDEPENDENTE da Gamers Club, e modifica o comportamento da plataforma na tentativa de torná-la\
-       um pouco melhor. Pedimos que eventuais problemas não sejam reportados na plataforma, e sim em um dos canais de\
-       comunicação próprios da extensão. Lembrando que nós que desenvolvemos também somos jogadores de CS:GO, e nem\
-       sempre temos tempo para atualizar a extensão devido a nossas agendas pessoais. Contamos com a compreensão de\
-       todos, e esperamos que a extensão possa ajudá-los na experiência de forma positiva.' ).css( {
-        'height': '150px',
-        'width': '400px',
-        'border': '1px solid #ccc',
-        'overflow': 'auto'
-      } ) );
-      container.append( $( '<button/>' ).text( 'ENTENDI' ).css( {
-        'align-items': 'center',
-        'background-color': 'rgb(156, 192, 12)',
-        'border-block-end-color': 'rgba(255, 255, 255, 0.16)',
-        'border-block-end-style': 'solid',
-        'border-block-end-width': '1px',
-        'border-block-start-color': 'rgba(255, 255, 255, 0.32)',
-        'border-block-start-style': 'solid',
-        'border-block-start-width': '1px',
-        'border-bottom-color': 'rgba(255, 255, 255, 0.16)',
-        'border-bottom-left-radius': '2px',
-        'border-bottom-right-radius': '2px',
-        'border-bottom-style': 'solid',
-        'border-bottom-width': '1px',
-        'border-end-end-radius': '2px',
-        'border-end-start-radius': '2px',
-        'border-inline-end-color': 'rgba(255, 255, 255, 0.16)',
-        'border-inline-end-style': 'solid',
-        'border-inline-end-width': '1px',
-        'border-inline-start-color': 'rgba(255, 255, 255, 0.16)',
-        'border-inline-start-style': 'solid',
-        'border-inline-start-width': '1px',
-        'border-left-color': 'rgba(255, 255, 255, 0.16)',
-        'border-left-style': 'solid',
-        'border-left-width': '1px',
-        'border-right-color': 'rgba(255, 255, 255, 0.16)',
-        'border-right-style': 'solid',
-        'border-right-width': '1px',
-        'border-start-end-radius': '2px',
-        'border-start-start-radius': '2px',
-        'border-top-color': 'rgba(255, 255, 255, 0.32)',
-        'border-top-left-radius': '2px',
-        'border-top-right-radius': '2px',
-        'border-top-style': 'solid',
-        'border-top-width': '1px',
-        'bottom': '0px',
-        'box-shadow': 'rgba(0, 0, 0, 0.16) 0px 2px 2px 0px, rgba(0, 0, 0, 0.08) 0px 4px 4px 0px',
-        'color': 'rgb(255, 255, 255)',
-        'cursor': 'pointer',
-        'display': 'flex',
-        'fill': 'rgb(0, 0, 0)',
-        'fill-opacity': '1',
-        'flex-direction': 'row',
-        'flex-grow': '0',
-        'flex-shrink': '1',
-        'flex-wrap': 'nowrap',
-        'flood-color': 'rgb(0, 0, 0)',
-        'flood-opacity': '1',
-        'font-family': 'Teko, sans-serif',
-        'font-size': '20px',
-        'font-stretch': '100%',
-        'font-weight': '400',
-        'height': '40px',
-        'inline-size': '137.641px',
-        'justify-content': 'center',
-        'lighting-color': 'rgb(255, 255, 255)',
-        'line-height': '24px',
-        'list-style-position': 'outside',
-        'list-style-type': 'disc',
-        'margin-block-end': '0px',
-        'margin-block-start': '0px',
-        'margin-bottom': '0px',
-        'margin-inline-end': '0px',
-        'margin-inline-start': '0px',
-        'margin-left': '0px',
-        'margin-right': '0px',
-        'margin-top': '20px',
-        'min-inline-size': '40px',
-        'min-width': '40px',
-        'mix-blend-mode': 'normal',
-        'object-fit': 'fill',
-        'object-position': '50% 50%',
-        'offset-rotate': 'auto 0deg',
-        'opacity': '1',
-        'order': '0',
-        'orphans': '2',
-        'outline-color': 'rgb(255, 255, 255)',
-        'padding-block-start': '4px',
-        'padding-bottom': '0px',
-        'padding-inline-end': '16px',
-        'padding-inline-start': '16px',
-        'padding-left': '16px',
-        'padding-right': '16px',
-        'padding-top': '4px',
-        'stroke-width': '1px',
-        'tab-size': '8',
-        'text-align': 'center',
-        'text-anchor': 'start',
-        'text-decoration': 'none solid rgb(255, 255, 255)',
-        'text-decoration-color': 'rgb(255, 255, 255)',
-        'text-decoration-skip-ink': 'auto',
-        'text-decoration-style': 'solid',
-        'widows': '2',
-        'width': '137.641px'
-      } ) );
-      //show message
+      $( '.botaoEntendi' ).on( 'click', () => {
+        $( '.containerMensagem' ).remove();
+        $( '.conteudo' ).css( 'display', '' );
+        chrome.storage.sync.set( { mensagemLida: true } );
+      } );
+    } else {
+      $( '.containerMensagem' ).remove();
     }
   } );
 }
@@ -447,9 +339,11 @@ function listenerButtonBlockList() {
 function loadBlockList() {
   const blackBlackList = `
   <div>
-    <li translation-key="ninguemNaLista"></li>
-    <li translation-key="comoAddnaLista"></li>
-    <li translation-key="notificacao"></li>
+    <ul>
+      <li translation-key="ninguemNaLista"></li>
+      <li translation-key="comoAddnaLista"></li>
+      <li translation-key="notificacao"></li>
+    <ul/>
   </div>`;
 
   chrome.storage.sync.get( [ 'blockList' ], function ( data ) {
