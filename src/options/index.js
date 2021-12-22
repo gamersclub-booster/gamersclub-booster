@@ -338,13 +338,11 @@ function listenerButtonBlockList() {
 
 function loadBlockList() {
   const blackBlackList = `
-  <div>
-    <ul>
-      <li translation-key="ninguemNaLista"></li>
-      <li translation-key="comoAddnaLista"></li>
-      <li translation-key="notificacao"></li>
-    <ul/>
-  </div>`;
+  <ul>
+    <li translation-key="ninguemNaLista"></li>
+    <li translation-key="comoAddnaLista"></li>
+    <li translation-key="notificacao"></li>
+  </ul>`;
 
   chrome.storage.sync.get( [ 'blockList' ], function ( data ) {
     const listHTML = document.getElementById( 'lista' );

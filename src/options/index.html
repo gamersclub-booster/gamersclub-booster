@@ -138,26 +138,27 @@
           </div>
         </div>
       </div>
+
       <div class="pagina" id="sons">
         <h3 class="subtitulo" translation-key="sons"></h3>
         <div>
           <div class="form-input">
             <span translation-key="ao-aceitar-ready"></span>
             <div class="input-container">
-              <select id="somReady"></select>
+              <select id="somReady" title="sons"></select>
             </div>
           </div>
           <button class="btn btn-primary" id="testarSomReady" translation-key="testar"></button>
           <div id="p-customSomReady" class="form-input" style="display: none; margin-top: 10px">
             <span translation-key="url-som-customizado"></span>
             <div class="input-container">
-              <input type="text" id="customSomReady" />
+              <input type="text" title="url" id="customSomReady" />
             </div>
           </div>
         </div>
         <div>
           <p translation-key="volume"></p>
-          <input type="range" id="volume" name="volume" min="0" max="100" />
+          <input type="range" title="volume" id="volume" name="volume" min="0" max="100" />
         </div>
         <div>
           <p translation-key="sons-myinstants-linha-1"></p>
@@ -204,10 +205,6 @@
         </div>
       </div>
 
-      <div class="pagina" id="lobby" translation-key="em-breve-lobby"></div>
-
-      <div class="pagina" id="mapas" translation-key="em-breve-mapas"></div>
-
       <div class="pagina" id="blocklist">
         <h3 class="subtitulo">
           <div translation-key="blockList"></div>
@@ -230,7 +227,7 @@
           <span translation-key="comoimportar-texto"></span>
           <button class="btn btn-warning" id="importButton" translation-key="importar"
             style="margin-top: 10px;"></button>
-          <input type="file" id="importOrig" accept=".json" style="display:none" />
+          <input type="file" title="import" id="importOrig" accept=".json" style="display:none" />
         </div>
       </div>
 
@@ -262,8 +259,9 @@
         </a>
         <br />
         <h3 class="subtitulo" translation-key="versao"></h3>
-        <p class="descricao versao" id="versao"></p>
+        <p class="descricao versao"></p>
       </div>
+
     </div>
     <div id="footer" class="footer">
       <div id="versao">
@@ -279,6 +277,6 @@
   </div>
 </body>
 <script src="index.js"></script>
-<script src="jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
 
 </html>
