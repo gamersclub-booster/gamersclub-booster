@@ -34,7 +34,7 @@ function mostrarMensagemAtencao() {
   chrome.storage.sync.get ( [ 'mensagemLida' ], response => {
     if ( !response.mensagemLida ) {
       $( '.conteudo' ).css( 'display', 'none' );
-      $( '.botaoEntendi' ).on( 'click', () => {
+      $( '#botaoEntendi' ).on( 'click', () => {
         $( '.containerMensagem' ).remove();
         $( '.conteudo' ).css( 'display', '' );
         chrome.storage.sync.set( { mensagemLida: true } );
