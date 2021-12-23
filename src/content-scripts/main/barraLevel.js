@@ -148,7 +148,9 @@ export const adicionarBarraLevel = async () => {
         .append( $( '<div>' )
           .attr( 'class', 'text-sm text-muted bold' )
           .css( { 'display': 'flex', 'justify-content': 'space-between' } )
-          .text( minPontos )
+          .append( $( '<span>' )
+            .text( minPontos )
+          )
           .append( $( '<span>' )
             .append( $( '<span>' )
               .css( { 'cursor': 'help' } )
@@ -162,40 +164,11 @@ export const adicionarBarraLevel = async () => {
             )
           )
           .append( $( '<span>' )
-            .text( [ 2999, 3000 ].includes( maxPontos ) ? '∞' : maxPontos )
+            .text( maxPontos > 2998 ? '∞' : maxPontos )
           )
         )
     );
 
   $( '.MainHeader__navbarBlock:last' )
     .before( containerDiv.append( currentLevelSpan ).append( progressBarDiv ).append( nextLevelSpan ) );
-  //   $( '.MainHeader__navbarBlock:last' )
-  //     .before( `
-  //                 <div style="margin-right: 4px;margin-left: 4px;">
-  //                     <div class="text-light" style="display: flex; justify-content: space-between;">
-  //                         <div class="text-sm text-muted bold" style="align-self: flex-end;"><a href="//${GC_URL}/lobby/partida/${matchId}">
-  //                           <span style="${colorTxt}cursor: pointer;" title="${
-  //     ratingPoints.includes( '-' ) ?
-  //       'Pontos que você perdeu na ultima partida' + qwertText :
-  //       'Pontos que você ganhou na ultima partida' + qwertText
-  //   }">${ratingPoints.includes( '-' ) ? ratingPoints : '+' + ratingPoints}</span></a></div>
-  //                         <div style="display: flex; align-items: center; justify-content: flex-end;">
-  //                             <span style="cursor: help;" title="Rating atual">${currentRating}</span>
-  //                             <i class="fas fa-chart-line" style="margin-left:4px;"></i>
-  //                         </div>
-  //                     </div>
-  //                     <div>
-  //                         <div style="margin: 1px 0px;height: 2px;width: 160px;background: rgb(75, 78, 78);">
-
-//                           <div style="height: 100%;width:${fixedNum}%; background: linear-gradient(to right, ${
-//   levelColor[playerLevel]
-// }, ${levelColor[playerNextLevel] || levelColor[playerLevel]});"></div>
-//                       </div>
-//                       <div class="text-sm text-muted bold" style="display: flex; justify-content: space-between;">${minPontos}<span>
-//                       <span style="cursor: help;" title="Quantidade de pontos para cair de Level">
-//                         ${pontosCair}
-//                       </span>/<span style="cursor: help;" title="Quantidade de pontos para subir de Level">+${pontosSubir}</span>
-//                       </span><span>${[ 2999, 3000 ].includes( maxPontos ) ? '∞' : maxPontos}</span></div>
-//                   </div>
-//               </div>
 };
