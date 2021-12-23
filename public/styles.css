@@ -51,6 +51,7 @@ body {
 .btn-primary {
     background-color: rgb(36, 126, 185);
 }
+
 .btn-primary:hover {
     background-color: rgba(36, 126, 185, 0.5);
 }
@@ -86,7 +87,7 @@ body {
 }
 
 .input-container input,
-.input-container select {
+input-container select {
     text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
     direction: ltr;
@@ -111,6 +112,7 @@ body {
     background: rgba(255, 255, 255, 0.13);
     color: #efefef;
 }
+
 .input-container select {
     cursor: pointer;
 }
@@ -124,9 +126,11 @@ input {
     padding: 0.5rem !important;
     height: 2.5rem !important;
 }
+
 .body {
     display: flex;
     flex-direction: column;
+    height: 100%;
 }
 
 .conteudo {
@@ -203,6 +207,7 @@ input {
     overflow: auto;
     height: 300px;
 }
+
 .ativo::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px #1e2033;
     box-shadow: inset 0 0 6px #1e2033;
@@ -274,6 +279,7 @@ input {
     display: table;
     clear: both;
 }
+
 #salvarWebhook {
     background-color: inherit;
     border: solid 2px #247eb9;
@@ -302,7 +308,7 @@ input {
 }
 
 /* Show the checkmark when checked */
-.container input:checked ~ .checkmark:after {
+.container input:checked~.checkmark:after {
     display: block;
 }
 
@@ -390,29 +396,37 @@ input {
     -webkit-font-smoothing: antialiased;
     direction: ltr;
 }
+
 .versao {
     color: rgb(36, 126, 187);
 }
+
 #versao {
     float: left;
 }
+
 .versao-texto {
     color: gray;
 }
+
 #translate {
-    float:right;
+    float: right;
 }
+
 .translate {
     color: #FFF;
 }
+
 .translate-option {
     color: gray;
     transition: 0.3s;
 }
+
 .translate-option:hover {
     color: rgb(194, 191, 191);
     cursor: pointer;
 }
+
 .translate-active {
     color: #FFF;
 }
@@ -429,7 +443,8 @@ input {
     font-size: 1.25rem;
     color: #fff;
     box-shadow: inset 0 1px 0 0 hsl(0deg 0% 100% / 25%), inset 0 0 0 1px hsl(0deg 0% 100% / 10%),
-        0 1px 1px 0 rgb(0 0 0 / 25%), 0 2px 4px 0 rgb(0 0 0 / 25%);
+        0 1px 1px 0 rgb(0 0 0 / 25%),
+        0 2px 4px 0 rgb(0 0 0 / 25%);
     margin: 0;
     padding: 5px 24px 3px;
     line-height: 1.2em;
@@ -439,7 +454,8 @@ input {
     border: none;
     outline: none;
     cursor: pointer;
-    background-color: #f44336; /* Green */
+    background-color: #f44336;
+    /* Green */
     margin-right: 12px;
 }
 
@@ -466,7 +482,63 @@ input {
     flex-direction: column;
     justify-content: center;
 }
+
 .import {
     display: flex;
     flex-direction: column;
+}
+
+.containerMensagem {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    justify-content: center
+}
+
+.caixaMensagem {
+    height: 250px;
+    width: 450px;
+    border: 1px solid #ccc;
+    background-color: rgba(var(--wasd-color-dark), 1);
+    overflow: auto;
+    border: var(--wasd-border-width-thin) solid var(--wasd-color-light-2);
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 27px;
+    text-decoration-color: rgba(255, 255, 255, 0.74);
+    text-decoration-line: none;
+    text-decoration-style: solid;
+    text-decoration-thickness: auto;
+    text-size-adjust: 100%;
+    text-transform: none;
+    text-transform: none;
+}
+
+#botaoEntendi {
+    margin-top: 20px;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(77, 79, 110, 1);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(112, 114, 151, 1);
+}
+
+::-webkit-scrollbar-corner {
+    background: rgba(33, 35, 53, 1);
 }

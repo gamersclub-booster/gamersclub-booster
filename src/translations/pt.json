@@ -1,4 +1,3 @@
-
 {
     "gamersclub-booster": "Gamers Club Booster",
     "geral": "Geral",
@@ -62,5 +61,7 @@
     "veja-quem-sao": "Veja quem são as pessoas que fazem parte desse projeto",
     "versao": "Versão",
     "versao-footer": "VERSÃO: ",
-    "idioma": "IDIOMA: "
+    "idioma": "IDIOMA: ",
+    "mensagemDeEntendi": "Atenção! Você está usando a extensão GamersClub Booster, que NÃO é desenvolvida pela Gamers Club. Somos desenvolvedores autônomos e pedimos que você relate os problemas nos próprios canais de comunicação da extensão. Lembrando que nós, desenvolvedores, também somos jogadores de CS: GO, e nem sempre temos tempo para atualizar a extensão devido às nossas agendas pessoais. Contamos com a compreensão de todos e esperamos que a extensão te ajude a ter uma melhor experiência.",
+    "botaoDeEntendi": "ENTENDI"
 }

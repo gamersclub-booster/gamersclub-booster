@@ -14,6 +14,7 @@ const translations = {
 };
 
 function iniciarPaginaOpcoes() {
+  mostrarMensagemAtencao();
   limparOpcoesInvalidas();
   adicionaVersao();
   marcarCheckboxes();
@@ -28,6 +29,20 @@ function iniciarPaginaOpcoes() {
   adicionarListenerTraducao();
   loadBlockList();
   listenerButtonBlockList();
+}
+function mostrarMensagemAtencao() {
+  chrome.storage.sync.get ( [ 'mensagemLida' ], response => {
+    if ( !response.mensagemLida ) {
+      $( '.conteudo' ).css( 'display', 'none' );
+      $( '#botaoEntendi' ).on( 'click', () => {
+        $( '.containerMensagem' ).remove();
+        $( '.conteudo' ).css( 'display', '' );
+        chrome.storage.sync.set( { mensagemLida: true } );
+      } );
+    } else {
+      $( '.containerMensagem' ).remove();
+    }
+  } );
 }
 function limparOpcoesInvalidas() {
   chrome.storage.sync.get( [ 'preVetos' ], res => {
@@ -323,11 +338,11 @@ function listenerButtonBlockList() {
 
 function loadBlockList() {
   const blackBlackList = `
-  <div>
+  <ul>
     <li translation-key="ninguemNaLista"></li>
     <li translation-key="comoAddnaLista"></li>
     <li translation-key="notificacao"></li>
-  </div>`;
+  </ul>`;
 
   chrome.storage.sync.get( [ 'blockList' ], function ( data ) {
     const listHTML = document.getElementById( 'lista' );

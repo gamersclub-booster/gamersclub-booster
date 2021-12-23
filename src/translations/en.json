@@ -62,5 +62,7 @@
     "veja-quem-sao": "See who are the people who are part of this project",
     "versao": "VERSION",
     "versao-footer": "VERSION: ",
-    "idioma": "LANGUAGE: "
+    "idioma": "LANGUAGE: ",
+    "mensagemDeEntendi": "Warning! You are using the GamersClub Booster extension, which is NOT developed by Gamers Club. We are standalone developers, and we asking you to report the issues on the extension's own communication channels. Keeping in mind that we developers are also CS:GO players, and we don't always have time to update the extension due to our personal schedules. We count on everyone's understanding, and we hope that the extension can help you to have a better experience.",
+    "botaoDeEntendi": "I UNDERSTAND"
 }
