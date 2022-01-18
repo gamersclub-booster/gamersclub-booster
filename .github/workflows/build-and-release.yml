@@ -24,7 +24,7 @@ jobs:
         run: npm run build
 
       - name: Zip release files
-        uses: papeloto/action-zip@v1
+        uses: vimtor/action-zip@v1
         with:
           files: dist
           recursive: true
