@@ -12,7 +12,7 @@ import { addCabecalho } from './addCabecalho';
 import { mostrarKdr } from './mostrarKdr';
 
 chrome.storage.sync.get( null, function ( _result ) {
-  if ( window.location.pathname.includes( 'partida' ) ) {
+  if ( window.location.pathname.includes( 'partida' ) || window.location.pathname.includes( '/match/' ) ) {
     initLobbyPartida();
   } else {
     initLobby();
