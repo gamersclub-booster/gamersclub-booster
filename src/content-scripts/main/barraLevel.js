@@ -45,14 +45,13 @@ export const adicionarBarraLevel = async () => {
   const colorTxt = ratingPoints.includes( '-' ) ? '#ef2f2f' : '#839800';
   const qwertText = '\nClique aqui para ir para a partida!';
 
-  const progressBar = maxPontos ? `${( ( currentRating - minPontos ) / ( maxPontos - minPontos ) ) * 100}%` : '100%';
-  const fixedNum = parseFloat( progressBar ).toFixed( 4 ) < 100 ? parseFloat( progressBar ).toFixed( 4 ) : 100;
+  const fixedNum = ( ( ( currentRating - minPontos ) * 100 ) / ( maxPontos - minPontos ) ).toFixed( 2 ) + '%';
   const subscriberStyle = isSubscriber === 'true' ? 'subscriber' : 'nonSubscriber';
 
   const containerDiv = $( '<div>' ).css( {
     'display': 'flex',
     'align-items': 'center',
-    'font-size': '12px',
+    'font-size': '11px',
     'justify-content': 'center',
     'width': '100%',
     'margin': '10px'
@@ -65,7 +64,7 @@ export const adicionarBarraLevel = async () => {
     .append(
       $( '<div>' )
         .attr( 'class', `PlayerLevel PlayerLevel--${playerLevel} PlayerLevel--${subscriberStyle}` )
-        .css( { 'height': '28px', 'width': '28px', 'font-size': '12px' } )
+        .css( { 'height': '24px', 'width': '24px' } )
         .append(
           $( '<div>' )
             .attr( 'class', 'PlayerLevel__background' )
@@ -84,7 +83,7 @@ export const adicionarBarraLevel = async () => {
     .append(
       $( '<div>' )
         .attr( 'class', `PlayerLevel PlayerLevel--${playerNextLevel} PlayerLevel--${subscriberStyle}` )
-        .css( { 'height': '28px', 'width': '28px', 'font-size': '12px' } )
+        .css( { 'height': '24px', 'width': '24px' } )
         .append(
           $( '<div>' )
             .attr( 'class', 'PlayerLevel__background' )
@@ -97,11 +96,11 @@ export const adicionarBarraLevel = async () => {
     );
 
   const progressBarDiv = $( '<div>' )
-    .css( { 'margin-right': '4px', 'margin-left': '4px' } )
+    .css( { 'margin-right': '4px', 'margin-left': '4px', 'width': '120px' } )
     .append(
       $( '<div>' )
         .attr( 'class', 'text-light' )
-        .css( { 'display': 'flex', 'justify-content': 'space-between' } )
+        .css( { 'display': 'flex', 'justify-content': 'space-between', 'width': '100%' } )
         .append(
           $( '<div>' )
             .attr( 'class', 'text-sm text-muted bold' )
@@ -134,7 +133,7 @@ export const adicionarBarraLevel = async () => {
     ).append(
       $( '<div>' )
         .append( $( '<div>' )
-          .css( { 'margin': '1px 0px', 'height': '2px', 'width': '160px', 'background': 'rgb(75, 78, 78)' } )
+          .css( { 'margin': '1px 0px', 'height': '2px', 'width': '100%', 'background': 'rgb(75, 78, 78)' } )
           .append( $( '<div>' )
             .css( {
               'height': '100%',
@@ -146,7 +145,7 @@ export const adicionarBarraLevel = async () => {
           )
         )
         .append( $( '<div>' )
-          .attr( 'class', 'text-sm text-muted bold' )
+          .attr( 'class', 'text-sm text-muted' )
           .css( { 'display': 'flex', 'justify-content': 'space-between' } )
           .append( $( '<span>' )
             .text( minPontos )
@@ -171,4 +170,23 @@ export const adicionarBarraLevel = async () => {
 
   $( '.MainHeader__navbarBlock:last' )
     .before( containerDiv.append( currentLevelSpan ).append( progressBarDiv ).append( nextLevelSpan ) );
+
+  $( '#GCFriends > div.gcf-sidebar' ).prepend( $( '#gamersclub-app > div.SettingsMenu' ).removeClass( 'SettingsMenu' ).css( {
+    'position': 'initial',
+    'top': '0',
+    'right': '0',
+    'width': '70px',
+    'height': '81px',
+    'background-color': '#1e2033',
+    'border-bottom': '1px solid hsla(0,0%,100%,.1)',
+    'cursor': 'pointer',
+    'z-index': '104',
+    'user-select': 'none'
+  } ).on( 'click', () => {
+    $( '#GCFriends > div.gcf-sidebar > div.SettingsMenu.SettingsMenu--active > div.SettingsMenu__dropdown.Dropdown.Dropdown--right' ).css( {
+      'top': '0px'
+    } );
+  } ) );
+
+
 };
