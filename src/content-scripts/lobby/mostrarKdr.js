@@ -1,3 +1,5 @@
+import { levelColor } from '../../lib/constants';
+
 let title = null;
 let kdr = null;
 
@@ -20,12 +22,14 @@ export const mostrarKdr = mutations => {
                   'id': 'gcbooster_kdr',
                   'css': {
                     'width': '45px',
-                    'height': '20px',
+                    'height': '18px',
                     'display': 'flex',
                     'align-items': 'center',
                     'color': 'white',
                     'font-weight': 'bold',
-                    'background-color': 'rgba(0, 0, 0, 0.4)'
+                    'background': kdr <= 2 ? '' :
+                      'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)',
+                    'background-color': kdr <= 2 ? levelColor[Math.round( kdr * 10 )] + 'cc' : 'initial'
                   }
                 } )
                 .append( $( '<span/>', { 'id': 'gcbooster_kdr_span', 'text': kdr, 'css': { 'width': '100%', 'font-size': '10px' } } ) ) );
