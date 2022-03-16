@@ -32,6 +32,7 @@ const initLobby = async () => {
   criarObserver( '#lobbyContent', lobbyLink );
   criarObserver( '#lobbyContent', listaBloqueio );
   criarObserver( '.list-avaliable-teams', mostrarKdr );
+  criarObserver( '#challengeList', mostrarKdr );
 
   // Cria seção de cabeçalho para botões da extensão
   addCabecalho();
