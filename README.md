@@ -1,5 +1,5 @@
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-11-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-12-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 #### Links úteis:
@@ -70,6 +70,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/ozkcs"><img src="https://avatars.githubusercontent.com/u/35303121?v=4?s=100" width="100px;" alt=""/><br /><sub><b>ozkcs</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=ozkcs" title="Code">💻</a> <a href="https://github.com/gamersclub-booster/gamersclub-booster/issues?q=author%3Aozkcs" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://average.digital"><img src="https://avatars.githubusercontent.com/u/11398105?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Felipe Rugai</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=feliperugai" title="Code">💻</a> <a href="#design-feliperugai" title="Design">🎨</a></td>
     <td align="center"><a href="http://babrauskas.dev"><img src="https://avatars.githubusercontent.com/u/19313864?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Federico Babrauskas</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/issues?q=author%3Afedebabrauskas" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/leandroribeir0"><img src="https://avatars.githubusercontent.com/u/62257278?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Leandro Ribeiro</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=leandroribeir0" title="Code">💻</a></td>
   </tr>
 </table>
 
