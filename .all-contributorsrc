@@ -110,6 +110,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "leandroribeir0",
+      "name": "Leandro Ribeiro",
+      "avatar_url": "https://avatars.githubusercontent.com/u/62257278?v=4",
+      "profile": "https://github.com/leandroribeir0",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
