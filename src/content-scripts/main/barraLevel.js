@@ -171,22 +171,4 @@ export const adicionarBarraLevel = async () => {
   $( '.MainHeader__navbarBlock:last' )
     .before( containerDiv.append( currentLevelSpan ).append( progressBarDiv ).append( nextLevelSpan ) );
 
-  $( '#GCFriends > div.gcf-sidebar' ).prepend( $( '#gamersclub-app > div.SettingsMenu' ).removeClass( 'SettingsMenu' ).css( {
-    'position': 'initial',
-    'top': '0',
-    'right': '0',
-    'width': '70px',
-    'height': '81px',
-    'background-color': '#1e2033',
-    'border-bottom': '1px solid hsla(0,0%,100%,.1)',
-    'cursor': 'pointer',
-    'z-index': '104',
-    'user-select': 'none'
-  } ).on( 'click', () => {
-    $( '#GCFriends > div.gcf-sidebar > div.SettingsMenu.SettingsMenu--active > div.SettingsMenu__dropdown.Dropdown.Dropdown--right' ).css( {
-      'top': '0px'
-    } );
-  } ) );
-
-
 };
