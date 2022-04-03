@@ -12,22 +12,24 @@ const grabPlayerLastMatch = async matchUrl => {
   const response = await fetch( matchUrl );
   const data = await response.json();
 
+  const lastMatchIndex = data.lastMatches.length - 1;
   const playerInfo = [];
-  playerInfo['name'] = data.currentUser ? data.currentUser.nick : undefined;
-  playerInfo['level'] = parseInt( data.currentUser.level );
-  playerInfo['matchId'] = data.lista[0].idlobby_game;
-  playerInfo['currentRating'] = data.lista[0].rating_final;
-  playerInfo['rating_points'] = data.lista[0].diference;
-  playerInfo['map_name'] = data.lista[0].map_name;
+  playerInfo['name'] = data.playerInfo ? data.playerInfo.nick : undefined;
+  playerInfo['level'] = parseInt( data.playerInfo.level );
+  playerInfo['currentRating'] = data.playerInfo.rating;
+  playerInfo['matchId'] = data.lastMatches[lastMatchIndex].id;
+  playerInfo['rating_points'] = data.lastMatches[lastMatchIndex].ratingDiff.toString();
+  playerInfo['map_name'] = data.lastMatches[lastMatchIndex].map;
 
   return playerInfo;
 };
 
 export const adicionarBarraLevel = async () => {
   const GC_URL = window.location.hostname;
-  const windowVariables = retrieveWindowVariables( [ 'ISSUBSCRIBER' ] );
+  const windowVariables = retrieveWindowVariables( [ 'ISSUBSCRIBER', 'PLAYERID' ] );
   const isSubscriber = windowVariables.ISSUBSCRIBER;
-  const playerInfo = await grabPlayerLastMatch( `https://${GC_URL}/players/get_playerLobbyResults/latest/1` );
+  const playerId = windowVariables.PLAYERID;
+  const playerInfo = await grabPlayerLastMatch( `https://${GC_URL}/api/box/init/${playerId}` );
 
   const playerLevel = playerInfo['level'];
   const currentRating = playerInfo['currentRating'];
