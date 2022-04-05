@@ -108,7 +108,7 @@ export const adicionarBarraLevel = async () => {
             .attr( 'class', 'text-sm text-muted bold' )
             .css( { 'align-self': 'flex-end' } )
             .append( $( '<a>' )
-              .attr( 'href', `//${GC_URL}/lobby/partida/${matchId}` )
+              .attr( 'href', matchId ? `//${GC_URL}/lobby/partida/${matchId}` : `//${GC_URL}/my-matches` )
               .append( $( '<span>' )
                 .css( { 'color': colorTxt, 'cursor': 'pointer' } )
                 .text( ratingPoints.includes( '-' ) ? ratingPoints : '+' + ratingPoints )
