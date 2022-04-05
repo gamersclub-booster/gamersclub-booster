@@ -6,11 +6,13 @@ import manifest from '../../manifest.json';
 import pt from '../translations/pt.json';
 import en from '../translations/en.json';
 import es from '../translations/es.json';
+import fr from '../translations/fr.json';
 
 const translations = {
   'pt': pt,
   'en': en,
-  'es': es
+  'es': es,
+  'fr': fr
 };
 
 function iniciarPaginaOpcoes() {
@@ -31,6 +33,7 @@ function iniciarPaginaOpcoes() {
   listenerButtonBlockList();
 }
 function mostrarMensagemAtencao() {
+  chrome.storage.sync.set( { traducao: "pt" } );
   chrome.storage.sync.get ( [ 'mensagemLida' ], response => {
     if ( !response.mensagemLida ) {
       $( '.conteudo' ).css( 'display', 'none' );
