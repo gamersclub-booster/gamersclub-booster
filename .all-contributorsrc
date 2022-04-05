@@ -119,6 +119,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "nilkesede",
+      "name": "Nil Késede",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1965127?v=4",
+      "profile": "http://nilkesede.sh",
+      "contributions": [
+        "code",
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
