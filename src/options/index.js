@@ -33,7 +33,14 @@ function iniciarPaginaOpcoes() {
   listenerButtonBlockList();
 }
 function mostrarMensagemAtencao() {
-  chrome.storage.sync.set( { traducao: "pt" } );
+  for (const key in translations) {
+    if (key === navigator.language.slice(0,2)) {
+      chrome.storage.sync.set( { traducao: key } )
+    } else {
+      chrome.storage.sync.set( { traducao: 'pt' } )
+    }
+  }
+  
   chrome.storage.sync.get ( [ 'mensagemLida' ], response => {
     if ( !response.mensagemLida ) {
       $( '.conteudo' ).css( 'display', 'none' );
