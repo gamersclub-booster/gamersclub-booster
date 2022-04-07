@@ -33,14 +33,6 @@ function iniciarPaginaOpcoes() {
   listenerButtonBlockList();
 }
 function mostrarMensagemAtencao() {
-  for (const key in translations) {
-    if (key === navigator.language.slice(0,2)) {
-      chrome.storage.sync.set( { traducao: key } )
-    } else {
-      chrome.storage.sync.set( { traducao: 'pt' } )
-    }
-  }
-  
   chrome.storage.sync.get ( [ 'mensagemLida' ], response => {
     if ( !response.mensagemLida ) {
       $( '.conteudo' ).css( 'display', 'none' );
@@ -81,10 +73,13 @@ function adicionarListenerTraducao() {
 document.addEventListener( 'DOMContentLoaded', () => {
   chrome.storage.sync.get( [ 'traducao' ], response => {
     const lang = ( response.traducao || navigator.language || 'pt' ).slice( 0, 2 );
-    carregarTraducao( lang );
-    document.getElementById( `traducao-${lang}` ).classList.add( 'translate-active' );
+    let value = false;
+    for ( const key in translations ) {
+      value = ( ( ( lang === key ) && lang ) || value ) || 'pt';
+    }
+    carregarTraducao( value );
+    document.getElementById( `traducao-${value}` ).classList.add( 'translate-active' );
   } );
-
 } );
 function carregarTraducao( language = 'pt' ) {
   const translation = translations[language];
