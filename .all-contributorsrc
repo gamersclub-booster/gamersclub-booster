@@ -129,6 +129,18 @@
         "code",
         "bug"
       ]
+    },
+    {
+      "login": "Skyy4",
+      "name": "Jimmy L.",
+      "avatar_url": "https://avatars.githubusercontent.com/u/47400940?v=4",
+      "profile": "https://github.com/Skyy4",
+      "contributions": [
+        "translation",
+        "test",
+        "code",
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
