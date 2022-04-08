@@ -14,14 +14,12 @@ const initGcBooster = async () => {
 
   if ( generalOptions.autoDailyRewards ) {
     const { lastCollectedDailyRewardsTs } = generalOptions;
-    const currentTimestamp = Date.now();
-    const dayInMilliseconds = 86400000;
+    const dateFormat = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    const currentDate = new Date().toLocaleDateString( dateFormat );
+    const currentHours = new Date().getHours();
+    const lastCollectDate = new Date( lastCollectedDailyRewardsTs ).toLocaleDateString( dateFormat );
 
-
-    // coletar daily rewards se ele não foi coletado
-    // nenhuma vez ou se a última coleta faz mais de um dia
-    if ( !lastCollectedDailyRewardsTs ||
-        ( currentTimestamp - lastCollectedDailyRewardsTs >= dayInMilliseconds ) ) {
+    if ( currentDate !== lastCollectDate && currentHours >= 5 ) {
       coletarDailyRewards();
     }
   }
