@@ -1,4 +1,5 @@
 import { autoFixarMenuLobby } from './autoFixarMenuLobby';
+import { autoDarkMode } from './autoDarkMode';
 import { autoAceitarReady, autoAceitarReadySetInterval } from './autoAceitarReady';
 import { somReady } from './somReady';
 import { autoConcordarTermosRanked } from './autoConcordarTermosRanked';
@@ -9,6 +10,7 @@ import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
 import { initListaBloqueio } from './botaoListaBloqueio';
 import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
 import { addCabecalho } from './addCabecalho';
+// import { addDarkMode } from './darkMode';
 import { mostrarKdr } from './mostrarKdr';
 
 chrome.storage.sync.get( null, function ( _result ) {
@@ -27,6 +29,7 @@ const initLobby = async () => {
   criarObserver( '.lobby,.ranking', somReady );
   criarObserver( '.lobby,.ranking', autoAceitarReady );
   criarObserver( '#lobbyContent', autoFixarMenuLobby );
+  criarObserver( '#lobbyContent', autoDarkMode );
   criarObserver( '.lobby,.ranking', autoConcordarTermosRanked );
   criarObserver( '#matchMainContainer', partidaInfo );
   criarObserver( '#lobbyContent', lobbyLink );
