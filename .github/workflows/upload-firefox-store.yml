@@ -15,7 +15,6 @@ jobs:
           version: "latest"
           file: "release.zip"
           target: "release.xpi"
-          token: ${{ secrets.YOUR_TOKEN }}
           
       - name: Retrieve manifest.json
         run: unzip -p release.xpi manifest.json >manifest.json
