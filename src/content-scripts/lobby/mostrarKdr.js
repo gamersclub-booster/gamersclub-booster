@@ -13,7 +13,7 @@ export const mostrarKdr = mutations => {
           $( element ).find( 'div.sala-lineup-placeholder' ).css( 'height', '100px' );
           $ ( element ).find( 'div.sala-lineup-imagem' ).css( 'margin-top', '23px' );
         } else {
-          title = $( element ).find( 'div.sala-lineup-imagem > div > a' ).attr( 'title' );
+          title = $( element ).find( 'div.sala-lineup-imagem a[data-jsaction]' ).attr( 'title' );
           if ( $( element ).find( '#gcbooster_kdr' ).length === 0 ) {
             kdr = getKdrFromTitle( title );
             $( element )

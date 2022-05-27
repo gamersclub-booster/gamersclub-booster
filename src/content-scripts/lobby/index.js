@@ -10,7 +10,6 @@ import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
 import { initListaBloqueio } from './botaoListaBloqueio';
 import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
 import { addCabecalho } from './addCabecalho';
-// import { addDarkMode } from './darkMode';
 import { mostrarKdr } from './mostrarKdr';
 
 chrome.storage.sync.get( null, function ( _result ) {
@@ -35,9 +34,7 @@ const initLobby = async () => {
   criarObserver( '#lobbyContent', lobbyLink );
   criarObserver( '#lobbyContent', listaBloqueio );
   criarObserver( '.list-avaliable-teams', mostrarKdr );
-  criarObserver( '.list-avaliable-teams', mostrarKdr );
-
-  // addDarkMode();
+  criarObserver( '#challengeList', mostrarKdr );
 
   // Cria seção de cabeçalho para botões da extensão
   addCabecalho();

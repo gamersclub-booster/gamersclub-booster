@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "GamersClub Booster",
   "description": "Extensão para o Google Chrome que adiciona algumas melhorias na plataforma da GamersClub.",
-  "version": "2.13.1",
+  "version": "2.15.9",
   "icons": {
     "16": "images/icon_16.png",
     "48": "images/icon_48.png",
@@ -63,7 +63,9 @@
     {
       "matches": [
         "*://*.gamersclub.com.br/jogador*",
-        "*://csgo.gamersclub.gg/jogador*"
+        "*://csgo.gamersclub.gg/jogador*",
+        "*://*.gamersclub.com.br/player*",
+        "*://csgo.gamersclub.gg/player*"
       ],
       "js": [
         "content-scripts/profile.js"

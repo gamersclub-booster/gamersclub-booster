@@ -12,22 +12,24 @@ const grabPlayerLastMatch = async matchUrl => {
   const response = await fetch( matchUrl );
   const data = await response.json();
 
+  const lastMatchIndex = data.lastMatches.length - 1;
   const playerInfo = [];
-  playerInfo['name'] = data.currentUser ? data.currentUser.nick : undefined;
-  playerInfo['level'] = parseInt( data.currentUser.level );
-  playerInfo['matchId'] = data.lista[0].idlobby_game;
-  playerInfo['currentRating'] = data.lista[0].rating_final;
-  playerInfo['rating_points'] = data.lista[0].diference;
-  playerInfo['map_name'] = data.lista[0].map_name;
+  playerInfo['name'] = data.playerInfo ? data.playerInfo.nick : undefined;
+  playerInfo['level'] = parseInt( data.playerInfo.level );
+  playerInfo['currentRating'] = data.playerInfo.rating;
+  playerInfo['matchId'] = data.lastMatches[lastMatchIndex].id;
+  playerInfo['rating_points'] = data.lastMatches[lastMatchIndex].ratingDiff.toString();
+  playerInfo['map_name'] = data.lastMatches[lastMatchIndex].map;
 
   return playerInfo;
 };
 
 export const adicionarBarraLevel = async () => {
   const GC_URL = window.location.hostname;
-  const windowVariables = retrieveWindowVariables( [ 'ISSUBSCRIBER' ] );
+  const windowVariables = retrieveWindowVariables( [ 'ISSUBSCRIBER', 'PLAYERID' ] );
   const isSubscriber = windowVariables.ISSUBSCRIBER;
-  const playerInfo = await grabPlayerLastMatch( `https://${GC_URL}/players/get_playerLobbyResults/latest/1` );
+  const playerId = windowVariables.PLAYERID;
+  const playerInfo = await grabPlayerLastMatch( `https://${GC_URL}/api/box/init/${playerId}` );
 
   const playerLevel = playerInfo['level'];
   const currentRating = playerInfo['currentRating'];
@@ -106,7 +108,7 @@ export const adicionarBarraLevel = async () => {
             .attr( 'class', 'text-sm text-muted bold' )
             .css( { 'align-self': 'flex-end' } )
             .append( $( '<a>' )
-              .attr( 'href', `//${GC_URL}/lobby/partida/${matchId}` )
+              .attr( 'href', matchId ? `//${GC_URL}/lobby/partida/${matchId}` : `//${GC_URL}/my-matches` )
               .append( $( '<span>' )
                 .css( { 'color': colorTxt, 'cursor': 'pointer' } )
                 .text( ratingPoints.includes( '-' ) ? ratingPoints : '+' + ratingPoints )
@@ -170,23 +172,5 @@ export const adicionarBarraLevel = async () => {
 
   $( '.MainHeader__navbarBlock:last' )
     .before( containerDiv.append( currentLevelSpan ).append( progressBarDiv ).append( nextLevelSpan ) );
-
-  $( '#GCFriends > div.gcf-sidebar' ).prepend( $( '#gamersclub-app > div.SettingsMenu' ).removeClass( 'SettingsMenu' ).css( {
-    'position': 'initial',
-    'top': '0',
-    'right': '0',
-    'width': '70px',
-    'height': '81px',
-    'background-color': '#1e2033',
-    'border-bottom': '1px solid hsla(0,0%,100%,.1)',
-    'cursor': 'pointer',
-    'z-index': '104',
-    'user-select': 'none'
-  } ).on( 'click', () => {
-    $( '#GCFriends > div.gcf-sidebar > div.SettingsMenu.SettingsMenu--active > div.SettingsMenu__dropdown.Dropdown.Dropdown--right' ).css( {
-      'top': '0px'
-    } );
-  } ) );
-
 
 };
