@@ -141,6 +141,15 @@
         "code",
         "bug"
       ]
+    },
+    {
+      "login": "jorgebrunetto",
+      "name": "Jorge Brunetto",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5823077?v=4",
+      "profile": "http://jorgebrunetto.com.br",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
