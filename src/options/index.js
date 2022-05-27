@@ -6,11 +6,13 @@ import manifest from '../../manifest.json';
 import pt from '../translations/pt.json';
 import en from '../translations/en.json';
 import es from '../translations/es.json';
+import fr from '../translations/fr.json';
 
 const translations = {
   'pt': pt,
   'en': en,
-  'es': es
+  'es': es,
+  'fr': fr
 };
 
 function iniciarPaginaOpcoes() {
@@ -71,10 +73,13 @@ function adicionarListenerTraducao() {
 document.addEventListener( 'DOMContentLoaded', () => {
   chrome.storage.sync.get( [ 'traducao' ], response => {
     const lang = ( response.traducao || navigator.language || 'pt' ).slice( 0, 2 );
-    carregarTraducao( lang );
-    document.getElementById( `traducao-${lang}` ).classList.add( 'translate-active' );
+    let value = false;
+    for ( const key in translations ) {
+      value = ( ( ( lang === key ) && lang ) || value ) || 'pt';
+    }
+    carregarTraducao( value );
+    document.getElementById( `traducao-${value}` ).classList.add( 'translate-active' );
   } );
-
 } );
 function carregarTraducao( language = 'pt' ) {
   const translation = translations[language];

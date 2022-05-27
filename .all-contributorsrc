@@ -110,6 +110,37 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "leandroribeir0",
+      "name": "Leandro Ribeiro",
+      "avatar_url": "https://avatars.githubusercontent.com/u/62257278?v=4",
+      "profile": "https://github.com/leandroribeir0",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "nilkesede",
+      "name": "Nil Késede",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1965127?v=4",
+      "profile": "http://nilkesede.sh",
+      "contributions": [
+        "code",
+        "bug"
+      ]
+    },
+    {
+      "login": "Skyy4",
+      "name": "Jimmy L.",
+      "avatar_url": "https://avatars.githubusercontent.com/u/47400940?v=4",
+      "profile": "https://github.com/Skyy4",
+      "contributions": [
+        "translation",
+        "test",
+        "code",
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
