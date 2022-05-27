@@ -55,7 +55,7 @@ jobs:
       - name: Commit version ${{ steps.tag_version.outputs.new_version }}
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          file_pattern: package.json manifest.json
+          file_pattern: package.json manifest.json package-lock.json
           commit_message: Versão ${{ steps.tag_version.outputs.new_version }} [skip ci]
           commit_options: "--no-verify"
           skip_dirty_check: true
