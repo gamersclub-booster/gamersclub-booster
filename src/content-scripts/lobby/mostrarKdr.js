@@ -15,6 +15,7 @@ export const mostrarKdr = mutations => {
         } else {
           title = $( element ).find( 'div.sala-lineup-imagem a[data-jsaction]' ).attr( 'title' );
           if ( $( element ).find( '#gcbooster_kdr' ).length === 0 ) {
+            const lobbyId = $ ( element )[0].parentNode.parentNode.parentNode.parentNode.parentNode.id;
             kdr = getKdrFromTitle( title );
             $( element )
               .prepend( $( '<div/>',
@@ -32,7 +33,13 @@ export const mostrarKdr = mutations => {
                     'background-color': kdr <= 2 ? levelColor[Math.round( kdr * 10 )] + 'cc' : 'initial'
                   }
                 } )
-                .append( $( '<span/>', { 'id': 'gcbooster_kdr_span', 'text': kdr, 'css': { 'width': '100%', 'font-size': '10px' } } ) ) );
+                .append( $( '<span/>', {
+                  'id': 'gcbooster_kdr_span',
+                  'gcbooster_kdr_lobby': lobbyId,
+                  'text': kdr,
+                  'kdr': kdr,
+                  'css': { 'width': '100%', 'font-size': '10px' }
+                } ) ) );
             $( element ).find( 'div.sala-lineup-player' ).append( '<style>.sala-lineup-player:before{top:15px !important;}</style>' );
           }
         }
