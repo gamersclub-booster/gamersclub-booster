@@ -97,7 +97,7 @@ const filtrarLobbiesKdr = () => {
       const lobbyId = elem.getAttribute( 'gcbooster_kdr_lobby' );
       if ( !lobbyId ) { return; }
       const kdrs = [];
-      $( 'span[gcbooster_kdr_lobby=${lobbyId}]' ).each( function ( _i, elem ) {
+      $( `span[gcbooster_kdr_lobby=${lobbyId}]` ).each( function ( _i, elem ) {
         kdrs.push( elem.textContent );
       } );
       if ( filtroValue <= 2.99 && kdrs.find( v => v > filtroValue ) ) {
