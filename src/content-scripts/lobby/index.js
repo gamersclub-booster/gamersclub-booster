@@ -11,6 +11,7 @@ import { initListaBloqueio } from './botaoListaBloqueio';
 import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
 import { addCabecalho } from './addCabecalho';
 import { mostrarKdr } from './mostrarKdr';
+import { adicionarFiltroKdr } from './filtrarKdr';
 
 chrome.storage.sync.get( null, function ( _result ) {
   if ( window.location.pathname.includes( 'partida' ) || window.location.pathname.includes( '/match/' ) ) {
@@ -42,10 +43,12 @@ const initLobby = async () => {
   autoAceitarReadySetInterval();
   // Feature para aceitar complete automatico
   adicionarBotaoAutoComplete();
-  //Feature pra criar lobby caso full
+  // Feature pra criar lobby caso full
   adicionarBotaoForcarCriarLobby();
   // Feature para mostrar kdr dos players
   mostrarKdr();
+  // Feature para filtrar por KD
+  adicionarFiltroKdr();
 };
 
 const criarObserver = ( seletor, exec ) => {

@@ -19,7 +19,6 @@ jobs:
           version: "latest"
           file: "release.zip"
           target: "release.zip"
-          token: ${{ secrets.YOUR_TOKEN }}
 
       - name: Upload to Chrome Store
         uses: Klemensas/chrome-extension-upload-action@master
