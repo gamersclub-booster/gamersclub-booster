@@ -79,7 +79,7 @@ const adicionarFiltroKdr = () => {
         max: '3',
         step: '0.1',
         value: 3
-      } ).addClass( 'filtrarKdr' ) )
+      } ) )
       .append( `<style>${styleKdr}</style>` );
     $( '#filtrarKdr' ).append( '<span id="filtrarKdrValor" class="FilterLobby_skillLevelTag__10iAp">3+</span>' );
   }
