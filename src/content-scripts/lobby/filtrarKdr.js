@@ -10,13 +10,16 @@ const adicionarFiltroKdr = () => {
         min: '0.1',
         max: '3',
         step: '0.1',
-        value: 3
+        value: 3,
+        class: 'filterKdr'
       } ) );
     $( '#filtrarKdr' ).append( '<span id="filtrarKdrValor" class="FilterLobby_skillLevelTag__10iAp">3+</span>' );
   }
 
   filtrarLobbiesKdr();
 };
+
+
 
 const filtrarLobbiesKdr = () => {
   setInterval( () => {

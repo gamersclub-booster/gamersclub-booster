@@ -15,13 +15,8 @@
   ],
   "content_scripts": [
     {
-      "matches": [
-        "*://*.gamersclub.com.br/*",
-        "*://csgo.gamersclub.gg/*"
-      ],
-      "js": [
-        "content-scripts/main.js"
-      ],
+      "matches": ["*://*.gamersclub.com.br/*", "*://csgo.gamersclub.gg/*"],
+      "js": ["content-scripts/main.js"],
       "run_at": "document_end"
     },
     {
@@ -31,9 +26,7 @@
         "*://*.gamersclub.com.br/my-matches*",
         "*://csgo.gamersclub.gg/my-matches*"
       ],
-      "js": [
-        "content-scripts/my-matches.js"
-      ],
+      "js": ["content-scripts/my-matches.js"],
       "run_at": "document_end"
     },
     {
@@ -41,9 +34,7 @@
         "*://*.gamersclub.com.br/team/matches/*",
         "*://csgo.gamersclub.gg/team/matches/*"
       ],
-      "js": [
-        "content-scripts/team.js"
-      ],
+      "js": ["content-scripts/team.js"],
       "run_at": "document_end"
     },
     {
@@ -55,9 +46,8 @@
         "*://*.gamersclub.com.br/match*",
         "*://csgo.gamersclub.gg/match*"
       ],
-      "js": [
-        "content-scripts/lobby.js"
-      ],
+      "js": ["content-scripts/lobby.js"],
+      "css": ["content.css"],
       "run_at": "document_end"
     },
     {
@@ -67,9 +57,7 @@
         "*://*.gamersclub.com.br/player*",
         "*://csgo.gamersclub.gg/player*"
       ],
-      "js": [
-        "content-scripts/profile.js"
-      ],
+      "js": ["content-scripts/profile.js"],
       "run_at": "document_end"
     },
     {
@@ -77,9 +65,7 @@
         "*://*.gamersclub.com.br/missoes*",
         "*://csgo.gamersclub.gg/missoes*"
       ],
-      "js": [
-        "content-scripts/missions.js"
-      ],
+      "js": ["content-scripts/missions.js"],
       "run_at": "document_end"
     }
   ],
