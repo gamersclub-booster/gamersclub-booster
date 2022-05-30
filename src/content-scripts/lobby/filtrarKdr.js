@@ -1,71 +1,3 @@
-const styleKdr =
-'input[type="range"] {' +
-'  margin: auto 8px auto 0;' +
-'  -webkit-appearance: none;' +
-'  position: relative;' +
-'  overflow: hidden;' +
-'  height: 12px;' +
-'  cursor: pointer;' +
-'  background: transparent;' +
-'  border-radius: 15px;' +
-'}' +
-'::-webkit-slider-runnable-track {' +
-'  background: #383b51;' +
-'}' +
-'::-webkit-slider-thumb {' +
-'  -webkit-appearance: none;' +
-'  width: 12px; /* 1 */' +
-'  height: 12px;' +
-'  background: #fff;' +
-'  box-shadow: -200px 0 0 195px #2196fd;' +
-'  border: 3px solid #fff;' +
-'  border-radius: 50%;' +
-'  border-radius: 15px;' +
-'}' +
-'::-moz-range-track {' +
-'  height: 12px;' +
-'  background: #ddd;' +
-'}' +
-'::-moz-range-thumb {' +
-'  -webkit-appearance: none;' +
-'  width: 12px; /* 1 */' +
-'  height: 12px;' +
-'  background: #fff;' +
-'  box-shadow: -200px 0 0 195px #2196fd;' +
-'  border: 3px solid #fff; /* 1 */' +
-'  border-radius: 50%;' +
-'  border-radius: 15px;' +
-'}' +
-'::-ms-fill-lower {' +
-'  background: #2196fd;' +
-'}' +
-'::-ms-thumb {' +
-'  -webkit-appearance: none;' +
-'  width: 12px; /* 1 */' +
-'  height: 12px;' +
-'  background: #fff;' +
-'  box-shadow: -200px 0 0 195px #2196fd;' +
-'  border: 3px solid #fff; /* 1 */' +
-'  border-radius: 50%;' +
-'  border-radius: 15px;' +
-'}' +
-'::-ms-ticks-after {' +
-'  display: none;' +
-'}' +
-'::-ms-ticks-before {' +
-'  display: none;' +
-'}' +
-'::-ms-track {' +
-'  background: #ddd;' +
-'  color: transparent;' +
-'  height: 12px;' +
-'  border: none;' +
-'}' +
-'::-ms-tooltip {' +
-'  display: none;' +
-'}'
-;
-
 const adicionarFiltroKdr = () => {
   if ( !$( '#filtrarKdrInput' ).length ) {
     $( '#gcbooster_cabecalho' ).append( $( '<div/>', { 'id': 'gcbooster_section2', 'class': 'FilterLobby_section__3UmYp' } )
@@ -78,9 +10,9 @@ const adicionarFiltroKdr = () => {
         min: '0.1',
         max: '3',
         step: '0.1',
-        value: 3
-      } ) )
-      .append( `<style>${styleKdr}</style>` );
+        value: 3,
+        class: 'filterKdr'
+      } ) );
     $( '#filtrarKdr' ).append( '<span id="filtrarKdrValor" class="FilterLobby_skillLevelTag__10iAp">3+</span>' );
   }
 
