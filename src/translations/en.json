@@ -18,6 +18,7 @@
   "comoexportar-titulo": "How to export?",
   "comoexportar-texto": "Click the button and then will be downloaded a config file, then you can share or load at import button.",
   "sobre": "About",
+  "donate": "Donate",
   "downloads": "Downloads",
   "automacoes": "Automations",
   "aceitar-pre-ready": "Accept Pre Ready",
@@ -66,5 +67,7 @@
   "versao-footer": "VERSION: ",
   "idioma": "LANGUAGE: ",
   "mensagemDeEntendi": "Warning! You are using the GamersClub Booster extension, which is NOT developed by Gamers Club. We are standalone developers, and we asking you to report the issues on the extension's own communication channels. Keeping in mind that we developers are also CS:GO players, and we don't always have time to update the extension due to our personal schedules. We count on everyone's understanding, and we hope that the extension can help you to have a better experience.",
-  "botaoDeEntendi": "I UNDERSTAND"
+  "botaoDeEntendi": "I UNDERSTAND",
+  "faca-sua-doacao": "Buy us a coffee",
+  "doacao-descricao": "If you like the extension, you can buy us a coffee to help us to keep it running."
 }
