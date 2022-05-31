@@ -31,7 +31,6 @@ const initLobby = async () => {
   criarObserver( '#lobbyContent', autoFixarMenuLobby );
   criarObserver( '#lobbyContent', autoDarkMode );
   criarObserver( '.lobby,.ranking', autoConcordarTermosRanked );
-  criarObserver( '#matchMainContainer', partidaInfo );
   criarObserver( '#lobbyContent', lobbyLink );
   criarObserver( '#lobbyContent', listaBloqueio );
   criarObserver( '.list-avaliable-teams', mostrarKdr );
@@ -49,6 +48,8 @@ const initLobby = async () => {
   mostrarKdr();
   // Feature para filtrar por KD
   adicionarFiltroKdr();
+  // Feature de discord na hora de copiar o ip
+  partidaInfo();
 };
 
 const criarObserver = ( seletor, exec ) => {
