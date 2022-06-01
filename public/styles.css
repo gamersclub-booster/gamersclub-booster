@@ -526,3 +526,9 @@ input:not([type="range"]) {
 ::-webkit-scrollbar-corner {
   background: rgba(33, 35, 53, 1);
 }
+
+/* Doação */
+.link-white {
+  color: #fff;
+  text-decoration: underline !important;
+}
