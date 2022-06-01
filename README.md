@@ -2,6 +2,18 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-15-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
+# REFERENTE AO ACESSO AO DISCORD:
+
+Foi adicionado permissão nova pra poder enviar pro webhook, só vai ser utilizado SE vc configurar o webhook, foi a única forma que encontramos, pode checar o manifest e ver que pede apenas acesso a discord.com/apis/webhooks, nada muito invasivo e bem restrito.
+
+Infelizmente o navegador bloqueia a request sem isso!
+
+O código está aberto e está aqui no github e os builds são automáticos, não tem alteração entre o que está lá e o que está nas lojas (chrome/firefox)
+Aqui está a permissão, que é bem restrita aos webhooks: https://github.com/gamersclub-booster/gamersclub-booster/blob/development/manifest.json#L15
+E só é utilizado caso você mesmo configure um webhook!
+
+
+
 #### Links úteis:
 [link-chrome]: https://chrome.google.com/webstore/detail/gamersclub-booster/dahnmmlhchpmmlgebpkpaofbefjdlpin 'Version published on Chrome Web Store'
 [link-firefox]: https://addons.mozilla.org/pt-BR/firefox/addon/gamersclub-booster/ 'Version published on Mozilla Add-ons'
