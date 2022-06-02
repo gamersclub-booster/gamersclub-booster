@@ -45,7 +45,9 @@
         "*://*.gamersclub.com.br/ranked*",
         "*://csgo.gamersclub.gg/ranked*",
         "*://*.gamersclub.com.br/match*",
-        "*://csgo.gamersclub.gg/match*"
+        "*://csgo.gamersclub.gg/match*",
+        "*://*.gamersclub.com.br/hub*",
+        "*://csgo.gamersclub.gg/hub*"
       ],
       "js": ["content-scripts/lobby.js"],
       "css": ["content.css"],
