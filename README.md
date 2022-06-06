@@ -57,6 +57,11 @@ E só é utilizado caso você mesmo configure um webhook!
 - Perfil
   - Adiciona a soma de todas as vitórias / derrotas e win rate
   ![image](https://user-images.githubusercontent.com/1070818/107776850-e13a2f80-6d20-11eb-9f2e-84f7fb38ead5.png)
+  
+- Integração com Discord
+  - Envia automáticamente o link no Discord cadastrado (passo a passo de como fazer em seguida)
+  - Envia para o Discord informações sobre a sala (Nível e KD dos jogadores, sequência de vitórias do Admin da sala, pré vetos e se a sala é aberta ou privada)
+     ![image](https://i.imgur.com/LxI3LyP.png)
 
 #### Para solicitar/colaborar com uma feature abra um Pull Request ou Issue
 
