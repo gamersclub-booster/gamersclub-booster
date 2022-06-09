@@ -90,7 +90,7 @@ export async function sendMatchInfo( url, gcMatch ) {
       },
       {
         name: 'IP da partida:',
-        value: `connect ${gcMatch.ip};password ${gcMatch.password}`
+        value: `connect ${gcMatch.ip};password ${gcMatch.password} \nsteam://connect/${gcMatch.ip}/${gcMatch.password}`
       },
       {
         name: 'Mapa:',
