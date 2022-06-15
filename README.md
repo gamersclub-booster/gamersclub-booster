@@ -31,6 +31,7 @@ E só é utilizado caso você mesmo configure um webhook!
 ### O que ela faz?
 - Geral
   - Adiciona o quanto falta para você upar ou cair, no menu superior das abas
+![Informação de pontos](https://github.com/gamersclub-booster/gamersclub-booster/blob/main/public/readme/info-pontos.jpg?raw=true)
   - Integra o discord com a gamersclub
     - Deve adicionar sua URL de webhook no menu da extensão
 - Página Minhas Partidas
@@ -61,7 +62,7 @@ E só é utilizado caso você mesmo configure um webhook!
 - Integração com Discord
   - Envia automáticamente o link no Discord cadastrado (passo a passo de como fazer em seguida)
   - Envia para o Discord informações sobre a sala (Nível e KD dos jogadores, sequência de vitórias do Admin da sala, pré vetos e se a sala é aberta ou privada)
-     ![image](https://i.imgur.com/LxI3LyP.png)
+  ![image](https://i.imgur.com/LxI3LyP.png)
 
 #### Para solicitar/colaborar com uma feature abra um Pull Request ou Issue
 
