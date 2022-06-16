@@ -61,7 +61,8 @@ export const mostrarKdrSala = mutations =>
     }
     for ( let i = 0; i < mutation.addedNodes.length; i++ ) {
       const node = mutation.addedNodes[i];
-      if ( node.className && node.className.includes( 'sidebar-item' ) ) {
+      console.log( node, 'node' );
+      if ( node.className && ( node.className.includes( 'sidebar-item' ) || node.className.includes( 'sidebar-sala-players' ) ) ) {
         const selectorLink = node.querySelector( 'a' );
         const kdr = selectorLink.getAttribute( 'title' ).split( ' | ' )[1];
         const searchKdr = kdr.split( ' ' )[1];
@@ -75,9 +76,7 @@ export const mostrarKdrSala = mutations =>
         kdrDiv.innerHTML = searchKdr;
         node.querySelector( '.sidebar-item-meta ' ).append( kdrDiv );
 
-        if ( searchKdr === 0 ) {
-          alertaMsg( 'Um KDR 0 entrou na sala!' );
-        }
+        if ( searchKdr === '0.00' ) { alertaMsg( 'Tem um KDR 0 na sala!' ); }
       }
     }
   } );
