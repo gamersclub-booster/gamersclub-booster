@@ -10,7 +10,7 @@ import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
 import { initListaBloqueio } from './botaoListaBloqueio';
 import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
 import { addCabecalho } from './addCabecalho';
-import { mostrarKdr } from './mostrarKdr';
+import { mostrarKdr, mostrarKdrSala } from './mostrarKdr';
 import { adicionarFiltroKdr } from './filtrarKdr';
 
 chrome.storage.sync.get( null, function ( _result ) {
@@ -28,12 +28,13 @@ const initLobbyPartida = async () => {
 const initLobby = async () => {
   criarObserver( '.lobby,.ranking', somReady );
   criarObserver( '.lobby,.ranking', autoAceitarReady );
+  criarObserver( '.lobby,.ranking', autoConcordarTermosRanked );
+  criarObserver( '.list-avaliable-teams', mostrarKdr );
   criarObserver( '#lobbyContent', autoFixarMenuLobby );
   criarObserver( '#lobbyContent', autoDarkMode );
-  criarObserver( '.lobby,.ranking', autoConcordarTermosRanked );
   criarObserver( '#lobbyContent', lobbyLink );
   criarObserver( '#lobbyContent', listaBloqueio );
-  criarObserver( '.list-avaliable-teams', mostrarKdr );
+  criarObserver( '#lobbyContent', mostrarKdrSala );
   criarObserver( '#challengeList', mostrarKdr );
 
   // Cria seção de cabeçalho para botões da extensão
@@ -46,6 +47,8 @@ const initLobby = async () => {
   adicionarBotaoForcarCriarLobby();
   // Feature para mostrar kdr dos players
   mostrarKdr();
+  // Feature para mostrar kdr na sala
+  mostrarKdrSala();
   // Feature para filtrar por KD
   adicionarFiltroKdr();
   // Feature de discord na hora de copiar o ip

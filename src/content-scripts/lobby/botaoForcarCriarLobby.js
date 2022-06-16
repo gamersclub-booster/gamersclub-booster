@@ -57,7 +57,7 @@ function intervalerCriacaoLobby() {
           const preVetos = res.preVetos ? res.preVetos : [];
           const lobbyPrivada = res.lobbyPrivada ? res.lobbyPrivada : false;
           const postData = {
-            max_level_to_join: 20,
+            max_level_to_join: 21,
             min_level_to_join: 0,
             private: lobbyPrivada,
             region: 0,

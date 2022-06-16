@@ -1,4 +1,6 @@
 import { levelColor } from '../../lib/constants';
+import { alertaMsg } from '../../lib/messageAlerts';
+
 
 let title = null;
 let kdr = null;
@@ -51,3 +53,29 @@ function getKdrFromTitle( title ) {
   const regexp = /KDR:\s+(\d+\.\d+)\s/g;
   return Array.from( title.matchAll( regexp ), m => m[1] )[0];
 }
+
+export const mostrarKdrSala = mutations =>
+  mutations.forEach( async mutation => {
+    if ( !mutation.addedNodes ) {
+      return;
+    }
+    for ( let i = 0; i < mutation.addedNodes.length; i++ ) {
+      const node = mutation.addedNodes[i];
+      if ( node.className && ( node.className.includes( 'sidebar-item' ) || node.className.includes( 'sidebar-sala-players' ) ) ) {
+        const selectorLink = node.querySelector( 'a' );
+        const kdr = selectorLink.getAttribute( 'title' ).split( ' | ' )[1];
+        const searchKdr = kdr.split( ' ' )[1];
+
+        const colorKrdDefault = searchKdr <= 2 ? '#000' :
+          'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)';
+        const colorKdr = searchKdr <= 2 ? levelColor[Math.round( searchKdr * 10 )] : colorKrdDefault;
+
+        const kdrDiv = document.createElement( 'span' );
+        kdrDiv.style = `background: ${colorKdr};padding:2px 4px;position:absolute;top:0;right:0;z-index:5;font-size:11px;`;
+        kdrDiv.innerHTML = searchKdr;
+        node.querySelector( '.sidebar-item-meta ' ).append( kdrDiv );
+
+        if ( searchKdr === '0.00' ) { alertaMsg( 'Tem um KDR 0 na sala!' ); }
+      }
+    }
+  } );
