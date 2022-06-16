@@ -23,7 +23,7 @@ export const levelRatingXP = [
   3000
 ];
 export const levelColor = [
-  '#000',
+  '#000000',
   '#643284',
   '#5c2d84',
   '#532883',

@@ -12,9 +12,10 @@ export const listaBloqueio = mutations =>
         if ( node.className && node.className.includes( 'sidebar-item' ) ) {
           chrome.storage.sync.get( [ 'blockList' ], function ( res ) {
             if ( res.blockList ) {
-              const id = node.querySelector( 'a' ).getAttribute( 'href' ).replace( '/jogador/', '' );
-              const nick = node.querySelector( 'a' ).getAttribute( 'title' ).split( ' | ' )[0];
-              console.log( 'Entrou o ID ' + id + ' nick: ' + nick );
+              const selectorLink = node.querySelector( 'a' );
+
+              const id = selectorLink.getAttribute( 'href' ).replace( '/jogador/', '' );
+              const nick = selectorLink.getAttribute( 'title' ).split( ' | ' )[0];
               if ( res.blockList.includes( id ) ) {
                 alertaMsg( prefix + ': Essa pessoa: ' + nick + ' está na sua lista de bloqueio' );
               }

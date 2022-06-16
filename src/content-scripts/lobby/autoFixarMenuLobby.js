@@ -13,9 +13,9 @@ export const autoFixarMenuLobby = mutations =>
           if ( typeof node.id !== 'undefined' ) {
             if ( node.id.includes( 'SidebarSala' ) ) {
               $ ( node ).css( {
-                'position': 'absolute',
+                'position': 'fixed',
                 'left': '0',
-                'top': '33px',
+                'top': '160px',
                 'width': '227px',
                 'border-radius': '0 6px 6px 0',
                 'background': '#2c2d3d',
