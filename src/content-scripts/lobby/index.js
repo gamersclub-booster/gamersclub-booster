@@ -47,8 +47,6 @@ const initLobby = async () => {
   adicionarBotaoForcarCriarLobby();
   // Feature para mostrar kdr dos players
   mostrarKdr();
-  // Feature para mostrar kdr na sala
-  mostrarKdrSala();
   // Feature para filtrar por KD
   adicionarFiltroKdr();
   // Feature de discord na hora de copiar o ip
