@@ -41,7 +41,7 @@ E só é utilizado caso você mesmo configure um webhook!
   - Integra o discord com a gamersclub
     - É possível enviar direto para o discord a sala. É preciso adicionar a URL de webhook no menu da extensão
   
-![times](https://user-images.githubusercontent.com/5823077/174089152-befc539e-1ed0-4a94-bccd-79a154884395.png)
+    ![times](https://user-images.githubusercontent.com/5823077/174089152-befc539e-1ed0-4a94-bccd-79a154884395.png)
 
     
 
@@ -53,6 +53,7 @@ E só é utilizado caso você mesmo configure um webhook!
     ![Banidos](https://user-images.githubusercontent.com/5823077/174089155-5db1df3e-ad79-4c8d-845e-8d3e38413190.jpg)
 
     - Adiciona um background com cores para vitória/derrota e empate
+    
     ![image](https://user-images.githubusercontent.com/1070818/108914631-661f2600-760a-11eb-9182-d98a2ef9beb5.png)
 
 - Lista de partidas do time  
@@ -91,11 +92,6 @@ E só é utilizado caso você mesmo configure um webhook!
     ![discord-lobby](https://user-images.githubusercontent.com/5823077/174089161-27be6d4b-d794-40cc-8c6e-1851cb37232c.jpg)
 
     ![discordsala](https://user-images.githubusercontent.com/5823077/174089162-2b845f20-168e-4fea-bd16-32f5d42eaa16.jpg)
-
-
-![partidas](https://user-images.githubusercontent.com/5823077/174089146-7547d9fb-97b1-457c-9e78-edf9f44d9fa0.jpg)
-
-
 
 
 #### Para solicitar/colaborar com uma feature abra um Pull Request ou Issue
