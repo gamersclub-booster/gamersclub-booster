@@ -27,18 +27,31 @@ E só é utilizado caso você mesmo configure um webhook!
 * [Como instalar no Microsoft EDGE e no Opera](https://youtu.be/rELLprJ15ug)
 
 ## GamersClub Booster é uma extensão com o intuito de melhorar a plataforma.
-
+![linguagem](https://user-images.githubusercontent.com/5823077/174089173-054fea38-c8f2-4fa2-b07c-2c0ba6dd7c85.jpg)
 ### O que ela faz?
+
 - Geral
   - Adiciona o quanto falta para você upar ou cair, no menu superior das abas
-![Informação de pontos](https://github.com/gamersclub-booster/gamersclub-booster/blob/main/public/readme/info-pontos.jpg?raw=true)
+  
+    ![info-pontos](https://user-images.githubusercontent.com/5823077/174089166-4affc850-c8fc-4e0a-839d-c8f70233ed76.jpg)
+  - Darkmode para todo a GC para o pessoal que joga no escuro.
+
+    ![darkmode](https://user-images.githubusercontent.com/5823077/174089157-ae92fb01-f970-483c-a370-0b554365b95b.jpg)
+
   - Integra o discord com a gamersclub
-    - Deve adicionar sua URL de webhook no menu da extensão
+    - É possível enviar direto para o discord a sala. É preciso adicionar a URL de webhook no menu da extensão
+  
+![times](https://user-images.githubusercontent.com/5823077/174089152-befc539e-1ed0-4a94-bccd-79a154884395.png)
+
+    
+
 - Página Minhas Partidas
   - Verifica em cada partida se tem jogador banido
     - Icone :warning: caso tenha algum jogador banido
     - Icone ✔️ caso nenhum jogador tenha sido banido
-    ![image](https://user-images.githubusercontent.com/1070818/107768732-ad0d4180-6d15-11eb-93d6-9ce156ecdad5.png)
+
+    ![Banidos](https://user-images.githubusercontent.com/5823077/174089155-5db1df3e-ad79-4c8d-845e-8d3e38413190.jpg)
+
     - Adiciona um background com cores para vitória/derrota e empate
     ![image](https://user-images.githubusercontent.com/1070818/108914631-661f2600-760a-11eb-9182-d98a2ef9beb5.png)
 
@@ -53,16 +66,37 @@ E só é utilizado caso você mesmo configure um webhook!
   - Opção de manter o lobby em posição fixa na tela. Evita aquele comportamento chato de ficar sumindo e aparecendo a aba do lobby.
   - Pré vetos
   - Adiciona um botão pra forçar a criação da lobby (pra quando tem mais do que o limite, 50 free ou 400 premium)
-  ![image](https://user-images.githubusercontent.com/1070818/108875916-70c2c680-75dc-11eb-94df-2746d7348a53.png)
+![filtros](https://user-images.githubusercontent.com/5823077/174089165-083d76e9-ff1f-4cda-bff3-a3e9f5d47372.jpg)
+  - KDR na no lobby
+
+    ![kdr-1](https://user-images.githubusercontent.com/5823077/174089172-9c92edcf-f244-41f6-a1f5-cc13e02f45d0.jpg)
+
+  - KDR na sala de espera
+
+    ![kdr](https://user-images.githubusercontent.com/5823077/174089170-3f69a64a-64d2-44a5-9fc1-47846b9f6e71.jpg)
 
 - Perfil
   - Adiciona a soma de todas as vitórias / derrotas e win rate
-  ![image](https://user-images.githubusercontent.com/1070818/107776850-e13a2f80-6d20-11eb-9f2e-84f7fb38ead5.png)
+  
+    ![image](https://user-images.githubusercontent.com/1070818/107776850-e13a2f80-6d20-11eb-9f2e-84f7fb38ead5.png)
   
 - Integração com Discord
   - Envia automáticamente o link no Discord cadastrado (passo a passo de como fazer em seguida)
   - Envia para o Discord informações sobre a sala (Nível e KD dos jogadores, sequência de vitórias do Admin da sala, pré vetos e se a sala é aberta ou privada)
-  ![image](https://i.imgur.com/LxI3LyP.png)
+
+    ![discord](https://user-images.githubusercontent.com/5823077/174089159-632cba3f-7cda-43f3-975c-97df2bd7de52.jpg)
+
+    ![discord-send](https://user-images.githubusercontent.com/5823077/174089163-0927db20-ad82-4800-aa1c-5e05f794eb70.jpg)
+
+    ![discord-lobby](https://user-images.githubusercontent.com/5823077/174089161-27be6d4b-d794-40cc-8c6e-1851cb37232c.jpg)
+
+    ![discordsala](https://user-images.githubusercontent.com/5823077/174089162-2b845f20-168e-4fea-bd16-32f5d42eaa16.jpg)
+
+
+![partidas](https://user-images.githubusercontent.com/5823077/174089146-7547d9fb-97b1-457c-9e78-edf9f44d9fa0.jpg)
+
+
+
 
 #### Para solicitar/colaborar com uma feature abra um Pull Request ou Issue
 
