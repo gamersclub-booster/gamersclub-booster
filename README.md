@@ -38,13 +38,6 @@ E só é utilizado caso você mesmo configure um webhook!
 
     ![darkmode](https://user-images.githubusercontent.com/5823077/174089157-ae92fb01-f970-483c-a370-0b554365b95b.jpg)
 
-  - Integra o discord com a gamersclub
-    - É possível enviar direto para o discord a sala. É preciso adicionar a URL de webhook no menu da extensão
-  
-    ![times](https://user-images.githubusercontent.com/5823077/174089152-befc539e-1ed0-4a94-bccd-79a154884395.png)
-
-    
-
 - Página Minhas Partidas
   - Verifica em cada partida se tem jogador banido
     - Icone :warning: caso tenha algum jogador banido
