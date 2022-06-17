@@ -63,3 +63,14 @@ input[type="range"].filterKdr::-ms-track {
 input[type="range"].filterKdr::-ms-tooltip {
   display: none;
 }
+
+.sidebar-desafios-salas
+  .sidebar-item:not(.sidebar-item-prime)
+  .sidebar-item-content,
+.sidebar-desafios-salas
+  .sidebar-item:not(.sidebar-item-prime)
+  .sidebar-item-content
+  .sidebar-desafios-play
+  button {
+  background-color: rgba(255, 0, 0, 0.322);
+}

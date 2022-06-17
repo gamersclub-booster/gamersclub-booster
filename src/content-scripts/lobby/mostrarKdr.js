@@ -61,7 +61,6 @@ export const mostrarKdrSala = mutations =>
     }
     for ( let i = 0; i < mutation.addedNodes.length; i++ ) {
       const node = mutation.addedNodes[i];
-      console.log( node, 'node' );
       if ( node.className && ( node.className.includes( 'sidebar-item' ) || node.className.includes( 'sidebar-sala-players' ) ) ) {
         const selectorLink = node.querySelector( 'a' );
         const kdr = selectorLink.getAttribute( 'title' ).split( ' | ' )[1];
