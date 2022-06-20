@@ -1,5 +1,4 @@
 import { autoFixarMenuLobby } from './autoFixarMenuLobby';
-import { autoDarkMode } from './autoDarkMode';
 import { autoAceitarReady, autoAceitarReadySetInterval } from './autoAceitarReady';
 import { somReady } from './somReady';
 import { autoConcordarTermosRanked } from './autoConcordarTermosRanked';
@@ -31,7 +30,6 @@ const initLobby = async () => {
   criarObserver( '.lobby,.ranking', autoConcordarTermosRanked );
   criarObserver( '.list-avaliable-teams', mostrarKdr );
   criarObserver( '#lobbyContent', autoFixarMenuLobby );
-  criarObserver( '#lobbyContent', autoDarkMode );
   criarObserver( '#lobbyContent', lobbyLink );
   criarObserver( '#lobbyContent', listaBloqueio );
   criarObserver( '#lobbyContent', mostrarKdrSala );
