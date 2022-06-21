@@ -60,7 +60,8 @@ E só é utilizado caso você mesmo configure um webhook!
   - Opção de manter o lobby em posição fixa na tela. Evita aquele comportamento chato de ficar sumindo e aparecendo a aba do lobby.
   - Pré vetos
   - Adiciona um botão pra forçar a criação da lobby (pra quando tem mais do que o limite, 50 free ou 400 premium)
-![filtros](https://user-images.githubusercontent.com/5823077/174089165-083d76e9-ff1f-4cda-bff3-a3e9f5d47372.jpg)
+- 
+  ![filtros](https://user-images.githubusercontent.com/5823077/174089165-083d76e9-ff1f-4cda-bff3-a3e9f5d47372.jpg)
   - KDR na no lobby
 
     ![kdr-1](https://user-images.githubusercontent.com/5823077/174089172-9c92edcf-f244-41f6-a1f5-cc13e02f45d0.jpg)
