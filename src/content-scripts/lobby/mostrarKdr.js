@@ -63,7 +63,7 @@ export const mostrarKdrSala = mutations =>
       const node = mutation.addedNodes[i];
       if ( node.className && ( node.className.includes( 'sidebar-item' ) || node.className.includes( 'sidebar-sala-players' ) ) ) {
         const selectorLink = node.querySelector( 'a' );
-        const kdr = selectorLink.getAttribute( 'title' ).split( ' | ' )[1];
+        const kdr = selectorLink.getAttribute( 'title' ).split( '|' ).find( str => str.includes( 'KDR:' ) ).trim();
         const searchKdr = kdr.split( ' ' )[1];
 
         const colorKrdDefault = searchKdr <= 2 ? '#000' :
