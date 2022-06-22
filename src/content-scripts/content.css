@@ -74,3 +74,12 @@ input[type="range"].filterKdr::-ms-tooltip {
   button {
   background-color: rgba(255, 0, 0, 0.322);
 }
+/* .sala-card-wrapper {
+  width: 50% !important;
+}
+
+.sala-card-wrapper > div,
+.sala-card-wrapper .sala-card {
+  width: 100%;
+}
+ */
