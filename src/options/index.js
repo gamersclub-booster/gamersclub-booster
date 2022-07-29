@@ -1,6 +1,6 @@
 import { features, preVetosMapas, configValues, paginas, audios } from '../lib/constants';
 import { saveJson, loadJson } from '../lib/blockList';
-import { removerDaLista } from '../lib/blockList';
+// import { removerDaLista } from '../lib/blockList';
 import { testWebhook } from '../lib/discord';
 import manifest from '../../manifest.json';
 import pt from '../translations/pt.json';
@@ -349,31 +349,49 @@ function loadBlockList() {
     <li translation-key="notificacao"></li>
   </ul>`;
 
+  // const removerDaLista = ( { id, avatarURL, nick }, function ( tamanho ) {
+  //   if ( tamanho === 0 ) {
+  //     listHTML.innerHTML += blackBlackList;
+  //     carregarTraducao();
+  //   }
+  // } );
+
   chrome.storage.sync.get( [ 'blockList' ], function ( data ) {
     const listHTML = document.getElementById( 'lista' );
+
     if ( data.blockList ) {
       if ( typeof data.blockList === 'object' && data.blockList.length > 0 ) {
-        data.blockList.forEach( each => {
+        data.blockList.map( each => {
           const { id, avatarURL, nick } = each;
-          listHTML.innerHTML += `<div class="jogador ${id}">
+
+          const numericId = id.split( '/' ).pop();
+
+          // Adicionar o jogar na lista e o botão remover
+          listHTML.innerHTML += `<div class="jogador ${numericId}">
                                   <img src="${avatarURL}" alt="" class="circle"></img>
                                   <span>${nick}</span>
-                                  <button class="buttonBlockLista button-${id}">Remover</button>
-                                 </div>`;
-          $( document ).on( 'click', '.button-' + id, function () {
-            // Remover a DIV do respectivo player
-            const selector = document.getElementsByClassName( id )[0];
-            console.log( selector );
-            selector.parentNode.removeChild( selector );
-            //Remover da lista de bloqueio
-            removerDaLista( { id, avatarURL, nick }, function ( tamanho ) {
-              if ( tamanho === 0 ) {
-                listHTML.innerHTML += blackBlackList;
+                                  <button class="buttonBlockLista" remove-button="${numericId}">Remover</button></div>`;
+
+
+        } );
+
+        // Remover o jogador da lista
+        $( '[remove-button]' ).each( function () {
+          const numericId = $( this ).attr( 'remove-button' );
+
+          $( this ).on( 'click', function ( ) {
+            chrome.storage.sync.get( [ 'blockList' ], function ( data ) {
+              const list = data.blockList;
+              const newList = list.filter( each => each.id.split( '/' ).pop() !== numericId );
+
+              chrome.storage.sync.set( { ['blockList']: newList }, function () {
                 carregarTraducao();
-              }
+                $( '.jogador.' + numericId ).remove();
+              } );
             } );
           } );
         } );
+
       } else {
         listHTML.innerHTML += blackBlackList;
       }
