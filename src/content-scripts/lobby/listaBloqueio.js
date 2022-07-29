@@ -2,7 +2,7 @@ import { alertaMsg } from '../../lib/messageAlerts';
 
 export const listaBloqueio = mutations =>
   chrome.storage.sync.get( [ 'blockList' ], function ( ) {
-    const prefix = '<a style="color: yellow;">[ Lista de Bloqueio ] - </a>';
+    const prefix = '<a style="color: yellow;">Block - </a>';
     mutations.forEach( async mutation => {
       if ( !mutation.addedNodes ) {
         return;
@@ -16,6 +16,7 @@ export const listaBloqueio = mutations =>
 
               const id = selectorLink.getAttribute( 'href' ).replace( '/jogador/', '' );
               const nick = selectorLink.getAttribute( 'title' ).split( ' | ' )[0];
+
               if ( res.blockList.includes( id ) ) {
                 alertaMsg( prefix + ': Essa pessoa: ' + nick + ' está na sua lista de bloqueio' );
               }

@@ -74,6 +74,10 @@ input[type="range"].filterKdr::-ms-tooltip {
   button {
   background-color: rgba(255, 0, 0, 0.322);
 }
+
+.blocked {
+  background: rgb(255 0 0 / 44%);
+}
 /* .sala-card-wrapper {
   width: 50% !important;
 }
@@ -83,3 +87,117 @@ input[type="range"].filterKdr::-ms-tooltip {
   width: 100%;
 }
  */
+/* 
+.boost-border,
+.sala-video {
+  display: none !important;
+}
+
+.sala-card-title {
+  width: 150px;
+  text-align: left !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sala-card-country {
+  top: -26px !important;
+  width: 20px;
+}
+
+.sala-card-content {
+  display: flex;
+  align-items: center;
+}
+
+.sala-card-wrapper {
+  width: 100% !important;
+}
+
+.sala-card-wrapper > div,
+.sala-card-wrapper .sala-card {
+  width: calc(100% - 4px);
+}
+
+.sala-card-badge > span {
+  width: 45px !important;
+  height: 25px !important;
+  border-radius: 0 !important;
+  top: 0 !important;
+}
+
+.sala-card-badge .badge-level,
+.sala-card-camp .badge-level {
+  width: 43px !important;
+  height: 23px !important;
+  line-height: 15px !important;
+  border-radius: 0 !important;
+  font-size: 14px !important;
+  text-align: left;
+  padding: 2px 4px;
+}
+
+.sala-card-title {
+  font-size: 17px !important;
+  padding: 15px 0 10px !important;
+}
+
+.boost-border:after .sala-lineup-player,
+.sala-lineup-placeholder {
+  min-height: 100px !important;
+  height: 150px !important;
+}
+
+.sala-card-badge,
+.sala-card-camp {
+  top: -25px !important;
+  width: initial !important;
+  position: relative !important;
+}
+
+.prime-badge,
+.sala-card-type-verified .mixed-badge-room {
+  bottom: 9px !important;
+  right: -6px !important;
+}
+.sala-card-type-verified .mixed-badge-room {
+  bottom: 2px !important;
+  right: -14px !important;
+}
+.sala-card-type-verified .verified-badge-room {
+  bottom: 2px !important;
+  right: -10px !important;
+}
+.sala-lineup-players {
+  width: 70%;
+}
+
+.sala-lineup-player > .sala-lineup-level {
+  position: absolute;
+  top: 30px;
+  width: 100%;
+  z-index: 50;
+  top: 50px;
+}
+.sala-lineup-medalha {
+  margin-top: 4px;
+}
+.sala-lineup-player {
+  text-align: center;
+  min-height: 110px !important;
+}
+.sala-lineup-imagem {
+  margin-top: 0 !important;
+}
+.sala-lineup-placeholder {
+  height: 61px !important;
+}
+.LobbyRoomLvlRestriction {
+  bottom: 0px !important;
+  left: 0 !important;
+  right: initial !important;
+  transform: translateX(-100%);
+}
+.sala-lineup-players {
+  text-align: left !important;
+} */

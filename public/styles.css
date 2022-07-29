@@ -451,7 +451,7 @@ input:not([type="range"]) {
   border-color: #1c6ea4;
   border-radius: 17px;
   align-items: center;
-  margin: 5 0;
+  margin: 5px 0;
 }
 
 .listaBlocks {
