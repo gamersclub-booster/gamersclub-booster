@@ -1,5 +1,5 @@
 const paises = [
-  { value: '0', text: 'Selecione...' },
+  { value: '0', text: 'Todos' },
   { value: 'Brasil', text: 'Brasil' },
   { value: 'Estados Unidos', text: 'EUA' },
   { value: 'Argentina', text: 'Argentina' },
