@@ -117,7 +117,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/Skyy4"><img src="https://avatars.githubusercontent.com/u/47400940?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jimmy L.</b></sub></a><br /><a href="#translation-Skyy4" title="Translation">🌍</a> <a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=Skyy4" title="Tests">⚠️</a> <a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=Skyy4" title="Code">💻</a> <a href="https://github.com/gamersclub-booster/gamersclub-booster/issues?q=author%3ASkyy4" title="Bug reports">🐛</a></td>
   </tr>
   <tr>
-    <td align="center"><a href="http://jorgebrunetto.com.br"><img src="https://avatars.githubusercontent.com/u/5823077?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jorge Brunetto</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=jorgebrunetto" title="Code">💻</a></td>
+    <td align="center"><a href="http://jorgebrunetto.com.br"><img src="https://avatars.githubusercontent.com/u/5823077?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jorge Brunetto</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=jorgebrunetto" title="Code">💻🐛🚧🎨</a></td>
     <td align="center"><a href="https://github.com/dchueri"><img src="https://avatars.githubusercontent.com/u/84249430?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Diego Chueri</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=dchueri" title="Documentation">📖</a></td>
   </tr>
 </table>

@@ -64,14 +64,14 @@ export const mostrarKdrSala = mutations =>
       if ( node.className && ( node.className.includes( 'sidebar-item' ) || node.className.includes( 'sidebar-sala-players' ) ) ) {
         const selectorLink = node.querySelector( 'a' );
         const kdr = selectorLink.getAttribute( 'title' ).split( '|' ).find( str => str.includes( 'KDR:' ) ).trim();
-        const searchKdr = kdr.split( ' ' )[1];
+        const searchKdr = parseFloat( kdr.split( ' ' )[1] ).toFixed( 2 ).toString();
 
         const colorKrdDefault = searchKdr <= 2 ? '#000' :
           'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)';
         const colorKdr = searchKdr <= 2 ? levelColor[Math.round( searchKdr * 10 )] : colorKrdDefault;
 
         const kdrDiv = document.createElement( 'span' );
-        kdrDiv.style = `background: ${colorKdr};padding:2px 4px;position:absolute;top:0;right:0;z-index:5;font-size:11px;`;
+        kdrDiv.style = `background:${colorKdr};padding:2px 4px;position:absolute;top:0;right:0;z-index:5;font-size:11px;width:40px;text-align:center`;
         kdrDiv.innerHTML = searchKdr;
         node.querySelector( '.sidebar-item-meta ' ).append( kdrDiv );
 
