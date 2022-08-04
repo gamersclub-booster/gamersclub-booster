@@ -16,6 +16,14 @@ const verificarBans = async ( partida, statsColumns, retries = 0 ) => {
   try {
     const resposta = await fetch( partida + '/1' );
     const dadosPartida = await resposta.json();
+
+    const pontos = dadosPartida.jogos.xpChange;
+    const pontosSpan = $( `<span>${pontos}</span>` )
+      .css( { 'color': pontos > 0 ? 'green' : 'red', 'font-size': '20px', display: 'block' } )
+      .attr( 'title', 'Seus pontos nessa partida' );
+    $( statsColumns ).prev().find( '.versus' ).css( { 'line-height': '0' } );
+    $( statsColumns ).prev().find( '.versus' ).parent().prepend( pontosSpan );
+
     const temBanidos =
       dadosPartida.jogos.players.team_a.some( jogador => jogador.player.banned ) ||
       dadosPartida.jogos.players.team_b.some( jogador => jogador.player.banned );
