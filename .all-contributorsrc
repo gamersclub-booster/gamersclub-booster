@@ -148,7 +148,10 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/5823077?v=4",
       "profile": "http://jorgebrunetto.com.br",
       "contributions": [
-        "code"
+        "code",
+        "design",
+        "bug",
+        "maintenance"
       ]
     },
     {
