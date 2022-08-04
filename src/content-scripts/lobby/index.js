@@ -11,6 +11,8 @@ import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
 import { addCabecalho } from './addCabecalho';
 import { mostrarKdr, mostrarKdrSala } from './mostrarKdr';
 import { adicionarFiltroKdr } from './filtrarKdr';
+import { adicionarFiltroPais } from './filtrarPais';
+
 
 chrome.storage.sync.get( null, function ( _result ) {
   if ( window.location.pathname.includes( 'partida' ) || window.location.pathname.includes( '/match/' ) ) {
@@ -49,6 +51,8 @@ const initLobby = async () => {
   adicionarFiltroKdr();
   // Feature de discord na hora de copiar o ip
   partidaInfo();
+  // Feature de mostrar somente pais selecionado
+  adicionarFiltroPais();
 };
 
 const criarObserver = ( seletor, exec ) => {

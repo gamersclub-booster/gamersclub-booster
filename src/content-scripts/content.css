@@ -78,6 +78,24 @@ input[type="range"].filterKdr::-ms-tooltip {
 .blocked {
   background: rgb(255 0 0 / 44%);
 }
+
+/* Filtro de paises */
+.filterPais {
+  width: 200px!important;
+  height: 35px !important;
+  padding: 0 16px !important;
+  /* needed */
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  /* SVG background image */
+  background-image: url("data:image/svg+xml,%3Csvg width='14' height='9' viewBox='0 0 14 9' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.7812 1.25L13.1875 0.625C13.0312 0.46875 12.7812 0.46875 12.6562 0.625L7 6.28125L1.3125 0.625C1.1875 0.46875 0.9375 0.46875 0.78125 0.625L0.1875 1.25C0.03125 1.375 0.03125 1.625 0.1875 1.78125L6.71875 8.3125C6.875 8.46875 7.09375 8.46875 7.25 8.3125L13.7812 1.78125C13.9375 1.625 13.9375 1.375 13.7812 1.25Z' fill='%23898EA6'/%3E%3C/svg%3E%0A") !important;
+  background-size: 14px !important;
+  background-position: calc(100% - 16px) center!important;
+  background-repeat: no-repeat !important;
+  outline: none;
+}
+
 /* .sala-card-wrapper {
   width: 50% !important;
 }
