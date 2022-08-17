@@ -51,6 +51,7 @@ export const features = [
   'autoAceitarReady',
   'autoFixarMenuLobby',
   'autoDarkMode',
+  'autoCompactMode',
   'autoConcordarTermosRanked',
   'autoDailyRewards',
   'mostrarLevelProgress',
