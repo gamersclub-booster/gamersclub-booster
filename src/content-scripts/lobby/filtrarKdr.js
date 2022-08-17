@@ -12,7 +12,10 @@ const adicionarFiltroKdr = () => {
         step: '0.1',
         value: 3,
         class: 'filterKdr'
-      } ) );
+      } ) ).css( {
+        'height': '32px',
+        'align-items': 'center'
+      } );
     $( '#filtrarKdr' ).append( '<span id="filtrarKdrValor" class="FilterLobby_skillLevelTag__10iAp">3+</span>' );
   }
 
