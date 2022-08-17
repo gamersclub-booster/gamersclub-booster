@@ -27,6 +27,9 @@ export function getMapImage( map ) {
   case 'de_ancient':
     return 'https://pbs.twimg.com/media/E0joah7WQAALf5n?format=png&name=large';
 
+  case 'de_tuscan':
+    return 'https://external-preview.redd.it/vozvExNxbuYFYBP8b8Fu03mTH2y1ZJEzajAFtYTN1rA.jpg?auto=webp&s=88361088e82d5868ac26ecb522f009dd1c9bec0b';
+
   default:
     return '';
   }
