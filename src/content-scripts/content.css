@@ -112,6 +112,11 @@ input[type="range"].filterKdr::-ms-tooltip {
   justify-content: center;
 }
 
+.lobby.compact .sala-card-badge > span[class=""] > span {
+  width: 30px !important;
+  height: 30px !important;
+}
+
 .lobby.compact
   .sala-card-type-verified
   .sala-card-level-verified
