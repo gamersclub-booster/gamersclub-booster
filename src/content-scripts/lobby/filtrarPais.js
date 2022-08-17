@@ -1,10 +1,17 @@
 const paises = [
   { value: '0', text: 'Todos' },
   { value: 'Brasil', text: 'Brasil' },
-  { value: 'Estados Unidos', text: 'EUA' },
   { value: 'Argentina', text: 'Argentina' },
   { value: 'Bolivia', text: 'Bolivia' },
-  { value: 'Chile', text: 'Chile' }
+  { value: 'Chile', text: 'Chile' },
+  { value: 'Colombia', text: 'Colombia' },
+  { value: 'Costa Rica', text: 'Costa Rica' },
+  { value: 'Espanha', text: 'Espanha' },
+  { value: 'Estados Unidos', text: 'EUA' },
+  { value: 'França', text: 'França' },
+  { value: 'Suiça', text: 'Suiça' },
+  { value: 'Paraguai', text: 'Paraguai' },
+  { value: 'Uruguai', text: 'Uruguai' }
 ];
 
 const adicionarFiltroPais = () => {
