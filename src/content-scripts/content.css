@@ -81,7 +81,7 @@ input[type="range"].filterKdr::-ms-tooltip {
 
 /* Filtro de paises */
 .filterPais {
-  width: 200px!important;
+  width: 200px !important;
   height: 35px !important;
   padding: 0 16px !important;
   /* needed */
@@ -91,131 +91,52 @@ input[type="range"].filterKdr::-ms-tooltip {
   /* SVG background image */
   background-image: url("data:image/svg+xml,%3Csvg width='14' height='9' viewBox='0 0 14 9' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.7812 1.25L13.1875 0.625C13.0312 0.46875 12.7812 0.46875 12.6562 0.625L7 6.28125L1.3125 0.625C1.1875 0.46875 0.9375 0.46875 0.78125 0.625L0.1875 1.25C0.03125 1.375 0.03125 1.625 0.1875 1.78125L6.71875 8.3125C6.875 8.46875 7.09375 8.46875 7.25 8.3125L13.7812 1.78125C13.9375 1.625 13.9375 1.375 13.7812 1.25Z' fill='%23898EA6'/%3E%3C/svg%3E%0A") !important;
   background-size: 14px !important;
-  background-position: calc(100% - 16px) center!important;
+  background-position: calc(100% - 16px) center !important;
   background-repeat: no-repeat !important;
   outline: none;
 }
 
-/* .sala-card-wrapper {
-  width: 50% !important;
+.lobby.compact .sala-card-title {
+  width: 150px;
+}
+.lobby.compact .sala-card-badge,
+.lobby.compact .sala-card-camp {
+  width: 50px !important;
+  left: -2px !important;
+  top: 4px !important;
 }
 
-.sala-card-wrapper > div,
-.sala-card-wrapper .sala-card {
-  width: 100%;
+.lobby.compact .sala-card-country {
+  right: 0;
+  z-index: 3;
+  left: initial !important;
+  transform: rotate(90deg);
 }
- */
-/* 
-.boost-border,
-.sala-video {
+
+.lobby.compact .sala-card-title {
+  width: 100% !important;
+  padding: 12px 0 15px 55px !important;
+  text-align: left !important;
+  font-size: 16px !important;
+  margin: 0 !important;
+}
+.lobby.compact .sala-lineup-imagem {
   display: none !important;
 }
-
-.sala-card-title {
-  width: 150px;
-  text-align: left !important;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.sala-card-country {
-  top: -26px !important;
-  width: 20px;
-}
-
-.sala-card-content {
-  display: flex;
-  align-items: center;
-}
-
-.sala-card-wrapper {
-  width: 100% !important;
-}
-
-.sala-card-wrapper > div,
-.sala-card-wrapper .sala-card {
-  width: calc(100% - 4px);
-}
-
-.sala-card-badge > span {
-  width: 45px !important;
-  height: 25px !important;
-  border-radius: 0 !important;
-  top: 0 !important;
-}
-
-.sala-card-badge .badge-level,
-.sala-card-camp .badge-level {
-  width: 43px !important;
-  height: 23px !important;
-  line-height: 15px !important;
-  border-radius: 0 !important;
-  font-size: 14px !important;
-  text-align: left;
-  padding: 2px 4px;
-}
-
-.sala-card-title {
-  font-size: 17px !important;
-  padding: 15px 0 10px !important;
-}
-
-.boost-border:after .sala-lineup-player,
-.sala-lineup-placeholder {
-  min-height: 100px !important;
-  height: 150px !important;
-}
-
-.sala-card-badge,
-.sala-card-camp {
-  top: -25px !important;
-  width: initial !important;
-  position: relative !important;
-}
-
-.prime-badge,
-.sala-card-type-verified .mixed-badge-room {
-  bottom: 9px !important;
-  right: -6px !important;
-}
-.sala-card-type-verified .mixed-badge-room {
-  bottom: 2px !important;
-  right: -14px !important;
-}
-.sala-card-type-verified .verified-badge-room {
-  bottom: 2px !important;
-  right: -10px !important;
-}
-.sala-lineup-players {
-  width: 70%;
-}
-
-.sala-lineup-player > .sala-lineup-level {
-  position: absolute;
-  top: 30px;
-  width: 100%;
-  z-index: 50;
-  top: 50px;
-}
-.sala-lineup-medalha {
+.lobby.compact .sala-lineup-level {
   margin-top: 4px;
 }
-.sala-lineup-player {
-  text-align: center;
-  min-height: 110px !important;
+.lobby.compact .sala-lineup-player,
+.lobby.compact .sala-assinante,
+.lobby.compact .sala-lineup-player-plus,
+.lobby.compact .sala-lineup-placeholder {
+  min-height: 90px !important;
+  height: 90px !important;
 }
-.sala-lineup-imagem {
-  margin-top: 0 !important;
+.lobby.compact .sala-card-wrapper {
+  width: 20% !important;
 }
-.sala-lineup-placeholder {
-  height: 61px !important;
+.lobby.compact .boost-border,
+.lobby.compact .sala-video {
+  display: none !important;
 }
-.LobbyRoomLvlRestriction {
-  bottom: 0px !important;
-  left: 0 !important;
-  right: initial !important;
-  transform: translateX(-100%);
-}
-.sala-lineup-players {
-  text-align: left !important;
-} */

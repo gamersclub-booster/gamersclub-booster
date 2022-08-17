@@ -1,6 +1,7 @@
 import { adicionarBarraLevel } from './barraLevel';
 import { coletarDailyRewards } from './autoDailyRewards';
 import { autoDarkMode } from './autoDarkMode';
+import { autoCompactMode } from './autoCompactMode';
 
 let generalOptions = [];
 chrome.storage.sync.get( null, function ( result ) {
@@ -15,6 +16,9 @@ const initGcBooster = async () => {
 
   if ( generalOptions.autoDarkMode ) {
     autoDarkMode();
+  }
+  if ( generalOptions.autoCompactMode ) {
+    autoCompactMode();
   }
 
   if ( generalOptions.autoDailyRewards ) {
