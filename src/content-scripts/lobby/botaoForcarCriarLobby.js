@@ -55,6 +55,7 @@ function intervalerCriacaoLobby() {
         //Criar lobby por meio de requisição com AXIOS. ozKcs
         chrome.storage.sync.get( [ 'preVetos', 'lobbyPrivada' ], async res => {
           const preVetos = res.preVetos ? res.preVetos : [];
+          console.log( preVetos );
           const lobbyPrivada = res.lobbyPrivada ? res.lobbyPrivada : false;
           const postData = {
             max_level_to_join: 21,
