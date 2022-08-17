@@ -145,7 +145,7 @@ input[type="range"].filterKdr::-ms-tooltip {
 
 .lobby.compact .sala-card-title {
   width: 100% !important;
-  padding: 10px 0 8px 55px !important;
+  padding: 8px 0 8px 52px !important;
   text-align: left !important;
   font-size: 15px !important;
   margin: 0 !important;
@@ -184,4 +184,16 @@ input[type="range"].filterKdr::-ms-tooltip {
 
 .lobby.compact .sala-card-content {
   padding: 0 !important;
+}
+.lobby.compact .sala-card-type-verified .mixed-badge-room {
+  right: -15px !important;
+}
+.lobby.compact .prime-badge {
+  right: -4px !important;
+}
+.lobby.compact .sala-card-type-verified .verified-badge-room {
+  right: -9px !important;
+}
+.lobby.compact .sala-card {
+  margin: 8px 0px !important;
 }
