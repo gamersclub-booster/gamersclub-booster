@@ -11,7 +11,9 @@ body {
   font-weight: 400;
   box-sizing: border-box;
 }
-
+hr {
+  border-color: #ffffff55;
+}
 .btn {
   font-family: Teko, sans-serif;
   border-radius: 3px;
@@ -160,7 +162,6 @@ input:not([type="range"]) {
 .menu li {
   transition: 0.2s all;
   display: flex;
-  align-items: center;
   padding-left: 20px;
   margin-bottom: 1px;
   background-color: rgba(14, 14, 23, 0.8);
@@ -175,7 +176,7 @@ input:not([type="range"]) {
 }
 
 .menu li.active {
-  background-color: #2c97de !important;
+  background-color: #2196f3 !important;
 }
 
 .menu li.active a {
@@ -183,15 +184,12 @@ input:not([type="range"]) {
   color: #fff;
 }
 
-.menu li:hover {
-  background-color: #2c97de !important;
+.menu li:hover:not(.active) {
+  background-color: #2d373e !important;
 }
 
 .menu li:hover a {
   color: #fff !important;
-}
-.img-container {
-  width: 16px;
 }
 .menu .img-menu {
   margin-top: -2px;
