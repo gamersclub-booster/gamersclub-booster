@@ -35,82 +35,86 @@
     <div class="conteudo">
       <div class="menu">
         <ul>
-          <li id="link-geral" class="active">
-            <div class="img-container">
-              <img src="images/menu/geral.svg" alt="Geral" class="img-menu" />
-            </div>
+          <li id="link-novidades" class="active">
+            <img
+              src="images/menu/novidades.svg"
+              alt="Novidades"
+              class="img-menu"
+            />
+            <a href="#novidades" translation-key="news-menu"></a>
+          </li>
+          <li id="link-geral">
+            <img src="images/menu/geral.svg" alt="Geral" class="img-menu" />
             <a href="#geral" translation-key="geral"></a>
           </li>
           <li id="link-sons">
-            <div class="img-container">
-              <img src="images/menu/som.svg" alt="Som" class="img-menu" />
-            </div>
+            <img src="images/menu/som.svg" alt="Som" class="img-menu" />
             <a href="#sons" translation-key="sons"></a>
           </li>
           <li id="link-mapas" style="display: none">
-            <div class="img-container">
-              <img src="images/menu/lobby.svg" alt="Mapas" class="img-menu" />
-            </div>
+            <img src="images/menu/lobby.svg" alt="Mapas" class="img-menu" />
             <a href="#mapas" translation-key="mapas"></a>
           </li>
           <li id="link-lobby">
-            <div class="img-container">
-              <img src="images/menu/lobby.svg" alt="Lobby" class="img-menu" />
-            </div>
+            <img src="images/menu/lobby.svg" alt="Lobby" class="img-menu" />
             <a href="#lobby" translation-key="lobby"></a>
           </li>
           <li id="link-integracoes">
-            <div class="img-container">
-              <img
-                src="images/menu/integracoes.svg"
-                alt="Integrações"
-                class="img-menu"
-              />
-            </div>
+            <img
+              src="images/menu/integracoes.svg"
+              alt="Integrações"
+              class="img-menu"
+            />
             <a href="#integracoes" translation-key="discord"></a>
           </li>
           <li id="link-blocklist">
-            <div class="img-container">
-              <img
-                src="images/menu/bloqueio.svg"
-                alt="Blocks"
-                class="img-menu"
-              />
-            </div>
+            <img src="images/menu/bloqueio.svg" alt="Blocks" class="img-menu" />
             <a href="#blocklist" translation-key="blockList"></a>
           </li>
           <li id="link-backup">
-            <div class="img-container">
-              <img src="images/menu/backup.svg" alt="Backup" class="img-menu" />
-            </div>
+            <img src="images/menu/backup.svg" alt="Backup" class="img-menu" />
             <a href="#backup" translation-key="backup"></a>
           </li>
           <li id="link-contato">
-            <div class="img-container">
-              <img
-                src="images/menu/contato.svg"
-                alt="Contato"
-                class="img-menu"
-              />
-            </div>
+            <img src="images/menu/contato.svg" alt="Contato" class="img-menu" />
             <a href="#contato" translation-key="contato"></a>
           </li>
           <li id="link-sobre">
-            <div class="img-container">
-              <img src="images/menu/sobre.svg" alt="Sobre" class="img-menu" />
-            </div>
+            <img src="images/menu/sobre.svg" alt="Sobre" class="img-menu" />
             <a href="#sobre" translation-key="sobre"></a>
           </li>
           <li id="link-doacao">
-            <div class="img-container">
-              <img src="images/menu/doacao.svg" alt="Doação" class="img-menu" />
-            </div>
+            <img src="images/menu/doacao.svg" alt="Doação" class="img-menu" />
             <a href="#doacao" translation-key="donate"></a>
           </li>
         </ul>
       </div>
 
-      <div class="pagina ativo" id="geral">
+      <div class="pagina ativo" id="novidades">
+        <h3 class="subtitulo" translation-key="news"></h3>
+        <div>
+          <h3>Salas compactadas!</h3>
+          <img src="images/news/compact-lobby.jpg" alt="Lobby compacta" />
+          <p>
+            Agora você pode compactar sua sala, antes era possível ver apenas 8
+            salas por vez, com o modo compacto podemos ver 20 salas dependendo
+            do seu monitor.
+          </p>
+          <hr />
+        </div>
+        <div>
+          <h3>Filtros por país</h3>
+          <img src="images/news/country-filter.jpg" alt="Lobby compacta" />
+          <p>
+            Cansado de clicar na sala errada e entrar jogar com pessoal de outro
+            país? Seus problemas acabaram haha, agora você pode filtrar as salas
+            apenas em sua região.
+          </p>
+          <hr />
+        </div>
+      </div>
+
+      <div class="pagina" id="geral">
         <h3 class="subtitulo" translation-key="automacoes"></h3>
         <label
           class="container"
