@@ -161,7 +161,11 @@ input[type="range"].filterKdr::-ms-tooltip {
   ) !important;
 }
 .lobby.compact .sala-lineup-imagem {
-  display: none !important;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  z-index: 3;
 }
 .lobby.compact .sala-lineup-level {
   margin-top: 4px;
