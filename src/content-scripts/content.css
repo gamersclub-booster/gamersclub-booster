@@ -101,9 +101,44 @@ input[type="range"].filterKdr::-ms-tooltip {
 }
 .lobby.compact .sala-card-badge,
 .lobby.compact .sala-card-camp {
-  width: 50px !important;
+  width: 40px !important;
   left: -2px !important;
   top: 4px !important;
+}
+
+.lobby.compact .sala-card-badge > span[class=""] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lobby.compact .sala-card-badge > span[class=""] > span {
+  width: 30px !important;
+  height: 30px !important;
+}
+
+.lobby.compact
+  .sala-card-type-verified
+  .sala-card-level-verified
+  .sala-card-level,
+.lobby.compact .sala-card-type-prime .sala-card-level-prime .sala-card-level,
+.lobby.compact .sala-card-badge .badge-level,
+.sala-card-camp .badge-level {
+  height: 30px !important;
+  width: 30px !important;
+  line-height: 22px !important;
+  font-size: 14px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lobby.compact .sala-card-type-prime .sala-card-level-prime,
+.lobby.compact .sala-card-type-verified .sala-card-level-verified,
+.lobby.compact .sala-card-badge .badge-level,
+.sala-card-camp .badge-level {
+  width: 34px !important;
+  height: 34px !important;
 }
 
 .lobby.compact .sala-card-country {
@@ -115,13 +150,22 @@ input[type="range"].filterKdr::-ms-tooltip {
 
 .lobby.compact .sala-card-title {
   width: 100% !important;
-  padding: 12px 0 15px 55px !important;
+  padding: 8px 0 8px 52px !important;
   text-align: left !important;
-  font-size: 16px !important;
+  font-size: 15px !important;
   margin: 0 !important;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.5) 15%,
+    rgba(0, 0, 0, 0) 100%
+  ) !important;
 }
 .lobby.compact .sala-lineup-imagem {
-  display: none !important;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  z-index: 3;
 }
 .lobby.compact .sala-lineup-level {
   margin-top: 4px;
@@ -139,4 +183,31 @@ input[type="range"].filterKdr::-ms-tooltip {
 .lobby.compact .boost-border,
 .lobby.compact .sala-video {
   display: none !important;
+}
+
+.lobby.compact .lobby-btn-big {
+  width: 100% !important;
+  max-width: 100% !important;
+  font-size: 16px !important;
+  height: 36px !important;
+}
+
+.lobby.compact .sala-card-btns {
+  min-height: 36px !important;
+}
+
+.lobby.compact .sala-card-content {
+  padding: 0 !important;
+}
+.lobby.compact .sala-card-type-verified .mixed-badge-room {
+  right: -15px !important;
+}
+.lobby.compact .prime-badge {
+  right: -4px !important;
+}
+.lobby.compact .sala-card-type-verified .verified-badge-room {
+  right: -9px !important;
+}
+.lobby.compact .sala-card {
+  margin: 8px 0px !important;
 }
