@@ -1,9 +1,13 @@
 import { alertaMsg } from '../../lib/messageAlerts';
+import { getAllStorageSyncData, getTranslationText } from '../../utils';
 
 let interval = 1000;
 let intervalId;
 
-export function adicionarBotaoAutoComplete() {
+export async function adicionarBotaoAutoComplete() {
+  const { traducao } = await getAllStorageSyncData();
+  const text = getTranslationText( traducao, 'completar-partida' );
+
   if ( !$( '#autoCompleteBtn' ).length ) { // Se precisa criar o botão e adicionar na página
     $( '#gcbooster_botoes' )
       .append( $( '<button/>', {
@@ -11,13 +15,13 @@ export function adicionarBotaoAutoComplete() {
         'class': 'WasdButton',
         'css': { 'background-color': 'orange', 'border-radius': '4px' },
         'type': 'button',
-        'text': 'Completar Partida'
+        'text': text
       } ) );
     addListeners();
   } else { // Se precisa apenas modificar o botão que já existe
     $( '#autoCompleteBtn' )
       .css( { 'background-color': 'orange', 'border-radius': '4px' } )
-      .text( 'Completar Partida' )
+      .text( text )
       .removeClass( 'Cancelar' );
   }
 }
