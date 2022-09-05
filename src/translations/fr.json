@@ -73,5 +73,11 @@
   "doacao-descricao": "Nous sommes une association non lucrative, nous n'acceptons pas de donations.",
   "doacao-paypal": "Le don peut aussi se faire par paypal",
   "news-menu": "Nouvelles",
-  "news": "Nouvelles fonctionnalités"
+  "news": "Nouvelles fonctionnalités",
+  "completar-partida": "Compléter match",
+  "criar-lobby-pre-configurada": "Créer un lobby préconfiguré",
+  "adicionar-a-lista-de-bloqueio": "Ajouter à la liste de blocage",
+  "remover-da-lista-de-bloqueio": "Supprimer de la liste de blocage",
+  "foi-adicionado-a-lista-bloqueio": "a été ajouté à votre liste de blocage",
+  "foi-removido-da-lista-bloqueio": "a été supprimé de votre liste de blocage"
 }
