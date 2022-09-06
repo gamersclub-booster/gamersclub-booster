@@ -6,7 +6,7 @@ let intervalId;
 
 export async function adicionarBotaoAutoComplete() {
   const { traducao } = await getAllStorageSyncData();
-  const text = getTranslationText( traducao, 'completar-partida' );
+  const text = getTranslationText( 'completar-partida', traducao );
 
   if ( !$( '#autoCompleteBtn' ).length ) { // Se precisa criar o botão e adicionar na página
     $( '#gcbooster_botoes' )

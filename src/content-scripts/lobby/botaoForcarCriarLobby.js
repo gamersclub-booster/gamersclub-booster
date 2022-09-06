@@ -8,7 +8,7 @@ let intervalCriarLobby = null;
 
 export async function adicionarBotaoForcarCriarLobby() {
   const { traducao } = await getAllStorageSyncData();
-  const text = getTranslationText( traducao, 'criar-lobby-pre-configurada' );
+  const text = getTranslationText( 'criar-lobby-pre-configurada', traducao );
 
   if ( !$( '#criarLobbyBtn' ).length ) {
     $( '#gcbooster_botoes' ).append(
