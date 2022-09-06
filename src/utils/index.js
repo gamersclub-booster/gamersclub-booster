@@ -14,16 +14,14 @@ export const getAllStorageSyncData = () => {
   } );
 };
 
-export const getTranslationText = ( language, jsonKey ) => {
-  const translations = {
+export const getTranslationText = ( jsonKey, language ) => {
+  const LOCALES = {
     'pt': pt,
     'en': en,
     'es': es,
     'fr': fr
   };
 
-  const translation = translations[language];
-  const text = translation[jsonKey];
-
-  return text || 'pt';
+  const translation = LOCALES[language] || LOCALES.pt;
+  return translation[jsonKey];
 };
