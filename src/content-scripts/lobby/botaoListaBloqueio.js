@@ -15,7 +15,8 @@ async function initBotaoListaBloqueio() {
   //Quando iniciar, adicionar os botoes da lista de bloqueio
   const playerSelector = $( '.tableMatch__leftColumn' );
   for ( let i = 0; i < playerSelector.length; i++ ) {
-    const botaoHTML = $( '<button data="preAlready" class="botaoListaDeBloqueio">Adicionar a lista de bloqueio</button>' );
+    if ( playerSelector[i].outerText === seuNickReal ) { continue; }
+    const botaoHTML = $( `<button data="preAlready" class="botaoListaDeBloqueio">${addBlocklistText}</button>` );
     botaoHTML.insertAfter( playerSelector[i] );
   }
   //Verificar quais já estão marcados
@@ -59,10 +60,6 @@ async function initBotaoListaBloqueio() {
             } );
           }
         } );
-        const seuNickReal = document.getElementsByClassName( 'MainHeader__playerNickname' )[0].innerText;
-        if ( nick === seuNickReal ) {
-          botaoLista[i].parentNode.removeChild( botaoLista[i] );
-        }
       }
     }
   } );
