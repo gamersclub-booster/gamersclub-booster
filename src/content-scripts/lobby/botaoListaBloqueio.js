@@ -1,12 +1,12 @@
 import { adicionarNaLista, removerDaLista } from '../../lib/blockList';
 import { alertaMsg } from '../../lib/messageAlerts';
 
-export async function initListaBloqueio() {
-  chrome.storage.sync.get( [ 'blockList' ], async function ( result ) {
+export function initListaBloqueio() {
+  chrome.storage.sync.get( [ 'blockList' ], function ( result ) {
     if ( !result.blockList ) {
-      chrome.storage.sync.set( { blockList: [] }, async function ( ) { await initBotaoListaBloqueio( ); } );
+      chrome.storage.sync.set( { blockList: [] }, initBotaoListaBloqueio );
     } else {
-      await initBotaoListaBloqueio();
+      initBotaoListaBloqueio();
     }
   } );
 }
