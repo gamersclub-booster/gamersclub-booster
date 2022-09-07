@@ -1,5 +1,6 @@
 import { adicionarNaLista, removerDaLista } from '../../lib/blockList';
 import { getAllStorageSyncData, getTranslationText } from '../../utils';
+import { alertaMsg } from '../../lib/messageAlerts';
 
 export function initListaBloqueio() {
   chrome.storage.sync.get( [ 'blockList' ], function ( result ) {
@@ -53,7 +54,7 @@ async function initBotaoListaBloqueio() {
               const nickName = click.path[1].outerText.split( '\n' )[0];
               botaoLista[i].innerText = addBlocklistText;
               botaoLista[i].setAttribute( 'data', 'notAlreadyListed' );
-              alert( `\n${nickName} ${removedBlocklistText}.` );
+              alertaMsg( `${nickName} ${removedBlocklistText}.` );
             } );
           } else {
             //Adicionar a lista
@@ -61,7 +62,7 @@ async function initBotaoListaBloqueio() {
               const nickName = click.path[1].outerText.split( '\n' )[0];
               botaoLista[i].innerText = removeBlocklistText;
               botaoLista[i].setAttribute( 'data', 'alreadyListed' );
-              alert( `\n${nickName} ${addedBlocklistText}.` );
+              alertaMsg( `${nickName} ${addedBlocklistText}.` );
             } );
           }
         } );
