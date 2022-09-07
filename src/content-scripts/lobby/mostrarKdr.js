@@ -69,10 +69,10 @@ export const mostrarKdrSala = mutations =>
         const id = selectorLink.getAttribute( 'href' )?.split( '/' )?.at( -1 );
 
 
-        const resposta = await fetch( `https://gamersclub.com.br/api/box/init/${id}` );
+        const resposta = await fetch( `https://gamersclub.com.br/api/box/history/${id}` );
         const dadosPartida = await resposta.json();
 
-        const kdr = dadosPartida?.stats[0]?.value;
+        const kdr = dadosPartida?.stat[0]?.value;
         const searchKdr = parseFloat( kdr ).toFixed( 2 ).toString();
 
         const colorKrdDefault = searchKdr <= 2 ? '#000' :
