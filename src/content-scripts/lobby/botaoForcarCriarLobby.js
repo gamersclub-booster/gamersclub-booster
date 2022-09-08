@@ -2,10 +2,14 @@ import { retrieveWindowVariables } from '../../lib/dom';
 import { GC_URL, isFirefox } from '../../lib/constants';
 import { alertaMsg } from '../../lib/messageAlerts';
 import axios from 'axios';
+import { getAllStorageSyncData, getTranslationText } from '../../utils';
 
 let intervalCriarLobby = null;
 
-export function adicionarBotaoForcarCriarLobby() {
+export async function adicionarBotaoForcarCriarLobby() {
+  const { traducao } = await getAllStorageSyncData();
+  const text = getTranslationText( 'criar-lobby-pre-configurada', traducao );
+
   if ( !$( '#criarLobbyBtn' ).length ) {
     $( '#gcbooster_botoes' ).append(
       $( '<button/>', {
@@ -13,14 +17,14 @@ export function adicionarBotaoForcarCriarLobby() {
         'class': 'WasdButton',
         'css': { 'background-color': 'orange', 'border-radius': '4px' },
         'type': 'button',
-        'text': 'Criar Lobby Pre Configurada'
+        'text': text
       } )
     );
     addListeners();
   } else {
     $( '#criarLobbyBtn' )
       .css( { 'background-color': 'orange', 'border-radius': '4px' } )
-      .text( 'Criar Lobby Pre Configurada' )
+      .text( text )
       .removeClass( 'Cancelar' );
   }
 }

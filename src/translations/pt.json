@@ -73,5 +73,11 @@
   "doacao-descricao": "Se você gostou do projeto, faça uma doação para ajudar a manter o desenvolvimento do projeto.",
   "doacao-paypal": "A doação também pode ser pelo paypal",
   "news-menu": "Novidades",
-  "news": "Novas funcionalidades"
+  "news": "Novas funcionalidades",
+  "completar-partida": "Completar partida",
+  "criar-lobby-pre-configurada": "Criar lobby pré-configurada",
+  "adicionar-a-lista-de-bloqueio": "Adicionar à lista de bloqueio",
+  "remover-da-lista-de-bloqueio": "Remover da lista de bloqueio",
+  "foi-adicionado-a-lista-bloqueio": "foi adicionado à sua lista de bloqueio",
+  "foi-removido-da-lista-bloqueio": "foi removido da sua lista de bloqueio"
 }

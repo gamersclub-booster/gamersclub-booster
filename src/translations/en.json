@@ -73,5 +73,11 @@
   "doacao-descricao": "If you like the extension, you can buy us a coffee to help us to keep it running.",
   "doacao-paypal": "Donation can also be through paypal.",
   "news-menu": "News",
-  "news": "New features"
+  "news": "New features",
+  "completar-partida": "Complete match",
+  "criar-lobby-pre-configurada": "Create lobby pre-setted",
+  "adicionar-a-lista-de-bloqueio": "Add to blocklist",
+  "remover-da-lista-de-bloqueio": "Remove from blocklist",
+  "foi-adicionado-a-lista-bloqueio": "has been added to your blocklist",
+  "foi-removido-da-lista-bloqueio": "has been removed from your blocklist"
 }
