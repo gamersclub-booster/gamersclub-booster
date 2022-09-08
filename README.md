@@ -120,7 +120,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <tr>
       <td align="center"><a href="http://jorgebrunetto.com.br"><img src="https://avatars.githubusercontent.com/u/5823077?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jorge Brunetto</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=jorgebrunetto" title="Code">💻</a> <a href="#design-jorgebrunetto" title="Design">🎨</a> <a href="https://github.com/gamersclub-booster/gamersclub-booster/issues?q=author%3Ajorgebrunetto" title="Bug reports">🐛</a> <a href="#maintenance-jorgebrunetto" title="Maintenance">🚧</a></td>
       <td align="center"><a href="https://github.com/dchueri"><img src="https://avatars.githubusercontent.com/u/84249430?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Diego Chueri</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=dchueri" title="Documentation">📖</a></td>
-      <td align="center"><a href="https://github.com/barbozafernando"><img src="https://avatars.githubusercontent.com/u/45888984?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Fernando Barboza</b></sub></a><br /><a href="#translation-barbozafernando" title="Translation">🌍</a></td>
+      <td align="center"><a href="https://github.com/barbozafernando"><img src="https://avatars.githubusercontent.com/u/45888984?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Fernando Barboza</b></sub></a><br /><a href="#translation-barbozafernando" title="Translation">🌍</a> <a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=barbozafernando" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
