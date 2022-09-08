@@ -162,6 +162,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "barbozafernando",
+      "name": "Fernando Barboza",
+      "avatar_url": "https://avatars.githubusercontent.com/u/45888984?v=4",
+      "profile": "https://github.com/barbozafernando",
+      "contributions": [
+        "translation"
+      ]
     }
   ],
   "contributorsPerLine": 7,
