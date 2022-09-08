@@ -49,6 +49,7 @@ export const mostrarKdr = mutations => {
   } );
 };
 
+
 function getKdrFromTitle( title ) {
   const regexp = /KDR:\s+(\d+\.\d+)\s/g;
   return Array.from( title.matchAll( regexp ), m => m[1] )[0];
@@ -63,8 +64,16 @@ export const mostrarKdrSala = mutations =>
       const node = mutation.addedNodes[i];
       if ( node.className && ( node.className.includes( 'sidebar-item' ) || node.className.includes( 'sidebar-sala-players' ) ) ) {
         const selectorLink = node.querySelector( 'a' );
-        const kdr = selectorLink.getAttribute( 'title' ).split( '|' ).find( str => str.includes( 'KDR:' ) ).trim();
-        const searchKdr = parseFloat( kdr.split( ' ' )[1] ).toFixed( 2 ).toString();
+
+
+        const id = selectorLink.getAttribute( 'href' )?.split( '/' )?.at( -1 );
+
+
+        const resposta = await fetch( `https://gamersclub.com.br/api/box/history/${id}` );
+        const dadosPartida = await resposta.json();
+
+        const kdr = dadosPartida?.stat[0]?.value;
+        const searchKdr = parseFloat( kdr ).toFixed( 2 ).toString();
 
         const colorKrdDefault = searchKdr <= 2 ? '#000' :
           'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)';
