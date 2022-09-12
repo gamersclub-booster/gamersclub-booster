@@ -4,6 +4,7 @@ import { alertaMsg } from '../../lib/messageAlerts';
 
 let title = null;
 let kdr = null;
+const fetchedKdrs = [];
 
 export const mostrarKdr = mutations => {
   $.each( mutations, async ( _, mutation ) => {
@@ -54,7 +55,19 @@ function getKdrFromTitle( title ) {
   const regexp = /KDR:\s+(\d+\.\d+)\s/g;
   return Array.from( title.matchAll( regexp ), m => m[1] )[0];
 }
+const fetchKdr = async id => {
+  const fetchedKdr = fetchedKdrs.find( kdr => kdr.id === id );
+  if ( fetchedKdr ) {
+    return fetchedKdr.kdr;
+  }
 
+  const resposta = await fetch( `https://gamersclub.com.br/api/box/history/${id}` );
+  const dadosPartida = await resposta.json();
+
+  const kdr = dadosPartida?.stat[0]?.value;
+  fetchedKdrs.push( { id, kdr } );
+  return kdr;
+};
 export const mostrarKdrSala = mutations =>
   mutations.forEach( async mutation => {
     if ( !mutation.addedNodes ) {
@@ -65,24 +78,20 @@ export const mostrarKdrSala = mutations =>
       if ( node.className && ( node.className.includes( 'sidebar-item' ) || node.className.includes( 'sidebar-sala-players' ) ) ) {
         const selectorLink = node.querySelector( 'a' );
 
-
         const id = selectorLink.getAttribute( 'href' )?.split( '/' )?.at( -1 );
+        const kdr = await fetchKdr( id );
 
-
-        const resposta = await fetch( `https://gamersclub.com.br/api/box/history/${id}` );
-        const dadosPartida = await resposta.json();
-
-        const kdr = dadosPartida?.stat[0]?.value;
         const searchKdr = parseFloat( kdr ).toFixed( 2 ).toString();
 
         const colorKrdDefault = searchKdr <= 2 ? '#000' :
           'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)';
         const colorKdr = searchKdr <= 2 ? levelColor[Math.round( searchKdr * 10 )] : colorKrdDefault;
 
-        const kdrDiv = document.createElement( 'span' );
-        kdrDiv.style = `background:${colorKdr};padding:2px 4px;position:absolute;top:0;right:0;z-index:5;font-size:11px;width:40px;text-align:center`;
-        kdrDiv.innerHTML = searchKdr;
-        node.querySelector( '.sidebar-item-meta ' ).append( kdrDiv );
+        const kdrSpan = document.createElement( 'span' );
+        kdrSpan.style =
+          `background:${colorKdr};padding:2px 4px;position:absolute;top:0;right:0;z-index:5;font-size:11px;width:40px;text-align:center`;
+        kdrSpan.innerHTML = searchKdr;
+        node.querySelector( '.sidebar-item-meta ' ).append( kdrSpan );
 
         if ( searchKdr === '0.00' ) { alertaMsg( 'Tem um KDR 0 na sala!' ); }
       }
