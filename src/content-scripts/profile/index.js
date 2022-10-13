@@ -1,24 +1,11 @@
 const SELETOR_HISTORICO = 'h3:contains("Histórico")';
 const LOCAT = $( location ).attr( 'href' );
-const MAIN_URL = 'https://gamersclub.com.br';
-const ALT_URL = 'https://csgo.gamersclub.gg';
-
-const urlFormatter = () => {
-  if ( LOCAT.includes( `${ALT_URL}/player` ) ) {
-    return `${MAIN_URL}/player/${LOCAT.substring( 34 )}`;
-  } else if ( LOCAT.includes( `${ALT_URL}/jogador` ) ) {
-    return `${MAIN_URL}/jogador/${LOCAT.substring( 35 )}`;
-  } else {
-    return LOCAT;
-  }
-};
 
 const initProfilePage = () => {
   let totalVitorias = 0;
   let totalDerrotas = 0;
-  const idPlayer = urlFormatter().includes( 'player' ) ?
-    urlFormatter().replace( `${MAIN_URL}/player/`, '' ) :
-    urlFormatter().replace( `${MAIN_URL}/jogador/`, '' );
+
+  const idPlayer = LOCAT.split( '/' ).pop();
 
   $( 'span:contains(\'Vitórias\')' ).each( function () {
     totalVitorias += parseInt( $( this ).html().replace( ' Vitórias', '' ) );
@@ -26,9 +13,10 @@ const initProfilePage = () => {
   $( 'span:contains(\'Derrotas\')' ).each( function () {
     totalDerrotas += parseInt( $( this ).html().replace( ' Derrotas', '' ) );
   } );
+  const gcHost = window.location.hostname;
   $.getJSON( {
     dataType: 'json',
-    url: `https://gamersclub.com.br/api/box/history/${idPlayer}`
+    url: `https://${gcHost}/api/box/history/${idPlayer}`
   } ).done( function ( json ) {
     const totalKillsMes = json.stat[2].value;
     const totalMortesMes = json.stat[3].value;
