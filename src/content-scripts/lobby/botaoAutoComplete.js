@@ -6,7 +6,7 @@ let intervalId;
 
 export async function adicionarBotaoAutoComplete() {
   const { traducao } = await getAllStorageSyncData();
-  const text = getTranslationText( 'completar-partida', traducao );
+  const completarPartidaText = getTranslationText( 'completar-partida', traducao );
 
   if ( !$( '#autoCompleteBtn' ).length ) { // Se precisa criar o botão e adicionar na página
     $( '#gcbooster_botoes' )
@@ -15,42 +15,47 @@ export async function adicionarBotaoAutoComplete() {
         'class': 'WasdButton',
         'css': { 'background-color': 'orange', 'border-radius': '4px' },
         'type': 'button',
-        'text': text
+        'text': completarPartidaText
       } ) );
     addListeners();
   } else { // Se precisa apenas modificar o botão que já existe
     $( '#autoCompleteBtn' )
       .css( { 'background-color': 'orange', 'border-radius': '4px' } )
-      .text( text )
+      .text( completarPartidaText )
       .removeClass( 'Cancelar' );
   }
 }
 
-function adicionarBotaoCancelar() {
+async function adicionarBotaoCancelar() {
+  const { traducao } = await getAllStorageSyncData();
+  const procurandoCompleteText = getTranslationText( 'procurando-complete', traducao );
   $( '#autoCompleteBtn' )
     .css( { 'background-color': 'red', 'border-radius': '4px' } )
-    .text( 'Procurando Complete...' )
+    .text( procurandoCompleteText )
     .addClass( 'Cancelar' );
 }
 
-function addListeners() {
-  $( '#autoCompleteBtn' ).on( 'click', function () {
+async function addListeners() {
+  const { traducao } = await getAllStorageSyncData();
+  const voceEstaEmLobbyText = getTranslationText( 'voce-esta-em-uma-lobby', traducao );
+
+  $( '#autoCompleteBtn' ).on( 'click', async function () {
     if ( $( '#autoCompleteBtn' ).hasClass( 'Cancelar' ) ) { // Se já estiver buscando
       clearInterval( intervalId );
       adicionarBotaoAutoComplete();
     } else { // Se não estiver buscando ainda
       if ( !$( '#SidebarSala' ).length ) { // Se não estiver em lobby
         intervalerAutoComplete();
-        adicionarBotaoCancelar();
+        await adicionarBotaoCancelar();
       } else { // Se estiver em lobby e tentar clicar no botão de complete
-        alertaMsg( 'Você está em um lobby! Saia para buscar por complete!' );
+        alertaMsg( voceEstaEmLobbyText );
       }
     }
   } );
 }
 
-function intervalerAutoComplete() {
-  intervalId = setInterval( function () {
+async function intervalerAutoComplete() {
+  intervalId = setInterval( async function () {
     if ( !$( '#SidebarSala' ).length ) { // Se não estiver em lobby ( acontece quando cria lobby e já está buscando complete )
       interval = randomIntFromInterval( 750, 4750 ); // Escolhe um novo intervalo aleatório entre 1s e 5s
       if ( $( '.scroll-content > li > .btn-actions > a.accept-btn' ).length ) {
@@ -61,7 +66,7 @@ function intervalerAutoComplete() {
       }
     } else {
       clearInterval( intervalId );
-      adicionarBotaoAutoComplete();
+      await adicionarBotaoAutoComplete();
     }
   }, 250 );
 }
