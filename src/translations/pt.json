@@ -79,5 +79,7 @@
   "adicionar-a-lista-de-bloqueio": "Adicionar à lista de bloqueio",
   "remover-da-lista-de-bloqueio": "Remover da lista de bloqueio",
   "foi-adicionado-a-lista-bloqueio": "foi adicionado à sua lista de bloqueio",
-  "foi-removido-da-lista-bloqueio": "foi removido da sua lista de bloqueio"
+  "foi-removido-da-lista-bloqueio": "foi removido da sua lista de bloqueio",
+  "procurando-complete": "Procurando Complete...",
+  "voce-esta-em-uma-lobby": "Você está em um lobby! Saia para buscar por complete!"
 }
