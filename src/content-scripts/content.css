@@ -257,10 +257,6 @@ input[type="range"].filterKdr::-ms-tooltip {
   margin-bottom: 4px;
 }
 
-/* #gcbooster_cabecalho {
-  border: 1px solid orange;
-} */
-
 .kdr-level {
   border-radius: 2px;
   padding: 0px 6px;
