@@ -15,7 +15,7 @@ export async function adicionarBotaoForcarCriarLobby() {
       $( '<button/>', {
         'id': 'criarLobbyBtn',
         'class': 'WasdButton',
-        'css': { 'background-color': 'orange', 'border-radius': '4px' },
+        'css': { 'background-color': '#839800', 'border-radius': '4px' },
         'type': 'button',
         'text': text
       } )
@@ -23,7 +23,7 @@ export async function adicionarBotaoForcarCriarLobby() {
     addListeners();
   } else {
     $( '#criarLobbyBtn' )
-      .css( { 'background-color': 'orange', 'border-radius': '4px' } )
+      .css( { 'background-color': '#839800', 'border-radius': '4px' } )
       .text( text )
       .removeClass( 'Cancelar' );
   }
