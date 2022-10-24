@@ -211,3 +211,54 @@ input[type="range"].filterKdr::-ms-tooltip {
 .lobby.compact .sala-card {
   margin: 8px 0px !important;
 }
+
+.bar-level {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  font-size: 11px;
+  padding: 8px;
+  left: 50%;
+
+  -webkit-transform: translatex(-50%);
+  -ms-transform: translatex(-50%);
+  transform: translatex(-50%);
+
+  box-shadow: inset 0px -1px 9px 6px rgb(255 141 0 / 10%), 0 0 14px #00000073;
+  border-radius: 8px 8px 0 0;
+  background: rgb(0 0 0);
+  border: 1px solid orange;
+  border-bottom: 0;
+}
+
+.bar-info-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 12px;
+  padding-right: 12px;
+  border-right: 1px solid orange;
+}
+
+.bar-level-avatar {
+  border-radius: 16px;
+  width: 32px;
+}
+
+.bar-info-name {
+  max-width: 70px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.kdr-level {
+  border-radius: 2px;
+  padding: 0px 6px;
+  font-weight: bold;
+}
