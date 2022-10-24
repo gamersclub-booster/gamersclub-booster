@@ -20,21 +20,38 @@ const grabPlayerLastMatch = async matchUrl => {
   playerInfo['matchId'] = data.lastMatches[lastMatchIndex].id;
   playerInfo['rating_points'] = data.lastMatches[lastMatchIndex].ratingDiff.toString();
   playerInfo['map_name'] = data.lastMatches[lastMatchIndex].map;
+  playerInfo['avatar'] = `https://static.gamersclub.com.br/players/avatar/${data.playerInfo.id}/${data.playerInfo.id}_medium.jpg`;
 
   return playerInfo;
 };
 
+const grabPlayerHistory = async matchUrl => {
+  const response = await fetch( matchUrl );
+  const data = await response.json();
+
+  const playerHistory = [];
+  playerHistory['kdr'] = data.stat[0].value;
+
+  return playerHistory;
+};
+
 export const adicionarBarraLevel = async () => {
+
   const GC_URL = window.location.hostname;
   const windowVariables = retrieveWindowVariables( [ 'ISSUBSCRIBER', 'PLAYERID' ] );
   const isSubscriber = windowVariables.ISSUBSCRIBER;
   const playerId = windowVariables.PLAYERID;
   const playerInfo = await grabPlayerLastMatch( `https://${GC_URL}/api/box/init/${playerId}` );
+  const playerHistory = await grabPlayerHistory( `https://${GC_URL}/api/box/history/${playerId}` );
+
+  const playerKdr = playerHistory['kdr'];
 
   const playerLevel = playerInfo['level'];
   const currentRating = playerInfo['currentRating'];
   const ratingPoints = playerInfo['rating_points'];
   const matchId = playerInfo['matchId'];
+  const namePlayer = playerInfo['name'];
+  const playerAvatar = playerInfo['avatar'];
 
   const minPontos = XpRangeFromLevel( playerLevel ).minRating;
   const maxPontos = XpRangeFromLevel( playerLevel ).maxRating;
@@ -50,14 +67,11 @@ export const adicionarBarraLevel = async () => {
   const fixedNum = ( ( ( currentRating - minPontos ) * 100 ) / ( maxPontos - minPontos ) ).toFixed( 2 ) + '%';
   const subscriberStyle = isSubscriber === 'true' ? 'subscriber' : 'nonSubscriber';
 
-  const containerDiv = $( '<div>' ).css( {
-    'display': 'flex',
-    'align-items': 'center',
-    'font-size': '11px',
-    'justify-content': 'center',
-    'width': '100%',
-    'margin': '10px'
-  } );
+  const containerDiv = $( '<div class="bar-level">' )
+    .append( $( '<div class="bar-info-player">' )
+      .append( $( '<div class="bar-info-name">' ).text( namePlayer ) )
+      .append( $( '<img>' ).attr( 'src', playerAvatar ).addClass( 'bar-level-avatar' ) )
+    );
 
   const currentLevelSpan = $( '<span>' )
     .attr( 'title', `Skill Level ${playerLevel}` )
@@ -66,7 +80,7 @@ export const adicionarBarraLevel = async () => {
     .append(
       $( '<div>' )
         .attr( 'class', `PlayerLevel PlayerLevel--${playerLevel} PlayerLevel--${subscriberStyle}` )
-        .css( { 'height': '24px', 'width': '24px' } )
+        .css( { 'height': '22px', 'width': '22px' } )
         .append(
           $( '<div>' )
             .attr( 'class', 'PlayerLevel__background' )
@@ -76,7 +90,9 @@ export const adicionarBarraLevel = async () => {
                 .text( playerLevel )
             )
         )
-    );
+    )
+
+    ;
 
   const nextLevelSpan = $( '<span>' )
     .attr( 'title', `Skill Level ${playerNextLevel}` )
@@ -85,7 +101,7 @@ export const adicionarBarraLevel = async () => {
     .append(
       $( '<div>' )
         .attr( 'class', `PlayerLevel PlayerLevel--${playerNextLevel} PlayerLevel--${subscriberStyle}` )
-        .css( { 'height': '24px', 'width': '24px' } )
+        .css( { 'height': '22px', 'width': '22px' } )
         .append(
           $( '<div>' )
             .attr( 'class', 'PlayerLevel__background' )
@@ -119,6 +135,11 @@ export const adicionarBarraLevel = async () => {
               )
             )
         )
+        .append( $( '<span class="kdr-level" title="KDR médio">' ).text( playerKdr ).css( {
+          'background': playerKdr <= 2 ? '' :
+            'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)',
+          'background-color': playerKdr <= 2 ? levelColor[Math.round( playerKdr * 10 )] + 'cc' : 'initial'
+        } ) )
         .append(
           $( '<div>' )
             .css( { 'display': 'flex', 'align-items': 'center', 'justify-content': 'flex-end' } )
@@ -135,7 +156,7 @@ export const adicionarBarraLevel = async () => {
     ).append(
       $( '<div>' )
         .append( $( '<div>' )
-          .css( { 'margin': '1px 0px', 'height': '2px', 'width': '100%', 'background': 'rgb(75, 78, 78)' } )
+          .css( { 'margin': '3px 0px', 'height': '3px', 'width': '100%', 'background': 'rgb(75, 78, 78)' } )
           .append( $( '<div>' )
             .css( {
               'height': '100%',
@@ -170,7 +191,7 @@ export const adicionarBarraLevel = async () => {
         )
     );
 
-  $( '.MainHeader__navbarBlock:last' )
-    .before( containerDiv.append( currentLevelSpan ).append( progressBarDiv ).append( nextLevelSpan ) );
+  $( 'body' )
+    .append( containerDiv.append( currentLevelSpan ).append( progressBarDiv ).append( nextLevelSpan ) );
 
 };
