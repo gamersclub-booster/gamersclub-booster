@@ -29,11 +29,8 @@ const grabPlayerHistory = async matchUrl => {
   const response = await fetch( matchUrl );
   const data = await response.json();
 
-  console.log( data, 'data' );
-
   const playerHistory = [];
   playerHistory['kdr'] = data.stat[0].value;
-
 
   return playerHistory;
 };
