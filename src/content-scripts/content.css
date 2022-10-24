@@ -211,7 +211,6 @@ input[type="range"].filterKdr::-ms-tooltip {
 .lobby.compact .sala-card {
   margin: 8px 0px !important;
 }
-
 .bar-level {
   position: fixed;
   bottom: 0;
@@ -261,4 +260,7 @@ input[type="range"].filterKdr::-ms-tooltip {
   border-radius: 2px;
   padding: 0px 6px;
   font-weight: bold;
+}
+#gcbooster_cabecalho {
+  border: 1px solid orange;
 }
