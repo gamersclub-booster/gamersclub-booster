@@ -18,6 +18,7 @@
     {
       "matches": ["*://*.gamersclub.com.br/*", "*://csgo.gamersclub.gg/*"],
       "js": ["content-scripts/main.js"],
+      "css": ["content.css"],
       "run_at": "document_end"
     },
     {
@@ -50,7 +51,6 @@
         "*://csgo.gamersclub.gg/hub*"
       ],
       "js": ["content-scripts/lobby.js"],
-      "css": ["content.css"],
       "run_at": "document_end"
     },
     {
