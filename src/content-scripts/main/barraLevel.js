@@ -159,7 +159,8 @@ export const adicionarBarraLevel = async () => {
           .css( { 'margin': '3px 0px', 'height': '3px', 'width': '100%', 'background': 'rgb(75, 78, 78)' } )
           .append( $( '<div>' )
             .css( {
-              'max-height': '100%',
+              'height': '100%',
+              'max-width': '100%',
               'width': fixedNum,
               'background': 'linear-gradient(to right, ' +
               levelColor[playerLevel] + ', ' +
