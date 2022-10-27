@@ -6,5 +6,5 @@ export function addCabecalho() {
 
   $( '#gcbooster_cabecalho' ).append( $( '<div/>', { 'class': 'FilterLobby_section__3UmYp' } )
     .append( $( '<p/>', { 'class': 'FilterLobby_sectionLabel__1zPew', 'text': 'GamersClub Booster', 'css': { 'color': 'orange' } } ) )
-    .append( $( '<div/>', { 'class': 'FilterLobby_buttons__2ySGq', 'id': 'gcbooster_botoes' } ) ) );
+    .append( $( '<div/>', { 'class': 'FilterLobby_buttons__2ySGq', 'id': 'gcbooster_botoes' } ) ) ).addClass( 'draw-orange' );
 }
