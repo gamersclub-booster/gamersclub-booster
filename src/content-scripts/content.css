@@ -73,6 +73,7 @@ input[type="range"].filterKdr::-ms-tooltip {
   .sidebar-desafios-play
   button {
   background-color: rgba(255, 0, 0, 0.322);
+  border: 1px solid orange;
 }
 
 .blocked {
@@ -261,6 +262,7 @@ input[type="range"].filterKdr::-ms-tooltip {
   padding: 0px 6px;
   font-weight: bold;
 }
-#gcbooster_cabecalho {
+
+.draw-orange {
   border: 1px solid orange;
 }

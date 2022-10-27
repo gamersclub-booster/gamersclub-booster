@@ -31,11 +31,13 @@ export const mostrarKdr = mutations => {
                     'align-items': 'center',
                     'color': 'white',
                     'font-weight': 'bold',
+                    'border-right': 'transparent',
+                    'border-left': 'transparent',
                     'background': kdr <= 2 ? '' :
                       'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)',
                     'background-color': kdr <= 2 ? levelColor[Math.round( kdr * 10 )] + 'cc' : 'initial'
                   }
-                } )
+                } ).addClass( 'draw-orange' )
                 .append( $( '<span/>', {
                   'id': 'gcbooster_kdr_span',
                   'gcbooster_kdr_lobby': lobbyId,
@@ -88,8 +90,19 @@ export const mostrarKdrSala = mutations =>
         const colorKdr = searchKdr <= 2 ? levelColor[Math.round( searchKdr * 10 )] : colorKrdDefault;
 
         const kdrSpan = document.createElement( 'span' );
-        kdrSpan.style =
-          `background:${colorKdr};padding:2px 4px;position:absolute;top:0;right:0;z-index:5;font-size:11px;width:40px;text-align:center`;
+
+        $( kdrSpan ).css( {
+          backgroundColor: colorKdr,
+          padding: '2px 4px',
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          zIndex: 5,
+          fontSize: '11px',
+          width: '40px',
+          textAlign: 'center'
+        } ).addClass( 'draw-orange' );
+
         kdrSpan.innerHTML = searchKdr;
         node.querySelector( '.sidebar-item-meta ' ).append( kdrSpan );
 
