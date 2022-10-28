@@ -34,7 +34,7 @@ async function initBotaoListaBloqueio() {
       for ( let i = 0; i < botaoLista.length; i++ ) {
         //Verificar se já existe no array
         const id = botaoLista[i].offsetParent.children[0].children[0].children[2].href.replace( 'https://gamersclub.com.br/jogador/', '' );
-        const avatarURL = botaoLista[i].offsetParent.children[0].children[0].children[0].children[1].currentSrc;
+        const avatarURL = botaoLista[i].offsetParent.children[0].children[0].children[0].children[2].src;
 
         const listaDeTodosOsIDs = result.blockList.map( e => { return e.id; } );
         if ( listaDeTodosOsIDs.includes( id ) ) {
@@ -47,22 +47,20 @@ async function initBotaoListaBloqueio() {
         //Adicionar o listener de clique
         botaoLista[i].addEventListener( 'click', function ( click ) {
           const state = botaoLista[i].attributes[0].value;
-
+          const nick = click.path[1].outerText.split( '\n' )[0];
           if ( state === 'alreadyListed' ) {
             //Remover da lista
-            removerDaLista( { id, avatarURL }, function ( ) {
-              const nickName = click.path[1].outerText.split( '\n' )[0];
+            removerDaLista( { id, avatarURL, nick }, function ( ) {
               botaoLista[i].innerText = addBlocklistText;
               botaoLista[i].setAttribute( 'data', 'notAlreadyListed' );
-              alertaMsg( `${nickName} ${removedBlocklistText}.` );
+              alertaMsg( `${nick} ${removedBlocklistText}.` );
             } );
           } else {
             //Adicionar a lista
-            adicionarNaLista( { id, avatarURL }, function ( ) {
-              const nickName = click.path[1].outerText.split( '\n' )[0];
+            adicionarNaLista( { id, avatarURL, nick }, function ( ) {
               botaoLista[i].innerText = removeBlocklistText;
               botaoLista[i].setAttribute( 'data', 'alreadyListed' );
-              alertaMsg( `${nickName} ${addedBlocklistText}.` );
+              alertaMsg( `${nick} ${addedBlocklistText}.` );
             } );
           }
         } );
