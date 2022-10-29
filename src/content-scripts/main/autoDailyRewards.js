@@ -3,6 +3,10 @@ import axios from 'axios';
 
 
 export const coletarDailyRewards = async () => {
+  const response = await fetch( 'https://gamersclub.com.br/daily-rewards' );
+  const page = await response.text();
+  const token = page.match( /token: '(\S+)'/ )[1];
+
   const authToken = localStorage.getItem( 'gc:authToken' );
   const productSession = localStorage.getItem( 'gc:product' );
   const headers = {
@@ -10,7 +14,7 @@ export const coletarDailyRewards = async () => {
     'x-product-session': `${productSession}`
   };
 
-  axios.post( `https://missions-api.${ GC_URL }/player/daily-rewards/claim`, '', { headers } ).then( () => {
+  axios.post( `https://${ GC_URL }/api/missions/daily-rewards/claim`, { token }, { headers } ).then( () => {
     localStorage.setItem( 'daily_rewards_claim_date', `"${new Date().toISOString()}"` );
 
     const dailyRewardsBtn = document.querySelector( '[href="/daily-rewards"]' );

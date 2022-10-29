@@ -263,6 +263,10 @@ input[type="range"].filterKdr::-ms-tooltip {
   font-weight: bold;
 }
 
+#gcbooster_cabecalho {
+  border: 1px solid orange !important;
+}
+
 .draw-orange {
   border: 1px solid orange;
 }
