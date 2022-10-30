@@ -71,9 +71,11 @@ E só é utilizado caso você mesmo configure um webhook!
     ![kdr](https://user-images.githubusercontent.com/5823077/174089170-3f69a64a-64d2-44a5-9fc1-47846b9f6e71.jpg)
 
 - Perfil
-  - Adiciona a soma de todas as vitórias / derrotas e win rate
+  - Adiciona a soma de todas as vitórias / derrotas / partidas e win rate*
+  - Adiciona a contagem de kills, mortes, diferença entre kill/morte* e o KDR médio* do mês atual
+    <h5>*Colorido conforme desempenho do jogador</h5>
   
-    ![image](https://user-images.githubusercontent.com/1070818/107776850-e13a2f80-6d20-11eb-9f2e-84f7fb38ead5.png)
+    ![image](https://img001.prntscr.com/file/img001/261AjPwLTf2BAIfsU0Ij_Q.png)
   
 - Integração com Discord
   - Envia automáticamente o link no Discord cadastrado (passo a passo de como fazer em seguida)
