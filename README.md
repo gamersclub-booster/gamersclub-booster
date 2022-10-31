@@ -31,19 +31,21 @@ E só é utilizado caso você mesmo configure um webhook!
 ### O que ela faz?
 
 - Geral
-  - Adiciona o quanto falta para você upar ou cair, no menu superior das abas
+  - Adiciona o quanto falta para você upar ou cair, suas informações básicas (como nick e foto), rating atual e KDR médio na parte inferior central da tela <br>
+    <h5> Obs: Agora você pode consultar essas informações em qualquer lugar dentro da plataforma da GamersClub! </h5>
   
-    ![info-pontos](https://user-images.githubusercontent.com/5823077/174089166-4affc850-c8fc-4e0a-839d-c8f70233ed76.jpg)
+    ![info-pontos](https://img001.prntscr.com/file/img001/huU_02wzQnuof9WR-kQsrA.png)
+    
   - Darkmode para todo a GC para o pessoal que joga no escuro.
 
-    ![darkmode](https://user-images.githubusercontent.com/5823077/174089157-ae92fb01-f970-483c-a370-0b554365b95b.jpg)
+    ![darkmode](https://img001.prntscr.com/file/img001/pa_tRmTqTXmAUivL0fWZcQ.png)
 
 - Página Minhas Partidas
   - Verifica em cada partida se tem jogador banido
     - Icone :warning: caso tenha algum jogador banido
     - Icone ✔️ caso nenhum jogador tenha sido banido
 
-    ![Banidos](https://user-images.githubusercontent.com/5823077/174089155-5db1df3e-ad79-4c8d-845e-8d3e38413190.jpg)
+    ![Banidos](https://img001.prntscr.com/file/img001/D5DRnkVSRlqm0BkqzPQTAw.png)
 
     - Adiciona um background com cores para vitória/derrota e empate
     
@@ -60,15 +62,17 @@ E só é utilizado caso você mesmo configure um webhook!
   - Opção de manter o lobby em posição fixa na tela. Evita aquele comportamento chato de ficar sumindo e aparecendo a aba do lobby.
   - Pré vetos
   - Adiciona um botão pra forçar a criação da lobby (pra quando tem mais do que o limite, 50 free ou 400 premium)
-- 
-  ![filtros](https://user-images.githubusercontent.com/5823077/174089165-083d76e9-ff1f-4cda-bff3-a3e9f5d47372.jpg)
+  - Completar partida automaticamente
+  - Filtrar lobbies por país
+ 
+  ![filtros](https://img001.prntscr.com/file/img001/C8R_8BhzRWOu6Ojw3fSfdg.png)
   - KDR na no lobby
 
-    ![kdr-1](https://user-images.githubusercontent.com/5823077/174089172-9c92edcf-f244-41f6-a1f5-cc13e02f45d0.jpg)
+    ![kdr-1](https://img001.prntscr.com/file/img001/U-t4M_AbQsGSpraSRw6Nlg.png)
 
   - KDR na sala de espera
 
-    ![kdr](https://user-images.githubusercontent.com/5823077/174089170-3f69a64a-64d2-44a5-9fc1-47846b9f6e71.jpg)
+    ![kdr](https://img001.prntscr.com/file/img001/RDXWnGZ4SUeil1XaOeWs1Q.png)
 
 - Perfil
   - Adiciona a soma de todas as vitórias / derrotas / partidas e win rate*
