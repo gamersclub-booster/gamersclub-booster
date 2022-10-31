@@ -18,7 +18,7 @@ export const listaBloqueio = mutations =>
 
               if ( res.blockList.some( item => item.id.split( '/' ).at( -1 ) === id ) ) {
                 $( `a[href*="/player/${id}"]` ).parents( '.sidebar-item' ).addClass( 'blocked' );
-                alertaMsg( 'Você tem uma pessoa sua lista de bloqueio' );
+                alertaMsg( 'Uma pessoa da lista de bloqueio entrou na lobby' );
               }
             }
           } );
