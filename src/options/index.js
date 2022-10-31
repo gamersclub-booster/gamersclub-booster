@@ -368,8 +368,8 @@ function loadBlockList() {
 
           // Adicionar o jogar na lista e o botão remover
           listHTML.innerHTML += `<div class="jogador ${numericId}">
-                                  <img src="${avatarURL}" alt="" class="circle"></img>
-                                  <span>${nick}</span>
+                                  <a href="${id}" target="_blank" class="links"><img src="${avatarURL}" alt="" class="circle" /></a>
+                                  <a href="${id}" target="_blank" class="links"><span>${nick}</span></a>
                                   <button class="buttonBlockLista" remove-button="${numericId}">Remover</button></div>`;
 
 

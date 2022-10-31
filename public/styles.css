@@ -530,3 +530,7 @@ input:not([type="range"]) {
   color: #fff;
   text-decoration: underline !important;
 }
+
+.conteudo a {
+  color: #ffffff;
+}
