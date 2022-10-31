@@ -179,7 +179,6 @@ function arrayRemove( arr, value ) {
 function adicionarListenersFeatures() {
   for ( const feature of features ) {
     document.getElementById( feature ).addEventListener( 'change', function () {
-      console.log( feature, ' changed' );
       chrome.storage.sync.set( { [feature]: this.checked }, function () {} );
     } );
   }
@@ -274,10 +273,8 @@ function loadWebhook() {
           document.getElementById( 'divDoDiscord' ).removeAttribute( 'hidden' );
         } );
       } catch ( e ) {
-        console.log( e );
         document.getElementById( 'statusWebhook' ).innerText = 'Erro na URL, tente novamente.';
         document.getElementById( 'divDoDiscord' ).setAttribute( 'hidden', true );
-        console.log( 'Erro' );
       }
     } else {
       chrome.storage.sync.get( [ 'statusWebhook' ], function ( e ) {
