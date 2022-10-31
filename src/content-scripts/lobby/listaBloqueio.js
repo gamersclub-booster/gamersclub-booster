@@ -9,16 +9,18 @@ export const listaBloqueio = mutations =>
       }
       for ( let i = 0; i < mutation.addedNodes.length; i++ ) {
         const node = mutation.addedNodes[i];
+
         if ( node.className && node.className.includes( 'sidebar-item' ) ) {
           chrome.storage.sync.get( [ 'blockList' ], function ( res ) {
+            console.log( node.querySelector( 'a' ) );
             if ( res.blockList ) {
               const selectorLink = node.querySelector( 'a' );
 
-              const id = selectorLink.getAttribute( 'href' ).replace( '/jogador/', '' );
-              const nick = selectorLink.getAttribute( 'title' ).split( ' | ' )[0];
+              const id = selectorLink.getAttribute( 'href' ).replace( '/player/', '' );
 
-              if ( res.blockList.includes( id ) ) {
-                alertaMsg( prefix + ': Essa pessoa: ' + nick + ' está na sua lista de bloqueio' );
+              if ( res.blockList.some( item => item.id.split( '/' ).at( -1 ) === id ) ) {
+                $( `a[href*="/player/${id}"]` ).parents( '.sidebar-item' ).addClass( 'blocked' );
+                alertaMsg( 'Você tem uma pessoa sua lista de bloqueio' );
               }
             }
           } );
