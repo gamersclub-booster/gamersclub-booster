@@ -2,7 +2,6 @@ import { alertaMsg } from '../../lib/messageAlerts';
 
 export const listaBloqueio = mutations =>
   chrome.storage.sync.get( [ 'blockList' ], function ( ) {
-    const prefix = '<a style="color: yellow;">Block - </a>';
     mutations.forEach( async mutation => {
       if ( !mutation.addedNodes ) {
         return;
@@ -12,7 +11,6 @@ export const listaBloqueio = mutations =>
 
         if ( node.className && node.className.includes( 'sidebar-item' ) ) {
           chrome.storage.sync.get( [ 'blockList' ], function ( res ) {
-            console.log( node.querySelector( 'a' ) );
             if ( res.blockList ) {
               const selectorLink = node.querySelector( 'a' );
 
