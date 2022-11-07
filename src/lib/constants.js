@@ -112,6 +112,9 @@ export const audios = {
   'https://www.myinstants.com/media/sounds/onarollbrag13.mp3': 'Easy Peasy - CS:GO',
   'https://www.myinstants.com/media/sounds/que-ota_-17.mp3': 'Qué Ota? - LUCAS1',
   'https://www.myinstants.com/media/sounds/tuturu_1.mp3': 'Tuturu - Steins;Gate',
+  'https://www.myinstants.com/media/sounds/cs_go-fallen-incredible-1v5-against-na_vi-at-iem-katowice-2016-_live_-2m23.mp3': 'Stop Blowing my mind - Fallen',
+  'https://www.myinstants.com/media/sounds/fnx-qm-ta-triste-nao-ta-mais_WXNDST4.mp3': 'Quem tá triste não tá mais - Fnx',
+  'https://www.myinstants.com/media/sounds/foto-na-parede.mp3': 'Coloca minha foto na sua parede - Kng',
   'custom': 'Customizar'
 };
 export const GC_URL = window.location.hostname;
