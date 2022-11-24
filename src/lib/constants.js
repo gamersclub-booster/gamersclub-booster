@@ -99,6 +99,10 @@ export const preVetosMapas = [
   {
     mapa: 'de_tuscan',
     codigo: 13
+  },
+  {
+    mapa: 'de_anubis',
+    codigo: 14
   }
 ];
 export const configValues = [ 'somReady', 'volume', 'customSomReady' ];
