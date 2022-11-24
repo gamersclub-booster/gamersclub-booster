@@ -96,10 +96,10 @@ export const preVetosMapas = [
     mapa: 'de_ancient',
     codigo: 12
   },
-  // {
-  //   mapa: 'de_tuscan',
-  //   codigo: 13
-  // },
+  {
+    mapa: 'de_tuscan',
+    codigo: 13
+  },
   {
     mapa: 'de_anubis',
     codigo: 14
