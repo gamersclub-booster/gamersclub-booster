@@ -5,7 +5,7 @@ const SELETOR_LINK_PARTIDAS = 'a:contains("Ver partida")';
 
 const pegarIdPartida = link => link.split( '/' )[7];
 
-const adicioanrLinks = () => {
+const adicionarLinks = () => {
   $( SELETOR_LINK_PARTIDAS ).each( function () {
     $( this ).parent().css( { 'width': '235px', 'text-align': 'center' } );
     if ( $( this ).attr( 'class' ).includes( 'finished' ) ) {
@@ -64,7 +64,7 @@ const revelarMapa = async ( partida, elemento, tentativas = 0 ) => {
 };
 
 const initPartidas = async () => {
-  adicioanrLinks();
+  adicionarLinks();
 };
 
 ( async () => {
