@@ -1,6 +1,7 @@
 import { adicionarNaLista, removerDaLista } from '../../lib/blockList';
 import { getAllStorageSyncData, getTranslationText } from '../../utils';
 import { alertaMsg } from '../../lib/messageAlerts';
+import { retrieveWindowVariables } from '../../lib/dom';
 
 export function initListaBloqueio() {
   chrome.storage.sync.get( [ 'blockList' ], function ( result ) {
@@ -18,12 +19,11 @@ async function initBotaoListaBloqueio() {
   const removeBlocklistText = getTranslationText( 'remover-da-lista-de-bloqueio', traducao );
   const addedBlocklistText = getTranslationText( 'foi-adicionado-a-lista-bloqueio', traducao );
   const removedBlocklistText = getTranslationText( 'foi-removido-da-lista-bloqueio', traducao );
-  const seuNickReal = document.getElementsByClassName( 'MainHeader__playerNickname' )[0].innerText;
-
+  const playerId = retrieveWindowVariables( [ 'PLAYERID' ] ).PLAYERID;
   //Quando iniciar, adicionar os botoes da lista de bloqueio
   const playerSelector = $( '.tableMatch__leftColumn' );
   for ( let i = 0; i < playerSelector.length; i++ ) {
-    if ( playerSelector[i].outerText === seuNickReal ) { continue; }
+    if ( playerSelector[i].children[2].href.includes( playerId ) ) { continue; }
     const botaoHTML = $( `<button data="preAlready" class="botaoListaDeBloqueio">${addBlocklistText}</button>` );
     botaoHTML.insertAfter( playerSelector[i] );
   }
