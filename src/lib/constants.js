@@ -68,10 +68,10 @@ export const preVetosMapas = [
     mapa: 'de_nuke',
     codigo: 2
   },
-  {
-    mapa: 'de_train',
-    codigo: 3
-  },
+  // {
+  //   mapa: 'de_train',
+  //   codigo: 3
+  // },
   {
     mapa: 'de_mirage',
     codigo: 5
@@ -88,18 +88,18 @@ export const preVetosMapas = [
     mapa: 'de_vertigo',
     codigo: 10
   },
-  // {
-  //   mapa: 'de_cbble_classic',
-  //   codigo: 11
-  // }
+  {
+    mapa: 'de_cbble_classic',
+    codigo: 11
+  },
   {
     mapa: 'de_ancient',
     codigo: 12
   },
-  {
-    mapa: 'de_tuscan',
-    codigo: 13
-  },
+  // {
+  //   mapa: 'de_tuscan',
+  //   codigo: 13
+  // },
   {
     mapa: 'de_anubis',
     codigo: 14

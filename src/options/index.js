@@ -17,7 +17,6 @@ const translations = {
 
 function iniciarPaginaOpcoes() {
   mostrarMensagemAtencao();
-  limparOpcoesInvalidas();
   adicionaVersao();
   marcarCheckboxes();
   marcarPreVetos();
@@ -46,15 +45,22 @@ function mostrarMensagemAtencao() {
     }
   } );
 }
+function limparPreVetos( preVetos, mapa ) {
+  const index = preVetos.indexOf( mapa );
+  if ( index > -1 ) {
+    const mapas = preVetos;
+    mapas.splice( index, 1 );
+    console.log( mapas );
+    chrome.storage.sync.set( { preVetos: mapas } );
+  }
+}
 function limparOpcoesInvalidas() {
   chrome.storage.sync.get( [ 'preVetos' ], res => {
     if ( res.preVetos && res.preVetos.length > 0 ) {
-      const index = res.preVetos.indexOf( 11 );
-      if ( index > -1 ) {
-        const mapas = res.preVetos;
-        mapas.splice( index, 1 );
-        chrome.storage.sync.set( { preVetos: mapas } );
-      }
+      // train
+      limparPreVetos( res.preVetos, 3 );
+      // tuscan
+      limparPreVetos( res.preVetos, 13 );
     }
   } );
 }
@@ -398,4 +404,5 @@ function loadBlockList() {
   } );
 }
 
+limparOpcoesInvalidas();
 iniciarPaginaOpcoes();
