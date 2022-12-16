@@ -1,7 +1,7 @@
-import { retrieveWindowVariables } from '../../lib/dom';
-import { GC_URL, isFirefox } from '../../lib/constants';
-import { alertaMsg } from '../../lib/messageAlerts';
-import axios from 'axios';
+// import { retrieveWindowVariables } from '../../lib/dom';
+// import { GC_URL, isFirefox } from '../../lib/constants';
+// import { alertaMsg } from '../../lib/messageAlerts';
+// import axios from 'axios';
 import { getAllStorageSyncData, getTranslationText } from '../../utils';
 
 const intervalCriarLobby = null;
