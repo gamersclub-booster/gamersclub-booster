@@ -81,5 +81,7 @@
   "foi-adicionado-a-lista-bloqueio": "has been added to your blocklist",
   "foi-removido-da-lista-bloqueio": "has been removed from your blocklist",
   "procurando-complete": "Searching Match to Complete...",
-  "voce-esta-em-uma-lobby": "You are already in a lobby!"
+  "voce-esta-em-uma-lobby": "You are already in a lobby!",
+  "auto-desafiar": "To challenge",
+  "auto-desafiar-cancel": "Stop"
 }

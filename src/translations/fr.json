@@ -81,5 +81,7 @@
   "foi-adicionado-a-lista-bloqueio": "a été ajouté à votre liste de blocage",
   "foi-removido-da-lista-bloqueio": "a été supprimé de votre liste de blocage",
   "procurando-complete": "Chercher...",
-  "voce-esta-em-uma-lobby": "Vous êtes dans un Lobby!"
+  "voce-esta-em-uma-lobby": "Vous êtes dans un Lobby!",
+  "auto-desafiar": "Mettre au défi",
+  "auto-desafiar-cancel": "Annuler"
 }

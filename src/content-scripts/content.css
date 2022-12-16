@@ -270,3 +270,31 @@ input[type="range"].filterKdr::-ms-tooltip {
 .draw-orange {
   border: 1px solid orange;
 }
+
+.hasOpenLobbyRoom div#challengeList {
+  position: fixed;
+  z-index: 103;
+
+  background: black;
+  padding: 8px;
+
+  top: initial !important;
+  height: calc(100% - 240px);
+  bottom: 0 !important;
+  border: 1px solid orange;
+  right: 72px;
+}
+
+.hasOpenLobbyRoom div#challengeList sidebar {
+  position: relative !important;
+  top: initial !important;
+  right: initial !important;
+  bottom: initial !important;
+  height: 100% !important;
+}
+
+div#sidebar-desafios-salas.hasOpenLobbyRoom {
+  width: 200px !important;
+  margin: 0 auto!important;
+  max-height: 100% !important;
+}

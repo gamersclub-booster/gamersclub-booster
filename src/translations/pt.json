@@ -81,5 +81,7 @@
   "foi-adicionado-a-lista-bloqueio": "foi adicionado à sua lista de bloqueio",
   "foi-removido-da-lista-bloqueio": "foi removido da sua lista de bloqueio",
   "procurando-complete": "Procurando Complete...",
-  "voce-esta-em-uma-lobby": "Você está em um lobby! Saia para buscar por complete!"
+  "voce-esta-em-uma-lobby": "Você está em um lobby! Saia para buscar por complete!",
+  "auto-desafiar": "Desafiar",
+  "auto-desafiar-cancel": "Cancelar"
 }

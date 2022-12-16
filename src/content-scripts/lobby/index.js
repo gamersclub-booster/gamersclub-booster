@@ -6,6 +6,7 @@ import { partidaInfo } from './partidaInfo';
 import { lobbyLink } from './lobbyLink';
 import { listaBloqueio } from './listaBloqueio';
 import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
+// import { adicionarBotaoAutoDesafiar } from './botaoAutoDesafiar';
 import { initListaBloqueio } from './botaoListaBloqueio';
 import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
 import { addCabecalho } from './addCabecalho';
@@ -53,6 +54,8 @@ const initLobby = async () => {
   partidaInfo();
   // Feature de mostrar somente pais selecionado
   adicionarFiltroPais();
+  // Desafiar automatico
+  // adicionarBotaoAutoDesafiar();
 };
 
 const criarObserver = ( seletor, exec ) => {
