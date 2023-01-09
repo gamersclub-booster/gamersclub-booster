@@ -1,4 +1,4 @@
-import { autoFixarMenuLobby } from './autoFixarMenuLobby';
+// import { autoFixarMenuLobby } from './autoFixarMenuLobby';
 import { autoAceitarReady, autoAceitarReadySetInterval } from './autoAceitarReady';
 import { somReady } from './somReady';
 import { autoConcordarTermosRanked } from './autoConcordarTermosRanked';
@@ -31,7 +31,8 @@ const initLobby = async () => {
   criarObserver( '.lobby,.ranking', autoAceitarReady );
   criarObserver( '.lobby,.ranking', autoConcordarTermosRanked );
   criarObserver( '.list-avaliable-teams', mostrarKdr );
-  criarObserver( '#lobbyContent', autoFixarMenuLobby );
+  // @TODO: corrigir o fixar menu, está bugando por causa da nova barra superior da gc
+  // criarObserver( '#lobbyContent', autoFixarMenuLobby );
   criarObserver( '#lobbyContent', lobbyLink );
   criarObserver( '#lobbyContent', listaBloqueio );
   criarObserver( '#lobbyContent', mostrarKdrSala );
