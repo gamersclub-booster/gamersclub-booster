@@ -120,6 +120,8 @@ export const audios = {
     'Stop Blowing my mind - Fallen',
   'https://www.myinstants.com/media/sounds/fnx-qm-ta-triste-nao-ta-mais_WXNDST4.mp3': 'Quem tá triste não tá mais - Fnx',
   'https://www.myinstants.com/media/sounds/foto-na-parede.mp3': 'Coloca minha foto na sua parede - Kng',
+  'https://www.myinstants.com/media/sounds/gau-desbane-o-v2.mp3': 'Gau desbane o v2?',
+  'https://www.myinstants.com/media/sounds/bt0-pega-o-guanabara-e-vem.mp3': 'Bt0 - Pega o guanabara e vem',
   'custom': 'Customizar'
 };
 export const GC_URL = window.location.hostname;
