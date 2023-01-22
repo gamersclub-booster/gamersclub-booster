@@ -77,7 +77,8 @@ input[type="range"].filterKdr::-ms-tooltip {
 }
 
 .blocked {
-  background: rgb(255 0 0 / 44%);
+  background: rgb(255 0 0 / 50%);
+  background-image: none !important;
 }
 
 /* Filtro de paises */
@@ -268,12 +269,12 @@ input[type="range"].filterKdr::-ms-tooltip {
 }
 
 .draw-orange {
-  border: 1px solid orange;
+  border: 1px solid orange!important;
 }
 
 .with-fixed-menu div#sidebar-desafios-salas.hasOpenLobbyRoom {
   width: 300px !important;
-  margin: 0 auto!important;
+  margin: 0 auto !important;
   max-height: 100% !important;
 }
 
@@ -298,4 +299,3 @@ input[type="range"].filterKdr::-ms-tooltip {
   bottom: initial !important;
   height: 100% !important;
 }
-
