@@ -23,7 +23,10 @@ async function initBotaoListaBloqueio() {
   //Quando iniciar, adicionar os botoes da lista de bloqueio
   const playerSelector = $( '.tableMatch__leftColumn' );
   for ( let i = 0; i < playerSelector.length; i++ ) {
-    if ( playerSelector[i].children[2].href.includes( playerId ) ) { continue; }
+    // Para não adicionar você mesmo na lista
+    const Iam = $( playerSelector[i] ).find( '.tableMatch__playerLink ' ).attr( 'href' );
+    if ( Iam.includes( playerId ) ) { continue; }
+
     const botaoHTML = $( `<button data="preAlready" class="botaoListaDeBloqueio">${addBlocklistText}</button>` );
     botaoHTML.insertAfter( playerSelector[i] );
   }
@@ -33,8 +36,9 @@ async function initBotaoListaBloqueio() {
       const botaoLista = document.getElementsByClassName( 'botaoListaDeBloqueio' );
       for ( let i = 0; i < botaoLista.length; i++ ) {
         //Verificar se já existe no array
-        const id = botaoLista[i].offsetParent.children[0].children[0].children[2].href.replace( 'https://gamersclub.com.br/jogador/', '' );
-        const avatarURL = botaoLista[i].offsetParent.children[0].children[0].children[0].children[2].src;
+        const itemList = $( botaoLista[i] ).parents( '.tableMatch__nickColumn' );
+        const id = itemList.find( '.tableMatch__playerLink ' ).attr( 'href' );
+        const avatarURL = itemList.find( '.gc-avatar-image' ).attr( 'src' );
 
         const listaDeTodosOsIDs = result.blockList.map( e => { return e.id; } );
         if ( listaDeTodosOsIDs.includes( id ) ) {
@@ -45,9 +49,12 @@ async function initBotaoListaBloqueio() {
           botaoLista[i].setAttribute( 'data', 'notAlreadyListed' );
         }
         //Adicionar o listener de clique
+        // $( botaoLista[i] ).on( 'click', function ( click ) {
         botaoLista[i].addEventListener( 'click', function ( click ) {
+          click.stopPropagation();
+          const clickButton = $( this );
           const state = botaoLista[i].attributes[0].value;
-          const nick = click.path[1].outerText.split( '\n' )[0];
+          const nick = clickButton.parents( '.tableMatch__nickColumn' ).find( '.tableMatch__playerLink ' ).text();
           if ( state === 'alreadyListed' ) {
             //Remover da lista
             removerDaLista( { id, avatarURL, nick }, function ( ) {
