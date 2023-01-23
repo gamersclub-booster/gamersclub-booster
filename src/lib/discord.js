@@ -85,7 +85,7 @@ export async function sendMatchInfo( url, gcMatch ) {
         value: getTeamInfo( gcMatch.teamA )
       },
       {
-        name:  `Time ${gcMatch.teamB.admin.nick} - ` + gcMatch.teamB.averageLevel,
+        name: `Time ${gcMatch.teamB.admin.nick} - ` + gcMatch.teamB.averageLevel,
         value: getTeamInfo( gcMatch.teamB )
       },
       {
