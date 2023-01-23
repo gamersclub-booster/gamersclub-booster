@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { getMapImage } from './maps';
 import { GC_URL } from './constants';
+import { getMapImage } from './maps';
 
 export async function send( url, body ) {
   return axios.post( url, {
@@ -81,11 +81,11 @@ export async function sendMatchInfo( url, gcMatch ) {
     color: '2391737',
     fields: [
       {
-        name: 'Time A - ' + gcMatch.teamA.averageLevel,
+        name: `Time ${gcMatch.teamA.admin.nick} - ` + gcMatch.teamA.averageLevel,
         value: getTeamInfo( gcMatch.teamA )
       },
       {
-        name: 'Time B - ' + gcMatch.teamB.averageLevel,
+        name:  `Time ${gcMatch.teamB.admin.nick} - ` + gcMatch.teamB.averageLevel,
         value: getTeamInfo( gcMatch.teamB )
       },
       {
