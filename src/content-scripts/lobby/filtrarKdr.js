@@ -19,7 +19,7 @@ const adicionarFiltroKdr = () => {
     $( '#filtrarKdr' ).append( '<span id="filtrarKdrValor" class="FilterLobby_skillLevelTag__10iAp">3+</span>' );
   }
 
-  filtrarLobbiesKdr();
+  // filtrarLobbiesKdr();
 };
 
 
