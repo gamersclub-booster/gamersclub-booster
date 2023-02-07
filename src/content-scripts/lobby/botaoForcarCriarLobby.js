@@ -11,16 +11,17 @@ export async function adicionarBotaoForcarCriarLobby() {
   const text = getTranslationText( 'criar-lobby-pre-configurada', traducao );
 
   if ( !$( '#criarLobbyBtn' ).length ) {
-    $( '#gcbooster_botoes' ).append(
-      $( '<button/>', {
-        'id': 'criarLobbyBtn',
-        'class': 'WasdButton',
-        'css': { 'background-color': '#839800', 'border-radius': '4px' },
-        'type': 'button',
-        'text': text
-      } )
-    );
-    addListeners();
+    setTimeout( () => {
+      $( '#lobby-actions-create-lobby-button' ).parent().append(
+        $( '<button/>', {
+          'id': 'criarLobbyBtn',
+          'class': 'WasdButton WasdButton--success WasdButton--lg WasdButton--block draw-orange',
+          'type': 'button',
+          'text': text
+        } )
+      );
+      addListeners();
+    }, 1500 );
   } else {
     $( '#criarLobbyBtn' )
       .css( { 'background-color': '#839800', 'border-radius': '4px' } )
