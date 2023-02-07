@@ -280,7 +280,7 @@ input[type="range"].filterKdr::-ms-tooltip {
 
 .hasOpenLobbyRoom div#challengeList.with-fixed-menu {
   position: fixed;
-  z-index: 103;
+  z-index: 101;
 
   background: black;
   padding: 8px;
