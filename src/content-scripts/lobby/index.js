@@ -1,17 +1,16 @@
-// import { autoFixarMenuLobby } from './autoFixarMenuLobby';
+import { autoFixarMenuLobby } from './autoFixarMenuLobby';
 import { autoAceitarReady, autoAceitarReadySetInterval } from './autoAceitarReady';
 import { somReady } from './somReady';
 import { autoConcordarTermosRanked } from './autoConcordarTermosRanked';
-// import { partidaInfo } from './partidaInfo';
-// import { lobbyLink } from './lobbyLink';
-// import { listaBloqueio } from './listaBloqueio';
+import { partidaInfo } from './partidaInfo';
+import { lobbyLink } from './lobbyLink';
+import { listaBloqueio } from './listaBloqueio';
 // import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
 import { initListaBloqueio } from './botaoListaBloqueio';
 // import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
 // import { addCabecalho } from './addCabecalho';
 import { mostrarKdr, mostrarKdrSala } from './mostrarKdr';
 // import { adicionarFiltroKdr } from './filtrarKdr';
-// import { adicionarFiltroPais } from './filtrarPais';
 
 
 chrome.storage.sync.get( null, function ( _result ) {
@@ -31,11 +30,11 @@ const initLobby = async () => {
   criarObserver( '.lobby,.ranking', autoAceitarReady );
   criarObserver( '.lobby,.ranking', autoConcordarTermosRanked );
   criarObserver( '.list-avaliable-teams', mostrarKdr );
-  // criarObserver( '#lobbyContent', autoFixarMenuLobby );
-  // criarObserver( '#lobbyContent', lobbyLink );
-  // criarObserver( '#lobbyContent', listaBloqueio );
+  criarObserver( '#lobbyContent', autoFixarMenuLobby );
+  criarObserver( '#lobbyContent', lobbyLink );
+  criarObserver( '#lobbyContent', listaBloqueio );
   criarObserver( '#lobbyContent', mostrarKdrSala );
-  criarObserver( '#challengeList', mostrarKdr );
+  criarObserver( '#lobbies-wrapper', mostrarKdr );
 
   // Cria seção de cabeçalho para botões da extensão
   // addCabecalho();
@@ -50,7 +49,7 @@ const initLobby = async () => {
   // Feature para filtrar por KD
   // adicionarFiltroKdr();
   // Feature de discord na hora de copiar o ip
-  // partidaInfo();
+  partidaInfo();
   // Feature de mostrar somente pais selecionado
   // adicionarFiltroPais();
 };
