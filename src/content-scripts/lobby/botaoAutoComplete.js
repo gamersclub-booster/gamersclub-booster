@@ -8,16 +8,19 @@ export async function adicionarBotaoAutoComplete() {
   const { traducao } = await getAllStorageSyncData();
   const completarPartidaText = getTranslationText( 'completar-partida', traducao );
 
+
   if ( !$( '#autoCompleteBtn' ).length ) { // Se precisa criar o botão e adicionar na página
-    $( '#gcbooster_botoes' )
-      .append( $( '<button/>', {
-        'id': 'autoCompleteBtn',
-        'class': 'WasdButton',
-        'css': { 'background-color': 'orange', 'border-radius': '4px' },
-        'type': 'button',
-        'text': completarPartidaText
-      } ) );
-    addListeners();
+    setTimeout( () => {
+      $( '#lobby-actions-create-lobby-button' ).parent()
+        .append( $( '<button/>', {
+          'id': 'autoCompleteBtn',
+          'class': 'WasdButton WasdButton--primary WasdButton--lg WasdButton--block draw-orange',
+          'type': 'button',
+          'text': completarPartidaText
+        } )
+        );
+      addListeners();
+    }, 1500 );
   } else { // Se precisa apenas modificar o botão que já existe
     $( '#autoCompleteBtn' )
       .css( { 'background-color': 'orange', 'border-radius': '4px' } )
