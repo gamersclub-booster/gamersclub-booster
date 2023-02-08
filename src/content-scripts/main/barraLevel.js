@@ -192,7 +192,7 @@ export const adicionarBarraLevel = async () => {
         )
     );
 
-  $( 'body' )
+  $( '#navbar-placeholder' )
     .append( containerDiv.append( currentLevelSpan ).append( progressBarDiv ).append( nextLevelSpan ) );
 
 };

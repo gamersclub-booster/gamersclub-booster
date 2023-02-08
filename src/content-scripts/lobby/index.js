@@ -7,7 +7,7 @@ import { lobbyLink } from './lobbyLink';
 import { listaBloqueio } from './listaBloqueio';
 import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
 import { initListaBloqueio } from './botaoListaBloqueio';
-// import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
+import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
 // import { addCabecalho } from './addCabecalho';
 import { mostrarKdr, mostrarKdrSala } from './mostrarKdr';
 // import { adicionarFiltroKdr } from './filtrarKdr';
@@ -41,7 +41,7 @@ const initLobby = async () => {
   // Clicar automáticamente no Ready, temporário.
   autoAceitarReadySetInterval();
   // Feature para aceitar complete automatico
-  // adicionarBotaoAutoComplete();
+  adicionarBotaoAutoComplete();
   // Feature pra criar lobby caso full
   adicionarBotaoForcarCriarLobby();
   // Feature para mostrar kdr dos players
