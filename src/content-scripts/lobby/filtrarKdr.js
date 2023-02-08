@@ -1,6 +1,6 @@
 const adicionarFiltroKdr = () => {
   if ( !$( '#filtrarKdrInput' ).length ) {
-    $( '#gcbooster_cabecalho' ).append( $( '<div/>', { 'id': 'gcbooster_section2', 'class': 'FilterLobby_section__3UmYp' } )
+    $( '#gcbooster_kdr_filter' ).append( $( '<div/>', { 'id': 'gcbooster_section2', 'class': 'FilterLobby_section__3UmYp' } )
       .append( $( '<p/>', { 'class': 'FilterLobby_sectionLabel__1zPew', 'text': 'Filtrar por KDR', 'css': { 'color': 'orange' } } ) )
       .append( $( '<div/>', { 'class': 'FilterLobby_buttons__2ySGq', 'id': 'filtrarKdr' } ) ) );
     $( '#filtrarKdr' )

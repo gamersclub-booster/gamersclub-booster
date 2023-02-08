@@ -7,10 +7,10 @@ import { lobbyLink } from './lobbyLink';
 import { listaBloqueio } from './listaBloqueio';
 import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
 import { initListaBloqueio } from './botaoListaBloqueio';
-// import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
-// import { addCabecalho } from './addCabecalho';
+import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
+import { addLobbyFeatures } from './addLobbyFeatures';
 import { mostrarKdr, mostrarKdrSala } from './mostrarKdr';
-// import { adicionarFiltroKdr } from './filtrarKdr';
+import { adicionarFiltroKdr } from './filtrarKdr';
 
 
 chrome.storage.sync.get( null, function ( _result ) {
@@ -37,21 +37,19 @@ const initLobby = async () => {
   criarObserver( '#lobbies-wrapper', mostrarKdr );
 
   // Cria seção de cabeçalho para botões da extensão
-  // addCabecalho();
+  addLobbyFeatures();
   // Clicar automáticamente no Ready, temporário.
   autoAceitarReadySetInterval();
   // Feature para aceitar complete automatico
-  // adicionarBotaoAutoComplete();
+  adicionarBotaoAutoComplete();
   // Feature pra criar lobby caso full
   adicionarBotaoForcarCriarLobby();
   // Feature para mostrar kdr dos players
   mostrarKdr();
   // Feature para filtrar por KD
-  // adicionarFiltroKdr();
+  adicionarFiltroKdr();
   // Feature de discord na hora de copiar o ip
   partidaInfo();
-  // Feature de mostrar somente pais selecionado
-  // adicionarFiltroPais();
 };
 
 const criarObserver = ( seletor, exec ) => {

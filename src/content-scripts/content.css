@@ -264,13 +264,34 @@ input[type="range"].filterKdr::-ms-tooltip {
   font-weight: bold;
 }
 
-#gcbooster_cabecalho {
+#gcbooster_lobby_features {
   border: 1px solid orange !important;
+  display: flex;
+  flex-direction: column;
 }
 
 .draw-orange {
   border: 1px solid orange !important;
   box-shadow: 0 0 10px rgb(255 165 0 / 86%) !important;
+}
+
+.options-body {
+  padding: 0px 16px 16px;
+  display: flex;
+  gap: 16px;
+  overflow: auto hidden;
+}
+
+.options-section {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  box-sizing: border-box;
+  border-radius: 2px;
+  backdrop-filter: blur(16px);
+  flex: 1 1 0%;
 }
 
 .with-fixed-menu div#sidebar-desafios-salas.hasOpenLobbyRoom {
