@@ -231,9 +231,10 @@ input[type="range"].filterKdr::-ms-tooltip {
   box-shadow: inset 0px -1px 9px 6px rgb(255 141 0 / 10%);
 
   border-top: 0;
+  border-bottom: 0;
 
   box-shadow: none;
-  padding: 4px 11px;
+  padding: 5px 11px;
   border-radius: 0;
 }
 
@@ -292,6 +293,7 @@ input[type="range"].filterKdr::-ms-tooltip {
   height: calc(100% - 240px);
   bottom: 0 !important;
   border: 1px solid orange;
+  box-shadow: 0 0 10px rgb(255 165 0 / 86%);
   right: 72px;
 }
 
