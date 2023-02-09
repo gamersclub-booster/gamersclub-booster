@@ -2,10 +2,6 @@ const BASE_URL = 'https://gamersclub.com.br/player';
 
 const SELETOR_DATA_CRIACAO = '.gc-list-title:contains("Registrado em")';
 
-function scrapText( html, selector ) {
-  return $( html ).find( selector ).text() || ' 0';
-}
-
 export async function getPlayerInfo( id ) {
   const promise = new Promise( ( resolve, reject ) => {
     try {
