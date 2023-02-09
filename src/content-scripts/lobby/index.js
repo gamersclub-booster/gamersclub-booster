@@ -37,8 +37,8 @@ const initLobby = async () => {
   criarObserver( '#lobbyContent', mostrarKdrSala );
 
   criarObserver( '#lobbies-wrapper', mostrarKdr );
-  criarObserver( '#lobbies-wrapper', mostrarKdr );
   criarObserver( '#lobbies-wrapper', infoLobby );
+  criarObserver( '#challengeList', mostrarKdr );
 
 
   // Cria seção de cabeçalho para botões da extensão
