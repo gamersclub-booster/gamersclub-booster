@@ -53,7 +53,7 @@ function createDivVitory( playerInfo ) {
       'class': 'gcbooster-info-vitoria',
       title: 'Porcentagem de vitória',
       'data-tip-text': 'Porcentagem de vitória'
-    } ).append( `V: ${Math.round( playerInfo.porcentagemVitoria )}%` );
+    } ).append( `%: ${Math.round( playerInfo.porcentagemVitoria )}%` );
 }
 
 function createDivDateCreate( playerInfo ) {
@@ -157,7 +157,7 @@ function createModal() {
   return $( '<div />',
     {
       'id': 'infos_lobby',
-      title: 'teste'
+      title: 'Estatísticas'
     } );
 }
 
