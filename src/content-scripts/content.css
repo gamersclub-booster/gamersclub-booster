@@ -348,6 +348,13 @@ input[type="range"].filterKdr::-ms-tooltip {
 .gcbooster-info-player {
   font-size: 10px;
   padding: 2px 0;
+
+  border-right: 1px solid #ffa50059;
+  padding-left: 4px;
+}
+
+.gcbooster-info-player:nth-last-of-type(-2n + 1) {
+  border: none !important;
 }
 
 .gcbooster-info-titles {
