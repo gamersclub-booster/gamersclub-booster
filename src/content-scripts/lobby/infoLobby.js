@@ -40,7 +40,7 @@ const IMAGE_ALT = 'Buscar informações da lobby';
 function createDiv( ) {
   return $( '<div/>',
     {
-      'id': 'gcbooster_lupa',
+      id: 'gcbooster_lupa',
       title: IMAGE_ALT,
       'data-tip-text': IMAGE_ALT
     } );
@@ -53,7 +53,7 @@ function createDivVitory( playerInfo ) {
       'class': 'gcbooster-info-vitoria',
       title: 'Porcentagem de vitória',
       'data-tip-text': 'Porcentagem de vitória'
-    } ).append( `VT: ${Math.round( playerInfo.porcentagemVitoria )}%` );
+    } ).append( `V: ${Math.round( playerInfo.porcentagemVitoria )}%` );
 }
 
 function createDivDateCreate( playerInfo ) {
@@ -62,7 +62,7 @@ function createDivDateCreate( playerInfo ) {
       'class': 'gcbooster-info-date-create',
       title: 'Tempo de conta',
       'data-tip-text': 'Tempo de conta'
-    } ).append( `TP: ${calcAge( playerInfo.dataCriacao )}` );
+    } ).append( `T: ${calcAge( playerInfo.dataCriacao )}` );
 }
 
 function createDivLobbys( playerInfo ) {
@@ -71,7 +71,7 @@ function createDivLobbys( playerInfo ) {
       'class': 'gcbooster-info-lobbyes',
       title: 'Partidas jogadas',
       'data-tip-text': 'Partidas jogadas'
-    } ).append( `PR: ${playerInfo.totalPartidas}` );
+    } ).append( `P: ${playerInfo.totalPartidas}` );
 }
 
 function createDivLobbysWin( playerInfo ) {
@@ -80,7 +80,7 @@ function createDivLobbysWin( playerInfo ) {
       'class': 'gcbooster-info-lobbyes-win',
       title: 'Vitórias',
       'data-tip-text': 'Vitórias'
-    } ).append( `VT: ${playerInfo.totalVitorias}` );
+    } ).append( `V: ${playerInfo.totalVitorias}` );
 }
 
 function createClose( ) {
@@ -99,7 +99,7 @@ function createDivLobbysLose( playerInfo ) {
       'class': 'gcbooster-info-lobbyes-lose',
       title: 'Derrotas',
       'data-tip-text': 'Derrotas'
-    } ).append( `DR: ${playerInfo.totalDerrotas}` );
+    } ).append( `D: ${playerInfo.totalDerrotas}` );
 }
 
 

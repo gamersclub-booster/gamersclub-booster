@@ -313,6 +313,10 @@ input[type="range"].filterKdr::-ms-tooltip {
 }
 
 #gcbooster_lupa {
+  border: 1px solid orange;
+  border-right: none;
+  border-bottom: none;
+  box-shadow: -3px -3px 6px rgb(255 165 0 / 60%);
   bottom: 0;
   right: 0;
   position: absolute;
@@ -351,7 +355,7 @@ input[type="range"].filterKdr::-ms-tooltip {
   top: -18px;
   background: orange;
   width: 100%;
-  border-radius: 10px;
+  border-radius: 10px 10px 0 0;
   padding: 1px 9px;
   color: black;
   text-transform: uppercase;
@@ -362,14 +366,17 @@ input[type="range"].filterKdr::-ms-tooltip {
 
 .gcbooster-info-close {
   position: absolute;
-  right: 2px;
+  right: 22px;
   top: -17px;
   color: white;
   cursor: pointer;
   font-weight: 400;
+  font-size: 10px;
   background: black;
   border-radius: 50%;
   width: 20px;
   height: 20px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
