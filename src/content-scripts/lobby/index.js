@@ -11,6 +11,7 @@ import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
 // import { addCabecalho } from './addCabecalho';
 import { mostrarKdr, mostrarKdrSala } from './mostrarKdr';
 // import { adicionarFiltroKdr } from './filtrarKdr';
+import { infoLobby } from './infoLobby';
 
 
 chrome.storage.sync.get( null, function ( _result ) {
@@ -29,13 +30,16 @@ const initLobby = async () => {
   criarObserver( '.lobby,.ranking', somReady );
   criarObserver( '.lobby,.ranking', autoAceitarReady );
   criarObserver( '.lobby,.ranking', autoConcordarTermosRanked );
-  criarObserver( '.list-avaliable-teams', mostrarKdr );
+
   criarObserver( '#lobbyContent', autoFixarMenuLobby );
   criarObserver( '#lobbyContent', lobbyLink );
   criarObserver( '#lobbyContent', listaBloqueio );
   criarObserver( '#lobbyContent', mostrarKdrSala );
+
   criarObserver( '#lobbies-wrapper', mostrarKdr );
+  criarObserver( '#lobbies-wrapper', infoLobby );
   criarObserver( '#challengeList', mostrarKdr );
+
 
   // Cria seção de cabeçalho para botões da extensão
   // addCabecalho();
