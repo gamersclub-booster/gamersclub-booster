@@ -30,7 +30,10 @@ function iniciarPaginaOpcoes() {
   adicionarListenerTraducao();
   loadBlockList();
   listenerButtonBlockList();
+  listenerJogarCom();
+  marcarJogarCom();
 }
+
 function mostrarMensagemAtencao() {
   chrome.storage.sync.get ( [ 'mensagemLida' ], response => {
     if ( !response.mensagemLida ) {
@@ -45,6 +48,7 @@ function mostrarMensagemAtencao() {
     }
   } );
 }
+
 function limparPreVetos( preVetos, mapa ) {
   const index = preVetos.indexOf( mapa );
   if ( index > -1 ) {
@@ -54,6 +58,7 @@ function limparPreVetos( preVetos, mapa ) {
     chrome.storage.sync.set( { preVetos: mapas } );
   }
 }
+
 function limparOpcoesInvalidas() {
   chrome.storage.sync.get( [ 'preVetos' ], res => {
     if ( res.preVetos && res.preVetos.length > 0 ) {
@@ -64,6 +69,7 @@ function limparOpcoesInvalidas() {
     }
   } );
 }
+
 function adicionarListenerTraducao() {
   Object.keys( translations ).forEach( lang => {
     document.getElementById( `traducao-${lang}` ).addEventListener( 'click', function () {
@@ -76,6 +82,7 @@ function adicionarListenerTraducao() {
     } );
   } );
 }
+
 document.addEventListener( 'DOMContentLoaded', () => {
   chrome.storage.sync.get( [ 'traducao' ], response => {
     const lang = ( response.traducao || navigator.language || 'pt' ).slice( 0, 2 );
@@ -87,6 +94,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
     document.getElementById( `traducao-${value}` ).classList.add( 'translate-active' );
   } );
 } );
+
 function carregarTraducao( language = 'pt' ) {
   const translation = translations[language];
   const translateArray = document.querySelectorAll( '[translation-key]' );
@@ -99,6 +107,7 @@ function carregarTraducao( language = 'pt' ) {
     }
   } );
 }
+
 function popularAudioOptions() {
   for ( const selectId of [ 'somReady' ] ) {
     const select = document.getElementById( selectId );
@@ -352,13 +361,6 @@ function loadBlockList() {
     <li translation-key="notificacao"></li>
   </ul>`;
 
-  // const removerDaLista = ( { id, avatarURL, nick }, function ( tamanho ) {
-  //   if ( tamanho === 0 ) {
-  //     listHTML.innerHTML += blackBlackList;
-  //     carregarTraducao();
-  //   }
-  // } );
-
   chrome.storage.sync.get( [ 'blockList' ], function ( data ) {
     const listHTML = document.getElementById( 'lista' );
 
@@ -401,6 +403,27 @@ function loadBlockList() {
     } else {
       listHTML.innerHTML += blackBlackList;
     }
+  } );
+}
+
+function listenerJogarCom() {
+  const radioButtons = document.getElementsByName( 'jogarCom' );
+  radioButtons.forEach( element => {
+    element.addEventListener( 'click', function () {
+      chrome.storage.sync.set( { jogarCom: element.value } );
+    } );
+  } );
+}
+
+function marcarJogarCom() {
+  chrome.storage.sync.get( [ 'jogarCom' ], response => {
+    if ( !response.jogarCom ) { return false; }
+    const radioButtons = document.getElementsByName( 'jogarCom' );
+    radioButtons.forEach( element => {
+      if ( element.value === response.jogarCom ) {
+        element.checked = true;
+      }
+    } );
   } );
 }
 

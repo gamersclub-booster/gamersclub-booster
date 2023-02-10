@@ -81,5 +81,9 @@
   "foi-adicionado-a-lista-bloqueio": "foi adicionado à sua lista de bloqueio",
   "foi-removido-da-lista-bloqueio": "foi removido da sua lista de bloqueio",
   "procurando-complete": "Procurando Complete...",
-  "voce-esta-em-uma-lobby": "Você está em um lobby! Saia para buscar por complete!"
+  "voce-esta-em-uma-lobby": "Você está em um lobby! Saia para buscar por complete!",
+  "jogar-apenas-com": "Jogar apenas com:",
+  "todos": "Todos",
+  "verificados": "Verificado",
+  "verificados-ou-prime": "Verificado ou Prime"
 }
