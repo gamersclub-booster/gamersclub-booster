@@ -407,23 +407,23 @@ function loadBlockList() {
 }
 
 function listenerJogarCom() {
-  const radioButtons = document.getElementsByName("jogarCom");
-  radioButtons.forEach(element => {
+  const radioButtons = document.getElementsByName( 'jogarCom' );
+  radioButtons.forEach( element => {
     element.addEventListener( 'click', function () {
       chrome.storage.sync.set( { jogarCom: element.value } );
     } );
-  });
+  } );
 }
 
 function marcarJogarCom() {
   chrome.storage.sync.get( [ 'jogarCom' ], response => {
     if ( !response.jogarCom ) { return false; }
-    const radioButtons = document.getElementsByName("jogarCom");
-    radioButtons.forEach(element => {
+    const radioButtons = document.getElementsByName( 'jogarCom' );
+    radioButtons.forEach( element => {
       if ( element.value === response.jogarCom ) {
         element.checked = true;
       }
-    });
+    } );
   } );
 }
 
