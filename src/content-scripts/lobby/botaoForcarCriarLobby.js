@@ -58,15 +58,16 @@ function intervalerCriacaoLobby() {
       const limiteLobby = windowVars.LOBBIES_LIMIT;
       if ( Number( lobbies ) < Number( limiteLobby ) ) {
         //Criar lobby por meio de requisição com AXIOS. ozKcs
-        chrome.storage.sync.get( [ 'preVetos', 'lobbyPrivada' ], async res => {
+        chrome.storage.sync.get( [ 'preVetos', 'lobbyPrivada', 'jogarCom' ], async res => {
           const preVetos = res.preVetos ? res.preVetos : [];
           const lobbyPrivada = res.lobbyPrivada ? res.lobbyPrivada : false;
+          const jogarCom = res.jogarCom ? res.jogarCom : 0;
           const postData = {
             max_level_to_join: 21,
             min_level_to_join: 0,
             private: lobbyPrivada,
             region: 0,
-            restriction: 1,
+            restriction: jogarCom,
             team: null,
             team_players: [],
             type: 'newRoom',

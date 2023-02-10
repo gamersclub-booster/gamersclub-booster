@@ -81,5 +81,9 @@
   "foi-adicionado-a-lista-bloqueio": "a été ajouté à votre liste de blocage",
   "foi-removido-da-lista-bloqueio": "a été supprimé de votre liste de blocage",
   "procurando-complete": "Chercher...",
-  "voce-esta-em-uma-lobby": "Vous êtes dans un Lobby!"
+  "voce-esta-em-uma-lobby": "Vous êtes dans un Lobby!",
+  "jogar-apenas-com": "Jouer uniquement avec:",
+  "todos": "Tous",
+  "verificados": "Vérifié",
+  "verificados-ou-prime": "Vérifié ou Primier"
 }
