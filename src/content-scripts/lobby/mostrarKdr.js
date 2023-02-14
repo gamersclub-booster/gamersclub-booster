@@ -110,3 +110,39 @@ export const mostrarKdrSala = mutations =>
       }
     }
   } );
+
+export const mostrarKdrRanked = () => {
+  const kdrRankedInterval = setInterval( () => {
+    $( '[class^=PlayerCardWrapper] [id^=trigger-]' ).each( ( _, element ) => {
+      ( async () => {
+        const playerId = String( element.id ).split( '-' ).pop();
+        const wrapper = $( element ).closest( '[class^=PlayerCardWrapper]' );
+
+        $( '.PlayerIdentityBadges', wrapper ).append( '<div class="WasdTooltip__wrapper PlayerIdentityBadges__KDR"></div>' );
+        const kdrDiv = $( '.PlayerIdentityBadges__KDR', wrapper );
+
+        const kdr = await fetchKdr( playerId );
+        const playerKdr = parseFloat( kdr ).toFixed( 2 );
+
+        const colorKrdDefault = playerKdr <= 2 ? '#000' :
+          'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)';
+        const colorKdr = playerKdr <= 2 ? levelColor[Math.round( playerKdr * 10 )] : colorKrdDefault;
+
+        kdrDiv.css( {
+          backgroundColor: colorKdr,
+          fontSize: '12px',
+          textAlign: 'center',
+          width: '2rem',
+          height: '1.5rem',
+          marginLeft: '4px',
+          order: 7
+        } ).text( playerKdr );
+      } )();
+    } );
+
+    if ( $( '[class^=PlayerCardWrapper] [id^=trigger-]' ).length > 0 ) {
+      clearInterval( kdrRankedInterval );
+    }
+  }, 1500 );
+};
+
