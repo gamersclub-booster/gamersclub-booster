@@ -2,17 +2,10 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-18-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-# REFERENTE AO ACESSO AO DISCORD:
+# GamersClub Booster
+Uma extensão com o intuito de melhorar a plataforma GamersClub.
 
-Foi adicionado permissão nova pra poder enviar pro webhook, só vai ser utilizado SE vc configurar o webhook, foi a única forma que encontramos, pode checar o manifest e ver que pede apenas acesso a discord.com/apis/webhooks, nada muito invasivo e bem restrito.
-
-Infelizmente o navegador bloqueia a request sem isso!
-
-O código está aberto e está aqui no github e os builds são automáticos, não tem alteração entre o que está lá e o que está nas lojas (chrome/firefox)
-Aqui está a permissão, que é bem restrita aos webhooks: https://github.com/gamersclub-booster/gamersclub-booster/blob/development/manifest.json#L15
-E só é utilizado caso você mesmo configure um webhook!
-
-#### Links úteis:
+## Links úteis:
 [link-chrome]: https://chrome.google.com/webstore/detail/gamersclub-booster/dahnmmlhchpmmlgebpkpaofbefjdlpin 'Version published on Chrome Web Store'
 [link-firefox]: https://addons.mozilla.org/pt-BR/firefox/addon/gamersclub-booster/ 'Version published on Mozilla Add-ons'
 
@@ -24,101 +17,13 @@ E só é utilizado caso você mesmo configure um webhook!
 
 * [Como instalar no Microsoft EDGE e no Opera](https://youtu.be/rELLprJ15ug)
 
-# COMO CONSTRUIR UM BUILD
-- **Branch principal:** `development`
-- `npm install`
-- `npm run dev`
+## Contribuições
+Todo pull request é bem-vindo e encorajado, tem um feature abra um **[Pull Request](https://github.com/gamersclub-booster/gamersclub-booster/pulls)** ou **[Issues](https://github.com/gamersclub-booster/gamersclub-booster/issues)**.
 
-Vai gerar a pasta **`dist`**;
+***Este projeto segue a especificação [all-contributors](https://github.com/all-contributors/all-contributors). Contribuições de qualquer tipo são bem-vindas!***
 
-É ela que você tem que **Carregar sem compactação** dentro das extensões do Chrome.
-
-Recomendo desativar a extensão ao carregar o seu dist, pra evitar duplicar o código e dificultar o debug 🙂
-
-![image](https://user-images.githubusercontent.com/32937653/219132820-027979fe-9a5b-42e4-b442-3f34b9db109c.png)
-
-Canto superior direito ***(aqui pelo menos)***
-
-![image](https://user-images.githubusercontent.com/32937653/219132918-1c98a987-c2d4-4e90-9613-1a085411d302.png)
-
-O primeiro botão
-![image](https://user-images.githubusercontent.com/32937653/219132972-0afa03fa-53d5-4a96-962d-38b42fe4ecfb.png)
-
-Sempre que tu modificar a pasta dist vai atualizar com seu código, tem que ir nas extensões e clicar em "Atualizar"
-
-## GamersClub Booster é uma extensão com o intuito de melhorar a plataforma.
-![linguagem](https://user-images.githubusercontent.com/5823077/174089173-054fea38-c8f2-4fa2-b07c-2c0ba6dd7c85.jpg)
-### O que ela faz?
-
-- Geral
-  - Adiciona o quanto falta para você upar ou cair, suas informações básicas (como nick e foto), rating atual e KDR médio na parte inferior central da tela <br>
-    <h5> Obs: Agora você pode consultar essas informações em qualquer lugar dentro da plataforma da GamersClub! </h5>
-  
-    ![info-pontos](https://img001.prntscr.com/file/img001/huU_02wzQnuof9WR-kQsrA.png)
-    
-  - Darkmode para todo a GC para o pessoal que joga no escuro.
-
-    ![darkmode](https://img001.prntscr.com/file/img001/pa_tRmTqTXmAUivL0fWZcQ.png)
-
-- Página Minhas Partidas
-  - Verifica em cada partida se tem jogador banido
-    - Icone :warning: caso tenha algum jogador banido
-    - Icone ✔️ caso nenhum jogador tenha sido banido
-
-    ![Banidos](https://img001.prntscr.com/file/img001/D5DRnkVSRlqm0BkqzPQTAw.png)
-
-    - Adiciona um background com cores para vitória/derrota e empate
-    
-    ![image](https://user-images.githubusercontent.com/1070818/108914631-661f2600-760a-11eb-9182-d98a2ef9beb5.png)
-
-- Lista de partidas do time  
-  - Adiciona um Botão para revelar o mapa que foi jogado.
-  ![image](https://user-images.githubusercontent.com/1070818/107768870-dc23b300-6d15-11eb-9499-c32a7fdd732b.png)
-
-- Lobby/Ranked  
-  - Pré Ready Automático
-  - Ready Automático
-  - Copiar IP Automático
-  - Opção de manter o lobby em posição fixa na tela. Evita aquele comportamento chato de ficar sumindo e aparecendo a aba do lobby.
-  - Pré vetos
-  - Adiciona um botão pra forçar a criação da lobby (pra quando tem mais do que o limite, 50 free ou 400 premium)
-  - Completar partida automaticamente
-  - Filtrar lobbies por país
- 
-  ![filtros](https://img001.prntscr.com/file/img001/C8R_8BhzRWOu6Ojw3fSfdg.png)
-  - KDR na no lobby
-
-    ![kdr-1](https://img001.prntscr.com/file/img001/U-t4M_AbQsGSpraSRw6Nlg.png)
-
-  - KDR na sala de espera
-
-    ![kdr](https://img001.prntscr.com/file/img001/RDXWnGZ4SUeil1XaOeWs1Q.png)
-
-- Perfil
-  - Adiciona a soma de todas as vitórias / derrotas / partidas e win rate*
-  - Adiciona a contagem de kills, mortes, diferença entre kill/morte* e o KDR médio* do mês atual
-    <h5>*Colorido conforme desempenho do jogador</h5>
-  
-    ![image](https://img001.prntscr.com/file/img001/261AjPwLTf2BAIfsU0Ij_Q.png)
-  
-- Integração com Discord
-  - Envia automáticamente o link no Discord cadastrado (passo a passo de como fazer em seguida)
-  - Envia para o Discord informações sobre a sala (Nível e KD dos jogadores, sequência de vitórias do Admin da sala, pré vetos e se a sala é aberta ou privada)
-
-    ![discord](https://user-images.githubusercontent.com/5823077/174089159-632cba3f-7cda-43f3-975c-97df2bd7de52.jpg)
-
-    ![discord-send](https://user-images.githubusercontent.com/5823077/174089163-0927db20-ad82-4800-aa1c-5e05f794eb70.jpg)
-
-    ![discord-lobby](https://user-images.githubusercontent.com/5823077/174089161-27be6d4b-d794-40cc-8c6e-1851cb37232c.jpg)
-
-    ![discordsala](https://user-images.githubusercontent.com/5823077/174089162-2b845f20-168e-4fea-bd16-32f5d42eaa16.jpg)
-
-
-#### Para solicitar/colaborar com uma feature abra um Pull Request ou Issue
-
-## Contributors ✨
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+## Contribuidores ✨
+Obrigado vai para essas pessoas maravilhosas ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -156,5 +61,3 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
