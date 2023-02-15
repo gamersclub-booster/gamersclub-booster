@@ -3,7 +3,7 @@
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # GamersClub Booster
-Uma extensão com o intuito de melhorar a plataforma GamersClub.
+Uma extensão com o intuito de melhorar a plataforma **[GamersClub](https://gamersclub.com.br/)**.
 
 ## Links úteis:
 [link-chrome]: https://chrome.google.com/webstore/detail/gamersclub-booster/dahnmmlhchpmmlgebpkpaofbefjdlpin 'Version published on Chrome Web Store'
@@ -19,8 +19,8 @@ Uma extensão com o intuito de melhorar a plataforma GamersClub.
 
 ## Feature & Bugs
 Todo pull request é bem-vindo e encorajado.
-- Tem um feature abra um **[Pull Request](https://github.com/gamersclub-booster/gamersclub-booster/pulls)** 
-- Encontrou um BUG, reporte no **[Issues](https://github.com/gamersclub-booster/gamersclub-booster/issues)**.
+- Tem um feature abra um **[Pull Request](https://github.com/gamersclub-booster/gamersclub-booster/pulls)**
+- Encontrou um BUG, reporte no **[Issues](https://github.com/gamersclub-booster/gamersclub-booster/issues)**
 
 ***Este projeto segue a especificação [all-contributors](https://github.com/all-contributors/all-contributors). Contribuições de qualquer tipo são bem-vindas!***
 
