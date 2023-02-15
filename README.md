@@ -12,8 +12,6 @@ O código está aberto e está aqui no github e os builds são automáticos, nã
 Aqui está a permissão, que é bem restrita aos webhooks: https://github.com/gamersclub-booster/gamersclub-booster/blob/development/manifest.json#L15
 E só é utilizado caso você mesmo configure um webhook!
 
-
-
 #### Links úteis:
 [link-chrome]: https://chrome.google.com/webstore/detail/gamersclub-booster/dahnmmlhchpmmlgebpkpaofbefjdlpin 'Version published on Chrome Web Store'
 [link-firefox]: https://addons.mozilla.org/pt-BR/firefox/addon/gamersclub-booster/ 'Version published on Mozilla Add-ons'
@@ -25,6 +23,28 @@ E só é utilizado caso você mesmo configure um webhook!
 * [Video explicativo sobre a extensão](https://youtu.be/nmxw6xjsIjc)
 
 * [Como instalar no Microsoft EDGE e no Opera](https://youtu.be/rELLprJ15ug)
+
+# COMO CONSTRUIR UM BUILD
+- **Branch principal:** `development`
+- `npm install`
+- `npm run dev`
+
+Vai gerar a pasta **`dist`**;
+
+É ela que você tem que **Carregar sem compactação** dentro das extensões do Chrome.
+
+Recomendo desativar a extensão ao carregar o seu dist, pra evitar duplicar o código e dificultar o debug 🙂
+
+![image](https://user-images.githubusercontent.com/32937653/219132820-027979fe-9a5b-42e4-b442-3f34b9db109c.png)
+
+Canto superior direito ***(aqui pelo menos)***
+
+![image](https://user-images.githubusercontent.com/32937653/219132918-1c98a987-c2d4-4e90-9613-1a085411d302.png)
+
+O primeiro botão
+![image](https://user-images.githubusercontent.com/32937653/219132972-0afa03fa-53d5-4a96-962d-38b42fe4ecfb.png)
+
+Sempre que tu modificar a pasta dist vai atualizar com seu código, tem que ir nas extensões e clicar em "Atualizar"
 
 ## GamersClub Booster é uma extensão com o intuito de melhorar a plataforma.
 ![linguagem](https://user-images.githubusercontent.com/5823077/174089173-054fea38-c8f2-4fa2-b07c-2c0ba6dd7c85.jpg)
@@ -138,4 +158,3 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
-
