@@ -1,7 +1,7 @@
 {
     "eslint.format.enable": true,
     "[javascript]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+        "editor.defaultFormatter": "vscode.typescript-language-features"
     },
     "compile-hero.disable-compile-files-on-did-save-code": true
 }

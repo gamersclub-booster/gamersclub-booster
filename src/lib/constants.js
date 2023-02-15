@@ -55,6 +55,7 @@ export const features = [
   'autoConcordarTermosRanked',
   'autoDailyRewards',
   'mostrarLevelProgress',
+  'warmupTimer',
   'enviarLinkLobby',
   'enviarPartida',
   'lobbyPrivada'
