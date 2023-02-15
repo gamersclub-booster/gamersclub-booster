@@ -17,7 +17,7 @@ Uma extensão com o intuito de melhorar a plataforma GamersClub.
 
 * [Como instalar no Microsoft EDGE e no Opera](https://youtu.be/rELLprJ15ug)
 
-## Contribuições
+## Solicitações & Bugs
 Todo pull request é bem-vindo e encorajado, tem um feature abra um **[Pull Request](https://github.com/gamersclub-booster/gamersclub-booster/pulls)** ou **[Issues](https://github.com/gamersclub-booster/gamersclub-booster/issues)**.
 
 ***Este projeto segue a especificação [all-contributors](https://github.com/all-contributors/all-contributors). Contribuições de qualquer tipo são bem-vindas!***
