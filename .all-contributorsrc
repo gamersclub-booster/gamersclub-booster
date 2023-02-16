@@ -178,6 +178,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "crashzk",
+      "name": "crashzk",
+      "avatar_url": "https://avatars.githubusercontent.com/u/32937653?v=4",
+      "profile": "https://zkservidores.com/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
