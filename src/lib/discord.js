@@ -71,11 +71,11 @@ function getTeamInfo( data ) {
 
   return membersString.join( '' );
 }
-function getWarmupTime (warmupexpires) {
-  if (warmupexpires <= 0) return "Acabou!"
-  var now = new Date();
-  now.setSeconds(now.getSeconds() + warmupexpires);
-  return `Até: ${now.toTimeString()}`
+function getWarmupTime( warmupexpires ) {
+  if ( warmupexpires <= 0 ) { return 'Acabou!'; }
+  const now = new Date();
+  now.setSeconds( now.getSeconds() + warmupexpires );
+  return `Até: ${now.toTimeString()}`;
 }
 
 export async function sendMatchInfo( url, gcMatch ) {
@@ -104,7 +104,7 @@ export async function sendMatchInfo( url, gcMatch ) {
       },
       {
         name: 'Warmup',
-        value: getWarmupTime(gcMatch.warmupExpiresInSeconds)
+        value: getWarmupTime( gcMatch.warmupExpiresInSeconds )
       },
       {
         name: 'Link da partida',

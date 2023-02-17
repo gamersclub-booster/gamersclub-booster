@@ -1,7 +1,7 @@
 import { getPlayerInfo } from './getPlayerInfo';
 
 
-const CreateModalForElement = (element) => {
+const CreateModalForElement = element => {
   if ( element.find( '#gcbooster_lupa' ).length === 0 ) {
     const div = createDiv();
     const modal = createModal();
@@ -15,7 +15,7 @@ const CreateModalForElement = (element) => {
       $( div ).parent().append( modal );
 
       const players = getPlayersIds( element );
-      console.log(players)
+      console.log( players );
 
       $( '#infos_lobby' ).append( createDivTitle() ).append( createClose() );
       for ( const player of players ) {
@@ -25,14 +25,14 @@ const CreateModalForElement = (element) => {
     } );
     element.append( div );
   }
-}
+};
 
 export const infoChallenge = mutations => {
   $.each( mutations, ( _, mutation ) => {
     $( mutation.addedNodes )
       .find( 'div.sidebar-desafios-team-prime' ).addBack( 'div.sala-lineup-players' )
       .each( ( _, element ) => {
-        CreateModalForElement($( element ))
+        CreateModalForElement( $( element ) );
       } );
   } );
 };
@@ -43,7 +43,7 @@ export const infoLobby = mutations => {
       .find( 'div.sala-card-content' )
       .addBack( 'div.sala-card-content' )
       .each( ( _, element ) => {
-        CreateModalForElement($( element ))
+        CreateModalForElement( $( element ) );
       } );
   } );
 };
