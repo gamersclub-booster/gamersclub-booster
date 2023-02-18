@@ -15,20 +15,20 @@ const getColor = argVal => ( colors.find( ( { val } ) => ( argVal > val ) ) || c
 
 export const buildTimer = ( warmupFinished, targetContainer, timeleft, maxtime = 300 ) => {
 
-  const time_util = input => `${Math.floor( input / 60 ) > 0 ? `${Math.floor( input / 60 )}min ` : ''}${Math.floor( input % 60 )}s`;
+  const timeUtil = input => `${Math.floor( input / 60 ) > 0 ? `${Math.floor( input / 60 )}min ` : ''}${Math.floor( input % 60 )}s`;
 
   const endTime = Math.floor( Date.now() / 1000 ) + timeleft;
   let baseContent = `
           <div id="warmup_left_wrapper">Warmup: 
-            <b style="color: ${getColor( timeleft )}">${time_util( timeleft )}</b>
+            <b style="color: ${getColor( timeleft )}">${timeUtil( timeleft )}</b>
           </div>
           <progress style="accent-color: ${getColor( timeleft )}" id="warmup_progressbar" value="${timeleft}" max="${maxtime}"></progress>`;
   if ( timeleft === 0 ) { baseContent = warmupFinished; }
   targetContainer.append( `<div id="warmup_timer">${baseContent}</div>` );
-  var x = setInterval( function () {
+  const x = setInterval( function () {
     const distance = endTime - Math.floor( Date.now() / 1000 );
     $( '#warmup_progressbar' ).attr( 'value', distance );
-    $( '#warmup_left_wrapper > b' ).html( time_util( distance ) );
+    $( '#warmup_left_wrapper > b' ).html( timeUtil( distance ) );
     $( '#warmup_left_wrapper > b' ).css( 'color', getColor( distance ) );
     $( '#warmup_progressbar' ).css( 'accent-color', getColor( distance ) );
 
