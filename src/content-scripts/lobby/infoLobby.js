@@ -1,36 +1,49 @@
 import { getPlayerInfo } from './getPlayerInfo';
 
+
+const CreateModalForElement = element => {
+  if ( element.find( '#gcbooster_lupa' ).length === 0 ) {
+    const div = createDiv();
+    const modal = createModal();
+    const image = createImage();
+
+    div.append( image );
+
+    div.on( 'click', async () => {
+      $( '#infos_lobby' ).empty( ).remove();
+
+      $( div ).parent().append( modal );
+
+      const players = getPlayersIds( element );
+      console.log( players );
+
+      $( '#infos_lobby' ).append( createDivTitle() ).append( createClose() );
+      for ( const player of players ) {
+        const response = await getPlayerInfo( player );
+        $( '#infos_lobby' ).append( createDivPlayers( response ) );
+      }
+    } );
+    element.append( div );
+  }
+};
+
+export const infoChallenge = mutations => {
+  $.each( mutations, ( _, mutation ) => {
+    $( mutation.addedNodes )
+      .find( 'div.sidebar-desafios-team-prime' ).addBack( 'div.sala-lineup-players' )
+      .each( ( _, element ) => {
+        CreateModalForElement( $( element ) );
+      } );
+  } );
+};
+
 export const infoLobby = mutations => {
   $.each( mutations, ( _, mutation ) => {
     $( mutation.addedNodes )
       .find( 'div.sala-card-content' )
       .addBack( 'div.sala-card-content' )
       .each( ( _, element ) => {
-        const card = $( element );
-        if ( card.find( '#gcbooster_lupa' ).length === 0 ) {
-          const div = createDiv();
-          const modal = createModal();
-          const image = createImage();
-
-          div.append( image );
-
-          div.on( 'click', async () => {
-            $( '#infos_lobby' ).empty( ).remove();
-
-            $( div ).parent().append( modal );
-
-            const players = getPlayersIds( card );
-
-            $( '#infos_lobby' ).append( createDivTitle() ).append( createClose() );
-            for ( const player of players ) {
-              const response = await getPlayerInfo( player );
-              $( '#infos_lobby' ).append( createDivPlayers( response ) );
-            }
-          } );
-
-
-          card.append( div );
-        }
+        CreateModalForElement( $( element ) );
       } );
   } );
 };
@@ -147,7 +160,7 @@ function createImage() {
 function getPlayersIds( element ) {
   return element
     .find( '.sala-lineup-player:not(.player-placeholder)' )
-    .find( '.gc-avatar' )
+    .find( '.gc-avatar, .sala-lineup-imagem' )
     .children( 'a' )
     .toArray()
     .map( e => e.href.split( '/' ).pop() );

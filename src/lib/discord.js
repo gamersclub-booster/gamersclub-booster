@@ -71,6 +71,12 @@ function getTeamInfo( data ) {
 
   return membersString.join( '' );
 }
+function getWarmupTime( warmupexpires ) {
+  if ( warmupexpires <= 0 ) { return 'Acabou!'; }
+  const now = new Date();
+  now.setSeconds( now.getSeconds() + warmupexpires );
+  return `Até: ${now.toTimeString()}`;
+}
 
 export async function sendMatchInfo( url, gcMatch ) {
   if ( typeof gcMatch !== 'object' ) {
@@ -95,6 +101,10 @@ export async function sendMatchInfo( url, gcMatch ) {
       {
         name: 'Mapa:',
         value: gcMatch.map.name
+      },
+      {
+        name: 'Warmup',
+        value: getWarmupTime( gcMatch.warmupExpiresInSeconds )
       },
       {
         name: 'Link da partida',

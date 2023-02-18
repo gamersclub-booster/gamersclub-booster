@@ -11,7 +11,7 @@ import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
 // import { addCabecalho } from './addCabecalho';
 import { mostrarKdr, mostrarKdrSala } from './mostrarKdr';
 // import { adicionarFiltroKdr } from './filtrarKdr';
-import { infoLobby } from './infoLobby';
+import { infoLobby, infoChallenge } from './infoLobby';
 
 
 chrome.storage.sync.get( null, function ( _result ) {
@@ -38,6 +38,7 @@ const initLobby = async () => {
 
   criarObserver( '#lobbies-wrapper', mostrarKdr );
   criarObserver( '#lobbies-wrapper', infoLobby );
+  criarObserver( '#challengeList', infoChallenge );
   criarObserver( '#challengeList', mostrarKdr );
 
 

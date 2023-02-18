@@ -32,6 +32,7 @@
   "melhorias": "Melhorias",
   "fixar-menu-do-lobby": "Fixar desafios",
   "mostrar-seu-progresso-no-menu": "Mostrar seu progresso no menu",
+  "mostrar-warmup-timer": "Mostrar timer de Warmup",
   "aceita-automaticamente-o-pre-ready": "Aceita automaticamente o pré-ready",
   "cole-aqui-a-url-do-seu-webhook": "Cole aqui a URL do seu WebHook",
   "lobby-privada": "Lobby Privada",
@@ -85,5 +86,6 @@
   "jogar-apenas-com": "Jogar apenas com:",
   "todos": "Todos",
   "verificados": "Verificado",
-  "verificados-ou-prime": "Verificado ou Prime"
+  "verificados-ou-prime": "Verificado ou Prime",
+  "warmup-fim": "O warmup chegou ao fim!"
 }
