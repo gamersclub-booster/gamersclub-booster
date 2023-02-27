@@ -12,6 +12,8 @@ const createModalForElement = element => {
 
     div.on( 'click', async () => {
       $( `#infos_lobby_${lobbyId}` ).empty( ).remove();
+      //bloqueia todas as outras lupas enquanto carrega
+      $.each( $( '.gcbooster_lupa' ), ( _, lupa ) => { lupa.style = 'display: none'; } );
 
       $( div ).parent().append( modal );
 
@@ -22,6 +24,7 @@ const createModalForElement = element => {
         const response = await getPlayerInfo( player );
         $( `#infos_lobby_${lobbyId}` ).append( createDivPlayers( response ) );
       }
+      $.each( $( '.gcbooster_lupa' ), ( _, lupa ) => { lupa.style = 'display: flex'; } );
     } );
     element.append( div );
   }
