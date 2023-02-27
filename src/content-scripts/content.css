@@ -305,14 +305,7 @@ input[type="range"].filterKdr::-ms-tooltip {
   height: 100% !important;
 }
 
-#infos_lobby {
-  top: 0;
-  left: 0;
-  position: absolute;
-  z-index: 9999;
-}
-
-#gcbooster_lupa {
+.gcbooster_lupa {
   border: 1px solid orange;
   border-right: none;
   border-bottom: none;
@@ -330,7 +323,10 @@ input[type="range"].filterKdr::-ms-tooltip {
   align-items: center;
 }
 
-#infos_lobby {
+.infos_lobby {
+  top: 0;
+  left: 0;
+  z-index: 9999;
   backface-visibility: hidden;
   position: absolute;
   top: 15px;
