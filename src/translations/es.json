@@ -32,6 +32,7 @@
   "melhorias": "Mejoras",
   "fixar-menu-do-lobby": "Fijar debajo",
   "mostrar-seu-progresso-no-menu": "Muestra tu progreso en el menú",
+  "mostrar-warmup-timer": "Mostrar temporizador de calentamiento",
   "aceita-automaticamente-o-pre-ready": "Aceptar automaticamente el pré-ready",
   "cole-aqui-a-url-do-seu-webhook": "Pega aqui la URL de tu WebHook",
   "lobby-privada": "Lobby Privada",
@@ -85,5 +86,6 @@
   "jogar-apenas-com": "Jugar solo con:",
   "todos": "Todos",
   "verificados": "Verificado",
-  "verificados-ou-prime": "Verificado o Prime"
+  "verificados-ou-prime": "Verificado o Prime",
+  "warmup-fim": "¡El calentamiento ha terminado!"
 }
