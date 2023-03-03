@@ -32,6 +32,7 @@
   "melhorias": "Improvements",
   "fixar-menu-do-lobby": "Fix challenges",
   "mostrar-seu-progresso-no-menu": "Show your progress on menu",
+  "mostrar-warmup-timer": "Show Warmup timer",
   "aceita-automaticamente-o-pre-ready": "Automatically accepts pre-ready",
   "cole-aqui-a-url-do-seu-webhook": "Paste your WebHook URL here",
   "lobby-privada": "Private Lobby",
@@ -85,5 +86,6 @@
   "jogar-apenas-com": "Play only with:",
   "todos": "All",
   "verificados": "Verified",
-  "verificados-ou-prime": "Verified or Prime"
+  "verificados-ou-prime": "Verified or Prime",
+  "warmup-fim": "Warmup is over!"
 }

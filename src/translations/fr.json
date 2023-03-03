@@ -32,6 +32,7 @@
   "melhorias": "Améliorations",
   "fixar-menu-do-lobby": "Se fixer des défis",
   "mostrar-seu-progresso-no-menu": "Montrez votre progression sur le menu",
+  "mostrar-warmup-timer": "Afficher la minuterie d'échauffement",
   "aceita-automaticamente-o-pre-ready": "Accepte automatiquement le pré-Prêt",
   "cole-aqui-a-url-do-seu-webhook": "Collez votre URL WebHook ici",
   "lobby-privada": "Salon privé",
@@ -85,5 +86,6 @@
   "jogar-apenas-com": "Jouer uniquement avec:",
   "todos": "Tous",
   "verificados": "Vérifié",
-  "verificados-ou-prime": "Vérifié ou Primier"
+  "verificados-ou-prime": "Vérifié ou Primier",
+  "warmup-fim": "L'échauffement est terminé!"
 }
