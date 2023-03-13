@@ -104,6 +104,10 @@ export const preVetosMapas = [
   {
     mapa: 'de_anubis',
     codigo: 14
+  },
+  {
+    mapa: 'de_cache_old',
+    codigo: 16
   }
 ];
 export const configValues = [ 'somReady', 'volume', 'customSomReady' ];
