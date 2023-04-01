@@ -20,9 +20,11 @@ function iniciarPaginaOpcoes() {
   adicionaVersao();
   marcarCheckboxes();
   marcarPreVetos();
+  marcarCompleteMapas();
   adicionarListenersFeatures();
   adicionarListenersPaginas();
   adicionarListenerPreVetos();
+  adicionarListenerCompleteMapas();
   popularAudioOptions();
   selecionarSons();
   adicionarListenersSons();
@@ -32,6 +34,7 @@ function iniciarPaginaOpcoes() {
   listenerButtonBlockList();
   listenerJogarCom();
   marcarJogarCom();
+  popularComplete();
 }
 
 function mostrarMensagemAtencao() {
@@ -136,6 +139,19 @@ function marcarPreVetos() {
   } );
 }
 
+function marcarCompleteMapas() {
+  chrome.storage.sync.get( [ 'complete' ], response => {
+    if ( !response.complete ) { return false; }
+    for ( let i = 0; i < response.complete.length; i++ ) {
+      const codigo = response.complete[i];
+      const mapaNome = preVetosMapas.filter( e => {
+        return e.codigo === codigo;
+      } )[0].mapa;
+      document.getElementById( 'complete' + mapaNome ).checked = true;
+    }
+  } );
+}
+
 function marcarCheckboxes() {
   chrome.storage.sync.get( null, response => {
     if ( !response ) { return false; }
@@ -179,6 +195,37 @@ function adicionarListenerPreVetos() {
           const preVetosAntes = preVetos;
           const preVetosDepois = arrayRemove( preVetosAntes, Number( codigo ) );
           chrome.storage.sync.set( { preVetos: preVetosDepois } );
+        }
+      } );
+    } );
+  }
+}
+
+function adicionarListenerCompleteMapas() {
+  for ( const mapa of preVetosMapas ) {
+    const idSelector = 'complete' + mapa.mapa;
+
+    document.getElementById( idSelector ).addEventListener( 'change', function () {
+      const codigo = document.getElementById( idSelector ).getAttribute( 'codigo' );
+      chrome.storage.sync.get( [ 'complete' ], res => {
+        const complete = res.complete;
+        if ( this.checked ) {
+          //adicionar
+          if ( complete === undefined ) {
+            //Primeira vez add um mapa
+            chrome.storage.sync.set( { complete: [ Number( codigo ) ] } );
+          } else {
+            chrome.storage.sync.get( [ 'complete' ], res => {
+              const completeAntes = res.complete;
+              completeAntes.push( Number( codigo ) );
+              chrome.storage.sync.set( { complete: completeAntes } );
+            } );
+          }
+        } else {
+          //desmarquei
+          const completeAntes = complete;
+          const completeDepois = arrayRemove( completeAntes, Number( codigo ) );
+          chrome.storage.sync.set( { complete: completeDepois } );
         }
       } );
     } );
@@ -425,6 +472,42 @@ function marcarJogarCom() {
       }
     } );
   } );
+}
+
+const sliderDiff = document.getElementById( 'slider-rounds-diff' );
+const sliderMin = document.getElementById( 'slider-rounds-min' );
+
+function popularComplete() {
+  chrome.storage.sync.get( [ 'roundsDiff' ], response => {
+    if ( !response.roundsDiff ) { return false; }
+    sliderDiff.value = response.roundsDiff;
+    completeMaxDiffText();
+  } );
+  chrome.storage.sync.get( [ 'roundsMin' ], response => {
+    if ( !response.roundsMin ) { return false; }
+    sliderMin.value = response.roundsMin;
+    completeMinText();
+  } );
+}
+
+sliderDiff.addEventListener( 'change', function () {
+  completeMaxDiffText();
+} );
+
+function completeMaxDiffText() {
+  const value = sliderDiff.value;
+  document.getElementById( 'rounds-diff' ).innerHTML = value + ' rounds';
+  chrome.storage.sync.set( { 'roundsDiff': value } );
+}
+
+sliderMin.addEventListener( 'change', function () {
+  completeMinText();
+} );
+
+function completeMinText() {
+  const value = sliderMin.value;
+  document.getElementById( 'rounds-min' ).innerHTML = value + ' rounds';
+  chrome.storage.sync.set( { 'roundsMin': value } );
 }
 
 limparOpcoesInvalidas();

@@ -59,6 +59,10 @@
             <img src="images/menu/lobby.svg" alt="Lobby" class="img-menu" />
             <a href="#lobby" translation-key="lobby"></a>
           </li>
+          <li id="link-complete">
+            <img src="images/menu/complete.svg" alt="Complete" class="img-menu" />
+            <a href="#complete" translation-key="complete"></a>
+          </li>
           <li id="link-integracoes">
             <img
               src="images/menu/integracoes.svg"
@@ -387,6 +391,121 @@
             <label class="container" for="preVetode_cache_old">
               <p class="descricao">de_cache_old</p>
               <input type="checkbox" id="preVetode_cache_old" codigo="16" />
+              <span class="checkmark"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="pagina" id="complete">
+        <h3 class="subtitulo" translation-key="complete"></h3>
+
+        
+        <p translation-key="complete-rounds-minimos"></p>
+          <input
+            type="range"
+            title="Rounds"
+            id="slider-rounds-min"
+            name="rounds-min"
+            min="0"
+            max="30"
+            value="0"
+          />
+          <h3 style="display: inline-block; margin-right: 10px;" id="rounds-min">0 rounds</h3>
+          
+          <p translation-key="complete-max-diff"></p>
+
+          <input
+            type="range"
+            title="Rounds"
+            id="slider-rounds-diff"
+            name="rounds-diff"
+            min="0"
+            max="16"
+            value="0"
+          />
+          <h3 style="display: inline-block; margin-right: 10px;" id="rounds-diff">0 rounds</h3>
+
+
+
+        <h3 class="subtitulo" translation-key="complete-mapas"></h3>
+        
+        <div class="row">
+          <div class="column">
+            <label class="container" for="completede_dust2">
+              <p class="descricao">de_dust2</p>
+              <input type="checkbox" id="completede_dust2" codigo="1" />
+              <span class="checkmark"></span>
+            </label>
+
+            <label class="container" for="completede_nuke">
+              <p class="descricao">de_nuke</p>
+              <input type="checkbox" id="completede_nuke" codigo="2" />
+              <span class="checkmark"></span>
+            </label>
+
+            <!-- <label class="container" for="complete_train">
+              <p class="descricao">de_train</p>
+              <input type="checkbox" id="complete_train" codigo="3" />
+              <span class="checkmark"></span>
+            </label> -->
+
+            <label class="container" for="completede_mirage">
+              <p class="descricao">de_mirage</p>
+              <input type="checkbox" id="completede_mirage" codigo="5" />
+              <span class="checkmark"></span>
+            </label>
+
+            <!-- <label class="container" for="completede_cache">
+              <p class="descricao">de_cache</p>
+              <input type="checkbox" id="completede_cache" codigo="6" />
+              <span class="checkmark"></span>
+            </label> -->
+
+            <label class="container" for="completede_overpass">
+              <p class="descricao">de_overpass</p>
+              <input type="checkbox" id="completede_overpass" codigo="7" />
+              <span class="checkmark"></span>
+            </label>
+          </div>
+          <div class="column">
+            <label class="container" for="completede_inferno">
+              <p class="descricao">de_inferno</p>
+              <input type="checkbox" id="completede_inferno" codigo="8" />
+              <span class="checkmark"></span>
+            </label>
+
+            <label class="container" for="completede_vertigo">
+              <p class="descricao">de_vertigo</p>
+              <input type="checkbox" id="completede_vertigo" codigo="10" />
+              <span class="checkmark"></span>
+            </label>
+            <label class="container" for="completede_cbble_classic">
+              <p class="descricao">de_cbble_classic</p>
+              <input type="checkbox" id="completede_cbble_classic" codigo="11" />
+              <span class="checkmark"></span>
+            </label>
+            <label class="container" for="completede_ancient">
+              <p class="descricao">de_ancient</p>
+              <input type="checkbox" id="completede_ancient" codigo="12" />
+              <span class="checkmark"></span>
+            </label>
+
+            <!-- <label class="container" for="completede_tuscan">
+              <p class="descricao">de_tuscan</p>
+              <input type="checkbox" id="completede_tuscan" codigo="13" />
+              <span class="checkmark"></span>
+            </label> -->
+
+            <label class="container" for="completede_anubis">
+              <p class="descricao">de_anubis</p>
+              <input type="checkbox" id="completede_anubis" codigo="14" />
+              <span class="checkmark"></span>
+            </label>
+
+            <label class="container" for="completede_cache_old">
+              <p class="descricao">de_cache_old</p>
+              <input type="checkbox" id="completede_cache_old" codigo="16" />
               <span class="checkmark"></span>
             </label>
           </div>

@@ -61,10 +61,14 @@ async function intervalerAutoComplete() {
   intervalId = setInterval( async function () {
     if ( !$( '#SidebarSala' ).length ) { // Se não estiver em lobby ( acontece quando cria lobby e já está buscando complete )
       interval = randomIntFromInterval( 750, 4750 ); // Escolhe um novo intervalo aleatório entre 1s e 5s
+      console.log( 'to aqui' );
       if ( $( '.scroll-content > li > .btn-actions > a.accept-btn' ).length ) {
-        setTimeout( function () { // Espera tempo aleatório entre 1 e 5 segundos
-          $( '.scroll-content > li > .btn-actions > a.accept-btn' ).get( 0 ).click();
-          $( '#completePlayerModal > div > div.buttons > button.sm-button-accept.btn.btn-success' ).get( 0 ).click();
+        setTimeout( function () { // Espera tempo aleatório entre 1 e 5 segundost
+          console.log( 'to aqui' );
+          console.log( $( '.scroll-content > li > .match-info > .result-type > .score > span' ).get( 0 ) );
+          console.log( $( '.scroll-content > li > .match-info > .result-type > .score > span' ).get( 1 ) );
+          //$( '.scroll-content > li > .btn-actions > a.accept-btn' ).get( 0 ).click();
+          //$( '#completePlayerModal > div > div.buttons > button.sm-button-accept.btn.btn-success' ).ge( 0 ).click();
         }, interval );
       }
     } else {
