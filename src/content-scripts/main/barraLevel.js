@@ -41,6 +41,7 @@ export const adicionarBarraLevel = async () => {
   const windowVariables = retrieveWindowVariables( [ 'ISSUBSCRIBER', 'PLAYERID' ] );
   const isSubscriber = windowVariables.ISSUBSCRIBER;
   const playerId = windowVariables.PLAYERID;
+  if ( !playerId ) { return; }
   const playerInfo = await grabPlayerLastMatch( `https://${GC_URL}/api/box/init/${playerId}` );
   const playerHistory = await grabPlayerHistory( `https://${GC_URL}/api/box/history/${playerId}` );
 

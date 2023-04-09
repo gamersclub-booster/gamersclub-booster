@@ -38,7 +38,7 @@ export function getMapImage( map ) {
 
   case 'de_cache_old':
     return 'https://steamuserimages-a.akamaihd.net/ugc/1822269383661548991/2C886B2A6EAB6E266B5E84BB1039E701205A48C1/';
-  
+
   default:
     return '';
   }
