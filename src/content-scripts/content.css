@@ -17,7 +17,6 @@ input[type="range"].filterKdr::-webkit-slider-runnable-track {
 input[type="range"].filterKdr::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 12px;
-  /* 1 */
   height: 12px;
   background: #fff;
   box-shadow: -200px 0 0 195px #2196fd;
@@ -35,12 +34,10 @@ input[type="range"].filterKdr::-moz-range-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 12px;
-  /* 1 */
   height: 12px;
   background: #fff;
   box-shadow: -200px 0 0 195px #2196fd;
   border: 3px solid #fff;
-  /* 1 */
   border-radius: 50%;
   border-radius: 15px;
 }
@@ -53,12 +50,10 @@ input[type="range"].filterKdr::-ms-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 12px;
-  /* 1 */
   height: 12px;
   background: #fff;
   box-shadow: -200px 0 0 195px #2196fd;
   border: 3px solid #fff;
-  /* 1 */
   border-radius: 50%;
   border-radius: 15px;
 }
