@@ -1,6 +1,7 @@
 input[type="range"].filterKdr {
   margin: auto 8px auto 0;
   -webkit-appearance: none;
+  appearance: none;
   position: relative;
   overflow: hidden;
   height: 12px;
@@ -8,12 +9,14 @@ input[type="range"].filterKdr {
   background: transparent;
   border-radius: 15px;
 }
+
 input[type="range"].filterKdr::-webkit-slider-runnable-track {
   background: #383b51;
 }
+
 input[type="range"].filterKdr::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 12px; /* 1 */
+  width: 12px;
   height: 12px;
   background: #fff;
   box-shadow: -200px 0 0 195px #2196fd;
@@ -21,57 +24,61 @@ input[type="range"].filterKdr::-webkit-slider-thumb {
   border-radius: 50%;
   border-radius: 15px;
 }
+
 input[type="range"].filterKdr::-moz-range-track {
   height: 12px;
   background: #ddd;
 }
+
 input[type="range"].filterKdr::-moz-range-thumb {
   -webkit-appearance: none;
-  width: 12px; /* 1 */
+  appearance: none;
+  width: 12px;
   height: 12px;
   background: #fff;
   box-shadow: -200px 0 0 195px #2196fd;
-  border: 3px solid #fff; /* 1 */
+  border: 3px solid #fff;
   border-radius: 50%;
   border-radius: 15px;
 }
+
 input[type="range"].filterKdr::-ms-fill-lower {
   background: #2196fd;
 }
+
 input[type="range"].filterKdr::-ms-thumb {
   -webkit-appearance: none;
-  width: 12px; /* 1 */
+  appearance: none;
+  width: 12px;
   height: 12px;
   background: #fff;
   box-shadow: -200px 0 0 195px #2196fd;
-  border: 3px solid #fff; /* 1 */
+  border: 3px solid #fff;
   border-radius: 50%;
   border-radius: 15px;
 }
+
 input[type="range"].filterKdr::-ms-ticks-after {
   display: none;
 }
+
 input[type="range"].filterKdr::-ms-ticks-before {
   display: none;
 }
+
 input[type="range"].filterKdr::-ms-track {
   background: #ddd;
   color: transparent;
   height: 12px;
   border: none;
 }
+
 input[type="range"].filterKdr::-ms-tooltip {
   display: none;
 }
 
-.sidebar-desafios-salas
-  .sidebar-item:not(.sidebar-item-prime)
-  .sidebar-item-content,
-.sidebar-desafios-salas
-  .sidebar-item:not(.sidebar-item-prime)
-  .sidebar-item-content
-  .sidebar-desafios-play
-  button {
+.sidebar-desafios-salas .sidebar-item:not(.sidebar-item-prime) .sidebar-item-content,
+.sidebar-desafios-salas .sidebar-item:not(.sidebar-item-prime) .sidebar-item-content .sidebar-desafios-play button {
   background-color: rgba(255, 0, 0, 0.322);
   border: 1px solid orange;
 }
@@ -101,6 +108,7 @@ input[type="range"].filterKdr::-ms-tooltip {
 .lobby.compact .sala-card-title {
   width: 150px;
 }
+
 .lobby.compact .sala-card-badge,
 .lobby.compact .sala-card-camp {
   width: 40px !important;
@@ -108,21 +116,18 @@ input[type="range"].filterKdr::-ms-tooltip {
   top: 4px !important;
 }
 
-.lobby.compact .sala-card-badge > span[class=""] {
+.lobby.compact .sala-card-badge>span[class=""] {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.lobby.compact .sala-card-badge > span[class=""] > span {
+.lobby.compact .sala-card-badge>span[class=""]>span {
   width: 30px !important;
   height: 30px !important;
 }
 
-.lobby.compact
-  .sala-card-type-verified
-  .sala-card-level-verified
-  .sala-card-level,
+.lobby.compact .sala-card-type-verified .sala-card-level-verified .sala-card-level,
 .lobby.compact .sala-card-type-prime .sala-card-level-prime .sala-card-level,
 .lobby.compact .sala-card-badge .badge-level,
 .sala-card-camp .badge-level {
@@ -156,12 +161,11 @@ input[type="range"].filterKdr::-ms-tooltip {
   text-align: left !important;
   font-size: 15px !important;
   margin: 0 !important;
-  background: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0.5) 15%,
-    rgba(0, 0, 0, 0) 100%
-  ) !important;
+  background: linear-gradient(90deg,
+      rgba(0, 0, 0, 0.5) 15%,
+      rgba(0, 0, 0, 0) 100%) !important;
 }
+
 .lobby.compact .sala-lineup-imagem {
   position: absolute;
   left: 0;
@@ -169,9 +173,11 @@ input[type="range"].filterKdr::-ms-tooltip {
   opacity: 0;
   z-index: 3;
 }
+
 .lobby.compact .sala-lineup-level {
   margin-top: 4px;
 }
+
 .lobby.compact .sala-lineup-player,
 .lobby.compact .sala-assinante,
 .lobby.compact .sala-lineup-player-plus,
@@ -179,9 +185,11 @@ input[type="range"].filterKdr::-ms-tooltip {
   min-height: 90px !important;
   height: 90px !important;
 }
+
 .lobby.compact .sala-card-wrapper {
   width: 20% !important;
 }
+
 .lobby.compact .boost-border,
 .lobby.compact .sala-video {
   display: none !important;
@@ -201,18 +209,23 @@ input[type="range"].filterKdr::-ms-tooltip {
 .lobby.compact .sala-card-content {
   padding: 0 !important;
 }
+
 .lobby.compact .sala-card-type-verified .mixed-badge-room {
   right: -15px !important;
 }
+
 .lobby.compact .prime-badge {
   right: -4px !important;
 }
+
 .lobby.compact .sala-card-type-verified .verified-badge-room {
   right: -9px !important;
 }
+
 .lobby.compact .sala-card {
   margin: 8px 0px !important;
 }
+
 .bar-level {
   position: absolute;
   top: 0;
@@ -228,14 +241,9 @@ input[type="range"].filterKdr::-ms-tooltip {
 
   background: rgb(0 0 0);
   border: 1px solid orange;
-  box-shadow: inset 0px -1px 9px 6px rgb(255 141 0 / 10%);
-
-  border-top: 0;
-  border-bottom: 0;
-
-  box-shadow: none;
+  box-shadow: inset 9px 9px 9px 6px rgb(255 141 0 / 10%);
   padding: 5px 11px;
-  border-radius: 0;
+  border-radius: 1px;
 }
 
 .bar-info-player {
@@ -307,17 +315,15 @@ input[type="range"].filterKdr::-ms-tooltip {
 
 .gcbooster_lupa {
   border: 1px solid orange;
-  border-right: none;
-  border-bottom: none;
-  box-shadow: -3px -3px 6px rgb(255 165 0 / 60%);
-  bottom: 0;
-  right: 0;
+  box-shadow: 0 0 9px rgb(255 165 0 / 40%);
+  bottom: 3px;
+  right: 3px;
   position: absolute;
   cursor: pointer;
   background: #181818;
   width: 38px;
   height: 38px;
-  border-radius: 30px 0 2px 0;
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -327,14 +333,16 @@ input[type="range"].filterKdr::-ms-tooltip {
   top: 0;
   left: 0;
   z-index: 9999;
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   position: absolute;
   top: 15px;
   border-radius: 7px;
   background: rgb(0 0 0 / 74%);
   padding: 10px 3px;
-  box-shadow: 0 0px 11px rgb(255 165 0 / 32%);
+  box-shadow: 0 0px 10px rgb(255 165 0 / 20%);
   border: 1px solid orange;
+  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -356,9 +364,10 @@ input[type="range"].filterKdr::-ms-tooltip {
 .gcbooster-info-titles {
   position: absolute;
   top: -18px;
+  left: -1px;
   background: orange;
-  width: 100%;
-  border-radius: 10px 10px 0 0;
+  width: calc(100% + 2px);
+  border-radius: 6px 6px 0 0;
   padding: 1px 9px;
   color: black;
   text-transform: uppercase;
@@ -369,7 +378,7 @@ input[type="range"].filterKdr::-ms-tooltip {
 
 .gcbooster-info-close {
   position: absolute;
-  right: 22px;
+  right: 3px;
   top: -17px;
   color: white;
   cursor: pointer;
