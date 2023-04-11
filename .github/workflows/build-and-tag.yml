@@ -46,7 +46,7 @@ jobs:
 
       - name: Delete tag if job fails
         if: ${{ failure() }}
-        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        uses: dev-drprasad/delete-tag-and-release@v0.2.1
         with:
           tag_name: ${{ steps.tag_version.outputs.new_tag }}
         env:
