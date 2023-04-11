@@ -64,7 +64,7 @@ function limparOpcoesInvalidas() {
     if ( res.preVetos && res.preVetos.length > 0 ) {
       // train
       limparPreVetos( res.preVetos, 3 );
-      // cbble_classic 
+      // cbble_classic
       limparPreVetos( res.preVetos, 11 );
       // tuscan
       limparPreVetos( res.preVetos, 13 );
