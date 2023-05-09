@@ -111,7 +111,8 @@ export const preVetosMapas = [
   }
 ];
 export const configValues = [ 'somReady', 'volume', 'customSomReady' ];
-export const paginas = [ 'novidades', 'geral', 'mapas', 'lobby', 'contato', 'sobre', 'sons', 'integracoes', 'blocklist', 'backup', 'doacao' ];
+export const paginas = [ 'novidades', 'geral', 'mapas', 'lobby', 'complete', 'contato', 'sobre', 'sons', 'integracoes', 'blocklist',
+  'backup', 'doacao' ];
 export const audios = {
   'undefined': 'Nenhum',
   'https://www.myinstants.com/media/sounds/whatsapp_ptt_2021-04-04_at_21.mp3': 'Partida encontrada',

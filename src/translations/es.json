@@ -4,6 +4,7 @@
   "sons": "Sonidos",
   "mapas": "Mapas",
   "lobby": "Lobby",
+  "complete": "Complete",
   "integracoes": "Integraciones",
   "blockList": "Lista de Bloqueio",
   "comoAddnaLista": "Para adicionar acesse alguma de suas partidas e você verá um botão para adicionar a pessoa a lista de bloqueio.",
@@ -87,5 +88,8 @@
   "todos": "Todos",
   "verificados": "Verificado",
   "verificados-ou-prime": "Verificado o Prime",
-  "warmup-fim": "¡El calentamiento ha terminado!"
+  "warmup-fim": "¡El calentamiento ha terminado!",
+  "complete-mapas": "Mapas que se aceptarán:",
+  "complete-rounds-minimos": "Rondas mínimas jugadas:",
+  "complete-max-diff": "Diferencia máxima entre puntuaciones:"
 }

@@ -4,6 +4,7 @@
   "sons": "Sounds",
   "mapas": "Maps",
   "lobby": "Lobby",
+  "complete": "Complete",
   "integracoes": "Integrations",
   "blockList": "Block List",
   "comoAddnaLista": "To add someone into your block list. Go to your matches page, then you will see a button to each person info, click the button to add.",
@@ -87,5 +88,8 @@
   "todos": "All",
   "verificados": "Verified",
   "verificados-ou-prime": "Verified or Prime",
-  "warmup-fim": "Warmup is over!"
+  "warmup-fim": "Warmup is over!",
+  "complete-mapas": "Maps to be accepted:",
+  "complete-rounds-minimos": "Minimum rounds played:",
+  "complete-max-diff": "Maximum difference between scores:"
 }

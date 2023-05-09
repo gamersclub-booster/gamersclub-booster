@@ -4,6 +4,7 @@
   "sons": "Sons",
   "mapas": "Cartes",
   "lobby": "Salon",
+  "complete": "Complet",
   "integracoes": "Intégrations",
   "blockList": "Joueurs bloqués",
   "comoAddnaLista": "Pour bloquer un joueur, allez sur votre page de match, puis vous verrez un bouton pour chaque information de personne, cliquez sur le bouton pour ajouter.",
@@ -87,5 +88,8 @@
   "todos": "Tous",
   "verificados": "Vérifié",
   "verificados-ou-prime": "Vérifié ou Primier",
-  "warmup-fim": "L'échauffement est terminé!"
+  "warmup-fim": "L'échauffement est terminé!",
+  "complete-mapas": "Cartes à accepter :",
+  "complete-rounds-minimos": "Tours minimum joués :",
+  "complete-max-diff": "Différence maximale entre les scores :"
 }

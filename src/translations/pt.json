@@ -4,6 +4,7 @@
   "sons": "Sons",
   "mapas": "Mapas",
   "lobby": "Lobby",
+  "complete": "Complete",
   "integracoes": "Integrações",
   "blockList": "Lista de Bloqueio",
   "comoAddnaLista": "Para adicionar acesse alguma de suas partidas e você verá um botão para adicionar a pessoa a lista de bloqueio.",
@@ -87,5 +88,8 @@
   "todos": "Todos",
   "verificados": "Verificado",
   "verificados-ou-prime": "Verificado ou Prime",
-  "warmup-fim": "O warmup chegou ao fim!"
+  "warmup-fim": "O warmup chegou ao fim!",
+  "complete-mapas": "Mapas a serem aceitos:",
+  "complete-rounds-minimos": "Rounds mínimos jogados:",
+  "complete-max-diff": "Diferença máxima entre placares:"
 }
