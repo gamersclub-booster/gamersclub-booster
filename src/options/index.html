@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <!-- HTML5 -->
-<meta charset="utf-8" />
 <html>
   <head>
+    <title>Gamers Club Booster</title>
+
+    <meta charset="utf-8" />
     <link
       href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700|Oswald:300,400,700|Teko"
       rel="stylesheet"
@@ -16,6 +18,11 @@
       href="https://assets.gamersclub.com.br/header/css/app.css?v=1210"
     />
     <link rel="stylesheet" href="styles.css" />
+    <script
+      src="https://code.jquery.com/jquery-3.6.4.slim.min.js"
+      integrity="sha256-a2yjHM4jnF9f54xUQakjZGaqYs/V1CYvWpoqZzC2/Bw="
+      crossorigin="anonymous"
+    ></script>
   </head>
 
   <body>
@@ -32,7 +39,9 @@
         ></span>
       </button>
     </div>
+
     <div class="conteudo">
+      <!-- MENU -->
       <div class="menu">
         <ul>
           <li id="link-novidades" class="active">
@@ -94,10 +103,10 @@
         </ul>
       </div>
 
+      <!-- NOVIDADES -->
       <div class="pagina ativo" id="novidades">
-        <h3 class="subtitulo" translation-key="news"></h3>
         <div>
-          <h3>Nova função estatistica!</h3>
+          <h3 class="subtitulo">Nova função estatistica!</h3>
           <img src="images/news/stats.jpg" alt="Estatísticas" />
           <p>
             Agora você consegue dar aquela olhada antes de jogar contra seu
@@ -105,10 +114,9 @@
             da conta :). Assim fica mais fácil decidir e não jogar contra
             smurfs.
           </p>
-          <hr />
         </div>
         <div>
-          <h3>Nova lobby na GC!</h3>
+          <h3 class="subtitulo">Nova lobby na GC!</h3>
           <img src="images/news/novo-layout-gc.png" alt="Status bar" />
           <p>
             A GC está melhorando e adicionando novas features! Com isso a
@@ -117,9 +125,9 @@
             o uso da GC. Assim que possível, tudo estará funcionando como deve
             :)
           </p>
-          <hr />
         </div>
         <div>
+          <h3 class="subtitulo">Lista de bloqueados!</h3>
           <h3>Lista de bloqueados!</h3>
           <img src="images/news/block-list.jpg" alt="Status bar" />
           <p>
@@ -128,9 +136,9 @@
             lista de bloqueados, assim que ele entrar na sala você saberá
             daiii?.
           </p>
-          <hr />
         </div>
         <div>
+          <h3 class="subtitulo">Barra de progresso!</h3>
           <h3>Barra de progresso!</h3>
           <img src="images/news/nav-status.jpg" alt="Status bar" />
           <p>
@@ -138,9 +146,9 @@
             quantos pontos faltam para você cair, ou subir de level, tambem foi
             adicionado o KDR e a foto de perfil.
           </p>
-          <hr />
         </div>
         <div>
+          <h3 class="subtitulo">Salas compactadas!</h3>
           <h3>Salas compactadas!</h3>
           <img src="images/news/compact-lobby.jpg" alt="Lobby compacta" />
           <p>
@@ -148,20 +156,10 @@
             salas por vez, com o modo compacto podemos ver 20 salas dependendo
             do seu monitor.
           </p>
-          <hr />
-        </div>
-        <div>
-          <h3>Filtros por país</h3>
-          <img src="images/news/country-filter.jpg" alt="Lobby compacta" />
-          <p>
-            Cansado de clicar na sala errada e entrar jogar com pessoal de outro
-            país? Seus problemas acabaram haha, agora você pode filtrar as salas
-            apenas em sua região.
-          </p>
-          <hr />
         </div>
       </div>
 
+      <!-- GERAL -->
       <div class="pagina" id="geral">
         <h3 class="subtitulo" translation-key="automacoes"></h3>
         <label
@@ -248,20 +246,17 @@
         </label>
 
         <label
-        class="container"
-        for="warmupTimer"
-        title="Mostra um timer na janela de lobby com o tempo restante de aquecimento.."
-      >
-        <p
-          class="descricao"
-          translation-key="mostrar-warmup-timer"
-        ></p>
-        <input type="checkbox" id="warmupTimer" />
-        <span class="checkmark"></span>
-      </label>
-
+          class="container"
+          for="warmupTimer"
+          title="Mostra um timer na janela de lobby com o tempo restante de aquecimento.."
+        >
+          <p class="descricao" translation-key="mostrar-warmup-timer"></p>
+          <input type="checkbox" id="warmupTimer" />
+          <span class="checkmark"></span>
+        </label>
       </div>
 
+      <!-- LOBBY -->
       <div class="pagina" id="lobby">
         <h3 class="subtitulo" translation-key="lobby"></h3>
         <label
@@ -275,41 +270,62 @@
           <input type="checkbox" id="lobbyPrivada" />
           <span class="checkmark"></span>
         </label>
-
+        <br />
         <h3 class="subtitulo" translation-key="jogar-apenas-com"></h3>
-        <label
-          class="container"
-          for="lobbyTodos"
-          title="Todos"
-          translation-key="todos"
-          translation-attr="title"
-        >
-          <p class="descricao" translation-key="todos"></p>
-          <input type="radio" id="lobbyTodos" name="jogarCom" value="0" />
-          <span class="checkmark"></span>
-        </label>
-        <label
-          class="container"
-          for="lobbyVerificados"
-          title="Verificados"
-          translation-key="verificados"
-          translation-attr="title"
-        >
-          <p class="descricao" translation-key="verificados"></p>
-          <input type="radio" id="lobbyVerificados" name="jogarCom" value="2" />
-          <span class="checkmark"></span>
-        </label>
-        <label
-          class="container"
-          for="lobbyVerificadosOuPrime"
-          title="Verificados ou Prime"
-          translation-key="verificados-ou-prime"
-          translation-attr="title"
-        >
-          <p class="descricao" translation-key="verificados-ou-prime"></p>
-          <input type="radio" id="lobbyVerificadosOuPrime" name="jogarCom" value="1" />
-          <span class="checkmark"></span>
-        </label>
+        <div class="row">
+          <div class="column">
+            <label
+              class="container"
+              for="lobbyTodos"
+              title="Todos"
+              translation-key="todos"
+              translation-attr="title"
+            >
+              <p class="descricao" translation-key="todos"></p>
+              <input type="radio" id="lobbyTodos" name="jogarCom" value="0" />
+              <span class="checkmark"></span>
+            </label>
+          </div>
+          <div class="column">
+            <label
+              class="container"
+              for="lobbyVerificados"
+              title="Verificados"
+              translation-key="verificados"
+              translation-attr="title"
+            >
+              <p class="descricao" translation-key="verificados"></p>
+              <input
+                type="radio"
+                id="lobbyVerificados"
+                name="jogarCom"
+                value="2"
+              />
+              <span class="checkmark"></span>
+            </label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="column">
+            <label
+              class="container"
+              for="lobbyVerificadosOuPrime"
+              title="Verificados ou Prime"
+              translation-key="verificados-ou-prime"
+              translation-attr="title"
+            >
+              <p class="descricao" translation-key="verificados-ou-prime"></p>
+              <input
+                type="radio"
+                id="lobbyVerificadosOuPrime"
+                name="jogarCom"
+                value="1"
+              />
+              <span class="checkmark"></span>
+            </label>
+          </div>
+        </div>
+        <br />
         <h3
           class="subtitulo"
           id="prevetoTitle"
@@ -352,27 +368,27 @@
               <input type="checkbox" id="preVetode_overpass" codigo="7" />
               <span class="checkmark"></span>
             </label>
-          </div>
-          
-          <div class="column">
+
             <label class="container" for="preVetode_inferno">
               <p class="descricao">de_inferno</p>
               <input type="checkbox" id="preVetode_inferno" codigo="8" />
               <span class="checkmark"></span>
             </label>
+          </div>
 
+          <div class="column">
             <label class="container" for="preVetode_vertigo">
               <p class="descricao">de_vertigo</p>
               <input type="checkbox" id="preVetode_vertigo" codigo="10" />
               <span class="checkmark"></span>
             </label>
-            
+
             <!-- <label class="container" for="preVetode_cbble_classic">
               <p class="descricao">de_cbble_classic</p>
               <input type="checkbox" id="preVetode_cbble_classic" codigo="11" />
               <span class="checkmark"></span>
             </label> -->
-            
+
             <label class="container" for="preVetode_ancient">
               <p class="descricao">de_ancient</p>
               <input type="checkbox" id="preVetode_ancient" codigo="12" />
@@ -402,8 +418,6 @@
 
       <div class="pagina" id="complete">
         <h3 class="subtitulo" translation-key="complete"></h3>
-
-        
         <p translation-key="complete-rounds-minimos"></p>
           <input
             type="range"
@@ -428,9 +442,6 @@
             value="16"
           />
           <h3 style="display: inline-block; margin-right: 10px;" id="rounds-diff">16 rounds</h3>
-
-
-
         <h3 class="subtitulo" translation-key="complete-mapas"></h3>
         
         <div class="row">
@@ -515,6 +526,7 @@
         </div>
       </div>
 
+      <!-- SONS -->
       <div class="pagina" id="sons">
         <h3 class="subtitulo" translation-key="sons"></h3>
         <div>
@@ -557,18 +569,29 @@
         </div>
       </div>
 
+      <!-- DISCORD -->
       <div class="pagina" id="integracoes">
-        <h3 class="subtitulo">
-          <div translation-key="discord"></div>
-          <a
-            class="subtituloh2"
-            href="https://github.com/gamersclub-booster/gamersclub-booster/blob/main/DISCORD.md"
-            target="_blank"
-            translation-key="como-criar-sua-webhook"
-          ></a>
-        </h3>
+        <a
+          class="subtituloh2"
+          href="https://github.com/gamersclub-booster/gamersclub-booster/blob/main/DISCORD.md"
+          target="_blank"
+          translation-key="como-criar-sua-webhook"
+          rel="noopener noreferrer"
+          title="como-criar-sua-webhook"
+        ></a>
+        <h3 class="subtitulo" translation-key="discord"></h3>
         <div>
           <div class="form-input">
+            <span>Nome do servidor</span>
+            <div class="input-container">
+              <input
+                type="text"
+                id="campoWebhookName"
+                translation-key="cole-aqui-a-url-do-seu-webhook"
+                translation-attr="placeholder"
+                class="input-form-gray form-control"
+              />
+            </div>
             <span translation-key="url"></span>
             <div class="input-container">
               <input
@@ -579,55 +602,66 @@
                 class="input-form-gray form-control"
               />
             </div>
+            <button class="btn btn-success" id="addWebhook">
+              Adicionar server
+            </button>
           </div>
-          <div>
-            <p
-              style="display: inline-block"
-              translation-key="status-da-url"
-            ></p>
-            <p style="display: inline-block" id="statusWebhook"></p>
-          </div>
-          <button
-            class="btn btn-success"
-            id="testarWebhook"
-            translation-key="testar-e-salvar"
-          ></button>
-          <button
-            class="btn btn-warning"
-            id="botaoLimparDiscord"
-            translation-key="redefinir"
-          ></button>
-          <br /><br />
-          <div id="divDoDiscord" hidden="true">
-            <h3
-              class="subtitulo"
-              translation-key="enviar-automaticamente-no-discord"
-            ></h3>
-            <label
-              class="container"
-              for="enviarLinkLobby"
-              translation-key="envia-automaticamente-link-lobby-discord-title"
-              translation-attr="title"
-            >
-              <p class="descricao" translation-key="lobby-link-kd"></p>
-              <input type="checkbox" id="enviarLinkLobby" />
-              <span class="checkmark"></span>
-            </label>
-            <label
-              class="container"
-              for="enviarPartida"
-              translation-key="envia-automaticamente-partida-title"
-              translation-attr="title"
-              title=""
-            >
-              <p class="descricao" translation-key="partida-ip-times"></p>
-              <input type="checkbox" id="enviarPartida" />
-              <span class="checkmark"></span>
-            </label>
+
+          <div id="group-add-server">
+            <hr />
+            <div class="input-container">
+              <select id="serversSelect" title="Discord Servers"></select>
+            </div>
+            <button
+              class="btn btn-success"
+              id="testarWebhook"
+              translation-key="testar-e-salvar"
+            ></button>
+            <button
+              class="btn btn-warning"
+              id="botaoLimparDiscord"
+              translation-key="redefinir"
+            ></button>
+            <div>
+              <p
+                style="display: inline-block"
+                translation-key="status-da-url"
+              ></p>
+              <p style="display: inline-block" id="statusWebhook"></p>
+            </div>
+
+            <div id="divDoDiscord" hidden="true">
+              <h3
+                class="subtitulo"
+                translation-key="enviar-automaticamente-no-discord"
+              ></h3>
+              <label
+                class="container"
+                for="enviarLinkLobby"
+                translation-key="envia-automaticamente-link-lobby-discord-title"
+                translation-attr="title"
+              >
+                <p class="descricao" translation-key="lobby-link-kd"></p>
+                <input type="checkbox" id="enviarLinkLobby" />
+                <span class="checkmark"></span>
+              </label>
+              <label
+                class="container"
+                for="enviarPartida"
+                translation-key="envia-automaticamente-partida-title"
+                translation-attr="title"
+                title=""
+              >
+                <p class="descricao" translation-key="partida-ip-times"></p>
+                <input type="checkbox" id="enviarPartida" />
+                <span class="checkmark"></span>
+              </label>
+            </div>
           </div>
         </div>
       </div>
 
+      <!-- LISTA DE BLOQUEADOS -->
       <div class="pagina" id="blocklist">
         <h3 class="subtitulo">
           <div translation-key="blockList"></div>
@@ -635,6 +669,7 @@
         <div class="listaBlocks" id="lista"></div>
       </div>
 
+      <!-- BACKUP -->
       <div class="pagina" id="backup">
         <h3 class="subtitulo">
           <div translation-key="backup"></div>
@@ -668,6 +703,7 @@
         </div>
       </div>
 
+      <!-- CONTATO -->
       <div class="pagina" id="contato">
         <a href="https://discord.gg/umx6bbuawh" target="_blank">
           <h3 class="subtitulo" translation-key="discord"></h3>
@@ -690,6 +726,7 @@
         </a>
       </div>
 
+      <!-- SOBRE -->
       <div class="pagina" id="sobre">
         <a
           href="https://github.com/gamersclub-booster/gamersclub-booster"
@@ -720,6 +757,7 @@
         <p class="descricao versao"></p>
       </div>
 
+      <!-- DOACAO -->
       <div class="pagina" id="doacao">
         <h3 class="subtitulo" translation-key="faca-sua-doacao"></h3>
         <h3>PIX</h3>
@@ -744,10 +782,18 @@
       </div>
     </div>
 
+    <!-- FOOTER -->
     <div id="footer" class="footer">
       <div id="versao">
-        <span class="versao-texto" translation-key="versao-footer"></span
-        ><span class="versao"></span>
+        <span class="versao-texto" translation-key="versao-footer"></span>
+        <a
+          href="https://github.com/gamersclub-booster/gamersclub-booster/releases/"
+          rel="noopener noreferrer"
+          target="_blank"
+          title="Versão"
+        >
+          <span class="versao"></span>
+        </a>
       </div>
       <div id="translate">
         <span class="translate" translation-key="idioma"></span>
@@ -759,9 +805,4 @@
     </div>
   </body>
   <script src="index.js"></script>
-  <script
-    src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
-    integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
-    crossorigin="anonymous"
-  ></script>
 </html>
