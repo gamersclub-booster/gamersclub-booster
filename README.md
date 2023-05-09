@@ -1,5 +1,5 @@
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-20-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-21-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # GamersClub Booster
@@ -57,6 +57,7 @@ Obrigado vai para essas pessoas maravilhosas ([emoji key](https://allcontributor
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/EMathioni"><img src="https://avatars.githubusercontent.com/u/78946931?v=4?s=100" width="100px;" alt="Eduardo Mathioni"/><br /><sub><b>Eduardo Mathioni</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=EMathioni" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://zkservidores.com/"><img src="https://avatars.githubusercontent.com/u/32937653?v=4?s=100" width="100px;" alt="crashzk"/><br /><sub><b>crashzk</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=crashzk" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/dudztroyer"><img src="https://avatars.githubusercontent.com/u/26704955?v=4?s=100" width="100px;" alt="dudztroyer"/><br /><sub><b>dudztroyer</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=dudztroyer" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/DanielHeringer"><img src="https://avatars.githubusercontent.com/u/35229999?v=4?s=100" width="100px;" alt="Daniel Lamounier Heringer"/><br /><sub><b>Daniel Lamounier Heringer</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=DanielHeringer" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
