@@ -26,6 +26,7 @@ function iniciarPaginaOpcoes() {
   adicionarListenerPreVetos();
   adicionarListenerCompleteMapas();
   popularAudioOptions();
+  popularServerWebHookOptions();
   selecionarSons();
   adicionarListenersSons();
   loadWebhook();
@@ -121,6 +122,7 @@ function popularAudioOptions() {
     }
   }
 }
+
 
 function adicionaVersao() {
   Array.from( document.getElementsByClassName( 'versao' ) ).forEach( v => {
@@ -310,7 +312,8 @@ function abrirPagina( pagina ) {
 function loadWebhook() {
   chrome.storage.sync.get( [ 'webhookLink' ], function ( data ) {
     if ( data.webhookLink ) {
-      document.getElementById( 'campoWebhookLink' ).value = data.webhookLink;
+      $( '#serversSelect' ).val( data.webhookLink );
+
       document.getElementById( 'statusWebhook' ).innerText = 'OK';
       document.getElementById( 'divDoDiscord' ).removeAttribute( 'hidden' );
     } else {
@@ -319,15 +322,24 @@ function loadWebhook() {
       document.getElementById( 'divDoDiscord' ).setAttribute( 'hidden', true );
     }
   } );
+
   document.getElementById( 'botaoLimparDiscord' ).addEventListener( 'click', async () => {
     chrome.storage.sync.set( { ['webhookLink']: '', ['enviarLinkLobby']: false, ['enviarPartida']: false } );
+    chrome.storage.sync.set( { ['webhookServers']: [ ] } );
+    $( '#serversSelect' ).empty();
+
+    $( '#group-add-server' ).hide();
+
     document.getElementById( 'divDoDiscord' ).hidden = true;
     document.getElementById( 'enviarLinkLobby' ).checked = false;
     document.getElementById( 'enviarPartida' ).checked = false;
     document.getElementById( 'campoWebhookLink' ).value = '';
   } );
+
   document.getElementById( 'testarWebhook' ).addEventListener( 'click', async function () {
-    const url = document.getElementById( 'campoWebhookLink' ).value;
+    const url = $( '#serversSelect' ).val();
+    chrome.storage.sync.set( { ['webhookLink']: url } );
+
     if ( url.length !== 0 ) {
       try {
         await testWebhook( url );
@@ -350,6 +362,86 @@ function loadWebhook() {
       } );
     }
   } );
+
+  document.getElementById( 'addWebhook' ).addEventListener( 'click', async function () {
+    let listServers = [];
+
+
+    chrome.storage.sync.get( [ 'webhookServers' ], function ( e ) {
+      // Pega os valores dos campos
+      const url = $( '#campoWebhookLink' ).val();
+      const nameServer = $( '#campoWebhookName' ).val();
+
+      if ( url.length !== 0 && nameServer.length !== 0 ) {
+        $( '#group-add-server' ).show();
+
+        if ( e.webhookServers ) {
+          listServers = e.webhookServers ;
+        }
+        listServers.push( { url, nameServer } );
+      }
+
+      console.log( listServers, 'listServers' );
+
+      try {
+        // await testWebhook( url );
+        // Salva os valores na store
+        chrome.storage.sync.set( { ['webhookServers']: [ ...listServers ] }, async function () {
+          $( '#divDoDiscord' ).removeAttr( 'hidden' );
+
+          // Adiciona na lista de servidores
+          $( '#serversSelect' ).prepend( $( '<option>', {
+            value: url,
+            text: nameServer
+          } ) );
+
+          // Seleciona a primeira opção
+          $( '#serversSelect' ).prop( 'selectedIndex', 0 );
+
+          $( '#statusWebhook' ).text( 'Adicionado na lista' );
+          $( '#campoWebhookLink' ).val( '' );
+          $( '#campoWebhookName' ).val( '' );
+          //   $.each(items, function (i, item) {
+          //     $('#mySelect').append($('<option>', {
+          //         value: item.value,
+          //         text : item.text
+          //     }));
+          // });
+        } );
+
+      } catch ( e ) {
+        $( '#statusWebhook' ).text( 'Erro na URL, tente novamente.' );
+        // document.getElementById( 'divDoDiscord' ).setAttribute( 'hidden', true );
+      }
+    } );
+  } );
+}
+
+async function popularServerWebHookOptions() {
+  try {
+    chrome.storage.sync.get( [ 'webhookServers' ], function ( e ) {
+      console.log( e.webhookServers, 'hooks' );
+      if ( e.webhookServers.length > 0 ) {
+        $.each( e.webhookServers, function ( i, item ) {
+          console.log( item );
+          $( '#serversSelect' ).append( $( '<option>', {
+            value: item.url,
+            text: item.nameServer
+          } ) );
+        } );
+
+        chrome.storage.sync.get( [ 'webhookLink' ], function ( e ) {
+          if ( e.webhookLink ) {
+            $( '#serversSelect' ).val( e.webhookLink );
+          }
+        } );
+      } else {
+        $( '#group-add-server' ).hide();
+      }
+    } );
+  } catch ( error ) {
+    console.log( error, 'error' );
+  }
 }
 
 //Block List
@@ -422,9 +514,11 @@ function loadBlockList() {
 
           // Adicionar o jogar na lista e o botão remover
           listHTML.innerHTML += `<div class="jogador ${numericId}">
-                                  <a href="${id}" target="_blank" class="links"><img src="${avatarURL}" alt="" class="circle" /></a>
-                                  <a href="${id}" target="_blank" class="links"><span>${nick}</span></a>
-                                  <button class="buttonBlockLista" remove-button="${numericId}">Remover</button></div>`;
+                                  <a href="${id}" target="_blank" class="links jogador-info">
+                                  <img src="${avatarURL}" alt="" class="circle" />
+                                  <span>${nick}</span>
+                                  </a>
+                                  <button class="btn btn-secondary" remove-button="${numericId}">Remover</button></div>`;
 
 
         } );
