@@ -1,7 +1,7 @@
+import axios from 'axios';
+import { GC_URL } from '../../lib/constants';
 import { sendLobby } from '../../lib/discord';
 import { alertaMsg } from '../../lib/messageAlerts';
-import { GC_URL } from '../../lib/constants';
-import axios from 'axios';
 
 export const lobbyLink = mutations =>
   chrome.storage.sync.get( [ 'webhookLink', 'enviarLinkLobby' ], function ( result ) {
@@ -33,7 +33,7 @@ export const lobbyLink = mutations =>
                   .getElementsByClassName( 'sidebar-titulo sidebar-sala-titulo' )[0]
                   .setAttribute( 'style', 'font-size: 12px;' );
                 $( '.btn-radial.btn-blue.btn-copiar-link' )
-                  .parent()
+                  .parents( '.sidebar-sala-action-buttons' )
                   .append(
                     `<span class="btn-radial btn-blue btn-copiar-link" id="discordLobbyButton"
                      title="Enviar lobby Discord" data-jsaction="gcCommonTooltip" data-tip-text="Convidar Amigos">
