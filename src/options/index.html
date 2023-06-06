@@ -27,7 +27,36 @@
 
   <body>
     <div class="header">
-      <a href="#default" class="logo" translation-key="gamersclub-booster"></a>
+      <div>
+        <a
+          href="https://gamersclub-booster.github.io"
+          class="logo"
+          target="_blank"
+          translation-key="gamersclub-booster"
+        ></a>
+        <div id="versao">
+          <div class="versao-texto" translation-key="versao-footer"></div>
+          <a
+            href="https://github.com/gamersclub-booster/gamersclub-booster/releases/"
+            rel="noopener noreferrer"
+            target="_blank"
+            title="Versão"
+          >
+            <div class="versao"></div>
+          </a>
+
+          <!-- FOOTER -->
+          <div id="footer" class="footer">
+            <div id="translate">
+              <div class="translate" translation-key="idioma"></div>
+              <div class="translate-option" id="traducao-pt">PT-BR</div>
+              <div class="translate-option" id="traducao-en">EN</div>
+              <div class="translate-option" id="traducao-es">ES</div>
+              <div class="translate-option" id="traducao-fr">FR</div>
+            </div>
+          </div>
+        </div>
+      </div>
       <img src="images/icon_48.png" alt="Gamers Club Booster" />
     </div>
     <div class="containerMensagem">
@@ -69,7 +98,11 @@
             <a href="#lobby" translation-key="lobby"></a>
           </li>
           <li id="link-complete">
-            <img src="images/menu/complete.svg" alt="Complete" class="img-menu" />
+            <img
+              src="images/menu/complete.svg"
+              alt="Complete"
+              class="img-menu"
+            />
             <a href="#complete" translation-key="complete"></a>
           </li>
           <li id="link-integracoes">
@@ -419,31 +452,35 @@
       <div class="pagina" id="complete">
         <h3 class="subtitulo" translation-key="complete"></h3>
         <p translation-key="complete-rounds-minimos"></p>
-          <input
-            type="range"
-            title="Rounds"
-            id="slider-rounds-min"
-            name="rounds-min"
-            min="0"
-            max="30"
-            value="0"
-          />
-          <h3 style="display: inline-block; margin-right: 10px;" id="rounds-min">0 rounds</h3>
-          
-          <p translation-key="complete-max-diff"></p>
+        <input
+          type="range"
+          title="Rounds"
+          id="slider-rounds-min"
+          name="rounds-min"
+          min="0"
+          max="30"
+          value="0"
+        />
+        <h3 style="display: inline-block; margin-right: 10px" id="rounds-min">
+          0 rounds
+        </h3>
 
-          <input
-            type="range"
-            title="Rounds"
-            id="slider-rounds-diff"
-            name="rounds-diff"
-            min="0"
-            max="16"
-            value="16"
-          />
-          <h3 style="display: inline-block; margin-right: 10px;" id="rounds-diff">16 rounds</h3>
+        <p translation-key="complete-max-diff"></p>
+
+        <input
+          type="range"
+          title="Rounds"
+          id="slider-rounds-diff"
+          name="rounds-diff"
+          min="0"
+          max="16"
+          value="16"
+        />
+        <h3 style="display: inline-block; margin-right: 10px" id="rounds-diff">
+          16 rounds
+        </h3>
         <h3 class="subtitulo" translation-key="complete-mapas"></h3>
-        
+
         <div class="row">
           <div class="column">
             <label class="container" for="completede_dust2">
@@ -779,28 +816,6 @@
             >hnrqdev@gmail.com</a
           >
         </p>
-      </div>
-    </div>
-
-    <!-- FOOTER -->
-    <div id="footer" class="footer">
-      <div id="versao">
-        <span class="versao-texto" translation-key="versao-footer"></span>
-        <a
-          href="https://github.com/gamersclub-booster/gamersclub-booster/releases/"
-          rel="noopener noreferrer"
-          target="_blank"
-          title="Versão"
-        >
-          <span class="versao"></span>
-        </a>
-      </div>
-      <div id="translate">
-        <span class="translate" translation-key="idioma"></span>
-        <span class="translate-option" id="traducao-pt">PT-BR</span>
-        <span class="translate-option" id="traducao-en">EN</span>
-        <span class="translate-option" id="traducao-es">ES</span>
-        <span class="translate-option" id="traducao-fr">FR</span>
       </div>
     </div>
   </body>

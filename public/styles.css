@@ -236,7 +236,7 @@ input:not([type="range"]) {
 .ativo {
   display: block !important;
   overflow: auto;
-  max-height: 409px;
+  max-height: 450px;
 }
 
 .ativo::-webkit-scrollbar-track {
@@ -369,8 +369,6 @@ input:not([type="range"]) {
 
 /* Style the header links */
 .header a {
-  color: #ffffff;
-  text-align: center;
   text-decoration: none;
 }
 
@@ -388,6 +386,7 @@ input:not([type="range"]) {
 .header a.logo {
   font-size: 25px;
   font-weight: bold;
+  color: white;
 }
 
 /* Style the active/current link*/
@@ -415,18 +414,24 @@ input:not([type="range"]) {
 }
 
 .footer {
-  padding: 16px;
-  line-height: 1.5;
-  font-style: normal;
-  font-weight: 400;
-  display: flex;
-  justify-content: space-between;
-  background-color: #141526;
-  border-radius: 5px;
+  margin-left: 16px;
 }
 
-.footer a {
-  text-decoration: none;
+
+.footer>div {
+  display: flex;
+}
+
+.footer>div>div {
+  margin-left: 8px;
+}
+
+#versao {
+  display: flex;
+}
+
+#versao a {
+  margin-left: 8px;
 }
 
 .versao {
@@ -439,7 +444,7 @@ input:not([type="range"]) {
 }
 
 .translate {
-  color: #fff;
+  color: gray;
 }
 
 .translate-option {
