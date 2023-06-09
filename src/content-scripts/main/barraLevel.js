@@ -1,4 +1,4 @@
-import { levelRatingXP, levelColor } from '../../lib/constants';
+import { levelColor, levelRatingXP } from '../../lib/constants';
 import { retrieveWindowVariables } from '../../lib/dom';
 
 function XpRangeFromLevel( level ) {
@@ -20,7 +20,7 @@ const grabPlayerLastMatch = async matchUrl => {
   playerInfo['matchId'] = data.lastMatches[lastMatchIndex].id;
   playerInfo['rating_points'] = data.lastMatches[lastMatchIndex].ratingDiff.toString();
   playerInfo['map_name'] = data.lastMatches[lastMatchIndex].map;
-  playerInfo['avatar'] = `https://static.gamersclub.com.br/players/avatar/${data.playerInfo.id}/${data.playerInfo.id}_medium.jpg`;
+  playerInfo['avatar'] = `https://static.gamersclub.com.br/players/avatar/${data.playerInfo.id}/${data.playerInfo.id}_full.jpg`;
 
   return playerInfo;
 };
