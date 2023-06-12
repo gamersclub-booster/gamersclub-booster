@@ -1,12 +1,13 @@
 import { levelColor, levelRatingXP } from '../../lib/constants';
 import { retrieveWindowVariables } from '../../lib/dom';
+import { getFromStorage, setStorage } from '../../lib/storage';
 
-function XpRangeFromLevel( level ) {
+const xpRangeFromLevel = level => {
   return {
     minRating: levelRatingXP[level - 1],
     maxRating: levelRatingXP[level]
   };
-}
+};
 
 const grabPlayerLastMatch = async matchUrl => {
   const response = await fetch( matchUrl );
@@ -36,7 +37,6 @@ const grabPlayerHistory = async matchUrl => {
 };
 
 export const adicionarBarraLevel = async () => {
-
   const GC_URL = window.location.hostname;
   const windowVariables = retrieveWindowVariables( [ 'ISSUBSCRIBER', 'PLAYERID' ] );
   const isSubscriber = windowVariables.ISSUBSCRIBER;
@@ -54,8 +54,8 @@ export const adicionarBarraLevel = async () => {
   const namePlayer = playerInfo['name'];
   const playerAvatar = playerInfo['avatar'];
 
-  const minPontos = XpRangeFromLevel( playerLevel ).minRating;
-  const maxPontos = XpRangeFromLevel( playerLevel ).maxRating;
+  const minPontos = xpRangeFromLevel( playerLevel ).minRating;
+  const maxPontos = xpRangeFromLevel( playerLevel ).maxRating;
 
   const pontosCair = minPontos - currentRating;
   const pontosSubir = maxPontos - currentRating;
@@ -68,12 +68,13 @@ export const adicionarBarraLevel = async () => {
   const fixedNum = ( ( ( currentRating - minPontos ) * 100 ) / ( maxPontos - minPontos ) ).toFixed( 2 ) + '%';
   const subscriberStyle = isSubscriber === 'true' ? 'subscriber' : 'nonSubscriber';
 
-  const containerDiv = $( '<div class="bar-level">' )
+  const position = await getFromStorage( 'barLevelPosition', 'local' ) || { top: '0px', left: '50%' };
+
+  const containerDiv = $( `<div class="bar-level" id="gcb-bar-level" style="top:${position.top};left:${position.left} ">` )
     .append( $( '<div class="bar-info-player">' )
       .append( $( '<div class="bar-info-name">' ).text( namePlayer ) )
       .append( $( '<img>' ).attr( 'src', playerAvatar ).addClass( 'bar-level-avatar' ) )
     );
-
   const currentLevelSpan = $( '<span>' )
     .attr( 'title', `Skill Level ${playerLevel}` )
     .attr( 'data-tip-text', `Skill Level ${playerLevel}` )
@@ -196,4 +197,46 @@ export const adicionarBarraLevel = async () => {
   $( '#navbar-placeholder' )
     .append( containerDiv.append( currentLevelSpan ).append( progressBarDiv ).append( nextLevelSpan ) );
 
+  // Make the DIV element draggable:
+  dragElement( document.getElementById( 'gcb-bar-level' ) );
+};
+
+const dragElement = elmnt => {
+  let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+  const dragMouseDown = e => {
+    const element = e || window.event;
+    element.preventDefault();
+    // get the mouse cursor position at startup:
+    pos3 = element.clientX;
+    pos4 = element.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  };
+
+  const elementDrag = e => {
+    const element = e || window.event;
+    element.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - element.clientX;
+    pos2 = pos4 - element.clientY;
+    pos3 = element.clientX;
+    pos4 = element.clientY;
+    // set the element's new position:
+    const topPosition = ( elmnt.offsetTop - pos2 ) + 'px';
+    const leftPosition = ( elmnt.offsetLeft - pos1 ) + 'px';
+    elmnt.style.top = topPosition;
+    elmnt.style.left = leftPosition;
+    // save elem position
+    setStorage( 'barLevelPosition', { top: topPosition, left: leftPosition }, 'local' );
+  };
+
+  const closeDragElement = () => {
+    // stop moving when mouse button is released:
+    document.onmouseup = null;
+    document.onmousemove = null;
+  };
+
+  elmnt.onmousedown = dragMouseDown;
 };
