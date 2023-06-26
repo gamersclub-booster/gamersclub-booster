@@ -20,7 +20,8 @@
     "precommit": "commitlint -E HUSKY_GIT_PARAMS",
     "lint": "eslint --config ./.eslintrc ./src",
     "lint:fix": "eslint --fix --config ./.eslintrc ./src",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage"
+   
   },
 
   "dependencies": {
