@@ -1,4 +1,5 @@
 // Um helper para pegar a var necessaria.
+import $ from 'jquery';
 export function retrieveWindowVariables( variables ) {
   const ret = {};
 

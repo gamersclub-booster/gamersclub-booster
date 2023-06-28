@@ -18,7 +18,7 @@ it ('seleciona mapas', () =>{
 })
 
 it ('seleciona mapas', () =>{
-    expect(getMapImage('de_train')).toBe('https://www.esportelandia.com.br/wp-content/uploads/2020/01/vertigo-posicoes-0-cke.jpg?ezimgfmt=ng:webp/ngcb2') //url está igual ao da 'de_vertigo' e irá acusar uma falha
+    expect(getMapImage('de_train')).toBe('https://steamuserimages-a.akamaihd.net/ugc/1822269383661557181/6914D9DE513C94C61DE93F771B84087CD3A71855/') //url está igual ao da 'de_vertigo' e irá acusar uma falha
 })
 
 it ('seleciona mapas', () =>{
