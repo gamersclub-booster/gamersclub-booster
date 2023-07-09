@@ -62,8 +62,10 @@ export async function sendLobby( url, lobbyInfo ) {
     ]
   } );
 }
+/*
+comentei essas e criei uma função externa pq ta dando um erro esquisitasso
 
-function getTeamInfo( data ) {
+export function getTeamInfo( data ) {
   const membersFull = data.players;
   const membersString = membersFull.map( function ( e ) {
     return `${e.level} - ${e.nick} \n`;
@@ -71,12 +73,14 @@ function getTeamInfo( data ) {
 
   return membersString.join( '' );
 }
+
 function getWarmupTime( warmupexpires ) {
   if ( warmupexpires <= 0 ) { return 'Acabou!'; }
   const now = new Date();
   now.setSeconds( now.getSeconds() + warmupexpires );
   return `Até: ${now.toTimeString()}`;
 }
+*/
 
 export async function sendMatchInfo( url, gcMatch ) {
   if ( typeof gcMatch !== 'object' ) {
