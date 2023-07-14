@@ -21,7 +21,7 @@ export async function adicionarBotaoForcarCriarLobby() {
         } )
       );
       addListeners();
-    }, 1500 );
+    }, 5000 );
   } else {
     $( '#criarLobbyBtn' )
       .css( { 'background-color': '#839800', 'border-radius': '4px' } )

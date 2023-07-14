@@ -21,7 +21,7 @@ export async function adicionarBotaoAutoComplete() {
         } )
         );
       addListeners();
-    }, 1500 );
+    }, 5000 );
   } else { // Se precisa apenas modificar o botão que já existe
     $( '#autoCompleteBtn' )
       .css( { 'background-color': 'orange', 'border-radius': '4px' } )
