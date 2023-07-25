@@ -69,10 +69,10 @@ export const preVetosMapas = [
     mapa: 'de_nuke',
     codigo: 2
   },
-  // {
-  //   mapa: 'de_train',
-  //   codigo: 3
-  // },
+  {
+    mapa: 'de_train',
+    codigo: 3
+  },
   {
     mapa: 'de_mirage',
     codigo: 5
@@ -104,11 +104,11 @@ export const preVetosMapas = [
   {
     mapa: 'de_anubis',
     codigo: 14
-  },
-  {
-    mapa: 'de_cache_old',
-    codigo: 16
   }
+  // {
+  //   mapa: 'de_cache_old',
+  //   codigo: 16
+  // }
 ];
 export const configValues = [ 'somReady', 'volume', 'customSomReady' ];
 export const paginas = [ 'novidades', 'geral', 'mapas', 'lobby', 'complete', 'contato', 'sobre', 'sons', 'integracoes', 'blocklist',
