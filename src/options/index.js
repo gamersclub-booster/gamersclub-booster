@@ -63,15 +63,33 @@ function limparPreVetos( preVetos, mapa ) {
   }
 }
 
+function limparComplete( complete, mapa ) {
+  const index = complete.indexOf( mapa );
+  if ( index > -1 ) {
+    const mapas = complete;
+    mapas.splice( index, 1 );
+    chrome.storage.sync.set( { complete: mapas } );
+  }
+}
+
 function limparOpcoesInvalidas() {
+  const mapasInvalidos = [
+    11, // cbble_classic
+    13, // tuscan
+    16 // cache_old
+  ];
   chrome.storage.sync.get( [ 'preVetos' ], res => {
     if ( res.preVetos && res.preVetos.length > 0 ) {
-      // train
-      limparPreVetos( res.preVetos, 3 );
-      // cbble_classic
-      limparPreVetos( res.preVetos, 11 );
-      // tuscan
-      limparPreVetos( res.preVetos, 13 );
+      for ( const mapa of mapasInvalidos ) {
+        limparPreVetos( res.preVetos, mapa );
+      }
+    }
+  } );
+  chrome.storage.sync.get( [ 'complete' ], res => {
+    if ( res.complete && res.complete.length > 0 ) {
+      for ( const mapa of mapasInvalidos ) {
+        limparComplete( res.complete, mapa );
+      }
     }
   } );
 }
@@ -421,7 +439,7 @@ async function popularServerWebHookOptions() {
   try {
     chrome.storage.sync.get( [ 'webhookServers' ], function ( e ) {
       console.log( e.webhookServers, 'hooks' );
-      if ( e.webhookServers.length > 0 ) {
+      if ( e.webhookServers?.length > 0 ) {
         $.each( e.webhookServers, function ( i, item ) {
           console.log( item );
           $( '#serversSelect' ).append( $( '<option>', {
