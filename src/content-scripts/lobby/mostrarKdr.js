@@ -16,7 +16,7 @@ export const mostrarKdr = mutations => {
           $( element ).find( 'div.sala-lineup-placeholder' ).css( 'height', '100px' );
           $ ( element ).find( 'div.sala-lineup-imagem' ).css( 'margin-top', '23px' );
         } else {
-          title = $( element ).find( 'div.sala-lineup-imagem a[data-jsaction]' ).attr( 'title' );
+          title = $( element ).find( 'a[data-jsaction]' ).attr( 'title' );
           if ( $( element ).find( '#gcbooster_kdr' ).length === 0 ) {
             const lobbyId = $ ( element )[0].parentNode.parentNode.parentNode.parentNode.parentNode.id;
             kdr = getKdrFromTitle( title );
@@ -25,6 +25,9 @@ export const mostrarKdr = mutations => {
                 {
                   'id': 'gcbooster_kdr',
                   'css': {
+                    'border-radius': '30px',
+                    'margin-bottom': '4px',
+                    'margin-top': '2px',
                     'width': '45px',
                     'height': '18px',
                     'display': 'flex',
