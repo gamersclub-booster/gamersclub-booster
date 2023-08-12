@@ -107,8 +107,8 @@ const createImage = lobbyId => $( '<img/>', {
 
 const getPlayersIds = element => element
   .find( '.sala-lineup-player:not(.player-placeholder)' )
-  .find( '.gc-avatar, .sala-lineup-imagem' )
-  .children( 'a' )
+  .find( 'a' )
+  // .children( 'a' )
   .toArray()
   .map( e => e.href.split( '/' ).pop() );
 
