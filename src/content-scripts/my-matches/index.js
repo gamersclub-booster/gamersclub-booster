@@ -81,12 +81,12 @@ const colorirPartidas = () => {
     let placarMeuTime;
     let placarAdversario;
     let cor;
-    if ( this.children[1].children.length > 1 ) {
-      placarMeuTime = +this.children[2].textContent;
-      placarAdversario = +this.children[4].textContent;
+    if ( this.children[2].children.length > 1 ) {
+      placarMeuTime = +this.children[3].textContent;
+      placarAdversario = +this.children[5].textContent;
     } else {
-      placarMeuTime = +this.children[4].textContent;
-      placarAdversario = +this.children[2].textContent;
+      placarMeuTime = +this.children[5].textContent;
+      placarAdversario = +this.children[3].textContent;
     }
     if ( placarMeuTime > placarAdversario ) {
       cor = 'rgba(22,229,180,.25) 0';
