@@ -82,11 +82,11 @@ const colorirPartidas = () => {
     let placarAdversario;
     let cor;
     if ( this.children[2].children.length > 1 ) {
-      placarMeuTime = +this.children[3].textContent;
-      placarAdversario = +this.children[5].textContent;
+      placarMeuTime = +this.children[3].textContent || +this.children[4].textContent;
+      placarAdversario = +this.children[5].textContent || +this.children[6].textContent;
     } else {
-      placarMeuTime = +this.children[5].textContent;
-      placarAdversario = +this.children[3].textContent;
+      placarMeuTime = +this.children[5].textContent || +this.children[6].textContent;
+      placarAdversario = +this.children[3].textContent || +this.children[4].textContent;
     }
     if ( placarMeuTime > placarAdversario ) {
       cor = 'rgba(22,229,180,.25) 0';
