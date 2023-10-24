@@ -8,7 +8,6 @@ import { listaBloqueio } from './listaBloqueio';
 // import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
 import { initListaBloqueio } from './botaoListaBloqueio';
 import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
-// import { addCabecalho } from './addCabecalho';
 import { mostrarKdr, mostrarKdrSala, mostrarKdrRanked } from './mostrarKdr';
 // import { adicionarFiltroKdr } from './filtrarKdr';
 import { infoLobby, infoChallenge } from './infoLobby';
@@ -41,8 +40,6 @@ const initLobby = async () => {
   criarObserver( '#challengeList', infoChallenge );
   criarObserver( '#challengeList', mostrarKdr );
 
-  // Cria seção de cabeçalho para botões da extensão
-  // addCabecalho();
   // Clicar automáticamente no Ready, temporário.
   autoAceitarReadySetInterval();
   // Feature para aceitar complete automatico
@@ -56,8 +53,6 @@ const initLobby = async () => {
   // adicionarFiltroKdr();
   // Feature de discord na hora de copiar o ip
   partidaInfo();
-  // Feature de mostrar somente pais selecionado
-  // adicionarFiltroPais();
 };
 
 const criarObserver = ( seletor, exec ) => {
