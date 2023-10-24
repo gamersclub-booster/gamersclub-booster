@@ -5,7 +5,7 @@ import { autoConcordarTermosRanked } from './autoConcordarTermosRanked';
 import { partidaInfo } from './partidaInfo';
 import { lobbyLink } from './lobbyLink';
 import { listaBloqueio } from './listaBloqueio';
-import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
+// import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
 import { initListaBloqueio } from './botaoListaBloqueio';
 import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
 // import { addCabecalho } from './addCabecalho';
@@ -48,7 +48,7 @@ const initLobby = async () => {
   // Feature para aceitar complete automatico
   adicionarBotaoAutoComplete();
   // Feature pra criar lobby caso full
-  adicionarBotaoForcarCriarLobby();
+  // adicionarBotaoForcarCriarLobby();
   // Feature para mostrar kdr dos players
   mostrarKdr();
   mostrarKdrRanked();
