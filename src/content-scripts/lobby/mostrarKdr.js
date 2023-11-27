@@ -9,16 +9,15 @@ const fetchedKdrs = [];
 export const mostrarKdr = mutations => {
   $.each( mutations, async ( _, mutation ) => {
     $( mutation.addedNodes )
-      .find( 'div.sala-lineup-player' ).addBack( 'div.sala-lineup-player' )
+      .find( 'a.LobbyPlayer' ).addBack( 'a.LobbyPlayer' )
       .each( ( _, element ) => {
-        $ ( 'div.sala-lineup-player' ).css( 'min-height', '190px' );
-        if ( $( element ).find( 'div.player-placeholder' ).addBack( 'div.player-placeholder' ).length > 0 ) {
-          $( element ).find( 'div.sala-lineup-placeholder' ).css( 'height', '100px' );
-          $ ( element ).find( 'div.sala-lineup-imagem' ).css( 'margin-top', '23px' );
+        $ ( element ).css( 'min-height', '120px' );
+        if ( $( element ).find( 'div.PlayerPlaceholder' ).addBack( 'div.PlayerPlaceholder' ).length > 0 ) {
+          $ ( element ).find( 'div.PlayerPlaceholder__image' ).css( 'margin-top', '23px' );
         } else {
-          title = $( element ).find( 'a[data-jsaction]' ).attr( 'title' );
+          title = $( element ).attr( 'title' );
           if ( $( element ).find( '#gcbooster_kdr' ).length === 0 ) {
-            const lobbyId = $ ( element )[0].parentNode.parentNode.parentNode.parentNode.parentNode.id;
+            const lobbyId = $ ( element )[0].parentNode.parentNode.parentNode.parentNode.parentNode.id.split( '-' )[1];
             kdr = getKdrFromTitle( title );
             $( element )
               .prepend( $( '<div/>',
@@ -28,10 +27,11 @@ export const mostrarKdr = mutations => {
                     'border-radius': '30px',
                     'margin-bottom': '4px',
                     'margin-top': '2px',
-                    'width': '45px',
+                    'width': '35px',
                     'height': '18px',
                     'display': 'flex',
                     'align-items': 'center',
+                    'text-align': 'center',
                     'color': 'white',
                     'font-weight': 'bold',
                     'border-right': 'transparent',
@@ -48,7 +48,7 @@ export const mostrarKdr = mutations => {
                   'kdr': kdr,
                   'css': { 'width': '100%', 'font-size': '10px' }
                 } ) ) );
-            $( element ).find( 'div.sala-lineup-player' ).append( '<style>.sala-lineup-player:before{top:15px !important;}</style>' );
+            $( element ).find( 'div.LobbyPlayer' ).append( '<style>.LobbyPlayer:before{top:15px !important;}</style>' );
           }
         }
       } );
