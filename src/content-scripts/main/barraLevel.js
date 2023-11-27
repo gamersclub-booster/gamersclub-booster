@@ -1,6 +1,9 @@
 import { levelColor, levelRatingXP } from '../../lib/constants';
 import { retrieveWindowVariables } from '../../lib/dom';
-import { getFromStorage, setStorage } from '../../lib/storage';
+import {
+  getFromStorage //,
+  // setStorage
+} from '../../lib/storage';
 
 const xpRangeFromLevel = level => {
   return {
