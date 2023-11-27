@@ -92,9 +92,7 @@ export const adicionarBarraLevel = async () => {
                 .text( playerLevel )
             )
         )
-    )
-
-    ;
+    );
 
   const nextLevelSpan = $( '<span>' )
     .attr( 'title', `Skill Level ${playerNextLevel}` )
@@ -194,49 +192,49 @@ export const adicionarBarraLevel = async () => {
         )
     );
 
-  $( '#navbar-placeholder' )
-    .append( containerDiv.append( currentLevelSpan ).append( progressBarDiv ).append( nextLevelSpan ) );
+  $( '.MainHeader__navbarBlock' )
+    .prepend( containerDiv.append( currentLevelSpan ).append( progressBarDiv ).append( nextLevelSpan ) );
 
   // Make the DIV element draggable:
-  dragElement( document.getElementById( 'gcb-bar-level' ) );
+  // dragElement( document.getElementById( 'gcb-bar-level' ) );
 };
 
-const dragElement = elmnt => {
-  let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+// const dragElement = elmnt => {
+//   let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
 
-  const dragMouseDown = e => {
-    const element = e || window.event;
-    element.preventDefault();
-    // get the mouse cursor position at startup:
-    pos3 = element.clientX;
-    pos4 = element.clientY;
-    document.onmouseup = closeDragElement;
-    // call a function whenever the cursor moves:
-    document.onmousemove = elementDrag;
-  };
+//   const dragMouseDown = e => {
+//     const element = e || window.event;
+//     element.preventDefault();
+//     // get the mouse cursor position at startup:
+//     pos3 = element.clientX;
+//     pos4 = element.clientY;
+//     document.onmouseup = closeDragElement;
+//     // call a function whenever the cursor moves:
+//     document.onmousemove = elementDrag;
+//   };
 
-  const elementDrag = e => {
-    const element = e || window.event;
-    element.preventDefault();
-    // calculate the new cursor position:
-    pos1 = pos3 - element.clientX;
-    pos2 = pos4 - element.clientY;
-    pos3 = element.clientX;
-    pos4 = element.clientY;
-    // set the element's new position:
-    const topPosition = ( elmnt.offsetTop - pos2 ) + 'px';
-    const leftPosition = ( elmnt.offsetLeft - pos1 ) + 'px';
-    elmnt.style.top = topPosition;
-    elmnt.style.left = leftPosition;
-    // save elem position
-    setStorage( 'barLevelPosition', { top: topPosition, left: leftPosition }, 'local' );
-  };
+//   const elementDrag = e => {
+//     const element = e || window.event;
+//     element.preventDefault();
+//     // calculate the new cursor position:
+//     pos1 = pos3 - element.clientX;
+//     pos2 = pos4 - element.clientY;
+//     pos3 = element.clientX;
+//     pos4 = element.clientY;
+//     // set the element's new position:
+//     const topPosition = ( elmnt.offsetTop - pos2 ) + 'px';
+//     const leftPosition = ( elmnt.offsetLeft - pos1 ) + 'px';
+//     elmnt.style.top = topPosition;
+//     elmnt.style.left = leftPosition;
+//     // save elem position
+//     setStorage( 'barLevelPosition', { top: topPosition, left: leftPosition }, 'local' );
+//   };
 
-  const closeDragElement = () => {
-    // stop moving when mouse button is released:
-    document.onmouseup = null;
-    document.onmousemove = null;
-  };
+//   const closeDragElement = () => {
+//     // stop moving when mouse button is released:
+//     document.onmouseup = null;
+//     document.onmousemove = null;
+//   };
 
-  elmnt.onmousedown = dragMouseDown;
-};
+//   elmnt.onmousedown = dragMouseDown;
+// };
