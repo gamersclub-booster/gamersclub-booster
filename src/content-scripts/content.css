@@ -227,8 +227,8 @@ input[type="range"].filterKdr::-ms-tooltip {
 }
 
 .bar-level {
-  position: absolute;
-  top: 0;
+  position: fixed;
+  bottom: 0;
   z-index: 100000;
   display: flex;
   align-items: center;
