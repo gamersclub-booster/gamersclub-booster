@@ -1,9 +1,5 @@
 import { levelColor, levelRatingXP } from '../../lib/constants';
 import { retrieveWindowVariables } from '../../lib/dom';
-import {
-  getFromStorage //,
-  // setStorage
-} from '../../lib/storage';
 
 const xpRangeFromLevel = level => {
   return {
@@ -71,9 +67,7 @@ export const adicionarBarraLevel = async () => {
   const fixedNum = ( ( ( currentRating - minPontos ) * 100 ) / ( maxPontos - minPontos ) ).toFixed( 2 ) + '%';
   const subscriberStyle = isSubscriber === 'true' ? 'subscriber' : 'nonSubscriber';
 
-  const position = await getFromStorage( 'barLevelPosition', 'local' ) || { left: '50%' };
-
-  const containerDiv = $( `<div class="bar-level" id="gcb-bar-level" style="top:${position.top};left:${position.left} ">` )
+  const containerDiv = $( '<div class="bar-level" id="gcb-bar-level">' )
     .append( $( '<div class="bar-info-player">' )
       .append( $( '<div class="bar-info-name">' ).text( namePlayer ) )
       .append( $( '<img>' ).attr( 'src', playerAvatar ).addClass( 'bar-level-avatar' ) )
