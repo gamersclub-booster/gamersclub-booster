@@ -1,8 +1,7 @@
 import { getPlayerInfo } from './getPlayerInfo';
 const IMAGE_ALT = 'Buscar informações da lobby';
 
-const createModalForElement = element => {
-  const lobbyId = $( element ).find( 'h1.sala-card-title' ).text().replace( /[\W_]+/g, ' ' ).replaceAll( ' ', '_' );
+const createModalForElement = ( element, getPlayersIdsFunction, lobbyId ) => {
   if ( element.find( `#gcbooster_lupa_${lobbyId}` ).length === 0 ) {
     const div = createDiv( lobbyId );
     const modal = createModal( lobbyId );
@@ -17,7 +16,7 @@ const createModalForElement = element => {
 
       $( div ).parent().append( modal );
 
-      const players = getPlayersIds( element );
+      const players = getPlayersIdsFunction( element );
 
       $( `#infos_lobby_${lobbyId}` ).append( createDivTitle() ).append( createClose( lobbyId ) );
       for ( const player of players ) {
@@ -149,20 +148,29 @@ const calcAge = ageDate => {
 export const infoChallenge = mutations => {
   $.each( mutations, ( _, mutation ) => {
     $( mutation.addedNodes )
-      .find( 'div.sidebar-desafios-team-prime' ).addBack( 'div.sala-lineup-players' )
+      .find( 'div.sidebar-desafios-team-prime' )
+      .addBack( 'div.sala-lineup-players' )
       .each( ( _, element ) => {
-        createModalForElement( $( element ) );
+        const lobbyId = $( element ).find( 'h1.sala-card-title' ).text().replace( /[\W_]+/g, ' ' ).replaceAll( ' ', '_' );
+        createModalForElement( $( element ), getPlayersIds, lobbyId );
       } );
   } );
 };
 
+const getPlayersIdsNew = element => element
+  .find( '.LobbyPlayerVertical' )
+  .toArray()
+  .map( e => e.href.split( '/' ).pop() );
+
+
 export const infoLobby = mutations => {
   $.each( mutations, ( _, mutation ) => {
     $( mutation.addedNodes )
-      .find( 'div.sala-card-content' )
-      .addBack( 'div.sala-card-content' )
+      .find( 'article.LobbyRoom' )
+      .addBack( 'article.LobbyRoom' )
       .each( ( _, element ) => {
-        createModalForElement( $( element ) );
+        const lobbyId = $( element ).parent().parent().attr( 'id' );
+        createModalForElement( $( element ), getPlayersIdsNew, lobbyId );
       } );
   } );
 };
