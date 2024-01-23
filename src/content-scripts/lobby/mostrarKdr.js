@@ -9,7 +9,8 @@ const fetchedKdrs = [];
 export const mostrarKdr = mutations => {
   $.each( mutations, async ( _, mutation ) => {
     $( mutation.addedNodes )
-      .find( 'a.LobbyPlayer' ).addBack( 'a.LobbyPlayer' )
+      .find( 'a.LobbyPlayerVertical' )
+      .addBack( 'a.LobbyPlayerVertical' )
       .each( ( _, element ) => {
         $ ( element ).css( 'min-height', '120px' );
         if ( $( element ).find( 'div.PlayerPlaceholder' ).addBack( 'div.PlayerPlaceholder' ).length > 0 ) {
