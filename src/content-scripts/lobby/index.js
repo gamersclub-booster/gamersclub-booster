@@ -11,6 +11,7 @@ import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
 import { mostrarKdr, mostrarKdrSala, mostrarKdrRanked } from './mostrarKdr';
 // import { adicionarFiltroKdr } from './filtrarKdr';
 import { infoLobby, infoChallenge } from './infoLobby';
+import { adicionarFiltroLobbyCompleta, filtrarLobbies } from './filtrarLobbyCompleta';
 
 
 chrome.storage.sync.get( null, function ( _result ) {
@@ -37,6 +38,8 @@ const initLobby = async () => {
 
   criarObserver( '#lobbies-wrapper', mostrarKdr );
   criarObserver( '#lobbies-wrapper', infoLobby );
+  criarObserver( '#lobbies-wrapper', filtrarLobbies );
+
   criarObserver( '#challengeList', infoChallenge );
   criarObserver( '#challengeList', mostrarKdr );
 
@@ -53,6 +56,8 @@ const initLobby = async () => {
   // adicionarFiltroKdr();
   // Feature de discord na hora de copiar o ip
   partidaInfo();
+  // Feature para filtrar por lobby completa
+  adicionarFiltroLobbyCompleta();
 };
 
 const criarObserver = ( seletor, exec ) => {
