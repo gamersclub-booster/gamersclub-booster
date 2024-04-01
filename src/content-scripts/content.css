@@ -397,3 +397,43 @@ input[type="range"].filterKdr::-ms-tooltip {
     display: flex;
     gap: 5px;
 }
+
+
+#btn-auto-complete {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    font-family: Teko;
+    font-size: 22px;
+    font-weight: 400;
+    text-transform: uppercase;
+    border-radius: 2px;
+    padding: 10px 16px 6px;
+    box-shadow: #ffa50066 0px 0px 9px;
+    border: 1px solid orange;
+    background-color: #272727;
+    color: #f0f0f0;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: opacity 0.25s cubic-bezier(0, 0.47, 0.34, 1), transform 0.25s cubic-bezier(0, 0.47, 0.34, 1);
+
+    /* 
+        define a largura máxima em 180px e oculta o texto que
+        exceder para evitar que distorça os outros botões
+    */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 190px;
+}
+
+#btn-auto-complete.btn-visible {
+    opacity: 1;
+    transform: translate(0);
+} 
+#btn-auto-complete.cancel-auto-complete {    
+    background-color: #561e1e;
+    box-shadow: #ff00006b 0px 0px 9px;
+    border-color: #c61010;
+    font-size: 20px;
+}
