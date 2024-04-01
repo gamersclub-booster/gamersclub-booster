@@ -9,10 +9,12 @@ const fetchedKdrs = [];
 export const mostrarKdr = mutations => {
   $.each( mutations, async ( _, mutation ) => {
     $( mutation.addedNodes )
-      .find( 'a.LobbyPlayerVertical' )
-      .addBack( 'a.LobbyPlayerVertical' )
+      .find( 'a.LobbyPlayerVertical, .sala-lineup-imagem a' )
+      .addBack( 'a.LobbyPlayerVertical, .sala-lineup-imagem a' )
       .each( ( _, element ) => {
-        $ ( element ).css( 'min-height', '120px' );
+        if ( !$( element ).parent().hasClass( 'sala-lineup-imagem' ) ) {
+          $ ( element ).css( 'min-height', '120px' );
+        }
         if ( $( element ).find( 'div.PlayerPlaceholder' ).addBack( 'div.PlayerPlaceholder' ).length > 0 ) {
           $ ( element ).find( 'div.PlayerPlaceholder__image' ).css( 'margin-top', '23px' );
         } else {
