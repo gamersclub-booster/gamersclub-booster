@@ -333,7 +333,8 @@ input[type="range"].filterKdr::-ms-tooltip {
   transition: opacity 0.25s cubic-bezier(0, 0.47, 0.34, 1), transform 0.25s cubic-bezier(0, 0.47, 0.34, 1);
 }
 
-.LobbyRoom:hover .gcbooster_lupa {
+.LobbyRoom:hover .gcbooster_lupa,
+.sala-lineup-players .gcbooster_lupa {
   opacity: 1;
   pointer-events: initial;
   transform: translateY(0);
