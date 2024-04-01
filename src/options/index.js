@@ -281,7 +281,7 @@ function selecionarSons() {
   chrome.storage.sync.get( null, response => {
     if ( !response ) { return false; }
     for ( const config of configValues ) {
-      document.getElementById( config ).value = response[config];
+      document.getElementById( config ).value = response[config] || '';
     }
   } );
 }
