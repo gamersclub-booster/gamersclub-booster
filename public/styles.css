@@ -76,6 +76,11 @@ h3 {
   background-color: #bc271c;
 }
 
+.btn[disabled] {
+  background-color: #9b9b9b;
+  cursor: not-allowed;
+}
+
 .input-container {
   margin: 5px 5px 5px 0px !important;
   line-height: 1.5;
@@ -506,11 +511,13 @@ input:not([type="range"]) {
   height: 100%;
   width: 100%;
   justify-content: center;
+  margin: 30px 0;
 }
 
 .caixaMensagem {
-  height: 250px;
+  height: 300px;
   width: 450px;
+  padding: 10px 20px;
   border: 1px solid #ccc;
   background-color: rgba(var(--wasd-color-dark), 1);
   overflow: auto;

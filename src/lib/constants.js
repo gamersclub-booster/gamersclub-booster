@@ -114,7 +114,7 @@ export const configValues = [ 'somReady', 'volume', 'customSomReady' ];
 export const paginas = [ 'novidades', 'geral', 'mapas', 'lobby', 'complete', 'contato', 'sobre', 'sons', 'integracoes', 'blocklist',
   'backup', 'doacao' ];
 export const audios = {
-  'undefined': 'Nenhum',
+  '': 'Nenhum',
   'https://www.myinstants.com/media/sounds/whatsapp_ptt_2021-04-04_at_21.mp3': 'Partida encontrada',
   'https://www.myinstants.com/media/sounds/esl-pro-league-season-11-north-america-mibr-vs-furia-mapa-iii-mirage-mp3cut.mp3':
     'Começou - Gaules',
