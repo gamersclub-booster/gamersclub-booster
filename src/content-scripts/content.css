@@ -392,3 +392,8 @@ input[type="range"].filterKdr::-ms-tooltip {
   align-items: center;
   justify-content: center;
 }
+
+.sidebar-sala-action-buttons {
+    display: flex;
+    gap: 5px;
+}
