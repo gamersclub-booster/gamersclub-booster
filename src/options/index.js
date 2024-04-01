@@ -28,6 +28,7 @@ function iniciarPaginaOpcoes() {
   popularAudioOptions();
   popularServerWebHookOptions();
   selecionarSons();
+  atualizarValorVolume();
   adicionarListenersSons();
   loadWebhook();
   adicionarListenerTraducao();
@@ -285,6 +286,14 @@ function selecionarSons() {
   } );
 }
 
+function atualizarValorVolume() {
+  chrome.storage.sync.get( [ 'volume' ], function ( data ) {
+    if ( data.volume ) {
+      document.getElementById( 'volumeValue' ).innerText = `${data.volume}%`;
+    }
+  } );
+}
+
 function adicionarListenersSons() {
   for ( const config of configValues ) {
     document.getElementById( config ).addEventListener( 'change', function () {
@@ -306,6 +315,11 @@ function adicionarListenersSons() {
     const audio = new Audio( som );
     audio.volume = document.getElementById( 'volume' ).value / 100;
     audio.play();
+  } );
+
+  document.getElementById( 'volume' ).addEventListener( 'input', function () {
+    const volume = document.getElementById( 'volume' ).value;
+    document.getElementById( 'volumeValue' ).innerText = `${volume}%`;
   } );
 }
 
