@@ -448,3 +448,21 @@ input[type="range"].filterKdr::-ms-tooltip {
     border-color: #c61010;
     font-size: 20px;
 }
+
+
+.sidebar-desafios-team .sala-lineup-players .is-prime {
+    width: 32px;
+    height: 32px;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%) scale(1.15);
+    top: unset;
+}
+
+.sidebar-desafios-team .sala-lineup-players .sala-lineup-player {
+    height: 140px;
+}
+
+.sidebar-desafios-team .sala-lineup-players .sala-lineup-player .sala-lineup-imagem #gcbooster_kdr {
+    margin-bottom: 8px !important;
+}
