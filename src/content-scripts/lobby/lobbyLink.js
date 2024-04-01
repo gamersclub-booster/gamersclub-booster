@@ -29,6 +29,8 @@ export const lobbyLink = mutations =>
                 if ( $( '.btn-radial.btn-blue.btn-copiar-link' ).length === 0 ) {
                   return false;
                 }
+
+                const discordSvgUrl = chrome.runtime.getURL( '/images/discord.svg' );
                 document
                   .getElementsByClassName( 'sidebar-titulo sidebar-sala-titulo' )[0]
                   .setAttribute( 'style', 'font-size: 12px;' );
@@ -37,7 +39,7 @@ export const lobbyLink = mutations =>
                   .append(
                     `<span class="btn-radial btn-blue btn-copiar-link" id="discordLobbyButton"
                      title="Enviar lobby Discord" data-jsaction="gcCommonTooltip" data-tip-text="Convidar Amigos">
-                       <img src="https://img.icons8.com/material-sharp/18/ffffff/discord-logo.png"/>
+                       <img src="${discordSvgUrl}"/>
                    </span>`
                   );
 
