@@ -1,5 +1,5 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "GamersClub Booster",
   "description": "Extensão para o Google Chrome que adiciona algumas melhorias na plataforma da GamersClub.",
   "version": "2.51.2",
@@ -8,11 +8,13 @@
     "48": "images/icon_48.png",
     "128": "images/icon_128.png"
   },
-  "permissions": [
+  "host_permissions": [
     "https://gamersclub.com.br/",
     "https://csgo.gamersclub.gg/",
-    "storage",
     "https://discord.com/api/webhooks/*"
+  ],
+  "permissions": [
+    "storage"
   ],
   "content_scripts": [
     {
@@ -72,12 +74,22 @@
       "run_at": "document_end"
     }
   ],
-  "web_accessible_resources": ["images/discord.svg"],
+  "web_accessible_resources": [
+    {
+      "resources": [
+          "images/discord.svg",
+          "jquery-3.7.1.min.js"
+      ],
+      "matches": [
+          "<all_urls>"
+      ]
+    }
+  ],
   "options_page": "index.html",
   "options_ui": {
     "page": "index.html"
   },
-  "browser_action": {
+  "action": {
     "default_icon": {
       "16": "images/icon_16.png",
       "48": "images/icon_48.png",
@@ -87,5 +99,7 @@
     "browser_style": true,
     "chrome_style": true
   },
-  "content_security_policy": "script-src 'self' https://code.jquery.com; object-src 'self'"
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval';object-src 'self';"
+  }
 }

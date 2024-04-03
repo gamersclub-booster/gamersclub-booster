@@ -1,4 +1,4 @@
-import { retrieveWindowVariables } from '../../lib/dom';
+// @TODO: cleanup e ativar? não ta sendo usado.
 import { GC_URL, isFirefox } from '../../lib/constants';
 import { alertaMsg } from '../../lib/messageAlerts';
 import axios from 'axios';
@@ -54,7 +54,7 @@ function intervalerCriacaoLobby() {
   return setInterval( async () => {
     if ( !$( '.sidebar-titulo.sidebar-sala-titulo' ).text().length ) {
       const lobbies = $( '.LobbiesInfo__expanded > .Tag > .Tag__tagLabel' )[0].innerText.split( '/' )[1];
-      const windowVars = retrieveWindowVariables( [ 'LOBBIES_LIMIT' ] );
+      const windowVars = 0; //retrieveWindowVariables( [ 'LOBBIES_LIMIT' ] ); // Não funciona mais.
       const limiteLobby = windowVars.LOBBIES_LIMIT;
       if ( Number( lobbies ) < Number( limiteLobby ) ) {
         //Criar lobby por meio de requisição com AXIOS. ozKcs

@@ -1,5 +1,5 @@
 import { levelColor, levelRatingXP } from '../../lib/constants';
-import { retrieveWindowVariables } from '../../lib/dom';
+import { getUserInfo } from '../../lib/dom';
 
 const xpRangeFromLevel = level => {
   return {
@@ -37,9 +37,8 @@ const grabPlayerHistory = async matchUrl => {
 
 export const adicionarBarraLevel = async () => {
   const GC_URL = window.location.hostname;
-  const windowVariables = retrieveWindowVariables( [ 'ISSUBSCRIBER', 'PLAYERID' ] );
-  const isSubscriber = windowVariables.ISSUBSCRIBER;
-  const playerId = windowVariables.PLAYERID;
+  const { isSubscriber, plID: playerId } = getUserInfo();
+  
   if ( !playerId ) { return; }
   const playerInfo = await grabPlayerLastMatch( `https://${GC_URL}/api/box/init/${playerId}` );
   const playerHistory = await grabPlayerHistory( `https://${GC_URL}/api/box/history/${playerId}` );
