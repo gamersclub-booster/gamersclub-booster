@@ -13,6 +13,7 @@ import { mostrarKdr, mostrarKdrSala, mostrarKdrRanked } from './mostrarKdr';
 import { infoLobby, infoChallenge } from './infoLobby';
 
 import { ocultarSugestaoDeLobbies } from './ocultarSugestaoDeLobbies';
+import { ocultarNotificacaoComplete } from './ocultarNotificacaoComplete';
 
 
 chrome.storage.sync.get( null, function ( _result ) {
@@ -44,6 +45,9 @@ const initLobby = async () => {
 
   // Esconde a sugestão de lobbies para entrar
   ocultarSugestaoDeLobbies();
+
+  //  Oculta as notificações de complete
+  ocultarNotificacaoComplete();
 
   // Clicar automáticamente no Ready, temporário.
   autoAceitarReadySetInterval();
