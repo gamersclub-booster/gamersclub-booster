@@ -78,6 +78,7 @@
     {
       "resources": [
           "images/discord.svg",
+          "events-listener.js",
           "jquery-3.7.1.min.js"
       ],
       "matches": [
