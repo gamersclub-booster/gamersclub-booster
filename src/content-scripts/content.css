@@ -466,3 +466,7 @@ input[type="range"].filterKdr::-ms-tooltip {
 .sidebar-desafios-team .sala-lineup-players .sala-lineup-player .sala-lineup-imagem #gcbooster_kdr {
     margin-bottom: 8px !important;
 }
+
+.ocultar-sugestao-de-lobbies .sc-jNMdxs.eGNUcW {
+    display: none !important;
+}
