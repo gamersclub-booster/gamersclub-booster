@@ -1,4 +1,8 @@
-export const ocultarNotificacaoComplete = () =>
+import { waitForElement } from '../../utils';
+
+export const ocultarNotificacaoComplete = async () => {
+  await waitForElement( '#soundCompletePlayerReceived' );
+
   chrome.storage.sync.get( [ 'ocultarNotificacaoComplete' ], function ( result ) {
     if ( result.ocultarNotificacaoComplete ) {
       document.body.classList.add( 'ocultar-notificacao-complete' );
@@ -7,3 +11,4 @@ export const ocultarNotificacaoComplete = () =>
       if ( soundComplete ) { soundComplete.volume = 0; }
     }
   } );
+};
