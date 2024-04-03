@@ -1,9 +1,12 @@
 import { adicionarNaLista, removerDaLista } from '../../lib/blockList';
-import { getAllStorageSyncData, getTranslationText } from '../../utils';
+import { getAllStorageSyncData, getTranslationText, waitForElement } from '../../utils';
 import { alertaMsg } from '../../lib/messageAlerts';
 import { getUserInfo } from '../../lib/dom';
 
-export function initListaBloqueio() {
+export async function initListaBloqueio() {
+  // aguarda as tabelas carregarem antes de adicionar os botões
+  await waitForElement( '.tableMatch__leftColumn' );
+
   chrome.storage.sync.get( [ 'blockList' ], function ( result ) {
     if ( !result.blockList ) {
       chrome.storage.sync.set( { blockList: [] }, initBotaoListaBloqueio );

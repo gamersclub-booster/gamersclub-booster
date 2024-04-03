@@ -14,6 +14,21 @@ export const getAllStorageSyncData = () => {
   } );
 };
 
+export const waitForElement = selector => {
+  return new Promise( res => {
+    if ( document.querySelector( selector ) ) { return res( document.querySelector( selector ) ); }
+
+    const observer = new MutationObserver( () => {
+      if ( document.querySelector( selector ) ) {
+        observer.disconnect();
+        res( document.querySelector( selector ) );
+      }
+    } );
+
+    observer.observe( document.body, { childList: true, subtree: true } );
+  } );
+};
+
 export const getTranslationText = ( jsonKey, language ) => {
   const LOCALES = {
     'pt': pt,
