@@ -38,7 +38,7 @@ const grabPlayerHistory = async matchUrl => {
 export const adicionarBarraLevel = async () => {
   const GC_URL = window.location.hostname;
   const { isSubscriber, plID: playerId } = getUserInfo();
-  
+
   if ( !playerId ) { return; }
   const playerInfo = await grabPlayerLastMatch( `https://${GC_URL}/api/box/init/${playerId}` );
   const playerHistory = await grabPlayerHistory( `https://${GC_URL}/api/box/history/${playerId}` );
