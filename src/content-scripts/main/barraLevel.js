@@ -64,7 +64,7 @@ export const adicionarBarraLevel = async () => {
   const qwertText = '\nClique aqui para ir para a partida!';
 
   const fixedNum = ( ( ( currentRating - minPontos ) * 100 ) / ( maxPontos - minPontos ) ).toFixed( 2 ) + '%';
-  const subscriberStyle = isSubscriber === 'true' ? 'subscriber' : 'nonSubscriber';
+  const subscriberStyle = isSubscriber ? 'subscriber' : 'nonSubscriber';
 
   const containerDiv = $( '<div class="bar-level" id="gcb-bar-level">' )
     .append( $( '<div class="bar-info-player">' )
