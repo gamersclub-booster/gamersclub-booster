@@ -470,7 +470,6 @@ input[type="range"].filterKdr::-ms-tooltip {
 .ocultar-sugestao-de-lobbies .sc-jNMdxs.eGNUcW {
     display: none !important;
 }
-.ocultar-notificacao-complete .container > .requests,
-.ocultar-notificacao-complete .container > .requests + .notification {
+.ocultar-notificacao-complete .complete-player {
     display: none !important;
 }
