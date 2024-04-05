@@ -97,7 +97,6 @@
       "128": "images/icon_128.png"
     },
     "default_popup": "index.html",
-    "browser_style": true,
     "chrome_style": true
   },
   "content_security_policy": {
