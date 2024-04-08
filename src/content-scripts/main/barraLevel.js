@@ -1,5 +1,5 @@
 import { levelColor, levelRatingXP } from '../../lib/constants';
-import { retrieveWindowVariables } from '../../lib/dom';
+import { getUserInfo } from '../../lib/dom';
 
 const xpRangeFromLevel = level => {
   return {
@@ -37,9 +37,8 @@ const grabPlayerHistory = async matchUrl => {
 
 export const adicionarBarraLevel = async () => {
   const GC_URL = window.location.hostname;
-  const windowVariables = retrieveWindowVariables( [ 'ISSUBSCRIBER', 'PLAYERID' ] );
-  const isSubscriber = windowVariables.ISSUBSCRIBER;
-  const playerId = windowVariables.PLAYERID;
+  const { isSubscriber, plID: playerId } = getUserInfo();
+
   if ( !playerId ) { return; }
   const playerInfo = await grabPlayerLastMatch( `https://${GC_URL}/api/box/init/${playerId}` );
   const playerHistory = await grabPlayerHistory( `https://${GC_URL}/api/box/history/${playerId}` );
@@ -65,7 +64,7 @@ export const adicionarBarraLevel = async () => {
   const qwertText = '\nClique aqui para ir para a partida!';
 
   const fixedNum = ( ( ( currentRating - minPontos ) * 100 ) / ( maxPontos - minPontos ) ).toFixed( 2 ) + '%';
-  const subscriberStyle = isSubscriber === 'true' ? 'subscriber' : 'nonSubscriber';
+  const subscriberStyle = isSubscriber ? 'subscriber' : 'nonSubscriber';
 
   const containerDiv = $( '<div class="bar-level" id="gcb-bar-level">' )
     .append( $( '<div class="bar-info-player">' )

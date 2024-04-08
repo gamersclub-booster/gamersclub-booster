@@ -1,9 +1,12 @@
 import { adicionarNaLista, removerDaLista } from '../../lib/blockList';
-import { getAllStorageSyncData, getTranslationText } from '../../utils';
+import { getAllStorageSyncData, getTranslationText, waitForElement } from '../../utils';
 import { alertaMsg } from '../../lib/messageAlerts';
-import { retrieveWindowVariables } from '../../lib/dom';
+import { getUserInfo } from '../../lib/dom';
 
-export function initListaBloqueio() {
+export async function initListaBloqueio() {
+  // aguarda as tabelas carregarem antes de adicionar os botões
+  await waitForElement( '.tableMatch__leftColumn' );
+
   chrome.storage.sync.get( [ 'blockList' ], function ( result ) {
     if ( !result.blockList ) {
       chrome.storage.sync.set( { blockList: [] }, initBotaoListaBloqueio );
@@ -19,7 +22,7 @@ async function initBotaoListaBloqueio() {
   const removeBlocklistText = getTranslationText( 'remover-da-lista-de-bloqueio', traducao );
   const addedBlocklistText = getTranslationText( 'foi-adicionado-a-lista-bloqueio', traducao );
   const removedBlocklistText = getTranslationText( 'foi-removido-da-lista-bloqueio', traducao );
-  const playerId = retrieveWindowVariables( [ 'PLAYERID' ] ).PLAYERID;
+  const { plID: playerId } = getUserInfo();
   //Quando iniciar, adicionar os botoes da lista de bloqueio
   const playerSelector = $( '.tableMatch__leftColumn' );
   for ( let i = 0; i < playerSelector.length; i++ ) {

@@ -51,6 +51,7 @@ export const features = [
   'autoAceitarReady',
   'autoFixarMenuLobby',
   'ocultarSugestaoDeLobbies',
+  'ocultarNotificacaoComplete',
   'autoDarkMode',
   'autoCompactMode',
   'autoConcordarTermosRanked',
