@@ -1,10 +1,10 @@
 import { levelColor } from '../../lib/constants';
 import { alertaMsg } from '../../lib/messageAlerts';
+import { getFromStorage, setStorage } from '../../lib/storage';
 
 
 let title = null;
 let kdr = null;
-const fetchedKdrs = [];
 
 export const mostrarKdr = mutations => {
   $.each( mutations, async ( _, mutation ) => {
@@ -58,24 +58,37 @@ export const mostrarKdr = mutations => {
   } );
 };
 
+// @TODO: Criar uma função que limpa o cache a cada X tempo ou a cada request e remove os ids que o TTL já expirou
+// const limparCache = () => {
+// }
 
 function getKdrFromTitle( title ) {
   const regexp = /KDR:\s+(\d+\.\d+)\s/g;
   return Array.from( title.matchAll( regexp ), m => m[1] )[0];
 }
+
 const fetchKdr = async id => {
-  const fetchedKdr = fetchedKdrs.find( kdr => kdr.id === id );
-  if ( fetchedKdr ) {
-    return fetchedKdr.kdr;
+  const kdrCache = await getFromStorage( 'kdrCache' ) || {};
+
+  if ( kdrCache?.[id]?.ttl > Date.now() ) {
+    return kdrCache[id].kdr;
   }
 
   const resposta = await fetch( `https://gamersclub.com.br/api/box/history/${id}` );
-  const dadosPartida = await resposta.json();
+  const dadosHistoryBox = await resposta.json();
 
-  const kdr = dadosPartida?.stat[0]?.value;
-  fetchedKdrs.push( { id, kdr } );
+  const kdr = dadosHistoryBox?.stat[0]?.value;
+
+  kdrCache[id] = {
+    kdr,
+    // 20min de ttl
+    ttl: Date.now() + ( 20 * 60 * 1000 )
+  };
+  await setStorage( 'kdrCache', kdrCache );
+
   return kdr;
 };
+
 export const mostrarKdrSala = mutations =>
   mutations.forEach( async mutation => {
     if ( !mutation.addedNodes ) {
