@@ -1,4 +1,4 @@
-import { levelColor, levelRatingXP } from '../../lib/constants';
+import { levelColor, levelRatingXP, headers } from '../../lib/constants';
 import { getUserInfo } from '../../lib/dom';
 
 const xpRangeFromLevel = level => {
@@ -9,7 +9,9 @@ const xpRangeFromLevel = level => {
 };
 
 const grabPlayerLastMatch = async matchUrl => {
-  const response = await fetch( matchUrl );
+  const response = await fetch( matchUrl, {
+    headers
+  } );
   const data = await response.json();
 
   const lastMatchIndex = data.lastMatches.length - 1;
@@ -26,7 +28,9 @@ const grabPlayerLastMatch = async matchUrl => {
 };
 
 const grabPlayerHistory = async matchUrl => {
-  const response = await fetch( matchUrl );
+  const response = await fetch( matchUrl, {
+    headers
+  } );
   const data = await response.json();
 
   const playerHistory = [];

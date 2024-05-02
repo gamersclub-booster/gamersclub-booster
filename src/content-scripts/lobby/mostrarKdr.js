@@ -1,7 +1,6 @@
-import { levelColor } from '../../lib/constants';
+import { levelColor, headers } from '../../lib/constants';
 import { alertaMsg } from '../../lib/messageAlerts';
 import { getFromStorage, setStorage } from '../../lib/storage';
-
 
 let title = null;
 let kdr = null;
@@ -74,7 +73,9 @@ const fetchKdr = async id => {
     return kdrCache[id].kdr;
   }
 
-  const resposta = await fetch( `https://gamersclub.com.br/api/box/history/${id}` );
+  const resposta = await fetch( `https://gamersclub.com.br/api/box/history/${id}`, {
+    headers
+  } );
   const dadosHistoryBox = await resposta.json();
 
   const kdr = dadosHistoryBox?.stat[0]?.value;

@@ -158,3 +158,8 @@ export const isChrome = !isOpera && !isFirefox && !isIE && !isEdge;
 
 // Blink engine detection (tested on Chrome 55.0.2883.87 and Opera 42.0)
 export const isBlink = ( isChrome || isOpera ) && !!window.CSS;
+
+// Header apis
+export const headers = {
+  Authorization: 'Basic Z2MtYm9vc3RlcjowZG5tTjBKVDNMQXcwc3B5SVVJck13NHI'
+};
