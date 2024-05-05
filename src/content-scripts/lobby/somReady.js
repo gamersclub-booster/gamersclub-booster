@@ -4,7 +4,7 @@ export const somReady = mutations =>
       $.each( mutations, ( _i, mutation ) => {
         const addedNodes = $( mutation.addedNodes );
         const selector = 'button:contains(\'Ready\')';
-        const readyButton = addedNodes.find( selector ).addBack( selector ); 
+        const readyButton = addedNodes.find( selector ).addBack( selector );
         if ( readyButton && readyButton.length && readyButton.text() === 'Ready' && !readyButton.disabled ) {
           const som = result.somReady === 'custom' ? result.customSomReady : result.somReady;
           const audio = new Audio( som );
