@@ -14,6 +14,7 @@ import { infoLobby, infoChallenge } from './infoLobby';
 
 import { ocultarSugestaoDeLobbies } from './ocultarSugestaoDeLobbies';
 import { ocultarNotificacaoComplete } from './ocultarNotificacaoComplete';
+import { tocarSomSeVoceForExpulsoDaLobby } from './tocarSomSeVoceForExpulsoDaLobby';
 
 
 chrome.storage.sync.get( null, function ( _result ) {
@@ -42,6 +43,7 @@ const initLobby = async () => {
   criarObserver( '#lobbies-wrapper', infoLobby );
   criarObserver( '#challengeList', infoChallenge );
   criarObserver( '#challengeList', mostrarKdr );
+  criarObserver( '#GamersClubCSApp-globals-globalToaster', tocarSomSeVoceForExpulsoDaLobby );
 
   // Esconde a sugestão de lobbies para entrar
   ocultarSugestaoDeLobbies();

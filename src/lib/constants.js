@@ -112,7 +112,7 @@ export const preVetosMapas = [
   //   codigo: 16
   // }
 ];
-export const configValues = [ 'somReady', 'volume', 'customSomReady' ];
+export const configValues = [ 'somReady', 'volume', 'customSomReady', 'somKicked' ];
 export const paginas = [ 'novidades', 'geral', 'mapas', 'lobby', 'complete', 'contato', 'sobre', 'sons', 'integracoes', 'blocklist',
   'backup', 'doacao' ];
 export const audios = {

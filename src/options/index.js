@@ -134,7 +134,7 @@ function carregarTraducao( language = 'pt' ) {
 }
 
 function popularAudioOptions() {
-  for ( const selectId of [ 'somReady' ] ) {
+  for ( const selectId of [ 'somReady', 'somKicked' ] ) {
     const select = document.getElementById( selectId );
     for ( const index in audios ) {
       select.options[select.options.length] = new Option( audios[index], index );
@@ -296,10 +296,18 @@ function atualizarValorVolume() {
   } );
 }
 
-function updateReadySoundInputsDisable() {
-  const isDefaultSound = !document.getElementById( 'somReady' ).value;
+function updateReadySoundInputsDisable( sound ) {
+  const isDefaultSound = !document.getElementById( sound ).value;
 
-  document.getElementById( 'testarSomReady' ).disabled = isDefaultSound;
+  switch ( sound ) {
+  case 'somReady':
+    document.getElementById( 'testarSomReady' ).disabled = isDefaultSound;
+    break;
+  case 'somKicked':
+    document.getElementById( 'testarSomKicked' ).disabled = isDefaultSound;
+    break;
+  }
+
   document.getElementById( 'volume' ).disabled = isDefaultSound;
 }
 
@@ -326,13 +334,26 @@ function adicionarListenersSons() {
     audio.volume = document.getElementById( 'volume' ).value / 100;
     audio.play();
   } );
+  document.getElementById( 'somReady' ).addEventListener( 'input', () => updateReadySoundInputsDisable( 'somReady' ) );
+
+  //SOM SE FOR EXPULSO DA LOBBY
+  document.getElementById( 'testarSomKicked' ).addEventListener( 'click', function () {
+    const som =
+      document.getElementById( 'somKicked' ).value === 'custom' ?
+        document.getElementById( 'customSomKicked' ).value :
+        document.getElementById( 'somKicked' ).value;
+    const audio = new Audio( som );
+    audio.volume = document.getElementById( 'volume' ).value / 100;
+    audio.play();
+  } );
 
   document.getElementById( 'volume' ).addEventListener( 'input', function () {
     const volume = document.getElementById( 'volume' ).value;
     document.getElementById( 'volumeValue' ).innerText = `${volume}%`;
   } );
+  document.getElementById( 'somKicked' ).addEventListener( 'input', () => updateReadySoundInputsDisable( 'somKicked' ) );
 
-  document.getElementById( 'somReady' ).addEventListener( 'input', updateReadySoundInputsDisable );
+
 }
 
 function abrirPagina( pagina ) {
