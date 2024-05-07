@@ -1,9 +1,6 @@
-import { levelColor, headers } from '../../lib/constants';
+import { headers, levelColor } from '../../lib/constants';
 import { alertaMsg } from '../../lib/messageAlerts';
 import { getFromStorage, setStorage } from '../../lib/storage';
-
-let title = null;
-let kdr = null;
 
 export const mostrarKdr = mutations => {
   $.each( mutations, async ( _, mutation ) => {
@@ -11,47 +8,48 @@ export const mostrarKdr = mutations => {
       .find( 'a.LobbyPlayerVertical, .sala-lineup-imagem a' )
       .addBack( 'a.LobbyPlayerVertical, .sala-lineup-imagem a' )
       .each( ( _, element ) => {
-        if ( !$( element ).parent().hasClass( 'sala-lineup-imagem' ) ) {
-          $ ( element ).css( 'min-height', '120px' );
+        const $element = $( element );
+        const $parent = $element.parent();
+
+        if ( !$parent.hasClass( 'sala-lineup-imagem' ) ) {
+          $element.css( 'min-height', '120px' );
         }
-        if ( $( element ).find( 'div.PlayerPlaceholder' ).addBack( 'div.PlayerPlaceholder' ).length > 0 ) {
-          $ ( element ).find( 'div.PlayerPlaceholder__image' ).css( 'margin-top', '23px' );
-        } else {
-          title = $( element ).attr( 'title' );
-          if ( $( element ).find( '#gcbooster_kdr' ).length === 0 ) {
-            const lobbyId = $ ( element )[0].parentNode.parentNode.parentNode.parentNode.parentNode.id.split( '-' )[1];
-            kdr = getKdrFromTitle( title );
-            $( element )
-              .prepend( $( '<div/>',
-                {
-                  'id': 'gcbooster_kdr',
-                  'css': {
-                    'border-radius': '30px',
-                    'margin-bottom': '4px',
-                    'margin-top': '2px',
-                    'width': '35px',
-                    'height': '18px',
-                    'display': 'flex',
-                    'align-items': 'center',
-                    'text-align': 'center',
-                    'color': 'white',
-                    'font-weight': 'bold',
-                    'border-right': 'transparent',
-                    'border-left': 'transparent',
-                    'background': kdr <= 2 ? '' :
-                      'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)',
-                    'background-color': kdr <= 2 ? levelColor[Math.round( kdr * 10 )] + 'cc' : 'initial'
-                  }
-                } ).addClass( 'draw-orange' )
-                .append( $( '<span/>', {
-                  'id': 'gcbooster_kdr_span',
-                  'gcbooster_kdr_lobby': lobbyId,
-                  'text': kdr,
-                  'kdr': kdr,
-                  'css': { 'width': '100%', 'font-size': '10px' }
-                } ) ) );
-            $( element ).find( 'div.LobbyPlayer' ).append( '<style>.LobbyPlayer:before{top:15px !important;}</style>' );
-          }
+
+        if ( $element.find( 'div.PlayerPlaceholder' ).length > 0 ) {
+          $element.find( 'div.PlayerPlaceholder__image' ).css( 'margin-top', '23px' );
+        } else if ( !$element.find( '#gcbooster_kdr' ).length ) {
+          const lobbyId = $element.closest( '[id^="lobby-"]' ).attr( 'id' ).split( '-' )[1];
+          const kdr = getKdrFromTitle( $element.attr( 'title' ) );
+
+          const $kdrElement = $( '<div/>', {
+            'id': 'gcbooster_kdr',
+            'class': 'draw-orange',
+            'css': {
+              'margin-bottom': '4px',
+              'margin-top': '2px',
+              'width': '100%',
+              'display': 'flex',
+              'padding': '2px 4px',
+              'align-items': 'center',
+              'justify-content': 'center',
+              'text-align': 'center',
+              'color': 'white',
+              'font-weight': '600',
+              'border': 'none',
+              'background': kdr <= 2.5 ? '' :
+                'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)',
+              'background-color': kdr <= 2.5 ? levelColor[Math.round( kdr * 10 )] + 'cc' : 'initial'
+            }
+          } ).append( $( '<span/>', {
+            'id': 'gcbooster_kdr_span',
+            'gcbooster_kdr_lobby': lobbyId,
+            'text': kdr,
+            'kdr': kdr,
+            'css': { 'width': '100%', 'font-size': '10px' }
+          } ) );
+
+          $element.prepend( $kdrElement );
+          $element.find( 'div.LobbyPlayer' ).append( '<style>.LobbyPlayer:before{top:15px !important;}</style>' );
         }
       } );
   } );
@@ -95,40 +93,45 @@ export const mostrarKdrSala = mutations =>
     if ( !mutation.addedNodes ) {
       return;
     }
-    for ( let i = 0; i < mutation.addedNodes.length; i++ ) {
-      const node = mutation.addedNodes[i];
-      if ( node.className && ( node.className.includes( 'sidebar-item' ) || node.className.includes( 'sidebar-sala-players' ) ) ) {
-        const selectorLink = node.querySelector( 'a' );
 
-        const id = selectorLink.getAttribute( 'href' )?.split( '/' )?.at( -1 );
-        const kdr = await fetchKdr( id );
+    $( mutation.addedNodes ).each( function () {
+      const node = $( this );
+      if ( node.hasClass( 'sidebar-item' ) || node.hasClass( 'sidebar-sala-players' ) ) {
+        const selectorLink = node.find( 'a' );
 
-        const searchKdr = parseFloat( kdr ).toFixed( 2 ).toString();
+        const id = selectorLink.attr( 'href' )?.split( '/' ).pop();
+        fetchKdr( id ).then( function ( kdr ) {
+          const searchKdr = parseFloat( kdr ).toFixed( 2 ).toString();
 
-        const colorKrdDefault = searchKdr <= 2 ? '#000' :
-          'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)';
-        const colorKdr = searchKdr <= 2 ? levelColor[Math.round( searchKdr * 10 )] : colorKrdDefault;
+          const colorKdrDefault = searchKdr <= 2.5 ? '#000' :
+            'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)';
+          const colorKdr = searchKdr <= 2.5 ? levelColor[Math.round( searchKdr * 10 )] : colorKdrDefault;
 
-        const kdrSpan = document.createElement( 'span' );
+          const kdrSpan = $( '<span>', {
+            'id': 'gcbooster_kdr_sala',
+            'class': 'draw-orange',
+            'css': {
+              'background-color': colorKdr,
+              'padding': '2px 4px',
+              'position': 'absolute',
+              'top': 0,
+              'right': 0,
+              'z-index': 5,
+              'font-size': '11px',
+              'width': '40px',
+              'text-align': 'center'
+            }
+          } ).html( searchKdr );
 
-        $( kdrSpan ).css( {
-          backgroundColor: colorKdr,
-          padding: '2px 4px',
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          zIndex: 5,
-          fontSize: '11px',
-          width: '40px',
-          textAlign: 'center'
-        } ).addClass( 'draw-orange' );
+          node.find( '.sidebar-item-meta' ).append( kdrSpan );
 
-        kdrSpan.innerHTML = searchKdr;
-        node.querySelector( '.sidebar-item-meta ' ).append( kdrSpan );
-
-        if ( searchKdr === '0.00' ) { alertaMsg( 'Tem um KDR 0 na sala!' ); }
+          if ( searchKdr === '0.00' ) {
+            alertaMsg( 'Tem um KDR 0 na sala!' );
+          }
+        } );
       }
-    }
+    } );
+
   } );
 
 export const mostrarKdrRanked = () => {

@@ -1,7 +1,7 @@
 import { adicionarNaLista, removerDaLista } from '../../lib/blockList';
-import { getAllStorageSyncData, getTranslationText, waitForElement } from '../../utils';
-import { alertaMsg } from '../../lib/messageAlerts';
 import { getUserInfo } from '../../lib/dom';
+import { alertaMsg } from '../../lib/messageAlerts';
+import { getAllStorageSyncData, getTranslationText, waitForElement } from '../../utils';
 
 export async function initListaBloqueio() {
   // aguarda as tabelas carregarem antes de adicionar os botões
@@ -36,7 +36,7 @@ async function initBotaoListaBloqueio() {
   //Verificar quais já estão marcados
   chrome.storage.sync.get( [ 'blockList' ], function ( result ) {
     if ( result.blockList ) {
-      const botaoLista = document.getElementsByClassName( 'botaoListaDeBloqueio' );
+      const botaoLista = $( '.botaoListaDeBloqueio' );
       for ( let i = 0; i < botaoLista.length; i++ ) {
         //Verificar se já existe no array
         const itemList = $( botaoLista[i] ).parents( '.tableMatch__nickColumn' );
