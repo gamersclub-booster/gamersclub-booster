@@ -226,6 +226,29 @@ input[type="range"].filterKdr::-ms-tooltip {
   margin: 8px 0px !important;
 }
 
+.lobby.compact .row.lobby-rooms-content,
+.lobby.compact .LobbyHeader__container {
+  max-width: 80rem !important;
+}
+
+.lobby.compact #lobbies-wrapper {
+  grid-template-columns: repeat(auto-fill, minmax(214px, 1fr)) !important;
+  padding: 16px 0 !important;
+  gap: 16px !important;
+}
+
+.lobby.compact .RoomCardWrapper {
+  max-width: 100% !important;
+}
+
+.lobby.compact #lobby-filters-container,
+.lobby.compact .LobbyRoom,
+.lobby.compact #lobby-filters-container button,
+.lobby.compact .LobbyRoom button,
+.lobby.compact .LobbyHeader__actions {
+  border-radius: 0 !important;
+}
+
 .bar-level {
   position: fixed;
   bottom: 0;
@@ -297,12 +320,12 @@ input[type="range"].filterKdr::-ms-tooltip {
   background: black;
   padding: 8px;
 
+  right: 2px;
   top: initial !important;
   height: calc(100% - 240px);
   bottom: 0 !important;
   border: 1px solid orange;
   box-shadow: 0 0 10px rgb(255 165 0 / 86%);
-  right: 72px;
 }
 
 .hasOpenLobbyRoom div#challengeList.with-fixed-menu sidebar {
@@ -405,71 +428,69 @@ input[type="range"].filterKdr::-ms-tooltip {
 }
 
 .sidebar-sala-action-buttons {
-    display: flex;
-    gap: 5px;
+  display: flex;
+  gap: 5px;
 }
 
 
 #btn-auto-complete {
-    display: flex;
-    align-items: center;
-    height: 40px;
-    font-family: Teko;
-    font-size: 22px;
-    font-weight: 400;
-    text-transform: uppercase;
-    border-radius: 2px;
-    padding: 10px 16px 6px;
-    box-shadow: #ffa50066 0px 0px 9px;
-    border: 1px solid orange;
-    background-color: #272727;
-    color: #f0f0f0;
-    transform: translateY(20px);
-    opacity: 0;
-    transition: opacity 0.25s cubic-bezier(0, 0.47, 0.34, 1), transform 0.25s cubic-bezier(0, 0.47, 0.34, 1);
+  display: flex;
+  align-items: center;
+  height: 40px;
+  font-family: Teko;
+  font-size: 22px;
+  font-weight: 400;
+  text-transform: uppercase;
+  border-radius: 2px;
+  padding: 10px 16px 6px;
+  box-shadow: #ffa50066 0px 0px 9px;
+  border: 1px solid orange;
+  background-color: #272727;
+  color: #f0f0f0;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: opacity 0.25s cubic-bezier(0, 0.47, 0.34, 1), transform 0.25s cubic-bezier(0, 0.47, 0.34, 1);
+  width: 100%;
 
-    /* 
-        define a largura máxima em 180px e oculta o texto que
-        exceder para evitar que distorça os outros botões
-    */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 190px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #btn-auto-complete.btn-visible {
-    opacity: 1;
-    transform: translate(0);
-} 
-#btn-auto-complete.cancel-auto-complete {    
-    background-color: #561e1e;
-    box-shadow: #ff00006b 0px 0px 9px;
-    border-color: #c61010;
-    font-size: 20px;
+  opacity: 1;
+  transform: translate(0);
+}
+
+#btn-auto-complete.cancel-auto-complete {
+  background-color: #561e1e;
+  box-shadow: #ff00006b 0px 0px 9px;
+  border-color: #c61010;
+  font-size: 20px;
 }
 
 
 .sidebar-desafios-team .sala-lineup-players .is-prime {
-    width: 32px;
-    height: 32px;
-    bottom: 2px;
-    left: 50%;
-    transform: translateX(-50%) scale(1.15);
-    top: unset;
+  width: 32px;
+  height: 32px;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%) scale(1.15);
+  top: unset;
 }
 
 .sidebar-desafios-team .sala-lineup-players .sala-lineup-player {
-    height: 140px;
+  height: 140px;
 }
 
 .sidebar-desafios-team .sala-lineup-players .sala-lineup-player .sala-lineup-imagem #gcbooster_kdr {
-    margin-bottom: 8px !important;
+  margin-bottom: 8px !important;
 }
 
 .ocultar-sugestao-de-lobbies .sc-jNMdxs.eGNUcW {
-    display: none !important;
+  display: none !important;
 }
+
 .ocultar-notificacao-complete .complete-player {
-    display: none !important;
+  display: none !important;
 }

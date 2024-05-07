@@ -1,6 +1,6 @@
+import { preVetosMapas } from '../../lib/constants';
 import { alertaMsg } from '../../lib/messageAlerts';
 import { getAllStorageSyncData, getTranslationText } from '../../utils';
-import { preVetosMapas } from '../../lib/constants';
 
 let intervalId;
 
@@ -30,6 +30,11 @@ export async function adicionarBotaoAutoComplete() {
 
   const addListeners = () => {
     const $autoCompleteBtn = $( '#btn-auto-complete' );
+
+    $autoCompleteBtn.parent().css( {
+      'grid-template-columns': '1fr 1fr',
+      'display': 'grid'
+    } );
 
     $autoCompleteBtn.on( 'click', async function () {
       if ( $autoCompleteBtn.hasClass( 'cancel-auto-complete' ) ) { // Se já estiver buscando
@@ -71,35 +76,32 @@ export async function adicionarBotaoAutoComplete() {
 
 async function intervalerAutoComplete() {
   intervalId = setInterval( async function () {
-    if ( !$( '#SidebarSala' ).length ) { // Se não estiver em lobby ( acontece quando cria lobby e já está buscando complete )
-      chrome.storage.sync.get( [ 'complete', 'roundsDiff', 'roundsMin' ], async res => {
-        if ( $( '.scroll-content > li > .btn-actions > a.accept-btn' ).length ) {
-          const score1 = $( '.scroll-content > li > .match-info > .result-type > .score > span' ).eq( 0 ).text();
-          const score2 = $( '.scroll-content > li > .match-info > .result-type > .score > span' ).eq( 1 ).text();
-          const mapCode = getMapCode( $( '.map-name' ).text() );
+    // Verifique se não estamos no lobby
+    if ( $( '#SidebarSala' ).length === 0 ) {
+      const acceptBtn = $( '.scroll-content > li > .btn-actions > a.accept-btn' );
 
-          if ( score1 && score2 && mapCode ) {
-            let isInCheckedMaps = true, hasMinRounds = true, isInDiff = true;
+      if ( acceptBtn.length ) {
+        const scoreSpans = $( '.scroll-content > li > .match-info > .result-type > .score > span' );
+        const mapCode = getMapCode( $( '.map-name' ).text() );
 
-            if ( res.complete ) {
-              isInCheckedMaps = !res.complete.length || res.complete.includes( mapCode );
-            }
+        if ( scoreSpans.length === 2 && mapCode ) {
+          const score1 = parseInt( scoreSpans.eq( 0 ).text() );
+          const score2 = parseInt( scoreSpans.eq( 1 ).text() );
 
-            if ( res.roundsMin ) {
-              hasMinRounds = ( parseInt( score1 ) + parseInt( score2 ) ) >= res.roundsMin;
-            }
+          chrome.storage.sync.get( [ 'complete', 'roundsDiff', 'roundsMin' ], res => {
+            const { complete, roundsDiff, roundsMin } = res || {};
 
-            if ( res.roundsDiff ) {
-              isInDiff = Math.abs( score1 - score2 ) <= res.roundsDiff;
-            }
+            const isInCheckedMaps = !complete || complete.includes( mapCode );
+            const hasMinRounds = ( score1 + score2 ) >= roundsMin;
+            const isInDiff = Math.abs( score1 - score2 ) <= roundsDiff;
 
-            if ( isInCheckedMaps && isInDiff && hasMinRounds ) {
-              $( '.scroll-content > li > .btn-actions > a.accept-btn' ).get( 0 ).click();
+            if ( isInCheckedMaps && hasMinRounds && isInDiff ) {
+              acceptBtn.get( 0 ).click();
               $( '#completePlayerModal > div > div.buttons > button.sm-button-accept.btn.btn-success' ).get( 0 ).click();
             }
-          }
+          } );
         }
-      } );
+      }
     } else {
       clearInterval( intervalId );
     }

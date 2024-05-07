@@ -42,7 +42,7 @@ const createDivVitory = playerInfo => $( '<div />',
     'class': 'gcbooster-info-vitoria',
     title: 'Porcentagem de vitória',
     'data-tip-text': 'Porcentagem de vitória'
-  } ).append( `%: ${Math.round( playerInfo.porcentagemVitoria )}%` );
+  } ).append( `%: ${!isNaN( playerInfo.porcentagemVitoria ) ? Math.round( playerInfo.porcentagemVitoria ) : 0}% ` );
 
 const createDivDateCreate = playerInfo => $( '<div />',
   {
@@ -142,7 +142,7 @@ const calcAge = ageDate => {
     return `${finalMonths}m`;
   }
 
-  return 'Novo(a)';
+  return 'Nova';
 };
 
 export const infoChallenge = mutations => {

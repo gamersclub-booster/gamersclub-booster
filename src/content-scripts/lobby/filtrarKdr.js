@@ -26,22 +26,23 @@ const adicionarFiltroKdr = () => {
 
 const filtrarLobbiesKdr = () => {
   setInterval( () => {
-    const filtroValue = document.getElementById( 'filtrarKdrInput' )?.value;
+    const filtroValue = $( '#filtrarKdrInput' )?.value;
     $( '#filtrarKdrValor' )[0].textContent = filtroValue > 2.99 ? '3+' : filtroValue;
     $( 'span[gcbooster_kdr_lobby]' ).each( function ( _i, elem ) {
-      const lobbyId = elem.getAttribute( 'gcbooster_kdr_lobby' );
+      const lobbyId = $( elem ).attr( 'gcbooster_kdr_lobby' );
       if ( !lobbyId ) { return; }
       const kdrs = [];
       $( `span[gcbooster_kdr_lobby=${lobbyId}]` ).each( function ( _i, elem ) {
-        kdrs.push( elem.textContent );
+        kdrs.push( $( elem ).text() );
       } );
       if ( filtroValue <= 2.99 && kdrs.find( v => v > filtroValue ) ) {
-        document.getElementById( lobbyId ).style.display = 'none';
+        $( `#${lobbyId}` ).css( 'display', 'none' );
       } else {
-        document.getElementById( lobbyId ).style.display = 'flex';
+        $( `#${lobbyId}` ).css( 'display', 'flex' );
       }
     } );
   }, 100 );
 };
 
 export { adicionarFiltroKdr };
+
