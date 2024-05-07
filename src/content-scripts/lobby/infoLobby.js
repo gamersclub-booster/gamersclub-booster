@@ -142,7 +142,7 @@ const calcAge = ageDate => {
     return `${finalMonths}m`;
   }
 
-  return 'Novo(a)';
+  return 'Novo';
 };
 
 export const infoChallenge = mutations => {
