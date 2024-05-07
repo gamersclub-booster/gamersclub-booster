@@ -31,7 +31,10 @@ export async function adicionarBotaoAutoComplete() {
   const addListeners = () => {
     const $autoCompleteBtn = $( '#btn-auto-complete' );
 
-    $autoCompleteBtn.parent().css( 'flex-wrap', 'wrap' );
+    $autoCompleteBtn.parent().css( {
+      'grid-template-columns': '1fr 1fr',
+      'display': 'grid'
+    } );
 
     $autoCompleteBtn.on( 'click', async function () {
       if ( $autoCompleteBtn.hasClass( 'cancel-auto-complete' ) ) { // Se já estiver buscando
