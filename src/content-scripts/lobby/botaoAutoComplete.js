@@ -32,7 +32,7 @@ export async function adicionarBotaoAutoComplete() {
     const $autoCompleteBtn = $( '#btn-auto-complete' );
 
     $autoCompleteBtn.parent().css( {
-      'grid-template-columns': '1fr 1fr',
+      'grid-template-columns': 'repeat(3, 1fr)',
       'display': 'grid'
     } );
 
@@ -65,7 +65,7 @@ export async function adicionarBotaoAutoComplete() {
         );
 
       // cria uma pequena animação para o botão não aparecer de forma brusca
-      setTimeout( () => { $( '#btn-auto-complete' ).addClass( 'btn-visible' ); }, 100 );
+      setTimeout( () => { $( '#btn-auto-complete' ).addClass( 'btn-visible' ); }, 500 );
 
       addListeners();
     } );
