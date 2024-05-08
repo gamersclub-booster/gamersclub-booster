@@ -3,6 +3,7 @@ import { getAllStorageSyncData, getTranslationText } from '../../utils';
 // @TODO: cleanup e ativar? não ta sendo usado.
 import axios from 'axios';
 import { GC_URL, isFirefox } from '../../lib/constants';
+import { getLobbiesLimit } from '../../lib/dom';
 import { alertaMsg } from '../../lib/messageAlerts';
 
 let intervalCriarLobby = null;
@@ -58,7 +59,7 @@ function intervalerCriacaoLobby() {
     if ( !$( '.sidebar-titulo.sidebar-sala-titulo' ).text().length ) {
       const lobbies = $( '.LobbyHeader__buttons div[type="default"]' )[0].innerText.match( /\d+/ )[0];
 
-      if ( Number( lobbies ) < 100 ) {
+      if ( Number( lobbies ) < getLobbiesLimit() ) {
         //Criar lobby por meio de requisição com AXIOS. ozKcs
         chrome.storage.sync.get( [ 'preVetos', 'lobbyPrivada', 'jogarCom' ], async res => {
           const preVetos = res.preVetos ? res.preVetos : [];
@@ -76,7 +77,6 @@ function intervalerCriacaoLobby() {
             vetoes: preVetos
           };
 
-          console.log( 'postData', postData );
           const criarPost = await axios.post( `https://${ GC_URL }/lobbyBeta/createLobby`, postData );
           if ( criarPost.data.success ) {
             if ( isFirefox ) { window.wrappedJSObject.openLobby(); }

@@ -1,12 +1,12 @@
-import { features, preVetosMapas, configValues, paginas, audios } from '../lib/constants';
-import { saveJson, loadJson } from '../lib/blockList';
+import { loadJson, saveJson } from '../lib/blockList';
+import { audios, configValues, features, paginas, preVetosMapas } from '../lib/constants';
 // import { removerDaLista } from '../lib/blockList';
-import { testWebhook } from '../lib/discord';
 import manifest from '../../manifest.json';
-import pt from '../translations/pt.json';
+import { testWebhook } from '../lib/discord';
 import en from '../translations/en.json';
 import es from '../translations/es.json';
 import fr from '../translations/fr.json';
+import pt from '../translations/pt.json';
 
 const translations = {
   'pt': pt,
@@ -59,7 +59,7 @@ function limparPreVetos( preVetos, mapa ) {
   if ( index > -1 ) {
     const mapas = preVetos;
     mapas.splice( index, 1 );
-    console.log( mapas );
+    // console.log( mapas );
     chrome.storage.sync.set( { preVetos: mapas } );
   }
 }
@@ -446,7 +446,7 @@ function loadWebhook() {
         listServers.push( { url, nameServer } );
       }
 
-      console.log( listServers, 'listServers' );
+      // console.log( listServers, 'listServers' );
 
       try {
         // await testWebhook( url );
@@ -485,10 +485,10 @@ function loadWebhook() {
 async function popularServerWebHookOptions() {
   try {
     chrome.storage.sync.get( [ 'webhookServers' ], function ( e ) {
-      console.log( e.webhookServers, 'hooks' );
+      // console.log( e.webhookServers, 'hooks' );
       if ( e.webhookServers?.length > 0 ) {
         $.each( e.webhookServers, function ( i, item ) {
-          console.log( item );
+          // console.log( item );
           $( '#serversSelect' ).append( $( '<option>', {
             value: item.url,
             text: item.nameServer
@@ -505,7 +505,7 @@ async function popularServerWebHookOptions() {
       }
     } );
   } catch ( error ) {
-    console.log( error, 'error' );
+    // console.log( error, 'error' );
   }
 }
 
