@@ -24,7 +24,8 @@ export async function adicionarBotaoForcarCriarLobby() {
           'id': 'criar-lobby-btn',
           'class': 'WasdButton WasdButton--primary WasdButton--lg WasdButton--block draw-orange btn-visible',
           'type': 'button',
-          'text': text
+          'text': text,
+          'title': 'Vai ficar tentando criar a lobby até conseguir (caso o limite máximo de lobbies tenha sido ultrapassado)'
         } )
       );
 
@@ -79,7 +80,8 @@ function intervalerCriacaoLobby() {
             team: null,
             team_players: [],
             type: 'newRoom',
-            vetoes: preVetos
+            vetoes: preVetos,
+            game: 'cs2'
           };
 
           const criarPost = await axios.post( `https://${ GC_URL }/lobbyBeta/createLobby`, postData );
