@@ -433,7 +433,8 @@ input[type="range"].filterKdr::-ms-tooltip {
 }
 
 
-#btn-auto-complete {
+#btn-auto-complete,
+#criar-lobby-btn {
   display: flex;
   align-items: center;
   height: 40px;
@@ -457,12 +458,14 @@ input[type="range"].filterKdr::-ms-tooltip {
   text-overflow: ellipsis;
 }
 
-#btn-auto-complete.btn-visible {
+#btn-auto-complete.btn-visible,
+#criar-lobby-btn.btn-visible {
   opacity: 1;
   transform: translate(0);
 }
 
-#btn-auto-complete.cancel-auto-complete {
+#btn-auto-complete.cancel-auto-complete,
+#criar-lobby-btn.cancel-auto-complete {
   background-color: #561e1e;
   box-shadow: #ff00006b 0px 0px 9px;
   border-color: #c61010;

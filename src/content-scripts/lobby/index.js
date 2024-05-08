@@ -1,19 +1,19 @@
-import { autoFixarMenuLobby } from './autoFixarMenuLobby';
 import { autoAceitarReady, autoAceitarReadySetInterval } from './autoAceitarReady';
-import { somReady } from './somReady';
 import { autoConcordarTermosRanked } from './autoConcordarTermosRanked';
-import { partidaInfo } from './partidaInfo';
-import { lobbyLink } from './lobbyLink';
-import { listaBloqueio } from './listaBloqueio';
-// import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
-import { initListaBloqueio } from './botaoListaBloqueio';
+import { autoFixarMenuLobby } from './autoFixarMenuLobby';
 import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
-import { mostrarKdr, mostrarKdrSala, mostrarKdrRanked } from './mostrarKdr';
+import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
+import { initListaBloqueio } from './botaoListaBloqueio';
+import { listaBloqueio } from './listaBloqueio';
+import { lobbyLink } from './lobbyLink';
+import { mostrarKdr, mostrarKdrRanked, mostrarKdrSala } from './mostrarKdr';
+import { partidaInfo } from './partidaInfo';
+import { somReady } from './somReady';
 // import { adicionarFiltroKdr } from './filtrarKdr';
-import { infoLobby, infoChallenge } from './infoLobby';
+import { infoChallenge, infoLobby } from './infoLobby';
 
-import { ocultarSugestaoDeLobbies } from './ocultarSugestaoDeLobbies';
 import { ocultarNotificacaoComplete } from './ocultarNotificacaoComplete';
+import { ocultarSugestaoDeLobbies } from './ocultarSugestaoDeLobbies';
 import { tocarSomSeVoceForExpulsoDaLobby } from './tocarSomSeVoceForExpulsoDaLobby';
 
 
@@ -56,7 +56,7 @@ const initLobby = async () => {
   // Feature para aceitar complete automatico
   adicionarBotaoAutoComplete();
   // Feature pra criar lobby caso full
-  // adicionarBotaoForcarCriarLobby();
+  adicionarBotaoForcarCriarLobby();
   // Feature para mostrar kdr dos players
   mostrarKdr();
   mostrarKdrRanked();

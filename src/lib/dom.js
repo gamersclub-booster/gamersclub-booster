@@ -6,3 +6,7 @@ export function getUserInfo() {
 }
 
 export const log = msg => console.log( '[GC Booster]', msg );
+
+export function getLobbiesLimit() {
+  return Number( document.documentElement.innerHTML.match( /var LOBBIES_LIMIT =\s(\d*)/ )[1] );
+}
