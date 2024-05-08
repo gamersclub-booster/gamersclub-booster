@@ -13,19 +13,24 @@ export async function adicionarBotaoForcarCriarLobby() {
   const text = getTranslationText( 'criar-lobby-pre-configurada', traducao );
 
   if ( !$( '#criar-lobby-btn' ).length ) {
-    setTimeout( () => {
-      $( '#lobby-actions-create-lobby-button' ).parent().prepend(
+    const observer = new MutationObserver( () => {
+      const btnAlreadyExists = $( '#criar-lobby-btn' ).length;
+      const isReadyToInsert = $( '#lobby-actions-create-lobby-button' ).length;
+
+      if ( btnAlreadyExists || !isReadyToInsert ) { return; }
+
+      $( '#lobby-actions-create-lobby-button' ).parent().append(
         $( '<button/>', {
           'id': 'criar-lobby-btn',
-          'class': 'WasdButton WasdButton--primary WasdButton--lg WasdButton--block draw-orange',
+          'class': 'WasdButton WasdButton--primary WasdButton--lg WasdButton--block draw-orange btn-visible',
           'type': 'button',
           'text': text
         } )
       );
-      $( '#criar-lobby-btn' ).addClass( 'btn-visible' );
 
       addListeners();
-    }, 3000 );
+    } );
+    observer.observe( document.body, { childList: true, subtree: true } );
   } else {
     $( '#criar-lobby-btn' )
       .css( { 'background-color': 'transparent', 'border-radius': '4px' } )
@@ -79,12 +84,12 @@ function intervalerCriacaoLobby() {
 
           const criarPost = await axios.post( `https://${ GC_URL }/lobbyBeta/createLobby`, postData );
           if ( criarPost.data.success ) {
-            if ( isFirefox ) { window.wrappedJSObject.openLobby(); }
-            setTimeout( async () => {
-              adicionarBotaoForcarCriarLobby();
-              clearInterval( intervalCriarLobby );
-              location.reload();
-            }, 1000 );
+            if ( isFirefox ) {
+              window.wrappedJSObject.openLobby();
+            }
+            adicionarBotaoForcarCriarLobby();
+            clearInterval( intervalCriarLobby );
+            location.reload();
           } else {
             if ( criarPost.data.message.includes( 'Anti-cheat' ) || criarPost.data.message.includes( 'banned' ) ) {
               clearInterval( intervalCriarLobby );
