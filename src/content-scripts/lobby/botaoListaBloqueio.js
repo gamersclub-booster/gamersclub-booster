@@ -47,9 +47,13 @@ async function initBotaoListaBloqueio() {
         if ( listaDeTodosOsIDs.includes( id ) ) {
           botaoLista[i].innerText = removeBlocklistText;
           botaoLista[i].setAttribute( 'data', 'alreadyListed' );
+          botaoLista[i].setAttribute( 'title', `[GC Booster]: ${removeBlocklistText}` );
+          botaoLista[i].classList.add( 'draw-orange' );
         } else {
           botaoLista[i].innerText = addBlocklistText;
           botaoLista[i].setAttribute( 'data', 'notAlreadyListed' );
+          botaoLista[i].setAttribute( 'title', `[GC Booster]: ${addBlocklistText}` );
+          botaoLista[i].classList.add( 'draw-orange' );
         }
         //Adicionar o listener de clique
         // $( botaoLista[i] ).on( 'click', function ( click ) {
@@ -62,14 +66,18 @@ async function initBotaoListaBloqueio() {
             //Remover da lista
             removerDaLista( { id, avatarURL, nick }, function ( ) {
               botaoLista[i].innerText = addBlocklistText;
+              botaoLista[i].classList.add( 'draw-orange' );
               botaoLista[i].setAttribute( 'data', 'notAlreadyListed' );
+              botaoLista[i].setAttribute( 'title', `[GC Booster]: ${addBlocklistText}` );
               alertaMsg( `${nick} ${removedBlocklistText}.` );
             } );
           } else {
             //Adicionar a lista
             adicionarNaLista( { id, avatarURL, nick }, function ( ) {
               botaoLista[i].innerText = removeBlocklistText;
+              botaoLista[i].classList.add( 'draw-orange' );
               botaoLista[i].setAttribute( 'data', 'alreadyListed' );
+              botaoLista[i].setAttribute( 'title', `[GC Booster]: ${removeBlocklistText}` );
               alertaMsg( `${nick} ${addedBlocklistText}.` );
             } );
           }

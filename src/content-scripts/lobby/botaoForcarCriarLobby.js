@@ -25,7 +25,7 @@ export async function adicionarBotaoForcarCriarLobby() {
           'class': 'WasdButton WasdButton--primary WasdButton--lg WasdButton--block draw-orange btn-visible',
           'type': 'button',
           'text': text,
-          'title': 'Vai ficar tentando criar a lobby até conseguir (caso o limite máximo de lobbies tenha sido ultrapassado)'
+          'title': '[GC Booster]: Vai ficar tentando criar a lobby até conseguir (caso o limite máximo de lobbies tenha sido ultrapassado)'
         } )
       );
 

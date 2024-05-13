@@ -63,7 +63,8 @@ export async function adicionarBotaoAutoComplete() {
           'id': 'btn-auto-complete',
           'class': 'WasdButton WasdButton--primary WasdButton--lg WasdButton--block draw-orange btn-visible',
           'type': 'button',
-          'text': completarPartidaText
+          'text': `${completarPartidaText}`,
+          'title': `[GC Booster]: ${completarPartidaText}`
         } ) );
 
       addListeners();
