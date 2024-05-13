@@ -88,50 +88,46 @@ const fetchKdr = async id => {
   return kdr;
 };
 
+
 export const mostrarKdrSala = mutations =>
   mutations.forEach( async mutation => {
     if ( !mutation.addedNodes ) {
       return;
     }
+    for ( let i = 0; i < mutation.addedNodes.length; i++ ) {
+      const node = mutation.addedNodes[i];
+      if ( node.className && ( node.className.includes( 'sidebar-item' ) || node.className.includes( 'sidebar-sala-players' ) ) ) {
+        const selectorLink = node.querySelector( 'a' );
 
-    $( mutation.addedNodes ).each( function () {
-      const node = $( this );
-      if ( node.hasClass( 'sidebar-item' ) || node.hasClass( 'sidebar-sala-players' ) ) {
-        const selectorLink = node.find( 'a' );
+        const id = selectorLink.getAttribute( 'href' )?.split( '/' )?.at( -1 );
+        const kdr = await fetchKdr( id );
 
-        const id = selectorLink.attr( 'href' )?.split( '/' ).pop();
-        fetchKdr( id ).then( function ( kdr ) {
-          const searchKdr = parseFloat( kdr ).toFixed( 2 ).toString();
+        const searchKdr = parseFloat( kdr ).toFixed( 2 ).toString();
 
-          const colorKdrDefault = searchKdr <= 2.5 ? '#000' :
-            'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)';
-          const colorKdr = searchKdr <= 2.5 ? levelColor[Math.round( searchKdr * 10 )] : colorKdrDefault;
+        const colorKrdDefault = searchKdr <= 2.5 ? '#000' :
+          'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)';
+        const colorKdr = searchKdr <= 2.5 ? levelColor[Math.round( searchKdr * 10 )] : colorKrdDefault;
 
-          const kdrSpan = $( '<span>', {
-            'id': 'gcbooster_kdr_sala',
-            'class': 'draw-orange',
-            'css': {
-              'background-color': colorKdr,
-              'padding': '2px 4px',
-              'position': 'absolute',
-              'top': 0,
-              'right': 0,
-              'z-index': 5,
-              'font-size': '11px',
-              'width': '40px',
-              'text-align': 'center'
-            }
-          } ).html( searchKdr );
+        const kdrSpan = document.createElement( 'span' );
 
-          node.find( '.sidebar-item-meta' ).append( kdrSpan );
+        $( kdrSpan ).css( {
+          backgroundColor: colorKdr,
+          padding: '2px 4px',
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          zIndex: 5,
+          fontSize: '11px',
+          width: '40px',
+          textAlign: 'center'
+        } ).addClass( 'draw-orange' );
 
-          if ( searchKdr === '0.00' ) {
-            alertaMsg( 'Tem um KDR 0 na sala!' );
-          }
-        } );
+        kdrSpan.innerHTML = searchKdr;
+        node.querySelector( '.sidebar-item-meta ' ).append( kdrSpan );
+
+        if ( searchKdr === '0.00' ) { alertaMsg( 'Tem um KDR 0 na sala!' ); }
       }
-    } );
-
+    }
   } );
 
 export const mostrarKdrRanked = () => {
