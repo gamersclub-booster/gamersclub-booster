@@ -1,5 +1,5 @@
 import { getPlayerInfo } from './getPlayerInfo';
-const IMAGE_ALT = 'Buscar informações da lobby';
+const IMAGE_ALT = '[GC Booster]: Buscar informações da lobby';
 
 const createModalForElement = ( element, getPlayersIdsFunction, lobbyId ) => {
   if ( element.find( `#gcbooster_lupa_${lobbyId}` ).length === 0 ) {
@@ -33,8 +33,7 @@ const createDiv = lobbyId => $( '<div/>',
   {
     id: `gcbooster_lupa_${lobbyId}`,
     class: 'gcbooster_lupa',
-    title: IMAGE_ALT,
-    'data-tip-text': IMAGE_ALT
+    title: IMAGE_ALT
   } );
 
 const createDivVitory = playerInfo => $( '<div />',

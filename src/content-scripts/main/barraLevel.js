@@ -1,4 +1,4 @@
-import { levelColor, levelRatingXP, headers } from '../../lib/constants';
+import { headers, levelColor, levelRatingXP } from '../../lib/constants';
 import { getUserInfo } from '../../lib/dom';
 
 const xpRangeFromLevel = level => {
@@ -76,7 +76,7 @@ export const adicionarBarraLevel = async () => {
       .append( $( '<img>' ).attr( 'src', playerAvatar ).addClass( 'bar-level-avatar' ) )
     );
   const currentLevelSpan = $( '<span>' )
-    .attr( 'title', `Skill Level ${playerLevel}` )
+    .attr( 'title', `[GC Booster]: Skill Level ${playerLevel}` )
     .attr( 'data-tip-text', `Skill Level ${playerLevel}` )
     .css( { 'cursor': 'help', 'display': 'inline-block' } )
     .append(
@@ -95,7 +95,7 @@ export const adicionarBarraLevel = async () => {
     );
 
   const nextLevelSpan = $( '<span>' )
-    .attr( 'title', `Skill Level ${playerNextLevel}` )
+    .attr( 'title', `[GC Booster]: Skill Level ${playerNextLevel}` )
     .attr( 'data-tip-text', `Skill Level ${playerNextLevel}` )
     .css( { 'cursor': 'help', 'display': 'inline-block' } )
     .append(
@@ -130,12 +130,12 @@ export const adicionarBarraLevel = async () => {
                 .text( ratingPoints.includes( '-' ) ? ratingPoints : '+' + ratingPoints )
                 .attr( 'title', (
                   ratingPoints.includes( '-' ) ?
-                    'Pontos que você perdeu na última partida' :
-                    'Pontos que você ganhou na última partida' ) + qwertText )
+                    '[GC Booster]: Pontos que você perdeu na última partida' :
+                    '[GC Booster]: Pontos que você ganhou na última partida' ) + qwertText )
               )
             )
         )
-        .append( $( '<span class="kdr-level" title="KDR médio">' ).text( playerKdr ).css( {
+        .append( $( '<span class="kdr-level" title="[GC Booster]: KDR médio">' ).text( playerKdr ).css( {
           'background': playerKdr <= 2 ? '' :
             'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)',
           'background-color': playerKdr <= 2 ? levelColor[Math.round( playerKdr * 10 )] + 'cc' : 'initial'
@@ -145,7 +145,7 @@ export const adicionarBarraLevel = async () => {
             .css( { 'display': 'flex', 'align-items': 'center', 'justify-content': 'flex-end' } )
             .append( $( '<span>' )
               .css( { 'cursor': 'help' } )
-              .attr( 'title', 'Rating atual' )
+              .attr( 'title', '[GC Booster]: Rating atual' )
               .text( currentRating )
             )
             .append( $( '<i>' )
@@ -177,12 +177,12 @@ export const adicionarBarraLevel = async () => {
           .append( $( '<span>' )
             .append( $( '<span>' )
               .css( { 'cursor': 'help', 'color': '#ef2f2f' } )
-              .attr( 'title', 'Quantidade de pontos para cair de Level' )
+              .attr( 'title', '[GC Booster]: Quantidade de pontos para cair de Level' )
               .text( pontosCair )
             )
             .append( $( '<span>' )
               .css( { 'cursor': 'help', 'color': '#839800' } )
-              .attr( 'title', 'Quantidade de pontos para subir de Level' )
+              .attr( 'title', '[GC Booster]: Quantidade de pontos para subir de Level' )
               .text( '+' + pontosSubir )
             )
           )

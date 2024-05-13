@@ -1,6 +1,6 @@
-import { sendMatchInfo } from '../../lib/discord';
-import { GC_URL } from '../../lib/constants';
 import axios from 'axios';
+import { GC_URL } from '../../lib/constants';
+import { sendMatchInfo } from '../../lib/discord';
 import { getAllStorageSyncData, getTranslationText } from '../../utils';
 
 const colors = [
@@ -19,7 +19,7 @@ export const buildTimer = ( warmupFinished, targetContainer, timeleft, maxtime =
 
   const endTime = Math.floor( Date.now() / 1000 ) + timeleft;
   let baseContent = `
-          <div id="warmup_left_wrapper">Warmup: 
+          <div id="warmup_left_wrapper" title="[GC Booster]: Tempo restante">Warmup: 
             <b style="color: ${getColor( timeleft )}">${timeUtil( timeleft )}</b>
           </div>
           <progress style="accent-color: ${getColor( timeleft )}" id="warmup_progressbar" value="${timeleft}" max="${maxtime}"></progress>`;
@@ -66,7 +66,7 @@ export const partidaInfo = async () => {
               if ( needDisc && !discElement ) {
                 parentDisclaimer.append(
                   `<button id="botaoDiscordNoDOM" class="WasdButton WasdButton--success WasdButton--lg botaoDiscordNoDOM-sc-1ylcea4-4"
-                  data-tip-text="Clique para enviar no discord">Enviar no Discord</button>`
+                  title="[GC Booster]: Clique para enviar no discord">Enviar no Discord</button>`
                 );
                 document.getElementById( 'botaoDiscordNoDOM' ).addEventListener( 'click', async function () {
                   await sendMatchInfo( result.webhookLink, listenGame.data.data );
