@@ -10,7 +10,7 @@
   },
   "host_permissions": [
     "https://gamersclub.com.br/",
-    "https://csgo.gamersclub.gg/",
+    "https://cs.gamersclub.gg/",
     "https://discord.com/api/webhooks/*"
   ],
   "permissions": [
@@ -18,7 +18,7 @@
   ],
   "content_scripts": [
     {
-      "matches": ["*://*.gamersclub.com.br/*", "*://csgo.gamersclub.gg/*"],
+      "matches": ["*://*.gamersclub.com.br/*", "*://cs.gamersclub.gg/*"],
       "js": ["content-scripts/main.js"],
       "css": ["content.css"],
       "run_at": "document_end"
@@ -26,9 +26,9 @@
     {
       "matches": [
         "*://*.gamersclub.com.br/minhas-partidas*",
-        "*://csgo.gamersclub.gg/minhas-partidas*",
+        "*://cs.gamersclub.gg/minhas-partidas*",
         "*://*.gamersclub.com.br/my-matches*",
-        "*://csgo.gamersclub.gg/my-matches*"
+        "*://cs.gamersclub.gg/my-matches*"
       ],
       "js": ["content-scripts/my-matches.js"],
       "run_at": "document_end"
@@ -36,7 +36,7 @@
     {
       "matches": [
         "*://*.gamersclub.com.br/team/matches/*",
-        "*://csgo.gamersclub.gg/team/matches/*"
+        "*://cs.gamersclub.gg/team/matches/*"
       ],
       "js": ["content-scripts/team.js"],
       "run_at": "document_end"
@@ -44,13 +44,13 @@
     {
       "matches": [
         "*://*.gamersclub.com.br/lobby*",
-        "*://csgo.gamersclub.gg/lobby*",
+        "*://cs.gamersclub.gg/lobby*",
         "*://*.gamersclub.com.br/ranked*",
-        "*://csgo.gamersclub.gg/ranked*",
+        "*://cs.gamersclub.gg/ranked*",
         "*://*.gamersclub.com.br/match*",
-        "*://csgo.gamersclub.gg/match*",
+        "*://cs.gamersclub.gg/match*",
         "*://*.gamersclub.com.br/hub*",
-        "*://csgo.gamersclub.gg/hub*"
+        "*://cs.gamersclub.gg/hub*"
       ],
       "js": ["content-scripts/lobby.js"],
       "run_at": "document_end"
@@ -58,9 +58,9 @@
     {
       "matches": [
         "*://*.gamersclub.com.br/jogador*",
-        "*://csgo.gamersclub.gg/jogador*",
+        "*://cs.gamersclub.gg/jogador*",
         "*://*.gamersclub.com.br/player*",
-        "*://csgo.gamersclub.gg/player*"
+        "*://cs.gamersclub.gg/player*"
       ],
       "js": ["content-scripts/profile.js"],
       "run_at": "document_end"
@@ -68,7 +68,7 @@
     {
       "matches": [
         "*://*.gamersclub.com.br/missoes*",
-        "*://csgo.gamersclub.gg/missoes*"
+        "*://cs.gamersclub.gg/missoes*"
       ],
       "js": ["content-scripts/missions.js"],
       "run_at": "document_end"
