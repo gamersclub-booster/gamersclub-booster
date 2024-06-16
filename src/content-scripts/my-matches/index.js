@@ -105,8 +105,7 @@ const colorirPartidas = () => {
     colorirPartidas();
   } );
   $( 'body' ).on( 'click', '#myMatchesPagination button:not(.btn-active):not(.clicked)', async function ( e ) {
-    const paginationButton = $( e.target );
-    paginationButton.addClass( 'clicked' );
+    $( e.target ).addClass( 'clicked' );
     await new Promise( r => setTimeout( r, 3000 ) );
     initVerificarBans();
     colorirPartidas();
