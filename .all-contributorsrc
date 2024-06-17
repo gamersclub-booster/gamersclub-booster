@@ -223,6 +223,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "llinq",
+      "name": "João Costa",
+      "avatar_url": "https://avatars.githubusercontent.com/u/26715721?v=4",
+      "profile": "https://medium.com/@joaopedrocosta.contato",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
