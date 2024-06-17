@@ -104,7 +104,8 @@ const colorirPartidas = () => {
     initVerificarBans();
     colorirPartidas();
   } );
-  $( 'body' ).on( 'click', '#myMatchesPagination', async function () {
+  $( 'body' ).on( 'click', '#myMatchesPagination button:not(.btn-active):not(.clicked)', async function ( e ) {
+    $( e.target ).addClass( 'clicked' );
     await new Promise( r => setTimeout( r, 3000 ) );
     initVerificarBans();
     colorirPartidas();
