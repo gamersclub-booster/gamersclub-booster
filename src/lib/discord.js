@@ -33,7 +33,7 @@ export async function sendLobby( url, lobbyInfo ) {
   await send( url, {
     title: 'Clique aqui para abrir a lobby',
     color: '2391737',
-    url: `https://${GC_URL}/j/${lobbyInfo.lobby.lobbyID}/${lobbyInfo.lobby.hasPassword || ''}`,
+    url: `https://${GC_URL}/j/${lobbyInfo.lobby.lobbyID}/${lobbyInfo.lobby.password || ''}`,
     fields: [
       {
         name: 'Tipo da sala:',
