@@ -55,7 +55,6 @@ export const features = [
   'autoDarkMode',
   'autoCompactMode',
   'autoConcordarTermosRanked',
-  'autoDailyRewards',
   'mostrarLevelProgress',
   'warmupTimer',
   'enviarLinkLobby',
