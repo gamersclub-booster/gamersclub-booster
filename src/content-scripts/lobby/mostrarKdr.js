@@ -97,7 +97,6 @@ export const mostrarKdrSala = mutations =>
         const $players = $element.find( '.LobbyPlayerHorizontal' );
 
         $players.each( async ( _, player ) => {
-          console.log( player );
           const kdrInfos = $( player ).find( '.LobbyPlayerHorizontal__kdr' );
           const kdrValue = kdrInfos.text().split( 'KDR' )[1];
 
