@@ -35,9 +35,11 @@ const initLobby = async () => {
   criarObserver( '.lobby,.ranking', autoConcordarTermosRanked );
 
   criarObserver( '#lobbyContent', autoFixarMenuLobby );
-  criarObserver( '#lobbyContent', lobbyLink );
+  criarObserver( '.lobby', lobbyLink );
   criarObserver( '#lobbyContent', listaBloqueio );
-  criarObserver( '#lobbyContent', mostrarKdrSala );
+
+  criarObserver( '.lobby', mostrarKdrSala );
+
 
   criarObserver( '#lobbies-wrapper', mostrarKdr );
   criarObserver( '#lobbies-wrapper', infoLobby );

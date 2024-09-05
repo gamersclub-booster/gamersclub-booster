@@ -15,7 +15,7 @@ export const lobbyLink = mutations =>
           if (
             node.nextElementSibling &&
           node.nextElementSibling.className &&
-          node.nextElementSibling.className.includes( 'sidebar-desafios sidebar-content' )
+          node.nextElementSibling.className.includes( 'MyRoom' )
           ) {
             if ( result.webhookLink.startsWith( 'http' ) ) {
               if ( document.getElementById( 'discordLobbyButton' ) ) {
@@ -31,11 +31,9 @@ export const lobbyLink = mutations =>
                 }
 
                 const discordSvgUrl = chrome.runtime.getURL( '/images/discord.svg' );
-                document
-                  .getElementsByClassName( 'sidebar-titulo sidebar-sala-titulo' )[0]
-                  .setAttribute( 'style', 'font-size: 12px;' );
-                $( '.btn-radial.btn-blue.btn-copiar-link' )
-                  .parents( '.sidebar-sala-action-buttons' )
+                console.log( 'discordSvgUrl', discordSvgUrl );
+
+                $( '.MyRoomHeader__actions' )
                   .append(
                     `<span class="btn-radial btn-blue btn-copiar-link" id="discordLobbyButton"
                      title="Enviar lobby Discord" data-jsaction="gcCommonTooltip" data-tip-text="Convidar Amigos">

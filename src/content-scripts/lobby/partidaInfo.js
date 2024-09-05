@@ -4,16 +4,16 @@ import { sendMatchInfo } from '../../lib/discord';
 import { getAllStorageSyncData, getTranslationText } from '../../utils';
 
 const colors = [
-  { val: 300, color: 'chartreuse' },
-  { val: 120, color: 'greenyellow' },
-  { val: 60, color: 'yellow' },
+  { val: 180, color: 'chartreuse' },
+  { val: 130, color: 'greenyellow' },
+  { val: 80, color: 'yellow' },
   { val: 30, color: 'orange' },
   { val: 0, color: 'orangered' }
 ];
 
 const getColor = argVal => ( colors.find( ( { val } ) => ( argVal > val ) ) || colors[0] ).color;
 
-export const buildTimer = ( warmupFinished, targetContainer, timeleft, maxtime = 300 ) => {
+export const buildTimer = ( warmupFinished, targetContainer, timeleft, maxtime = 180 ) => {
 
   const timeUtil = input => `${Math.floor( input / 60 ) > 0 ? `${Math.floor( input / 60 )}min ` : ''}${Math.floor( input % 60 )}s`;
 
