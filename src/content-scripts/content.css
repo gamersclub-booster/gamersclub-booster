@@ -83,7 +83,7 @@ input[type="range"].filterKdr::-ms-tooltip {
   border: 1px solid orange;
 }
 
-.RoomCardWrapper{
+.RoomCardWrapper {
   position: relative;
 }
 
@@ -501,4 +501,22 @@ input[type="range"].filterKdr::-ms-tooltip {
 
 .ocultar-notificacao-complete .complete-player {
   display: none !important;
+}
+
+.LobbyPlayerHorizontal__kick-button {
+  right: auto!important;
+  left: 2px!important;
+  width: 35px!important;
+  height: 35px!important;
+  border-radius: 50%!important;
+  z-index: 1!important;
+  font-size: 0!important;
+  display: flex!important;
+  align-items: center!important;
+  justify-content: center!important;
+}
+.LobbyPlayerHorizontal__kick-button::after {
+  content: "X";
+  font-size: 20px;
+  color: white;
 }

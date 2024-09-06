@@ -147,8 +147,8 @@ const calcAge = ageDate => {
 export const infoChallenge = mutations => {
   $.each( mutations, ( _, mutation ) => {
     $( mutation.addedNodes )
-      .find( 'div.sidebar-desafios-team-prime' )
-      .addBack( '.sala-lineup > .sala-lineup-players' )
+      .find( '.LobbyChallengeCard__item' )
+      .addBack( '.LobbyChallengeCard__item' )
       .each( ( _, element ) => {
         const lobbyId = $( element ).find( 'h1.sala-card-title' ).text().replace( /[\W_]+/g, ' ' ).replaceAll( ' ', '_' );
         createModalForElement( $( element ), getPlayersIds, lobbyId );

@@ -89,14 +89,14 @@ const fetchKdr = async id => {
 
 
 export const mostrarKdrSala = mutations =>
-  $.each( mutations, async ( _, mutation ) => {
+  $.each( mutations, ( _, mutation ) => {
     $( mutation.addedNodes )
       .find( '#integrantesLobbyShort' )
       .each( ( _, element ) => {
         const $element = $( element );
         const $players = $element.find( '.LobbyPlayerHorizontal' );
 
-        $players.each( async ( _, player ) => {
+        $players.each( ( _, player ) => {
           const kdrInfos = $( player ).find( '.LobbyPlayerHorizontal__kdr' );
           const kdrValue = kdrInfos.text().split( 'KDR' )[1];
           kdrInfos.attr( 'title', `[GC Booster]: KDR médio: ${kdrValue}` );
