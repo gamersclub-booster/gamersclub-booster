@@ -6,7 +6,7 @@ import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
 import { initListaBloqueio } from './botaoListaBloqueio';
 import { listaBloqueio } from './listaBloqueio';
 import { lobbyLink } from './lobbyLink';
-import { mostrarKdr, mostrarKdrRanked, mostrarKdrSala } from './mostrarKdr';
+import { mostrarKdr, mostrarKdrRanked, mostrarKdrSalaIntervaler } from './mostrarKdr';
 import { partidaInfo } from './partidaInfo';
 import { somReady } from './somReady';
 // import { adicionarFiltroKdr } from './filtrarKdr';
@@ -35,9 +35,8 @@ const initLobby = async () => {
   criarObserver( '.lobby,.ranking', autoConcordarTermosRanked );
 
   criarObserver( '#lobbyContent', autoFixarMenuLobby );
-  criarObserver( '#lobbyContent', lobbyLink );
+  criarObserver( '.lobby', lobbyLink );
   criarObserver( '#lobbyContent', listaBloqueio );
-  criarObserver( '#lobbyContent', mostrarKdrSala );
 
   criarObserver( '#lobbies-wrapper', mostrarKdr );
   criarObserver( '#lobbies-wrapper', infoLobby );
@@ -58,8 +57,8 @@ const initLobby = async () => {
   // Feature pra criar lobby caso full
   adicionarBotaoForcarCriarLobby();
   // Feature para mostrar kdr dos players
-  mostrarKdr();
   mostrarKdrRanked();
+  mostrarKdrSalaIntervaler();
   // Feature para filtrar por KD
   // adicionarFiltroKdr();
   // Feature de discord na hora de copiar o ip

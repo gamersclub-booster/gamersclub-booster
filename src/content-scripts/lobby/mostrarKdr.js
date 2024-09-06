@@ -1,5 +1,4 @@
 import { headers, levelColor } from '../../lib/constants';
-import { alertaMsg } from '../../lib/messageAlerts';
 import { getFromStorage, setStorage } from '../../lib/storage';
 
 export const mostrarKdr = mutations => {
@@ -88,47 +87,23 @@ const fetchKdr = async id => {
   return kdr;
 };
 
-
-export const mostrarKdrSala = mutations =>
-  mutations.forEach( async mutation => {
-    if ( !mutation.addedNodes ) {
-      return;
-    }
-    for ( let i = 0; i < mutation.addedNodes.length; i++ ) {
-      const node = mutation.addedNodes[i];
-      if ( node.className && ( node.className.includes( 'sidebar-item' ) || node.className.includes( 'sidebar-sala-players' ) ) ) {
-        const selectorLink = node.querySelector( 'a' );
-
-        const id = selectorLink.getAttribute( 'href' )?.split( '/' )?.at( -1 );
-        const kdr = await fetchKdr( id );
-
-        const searchKdr = parseFloat( kdr ).toFixed( 2 ).toString();
-
-        const colorKrdDefault = searchKdr <= 2.5 ? '#000' :
-          'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)';
-        const colorKdr = searchKdr <= 2.5 ? levelColor[Math.round( searchKdr * 10 )] : colorKrdDefault;
-
-        const kdrSpan = document.createElement( 'span' );
-
-        $( kdrSpan ).css( {
-          backgroundColor: colorKdr,
-          padding: '2px 4px',
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          zIndex: 5,
-          fontSize: '11px',
-          width: '40px',
-          textAlign: 'center'
-        } ).addClass( 'draw-orange' );
-
-        kdrSpan.innerHTML = searchKdr;
-        node.querySelector( '.sidebar-item-meta ' ).append( kdrSpan );
-
-        if ( searchKdr === '0.00' ) { alertaMsg( 'Tem um KDR 0 na sala!' ); }
-      }
-    }
-  } );
+export const mostrarKdrSalaIntervaler = () => {
+  setInterval( () => {
+    $( '[class^=LobbyPlayerHorizontal]' ).each( ( _, player ) => {
+      ( async () => {
+        const kdrInfos = $( player ).find( '.LobbyPlayerHorizontal__kdr' );
+        const kdrValue = kdrInfos.text().split( 'KDR' )[1];
+        kdrInfos.attr( 'title', `[GC Booster]: KDR médio: ${kdrValue}` );
+        kdrInfos.addClass( 'draw-orange' );
+        kdrInfos.css( {
+          'background': kdrValue <= 2.5 ? '' :
+            'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)',
+          'background-color': kdrValue <= 2.5 ? levelColor[Math.round( kdrValue * 10 )] + 'cc' : 'initial'
+        } );
+      } )();
+    } );
+  }, 1500 );
+};
 
 export const mostrarKdrRanked = () => {
   const kdrRankedInterval = setInterval( () => {

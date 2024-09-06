@@ -83,6 +83,10 @@ input[type="range"].filterKdr::-ms-tooltip {
   border: 1px solid orange;
 }
 
+.RoomCardWrapper {
+  position: relative;
+}
+
 .blocked {
   background: rgb(255 0 0 / 50%);
   background-image: none !important;
@@ -337,6 +341,7 @@ input[type="range"].filterKdr::-ms-tooltip {
 }
 
 .gcbooster_lupa {
+  z-index: 1;
   border: 1px solid orange;
   box-shadow: 0 0 9px rgb(255 165 0 / 40%);
   bottom: 3px;
@@ -356,7 +361,7 @@ input[type="range"].filterKdr::-ms-tooltip {
   transition: opacity 0.25s cubic-bezier(0, 0.47, 0.34, 1), transform 0.25s cubic-bezier(0, 0.47, 0.34, 1);
 }
 
-.LobbyRoom:hover .gcbooster_lupa,
+.RoomCardWrapper:hover .gcbooster_lupa,
 .sala-lineup-players .gcbooster_lupa {
   opacity: 1;
   pointer-events: initial;
@@ -496,4 +501,22 @@ input[type="range"].filterKdr::-ms-tooltip {
 
 .ocultar-notificacao-complete .complete-player {
   display: none !important;
+}
+
+.LobbyPlayerHorizontal__kick-button {
+  right: auto!important;
+  left: 2px!important;
+  width: 35px!important;
+  height: 35px!important;
+  border-radius: 50%!important;
+  z-index: 1!important;
+  font-size: 0!important;
+  display: flex!important;
+  align-items: center!important;
+  justify-content: center!important;
+}
+.LobbyPlayerHorizontal__kick-button::after {
+  content: "X";
+  font-size: 20px;
+  color: white;
 }
