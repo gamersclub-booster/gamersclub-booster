@@ -99,7 +99,7 @@ export const mostrarKdrSala = mutations =>
         $players.each( async ( _, player ) => {
           const kdrInfos = $( player ).find( '.LobbyPlayerHorizontal__kdr' );
           const kdrValue = kdrInfos.text().split( 'KDR' )[1];
-
+          kdrInfos.attr( 'title', `[GC Booster]: KDR médio: ${kdrValue}` );
           kdrInfos.addClass( 'draw-orange' );
           kdrInfos.css( {
             'background': kdrValue <= 2.5 ? '' :

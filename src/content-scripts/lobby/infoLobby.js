@@ -163,12 +163,13 @@ const getPlayersIdsNew = element => element
 
 
 export const infoLobby = mutations => {
+
   $.each( mutations, ( _, mutation ) => {
     $( mutation.addedNodes )
-      .find( 'article.LobbyRoom' )
-      .addBack( 'article.LobbyRoom' )
+      .find( '.RoomCardWrapper' )
+      .addBack( '.RoomCardWrapper' )
       .each( ( _, element ) => {
-        const lobbyId = $( element ).parent().parent().attr( 'id' );
+        const lobbyId = $( element ).attr( 'id' );
         createModalForElement( $( element ), getPlayersIdsNew, lobbyId );
       } );
   } );
