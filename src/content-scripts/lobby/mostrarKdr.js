@@ -87,29 +87,23 @@ const fetchKdr = async id => {
   return kdr;
 };
 
-
-export const mostrarKdrSala = mutations =>
-  $.each( mutations, ( _, mutation ) => {
-    $( mutation.addedNodes )
-      .find( '#integrantesLobbyShort' )
-      .each( ( _, element ) => {
-        const $element = $( element );
-        const $players = $element.find( '.LobbyPlayerHorizontal' );
-
-        $players.each( ( _, player ) => {
-          const kdrInfos = $( player ).find( '.LobbyPlayerHorizontal__kdr' );
-          const kdrValue = kdrInfos.text().split( 'KDR' )[1];
-          kdrInfos.attr( 'title', `[GC Booster]: KDR médio: ${kdrValue}` );
-          kdrInfos.addClass( 'draw-orange' );
-          kdrInfos.css( {
-            'background': kdrValue <= 2.5 ? '' :
-              'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)',
-            'background-color': kdrValue <= 2.5 ? levelColor[Math.round( kdrValue * 10 )] + 'cc' : 'initial'
-          } );
-
+export const mostrarKdrSalaIntervaler = () => {
+  setInterval( () => {
+    $( '[class^=LobbyPlayerHorizontal]' ).each( ( _, player ) => {
+      ( async () => {
+        const kdrInfos = $( player ).find( '.LobbyPlayerHorizontal__kdr' );
+        const kdrValue = kdrInfos.text().split( 'KDR' )[1];
+        kdrInfos.attr( 'title', `[GC Booster]: KDR médio: ${kdrValue}` );
+        kdrInfos.addClass( 'draw-orange' );
+        kdrInfos.css( {
+          'background': kdrValue <= 2.5 ? '' :
+            'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)',
+          'background-color': kdrValue <= 2.5 ? levelColor[Math.round( kdrValue * 10 )] + 'cc' : 'initial'
         } );
-      } );
-  } );
+      } )();
+    } );
+  }, 1500 );
+};
 
 export const mostrarKdrRanked = () => {
   const kdrRankedInterval = setInterval( () => {
