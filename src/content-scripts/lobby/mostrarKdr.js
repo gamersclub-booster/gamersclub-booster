@@ -54,6 +54,63 @@ export const mostrarKdr = mutations => {
   } );
 };
 
+export const mostrarKdrDesafios = () => {
+  const observer = new MutationObserver( () => {
+    const challengeCardSelector = '.LobbyChallengeLineUpCard';
+
+    if ( $( challengeCardSelector ).length ) {
+      $( challengeCardSelector ).find( 'a.LobbyPlayerVertical, .sala-lineup-imagem a' )
+        .addBack( 'a.LobbyPlayerVertical, .sala-lineup-imagem a' )
+        .each( ( _, element ) => {
+          const $element = $( element );
+          const $parent = $element.parent();
+
+          if ( !$parent.hasClass( 'sala-lineup-imagem' ) ) {
+            $element.css( 'min-height', '120px' );
+          }
+
+          if ( $element.find( 'div.PlayerPlaceholder' ).length > 0 ) {
+            $element.find( 'div.PlayerPlaceholder__image' ).css( 'margin-top', '23px' );
+          } else if ( !$element.find( '#gcbooster_kdr' ).length ) {
+            const kdr = getKdrFromTitle( $element.attr( 'title' ) );
+
+            const $kdrElement = $( '<div/>', {
+              'id': 'gcbooster_kdr',
+              'class': 'draw-orange',
+              'css': {
+                'margin-bottom': '4px',
+                'margin-top': '2px',
+                'width': '100%',
+                'display': 'flex',
+                'padding': '2px 4px',
+                'align-items': 'center',
+                'justify-content': 'center',
+                'text-align': 'center',
+                'color': 'white',
+                'font-weight': '600',
+                'border': 'none',
+                'background': kdr <= 2.5 ? '' :
+                  'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)',
+                'background-color': kdr <= 2.5 ? levelColor[Math.round( kdr * 10 )] + 'cc' : 'initial'
+              }
+            } ).append( $( '<span/>', {
+              'id': 'gcbooster_kdr_span',
+              'text': kdr,
+              'kdr': kdr,
+              'css': { 'width': '100%', 'font-size': '10px' }
+            } ) );
+
+            $element.prepend( $kdrElement );
+            $element.find( 'div.LobbyPlayer' ).append( '<style>.LobbyPlayer:before{top:15px !important;}</style>' );
+          }
+        } );
+    }
+  } );
+    // monitora o documento inteiro
+  observer.observe( document.body, { childList: true, subtree: true } );
+};
+
+
 // @TODO: Criar uma função que limpa o cache a cada X tempo ou a cada request e remove os ids que o TTL já expirou
 // const limparCache = () => {
 // }

@@ -6,7 +6,7 @@ import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
 import { initListaBloqueio } from './botaoListaBloqueio';
 import { listaBloqueio } from './listaBloqueio';
 import { lobbyLink } from './lobbyLink';
-import { mostrarKdr, mostrarKdrRanked, mostrarKdrSalaIntervaler } from './mostrarKdr';
+import { mostrarKdr, mostrarKdrRanked, mostrarKdrSalaIntervaler, mostrarKdrDesafios } from './mostrarKdr';
 import { partidaInfo } from './partidaInfo';
 import { somReady } from './somReady';
 // import { adicionarFiltroKdr } from './filtrarKdr';
@@ -41,8 +41,9 @@ const initLobby = async () => {
   criarObserver( '#lobbies-wrapper', mostrarKdr );
   criarObserver( '#lobbies-wrapper', infoLobby );
   criarObserver( '#challengeList', infoChallenge );
-  criarObserver( '#challengeList', mostrarKdr );
   criarObserver( '#GamersClubCSApp-globals-globalToaster', tocarSomSeVoceForExpulsoDaLobby );
+
+  mostrarKdrDesafios();
 
   // Esconde a sugestão de lobbies para entrar
   ocultarSugestaoDeLobbies();
@@ -65,16 +66,26 @@ const initLobby = async () => {
   partidaInfo();
 };
 
-const criarObserver = ( seletor, exec ) => {
-  if ( $( seletor ).length > 0 ) {
-    const observer = new MutationObserver( mutations => {
-      exec( mutations );
+const criarObserver = ( seletor, exec, type ) => {
+  const observer = new MutationObserver( mutations => {
+
+    let shouldExec = false;
+    mutations.forEach( mutation => {
+      // Verifica se o elemento que sofreu a mutação é o seletor ou está dentro dele
+      if ( $( mutation.target ).is( seletor ) || $( mutation.target ).closest( seletor ).length ) {
+        shouldExec = true;
+      }
     } );
-    observer.observe( $( seletor ).get( 0 ), {
-      childList: true,
-      subtree: true,
-      attributes: false,
-      characterData: false
-    } );
-  }
+
+    if ( shouldExec ) { exec( mutations, type ); }
+  } );
+
+  // Monitora o documento inteiro para pegar elementos que ainda não foram inseridos
+  observer.observe( document.body, {
+    childList: true,
+    subtree: true,
+    attributes: false,
+    characterData: false
+  } );
+
 };
