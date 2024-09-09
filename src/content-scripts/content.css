@@ -307,7 +307,7 @@ input[type="range"].filterKdr::-ms-tooltip {
 }
 
 .draw-orange {
-  border: 1px solid orange !important;
+  border: 1px dashed orange !important;
   box-shadow: 0 0 10px rgb(255 165 0 / 86%) !important;
 }
 
@@ -504,17 +504,18 @@ input[type="range"].filterKdr::-ms-tooltip {
 }
 
 .LobbyPlayerHorizontal__kick-button {
-  right: auto!important;
-  left: 2px!important;
-  width: 35px!important;
-  height: 35px!important;
-  border-radius: 50%!important;
-  z-index: 1!important;
-  font-size: 0!important;
-  display: flex!important;
-  align-items: center!important;
-  justify-content: center!important;
+  right: auto !important;
+  left: 5px !important;
+  width: 35px !important;
+  height: 35px !important;
+  border-radius: 50% !important;
+  z-index: 1 !important;
+  font-size: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
+
 .LobbyPlayerHorizontal__kick-button::after {
   content: "X";
   font-size: 20px;
