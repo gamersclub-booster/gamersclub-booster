@@ -26,23 +26,19 @@ export const lobbyLink = mutations =>
                   await sendLobby( result.webhookLink, lobbyInfo.data );
                   alertaMsg( '[Discord] - Enviado com sucesso' );
                 }
-                // if ( $( '.btn-radial.btn-blue.btn-copiar-link' ).length === 0 ) {
-                //   return false;
-                // }
 
                 const discordSvgUrl = chrome.runtime.getURL( '/images/discord.svg' );
-
-                $( '.MyRoomHeader__actions' )
-                  .prepend(
+                $( 'button.MyRoomHeader__button.MyRoomHeader__button--delete-room' )
+                  .before(
                     `<button
                       class="MyRoomHeader__button"
                       id="discordLobbyButton"
                       title="Excluir sala"title="Enviar lobby Discord"
                       data-jsaction="gcCommonTooltip"
                       data-tip-text="Convidar Amigos"
-                      style="width:75px;margin-right:7px;background:#7289da"
+                      style="width:75px;margin-left:var(--wasd-spacing-xxs);background:#5865F2"
                       >
-                      <img src="${discordSvgUrl}" width="20px"/>
+                      <img src="${discordSvgUrl}" width="15px"/>
                     </button>`
                   );
 
