@@ -56,7 +56,8 @@ const initLobby = async () => {
   // Feature para aceitar complete automatico
   adicionarBotaoAutoComplete();
   // Feature pra criar lobby caso full
-  adicionarBotaoForcarCriarLobby();
+  // GC removeu a var de limite de lobbies, n temos solução ainda pra isso...
+  // adicionarBotaoForcarCriarLobby();
   // Feature para mostrar kdr dos players
   mostrarKdrRanked();
   mostrarKdrSalaIntervaler();

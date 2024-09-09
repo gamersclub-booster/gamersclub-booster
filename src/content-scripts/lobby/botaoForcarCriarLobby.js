@@ -63,8 +63,8 @@ function addListeners() {
 function intervalerCriacaoLobby() {
   return setInterval( async () => {
     if ( !$( '.sidebar-titulo.sidebar-sala-titulo' ).text().length ) {
-      const lobbies = $( '.LobbyHeader__buttons div[type="default"]' )[0].innerText.match( /\d+/ )[0];
-
+      const lobbies = $( '.LobbyHeader__info div[type="default"]' )[0].innerText.match( /\d+/ )[0];
+      // N existe mais o lobbies limit... n sei uma solução pra isso ainda...
       if ( Number( lobbies ) < getLobbiesLimit() ) {
         //Criar lobby por meio de requisição com AXIOS. ozKcs
         chrome.storage.sync.get( [ 'preVetos', 'lobbyPrivada', 'jogarCom' ], async res => {
