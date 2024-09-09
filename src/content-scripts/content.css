@@ -495,7 +495,7 @@ input[type="range"].filterKdr::-ms-tooltip {
   margin-bottom: 8px !important;
 }
 
-.ocultar-sugestao-de-lobbies .sc-bBrOHt.dtBCfB {
+.ocultar-sugestao-de-lobbies .LobbyListBottom + [class^="sc-"][style*="position: sticky; bottom: 64px"] {
   display: none !important;
 }
 
