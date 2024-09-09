@@ -297,7 +297,7 @@ function atualizarValorVolume() {
 }
 
 function updateReadySoundInputsDisable( sound ) {
-  const isDefaultSound = !document.getElementById( sound ).value;
+  const isDefaultSound = !document.getElementById( sound )?.value;
 
   switch ( sound ) {
   case 'somReady':
