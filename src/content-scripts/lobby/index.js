@@ -2,7 +2,7 @@ import { autoAceitarReady, autoAceitarReadySetInterval } from './autoAceitarRead
 import { autoConcordarTermosRanked } from './autoConcordarTermosRanked';
 import { autoFixarMenuLobby } from './autoFixarMenuLobby';
 import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
-import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
+// import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
 import { initListaBloqueio } from './botaoListaBloqueio';
 import { listaBloqueio } from './listaBloqueio';
 import { lobbyLink } from './lobbyLink';
