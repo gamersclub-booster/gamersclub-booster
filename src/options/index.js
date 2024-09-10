@@ -7,6 +7,7 @@ import en from '../translations/en.json';
 import es from '../translations/es.json';
 import fr from '../translations/fr.json';
 import pt from '../translations/pt.json';
+import { addUrlToBlockList, removeUrlFromBlockList } from '../lib/httpRequestBlocker';
 
 const translations = {
   'pt': pt,
@@ -21,6 +22,7 @@ function iniciarPaginaOpcoes() {
   marcarCheckboxes();
   marcarPreVetos();
   marcarCompleteMapas();
+  adicionarListenerOcultarNotificacaoComplete();
   adicionarListenersFeatures();
   adicionarListenersPaginas();
   adicionarListenerPreVetos();
@@ -258,6 +260,19 @@ function adicionarListenerCompleteMapas() {
 function arrayRemove( arr, value ) {
   return arr.filter( function ( ele ) {
     return ele !== value;
+  } );
+}
+
+function adicionarListenerOcultarNotificacaoComplete() {
+  document.getElementById( 'ocultarNotificacaoComplete' ).addEventListener( 'click', function () {
+    const ocultar = document.getElementById( 'ocultarNotificacaoComplete' ).checked;
+
+    if ( ocultar ) {
+      addUrlToBlockList( '*sound-backup.mp3', 'ocultarNotificacaoComplete' );
+    } else {
+      removeUrlFromBlockList( 'ocultarNotificacaoComplete' );
+    }
+
   } );
 }
 
