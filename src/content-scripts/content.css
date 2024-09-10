@@ -495,11 +495,11 @@ input[type="range"].filterKdr::-ms-tooltip {
   margin-bottom: 8px !important;
 }
 
-.ocultar-sugestao-de-lobbies .sc-jNMdxs.eGNUcW {
+.ocultar-sugestao-de-lobbies .LobbyListBottom + [class^="sc-"][style*="position: sticky; bottom: 64px"] {
   display: none !important;
 }
 
-.ocultar-notificacao-complete .complete-player {
+.ocultar-notificacao-complete .LobbyComplete {
   display: none !important;
 }
 
