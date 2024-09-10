@@ -147,10 +147,10 @@ const calcAge = ageDate => {
 export const infoChallenge = mutations => {
   $.each( mutations, ( _, mutation ) => {
     $( mutation.addedNodes )
-      .find( '.LobbyChallengeCard__item' )
-      .addBack( '.LobbyChallengeCard__item' )
+      .find( '.LobbyChallengeLineUpCard' )
+      .addBack( '.LobbyChallengeLineUpCard' )
       .each( ( _, element ) => {
-        const lobbyId = $( element ).find( 'h1.sala-card-title' ).text().replace( /[\W_]+/g, ' ' ).replaceAll( ' ', '_' );
+        const lobbyId = $( element ).find( '.LobbyPlayerVertical' )[0].href.replace( /[\W_]+/g, ' ' ).replaceAll( ' ', '_' );
         createModalForElement( $( element ), getPlayersIds, lobbyId );
       } );
   } );
@@ -163,7 +163,6 @@ const getPlayersIdsNew = element => element
 
 
 export const infoLobby = mutations => {
-
   $.each( mutations, ( _, mutation ) => {
     $( mutation.addedNodes )
       .find( '.RoomCardWrapper' )

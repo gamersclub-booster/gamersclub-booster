@@ -41,7 +41,7 @@ const initLobby = async () => {
 
   criarObserver( '#lobbies-wrapper', mostrarKdr );
   criarObserver( '#lobbies-wrapper', infoLobby );
-  criarObserver( '#challengeList', infoChallenge );
+  criarObserver( '.lobby', infoChallenge );
   criarObserver( '#GamersClubCSApp-globals-globalToaster', tocarSomSeVoceForExpulsoDaLobby );
 
   mostrarKdrDesafios();
