@@ -8,7 +8,7 @@ import { listaBloqueio } from './listaBloqueio';
 import { lobbyLink } from './lobbyLink';
 import { mostrarKdr, mostrarKdrRanked, mostrarKdrSalaIntervaler, mostrarKdrDesafios } from './mostrarKdr';
 import { partidaInfo } from './partidaInfo';
-import { somReady } from './somReady';
+import { somReady, somReadySetInterval } from './somReady';
 // import { adicionarFiltroKdr } from './filtrarKdr';
 import { infoChallenge, infoLobby } from './infoLobby';
 
@@ -30,6 +30,7 @@ const initLobbyPartida = async () => {
 };
 
 const initLobby = async () => {
+  // Esses dois não estão funcionando, verificar o motivo, criei o intervaler pra substituir por enquanto...
   criarObserver( '.lobby,.ranking', somReady );
   criarObserver( '.lobby,.ranking', autoAceitarReady );
   criarObserver( '.lobby,.ranking', autoConcordarTermosRanked );
@@ -52,6 +53,7 @@ const initLobby = async () => {
   ocultarNotificacaoComplete();
 
   // Clicar automáticamente no Ready, temporário.
+  somReadySetInterval();
   autoAceitarReadySetInterval();
   // Feature para aceitar complete automatico
   adicionarBotaoAutoComplete();
