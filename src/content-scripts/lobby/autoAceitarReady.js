@@ -4,7 +4,7 @@ export const autoAceitarReady = mutations =>
       $.each( mutations, ( i, mutation ) => {
         const addedNodes = $( mutation.addedNodes );
         //eslint-disable-next-line
-          const selector = "button:contains('Ready')";
+        const selector = "button:contains('Ready')";
         const readyButton = addedNodes.find( selector ).addBack( selector );
         if ( readyButton && readyButton.length && !readyButton.disabled ) {
           setTimeout( () => {

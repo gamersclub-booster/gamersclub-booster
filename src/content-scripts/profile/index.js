@@ -1,28 +1,26 @@
-import { GC_URL } from '../../lib/constants';
-
-const SELETOR_HISTORICO = 'h3:contains("Histórico")';
-const LOCAT = $( location ).attr( 'href' );
+import { GC_URL, headers } from '../../lib/constants';
 
 const initProfilePage = () => {
   let totalPartidas = 0;
   let totalVitorias = 0;
   let totalDerrotas = 0;
 
-  const idPlayer = LOCAT.split( '/' ).pop();
+  const idPlayer = parseInt( $( '.gc-profile-user-id' ).html().replace( 'CS GCID: ', '' ) );
 
-  $( '.gc-card-history-text' ).each( function () {
+  $( '#cs2-history-list  .gc-card-history-text' ).each( function () {
     totalPartidas += parseInt( $( this ).html().trimEnd() );
   } );
-  $( 'span:contains(\'Vitórias\')' ).each( function () {
+  $( '#cs2-history-list span:contains(\'Vitórias\')' ).each( function () {
     totalVitorias += parseInt( $( this ).html().replace( ' Vitórias', '' ) );
   } );
-  $( 'span:contains(\'Derrotas\')' ).each( function () {
+  $( '#cs2-history-list span:contains(\'Derrotas\')' ).each( function () {
     totalDerrotas += parseInt( $( this ).html().replace( ' Derrotas', '' ) );
   } );
 
   $.getJSON( {
     data: 'json',
-    url: `https://${GC_URL}/api/box/history/${idPlayer}`
+    url: `https://${GC_URL}/api/box/history/${idPlayer}`,
+    headers
   } ).done( function ( json ) {
     const totalKillsMes = json.stat[2].value;
     const totalMortesMes = json.stat[3].value;
@@ -39,9 +37,8 @@ const initProfilePage = () => {
         return 'yellow';
       }
     };
-
-    const titleHistorico = $( SELETOR_HISTORICO )[0];
-    titleHistorico.innerHTML += ` -
+    const titleHistorico = $( 'h3:contains("Histórico")' )[0];
+    titleHistorico.innerHTML += `<br>CS2 -
     ${totalVitorias} Vitórias / ${totalDerrotas} Derrotas (${totalPartidas} Partidas | 
     <span style=color:${calcColor( winRatio, 50 )}>${winRatio}</span>% Win Rate) <br>
     Este mês: ${totalKillsMes} Kills / ${totalMortesMes}
