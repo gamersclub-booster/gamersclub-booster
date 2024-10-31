@@ -14,8 +14,7 @@
     "https://discord.com/api/webhooks/*"
   ],
   "permissions": [
-      "storage",
-      "declarativeNetRequest"
+      "storage"
   ],
   "content_scripts": [
     {
