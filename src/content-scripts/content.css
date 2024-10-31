@@ -1,3 +1,27 @@
+/* Define CSS Variables */
+:root {
+  --color-orange: orange;
+  --color-black: black;
+  --color-white: #fff;
+  --color-gray: #ddd;
+  --color-gray-100: #f0f0f0;
+  --color-gray-200: #383b51;
+  --color-gray-300: #272727;
+  --color-dark-gray: #181818;
+  --color-light-blue: #2196fd;
+  --color-red: rgb(255, 0, 0);
+  --color-light-red: rgba(255, 0, 0, 0.3);
+  --color-transparent-black: rgba(0, 0, 0, 0.5);
+  --color-transparent-black-2: rgba(0, 0, 0, 0.74);
+  --color-transparent-orange: rgb(255 165 0 / 86%);
+  --color-transparent-orange-2: rgb(255 165 0 / 40%);
+  --color-transparent-orange-3: rgb(255 141 0 / 10%);
+  --color-transparent-orange-4: rgb(255 165 0 / 20%);
+  --color-transparent-orange-5: #ffa50066;
+  --color-dark-red-border: #c61010;
+  --color-dark-red: #561e1e;
+}
+
 input[type="range"].filterKdr {
   margin: auto 8px auto 0;
   -webkit-appearance: none;
@@ -11,23 +35,22 @@ input[type="range"].filterKdr {
 }
 
 input[type="range"].filterKdr::-webkit-slider-runnable-track {
-  background: #383b51;
+  background: var(--color-gray-200);
 }
 
 input[type="range"].filterKdr::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 12px;
   height: 12px;
-  background: #fff;
-  box-shadow: -200px 0 0 195px #2196fd;
-  border: 3px solid #fff;
-  border-radius: 50%;
+  background: var(--color-white);
+  box-shadow: -200px 0 0 195px var(--color-light-blue);
+  border: 3px solid var(--color-white);
   border-radius: 15px;
 }
 
 input[type="range"].filterKdr::-moz-range-track {
   height: 12px;
-  background: #ddd;
+  background: var(--color-gray);
 }
 
 input[type="range"].filterKdr::-moz-range-thumb {
@@ -35,15 +58,14 @@ input[type="range"].filterKdr::-moz-range-thumb {
   appearance: none;
   width: 12px;
   height: 12px;
-  background: #fff;
-  box-shadow: -200px 0 0 195px #2196fd;
-  border: 3px solid #fff;
+  background: var(--color-white);
+  box-shadow: -200px 0 0 195px var(--color-light-blue);
+  border: 3px solid var(--color-white);
   border-radius: 50%;
-  border-radius: 15px;
 }
 
 input[type="range"].filterKdr::-ms-fill-lower {
-  background: #2196fd;
+  background: var(--color-light-blue);
 }
 
 input[type="range"].filterKdr::-ms-thumb {
@@ -51,36 +73,29 @@ input[type="range"].filterKdr::-ms-thumb {
   appearance: none;
   width: 12px;
   height: 12px;
-  background: #fff;
-  box-shadow: -200px 0 0 195px #2196fd;
-  border: 3px solid #fff;
-  border-radius: 50%;
+  background: var(--color-white);
+  box-shadow: -200px 0 0 195px var(--color-light-blue);
+  border: 3px solid var(--color-white);
   border-radius: 15px;
 }
 
-input[type="range"].filterKdr::-ms-ticks-after {
-  display: none;
-}
-
-input[type="range"].filterKdr::-ms-ticks-before {
+input[type="range"].filterKdr::-ms-ticks-after,
+input[type="range"].filterKdr::-ms-ticks-before,
+input[type="range"].filterKdr::-ms-tooltip {
   display: none;
 }
 
 input[type="range"].filterKdr::-ms-track {
-  background: #ddd;
+  background: var(--color-gray);
   color: transparent;
   height: 12px;
   border: none;
 }
 
-input[type="range"].filterKdr::-ms-tooltip {
-  display: none;
-}
-
 .sidebar-desafios-salas .sidebar-item:not(.sidebar-item-prime) .sidebar-item-content,
 .sidebar-desafios-salas .sidebar-item:not(.sidebar-item-prime) .sidebar-item-content .sidebar-desafios-play button {
-  background-color: rgba(255, 0, 0, 0.322);
-  border: 1px solid orange;
+  background-color: var(--color-light-red);
+  border: 1px solid var(--color-orange);
 }
 
 .RoomCardWrapper {
@@ -88,7 +103,7 @@ input[type="range"].filterKdr::-ms-tooltip {
 }
 
 .blocked {
-  background: rgb(255 0 0 / 50%);
+  background: var(--color-red);
   background-image: none !important;
 }
 
@@ -97,11 +112,9 @@ input[type="range"].filterKdr::-ms-tooltip {
   width: 200px !important;
   height: 35px !important;
   padding: 0 16px !important;
-  /* needed */
   -webkit-appearance: none !important;
   -moz-appearance: none !important;
   appearance: none !important;
-  /* SVG background image */
   background-image: url("data:image/svg+xml,%3Csvg width='14' height='9' viewBox='0 0 14 9' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.7812 1.25L13.1875 0.625C13.0312 0.46875 12.7812 0.46875 12.6562 0.625L7 6.28125L1.3125 0.625C1.1875 0.46875 0.9375 0.46875 0.78125 0.625L0.1875 1.25C0.03125 1.375 0.03125 1.625 0.1875 1.78125L6.71875 8.3125C6.875 8.46875 7.09375 8.46875 7.25 8.3125L13.7812 1.78125C13.9375 1.625 13.9375 1.375 13.7812 1.25Z' fill='%23898EA6'/%3E%3C/svg%3E%0A") !important;
   background-size: 14px !important;
   background-position: calc(100% - 16px) center !important;
@@ -165,9 +178,7 @@ input[type="range"].filterKdr::-ms-tooltip {
   text-align: left !important;
   font-size: 15px !important;
   margin: 0 !important;
-  background: linear-gradient(90deg,
-      rgba(0, 0, 0, 0.5) 15%,
-      rgba(0, 0, 0, 0) 100%) !important;
+  background: linear-gradient(90deg, var(--color-transparent-black) 15%, rgba(0, 0, 0, 0) 100%) !important;
 }
 
 .lobby.compact .sala-lineup-imagem {
@@ -227,7 +238,7 @@ input[type="range"].filterKdr::-ms-tooltip {
 }
 
 .lobby.compact .sala-card {
-  margin: 8px 0px !important;
+  margin: 8px 0 !important;
 }
 
 .lobby.compact .row.lobby-rooms-content,
@@ -261,16 +272,14 @@ input[type="range"].filterKdr::-ms-tooltip {
   align-items: center;
   font-size: 11px;
   left: 50%;
-
   -webkit-transform: translatex(-50%);
   -ms-transform: translatex(-50%);
   transform: translatex(-50%);
-
-  background: rgb(0 0 0);
-  border: 1px solid orange;
-  box-shadow: inset 9px 9px 9px 6px rgb(255 141 0 / 10%);
+  background: var(--color-black);
+  border: 1px solid var(--color-orange);
+  box-shadow: inset 9px 9px 9px 6px var(--color-transparent-orange-3);
   padding: 5px 11px;
-  border-radius: 1px;
+  border-radius: 2px;
 }
 
 .bar-info-player {
@@ -279,7 +288,7 @@ input[type="range"].filterKdr::-ms-tooltip {
   align-items: center;
   margin-right: 12px;
   padding-right: 12px;
-  border-right: 1px solid orange;
+  border-right: 1px solid var(--color-orange);
 }
 
 .bar-level-avatar {
@@ -298,17 +307,17 @@ input[type="range"].filterKdr::-ms-tooltip {
 
 .kdr-level {
   border-radius: 2px;
-  padding: 0px 6px;
+  padding: 0 6px;
   font-weight: bold;
 }
 
 #gcbooster_cabecalho {
-  border: 1px solid orange !important;
+  border: 1px solid var(--color-orange) !important;
 }
 
 .draw-orange {
-  border: 1px solid orange !important;
-  box-shadow: 0 0 10px rgb(255 165 0 / 86%) !important;
+  border: 1px dashed var(--color-orange) !important;
+  box-shadow: 0 0 10px var(--color-transparent-orange) !important;
 }
 
 .with-fixed-menu div#sidebar-desafios-salas.hasOpenLobbyRoom {
@@ -320,16 +329,14 @@ input[type="range"].filterKdr::-ms-tooltip {
 .hasOpenLobbyRoom div#challengeList.with-fixed-menu {
   position: fixed;
   z-index: 101;
-
-  background: black;
+  background: var(--color-black);
   padding: 8px;
-
   right: 2px;
   top: initial !important;
   height: calc(100% - 240px);
   bottom: 0 !important;
-  border: 1px solid orange;
-  box-shadow: 0 0 10px rgb(255 165 0 / 86%);
+  border: 1px solid var(--color-orange);
+  box-shadow: 0 0 10px var(--color-transparent-orange);
 }
 
 .hasOpenLobbyRoom div#challengeList.with-fixed-menu sidebar {
@@ -342,13 +349,13 @@ input[type="range"].filterKdr::-ms-tooltip {
 
 .gcbooster_lupa {
   z-index: 1;
-  border: 1px solid orange;
-  box-shadow: 0 0 9px rgb(255 165 0 / 40%);
+  border: 1px solid var(--color-orange);
+  box-shadow: 0 0 9px var(--color-transparent-orange-2);
   bottom: 3px;
   right: 3px;
   position: absolute;
   cursor: pointer;
-  background: #181818;
+  background: var(--color-dark-gray);
   width: 38px;
   height: 38px;
   border-radius: 50%;
@@ -377,10 +384,10 @@ input[type="range"].filterKdr::-ms-tooltip {
   position: absolute;
   top: 15px;
   border-radius: 7px;
-  background: rgb(0 0 0 / 74%);
+  background: var(--color-transparent-black-2);
   padding: 10px 3px;
-  box-shadow: 0 0px 10px rgb(255 165 0 / 20%);
-  border: 1px solid orange;
+  box-shadow: 0 0 10px var(--color-transparent-orange-4);
+  border: 1px solid var(--color-orange);
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   display: grid;
@@ -391,8 +398,7 @@ input[type="range"].filterKdr::-ms-tooltip {
 .gcbooster-info-player {
   font-size: 10px;
   padding: 2px 0;
-
-  border-right: 1px solid #ffa50059;
+  border-right: 1px solid var(--color-transparent-orange-7);
   padding-left: 4px;
 }
 
@@ -404,11 +410,11 @@ input[type="range"].filterKdr::-ms-tooltip {
   position: absolute;
   top: -18px;
   left: -1px;
-  background: orange;
+  background: var(--color-orange);
   width: calc(100% + 2px);
   border-radius: 6px 6px 0 0;
   padding: 1px 9px;
-  color: black;
+  color: var(--color-black);
   text-transform: uppercase;
   font-size: 13px;
   font-weight: 600;
@@ -419,11 +425,11 @@ input[type="range"].filterKdr::-ms-tooltip {
   position: absolute;
   right: 3px;
   top: -17px;
-  color: white;
+  color: var(--color-white);
   cursor: pointer;
   font-weight: 400;
   font-size: 10px;
-  background: black;
+  background: var(--color-black);
   border-radius: 50%;
   width: 20px;
   height: 20px;
@@ -437,7 +443,6 @@ input[type="range"].filterKdr::-ms-tooltip {
   gap: 5px;
 }
 
-
 #btn-auto-complete,
 #criar-lobby-btn {
   display: flex;
@@ -449,15 +454,14 @@ input[type="range"].filterKdr::-ms-tooltip {
   text-transform: uppercase;
   border-radius: 2px;
   padding: 10px 16px 6px;
-  box-shadow: #ffa50066 0px 0px 9px;
-  border: 1px solid orange;
-  background-color: #272727;
-  color: #f0f0f0;
+  box-shadow: var(--color-transparent-orange-5) 0 0 9px;
+  border: 1px solid var(--color-orange);
+  background-color: var(--color-gray-300);
+  color: var(--color-gray-100);
   transform: translateY(20px);
   opacity: 0;
   transition: opacity 0.25s cubic-bezier(0, 0.47, 0.34, 1), transform 0.25s cubic-bezier(0, 0.47, 0.34, 1);
   width: 100%;
-
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -471,12 +475,11 @@ input[type="range"].filterKdr::-ms-tooltip {
 
 #btn-auto-complete.cancel-auto-complete,
 #criar-lobby-btn.cancel-auto-complete {
-  background-color: #561e1e;
-  box-shadow: #ff00006b 0px 0px 9px;
-  border-color: #c61010;
+  background-color: var(--color-dark-red);
+  box-shadow: var(--color-dark-red-border) 0 0 9px;
+  border-color: var(--color-dark-red-border);
   font-size: 20px;
 }
-
 
 .sidebar-desafios-team .sala-lineup-players .is-prime {
   width: 32px;
@@ -495,26 +498,23 @@ input[type="range"].filterKdr::-ms-tooltip {
   margin-bottom: 8px !important;
 }
 
-.ocultar-sugestao-de-lobbies .LobbyListBottom + [class^="sc-"][style*="position: sticky; bottom: 64px"] {
-  display: none !important;
-}
-
+.ocultar-sugestao-de-lobbies .LobbyListBottom+[class^="sc-"][style*="position: sticky; bottom: 64px"],
 .ocultar-notificacao-complete .LobbyComplete {
   display: none !important;
 }
-
 .LobbyPlayerHorizontal__kick-button {
-  right: auto!important;
-  left: 2px!important;
-  width: 35px!important;
-  height: 35px!important;
-  border-radius: 50%!important;
-  z-index: 1!important;
-  font-size: 0!important;
-  display: flex!important;
-  align-items: center!important;
-  justify-content: center!important;
+  right: 3px !important;
+  left: auto !important;
+  width: 25px !important;
+  height: 100% !important;
+  border-radius: 0 !important;
+  z-index: 1 !important;
+  font-size: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
+
 .LobbyPlayerHorizontal__kick-button::after {
   content: "X";
   font-size: 20px;
