@@ -18,7 +18,7 @@ export const somReady = mutations =>
   } );
 
 export function somReadySetInterval() {
-  setInterval( async () => {
+  const interval = setInterval( async () => {
     chrome.storage.sync.get( [ 'somReady', 'customSomReady', 'volume' ], function ( result ) {
       if ( result.somReady ) {
         // eslint-disable-next-line
@@ -29,6 +29,7 @@ export function somReadySetInterval() {
           const volume = result.volume || 100;
           audio.volume = volume / 100;
           $( readyButton ).on( 'click', function () { audio.play(); } );
+          clearInterval( interval );
         }
       }
     } );
