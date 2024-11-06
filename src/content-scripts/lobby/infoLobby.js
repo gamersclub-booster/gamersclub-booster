@@ -66,16 +66,15 @@ const createImage = lobbyId => $( '<img/>', {
 } );
 
 const getPlayersIds = element => element
-  .find( '.sala-lineup-player:not(.player-placeholder)' )
-  .find( 'a' )
-  // .children( 'a' )
+  .find( '.LobbyPlayerVertical' )
   .toArray()
   .map( e => e.href.split( '/' ).pop() );
 
-const createModal = lobbyId => $( '<div />',
+const createModal = ( lobbyId, type ) => $( '<div />',
   {
     id: `infos_lobby_${lobbyId}`,
     class: 'infos_lobby',
+    style: type === 'challenge' ? 'top: 135px' : undefined,
     title: 'Estatísticas'
   } );
 
@@ -114,7 +113,7 @@ const getPlayersIdsNew = element => element
 const createModalForElementNew = ( element, getPlayersIdsFunction, type, lobbyId ) => {
   if ( element.find( `#gcbooster_lupa_${type}_${lobbyId}` ).length === 0 ) {
     const div = createDiv( lobbyId );
-    const modal = createModal( lobbyId );
+    const modal = createModal( lobbyId, type );
     const image = createImage( lobbyId );
 
     div.append( image );
@@ -127,7 +126,7 @@ const createModalForElementNew = ( element, getPlayersIdsFunction, type, lobbyId
       $( div ).parent().append( modal );
 
       const players = getPlayersIdsFunction( element );
-      console.log( 'PLAYERS:', { players } );
+
       $( `#infos_lobby_${lobbyId}` ).append( createClose( lobbyId ) );
       for ( const player of players ) {
         const response = await getPlayerInfo( player );
