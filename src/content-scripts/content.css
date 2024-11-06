@@ -385,7 +385,7 @@ input[type="range"].filterKdr::-ms-track {
   /* top: 15px; */
   border-radius: 7px;
   background: var(--color-transparent-black-2);
-  padding: 10px 3px;
+  padding: 1px 5px;
   box-shadow: 0 0 10px var(--color-transparent-orange-4);
   border: 1px solid var(--color-orange);
   -webkit-backdrop-filter: blur(4px);
