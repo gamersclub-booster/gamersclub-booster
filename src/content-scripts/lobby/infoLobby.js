@@ -1,34 +1,6 @@
 import { getPlayerInfo } from './getPlayerInfo';
 const IMAGE_ALT = '[GC Booster]: Buscar informações da lobby';
 
-const createModalForElement = ( element, getPlayersIdsFunction, lobbyId ) => {
-  if ( element.find( `#gcbooster_lupa_${lobbyId}` ).length === 0 ) {
-    const div = createDiv( lobbyId );
-    const modal = createModal( lobbyId );
-    const image = createImage( lobbyId );
-
-    div.append( image );
-
-    div.on( 'click', async () => {
-      $( `#infos_lobby_${lobbyId}` ).empty( ).remove();
-      //bloqueia todas as outras lupas enquanto carrega
-      $.each( $( '.gcbooster_lupa' ), ( _, lupa ) => { lupa.style = 'display: none'; } );
-
-      $( div ).parent().append( modal );
-
-      const players = getPlayersIdsFunction( element );
-
-      $( `#infos_lobby_${lobbyId}` ).append( createDivTitle() ).append( createClose( lobbyId ) );
-      for ( const player of players ) {
-        const response = await getPlayerInfo( player );
-        $( `#infos_lobby_${lobbyId}` ).append( createDivPlayers( response ) );
-      }
-      $.each( $( '.gcbooster_lupa' ), ( _, lupa ) => { lupa.style = 'display: flex'; } );
-    } );
-    element.append( div );
-  }
-};
-
 const createDiv = lobbyId => $( '<div/>',
   {
     id: `gcbooster_lupa_${lobbyId}`,
@@ -56,20 +28,6 @@ const createDivLobbys = playerInfo => $( '<div />',
     title: 'Partidas jogadas',
     'data-tip-text': 'Partidas jogadas'
   } ).append( `P: ${playerInfo.totalPartidas}` );
-
-// const _createDivLobbysWin = playerInfo => $( '<div />',
-//   {
-//     class: 'gcbooster-info-lobbyes-win',
-//     title: 'Vitórias',
-//     'data-tip-text': 'Vitórias'
-//   } ).append( `V: ${playerInfo.totalVitorias}` );
-
-// const _createDivLobbysLose = playerInfo => $( '<div />',
-//   {
-//     class: 'gcbooster-info-lobbyes-lose',
-//     title: 'Derrotas',
-//     'data-tip-text': 'Derrotas'
-//   } ).append( `D: ${playerInfo.totalDerrotas}` );
 
 const createClose = lobbyId => $( '<div />',
   {
@@ -103,8 +61,6 @@ const createDivPlayers = playerInfo => $( '<div/>',
   } )
   .append( createDivDateCreate( playerInfo ) )
   .append( createDivLobbys( playerInfo ) )
-  // .append( createDivLobbysWin( playerInfo ) )
-  // .append( createDivLobbysLose( playerInfo ) )
   .append( createDivVitory( playerInfo ) )
   .append( createDivAnotacao( playerInfo ) );
 
@@ -157,25 +113,13 @@ const calcAge = ageDate => {
   return 'Nova';
 };
 
-export const infoChallenge = mutations => {
-  $.each( mutations, ( _, mutation ) => {
-    $( mutation.addedNodes )
-      .find( '.LobbyChallengeCard__item' )
-      .addBack( '.LobbyChallengeCard__item' )
-      .each( ( _, element ) => {
-        const lobbyId = $( element ).find( 'h1.sala-card-title' ).text().replace( /[\W_]+/g, ' ' ).replaceAll( ' ', '_' );
-        createModalForElement( $( element ), getPlayersIds, lobbyId );
-      } );
-  } );
-};
-
 const getPlayersIdsNew = element => element
   .find( '.LobbyPlayerVertical' )
   .toArray()
   .map( e => e.href.split( '/' ).pop() );
 
-const createModalForElementNew = ( element, getPlayersIdsFunction, lobbyId ) => {
-  if ( element.find( `#gcbooster_lupa_${lobbyId}` ).length === 0 ) {
+const createModalForElementNew = ( element, getPlayersIdsFunction, type, lobbyId ) => {
+  if ( element.find( `#gcbooster_lupa_${type}_${lobbyId}` ).length === 0 ) {
     const div = createDiv( lobbyId );
     const modal = createModal( lobbyId );
     const image = createImage( lobbyId );
@@ -190,7 +134,7 @@ const createModalForElementNew = ( element, getPlayersIdsFunction, lobbyId ) => 
       $( div ).parent().append( modal );
 
       const players = getPlayersIdsFunction( element );
-
+      console.log( 'PLAYERS:',{ players } );
       $( `#infos_lobby_${lobbyId}` ).append( createClose( lobbyId ) );
       for ( const player of players ) {
         const response = await getPlayerInfo( player );
@@ -201,7 +145,18 @@ const createModalForElementNew = ( element, getPlayersIdsFunction, lobbyId ) => 
     element.append( div );
   }
 };
-
+export const infoChallenge = mutations => {
+  $.each( mutations, ( _, mutation ) => {
+    $( mutation.addedNodes )
+      .find( '.LobbyChallengeLineUpCard' )
+      .addBack( '.LobbyChallengeLineUpCard' )
+      .each( ( _, element ) => {
+        // lobbyId existe, cria o elemento, mas não aparece na tela...
+        const lobbyId = $( element ).find( '.LobbyPlayerVertical' )[0].href.replace( /[\W_]+/g, ' ' ).replaceAll( ' ', '_' );
+        createModalForElementNew( $( element ), getPlayersIds, 'challenge', lobbyId );
+      } );
+  } );
+};
 export const infoLobby = mutations => {
   $.each( mutations, ( _, mutation ) => {
     $( mutation.addedNodes )
@@ -209,7 +164,7 @@ export const infoLobby = mutations => {
       .addBack( '.RoomCardWrapper' )
       .each( ( _, element ) => {
         const lobbyId = $( element ).attr( 'id' );
-        createModalForElementNew( $( element ), getPlayersIdsNew, lobbyId );
+        createModalForElementNew( $( element ), getPlayersIdsNew, 'lobby', lobbyId );
       } );
   } );
 };
