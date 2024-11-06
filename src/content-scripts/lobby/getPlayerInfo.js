@@ -64,8 +64,6 @@ export async function getPlayerInfo( id ) {
         const response = {
           dataCriacao,
           totalPartidas,
-          totalVitorias,
-          totalDerrotas,
           porcentagemVitoria,
           anotacao,
           // 2 dias de cache
