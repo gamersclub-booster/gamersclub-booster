@@ -364,11 +364,11 @@ input[type="range"].filterKdr::-ms-track {
   align-items: center;
   opacity: 0;
   pointer-events: none;
-  transform: translateY(20px);
-  transition: opacity 0.25s cubic-bezier(0, 0.47, 0.34, 1), transform 0.25s cubic-bezier(0, 0.47, 0.34, 1);
+  /* transform: translateY(20px); */
+  /* transition: opacity 0.25s cubic-bezier(0, 0.47, 0.34, 1), transform 0.25s cubic-bezier(0, 0.47, 0.34, 1); */
 }
 
-.RoomCardWrapper:hover .gcbooster_lupa,
+.gcbooster_lupa,
 .sala-lineup-players .gcbooster_lupa {
   opacity: 1;
   pointer-events: initial;
@@ -378,7 +378,7 @@ input[type="range"].filterKdr::-ms-track {
 .infos_lobby {
   top: 210px;
   left: 0;
-  z-index: 9999;
+  z-index: 1;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   position: absolute;
