@@ -282,9 +282,14 @@ function selecionarSons() {
     if ( !response ) { return false; }
     for ( const config of configValues ) {
       document.getElementById( config ).value = response[config] || '';
+      if ( response[config] === 'custom' ) {
+        const customObj = document.getElementById( `p-custom${config[0].toUpperCase()}${config.slice( 1 )}` );
+        if ( customObj ) { customObj.style.display = 'block'; }
+      } else {
+        const customObj = document.getElementById( `p-custom${response[config][0].toUpperCase()}${response[config].slice( 1 )}` );
+        if ( customObj ) { customObj.style.display = 'none'; }
+      }
     }
-
-    updateReadySoundInputsDisable();
   } );
 }
 
@@ -296,20 +301,6 @@ function atualizarValorVolume() {
   } );
 }
 
-function updateReadySoundInputsDisable( sound ) {
-  const isDefaultSound = !document.getElementById( sound )?.value;
-
-  switch ( sound ) {
-  case 'somReady':
-    document.getElementById( 'testarSomReady' ).disabled = isDefaultSound;
-    break;
-  case 'somKicked':
-    document.getElementById( 'testarSomKicked' ).disabled = isDefaultSound;
-    break;
-  }
-
-  document.getElementById( 'volume' ).disabled = isDefaultSound;
-}
 
 
 function adicionarListenersSons() {
@@ -334,7 +325,6 @@ function adicionarListenersSons() {
     audio.volume = document.getElementById( 'volume' ).value / 100;
     audio.play();
   } );
-  document.getElementById( 'somReady' ).addEventListener( 'input', () => updateReadySoundInputsDisable( 'somReady' ) );
 
   //SOM SE FOR EXPULSO DA LOBBY
   document.getElementById( 'testarSomKicked' ).addEventListener( 'click', function () {
@@ -351,9 +341,6 @@ function adicionarListenersSons() {
     const volume = document.getElementById( 'volume' ).value;
     document.getElementById( 'volumeValue' ).innerText = `${volume}%`;
   } );
-  document.getElementById( 'somKicked' ).addEventListener( 'input', () => updateReadySoundInputsDisable( 'somKicked' ) );
-
-
 }
 
 function abrirPagina( pagina ) {
