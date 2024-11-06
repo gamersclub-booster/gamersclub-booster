@@ -38,31 +38,38 @@ const createDiv = lobbyId => $( '<div/>',
 
 const createDivVitory = playerInfo => $( '<div />',
   {
-    'class': 'gcbooster-info-vitoria',
+    'class': 'gcbooster-info-vitoria gcbooster-padding-bottom',
     title: 'Porcentagem de vitória',
     'data-tip-text': 'Porcentagem de vitória'
   } ).append( `%: ${!isNaN( playerInfo.porcentagemVitoria ) ? Math.round( playerInfo.porcentagemVitoria ) : 0}% ` );
 
 const createDivDateCreate = playerInfo => $( '<div />',
   {
-    class: 'gcbooster-info-date-create',
+    class: 'gcbooster-info-date-create gcbooster-padding-bottom',
     title: 'Tempo de conta',
     'data-tip-text': 'Tempo de conta'
   } ).append( `T: ${calcAge( playerInfo.dataCriacao )}` );
 
 const createDivLobbys = playerInfo => $( '<div />',
   {
-    class: 'gcbooster-info-lobbyes',
+    class: 'gcbooster-info-lobbyes gcbooster-padding-bottom',
     title: 'Partidas jogadas',
     'data-tip-text': 'Partidas jogadas'
   } ).append( `P: ${playerInfo.totalPartidas}` );
 
-const createDivLobbysWin = playerInfo => $( '<div />',
-  {
-    class: 'gcbooster-info-lobbyes-win',
-    title: 'Vitórias',
-    'data-tip-text': 'Vitórias'
-  } ).append( `V: ${playerInfo.totalVitorias}` );
+// const _createDivLobbysWin = playerInfo => $( '<div />',
+//   {
+//     class: 'gcbooster-info-lobbyes-win',
+//     title: 'Vitórias',
+//     'data-tip-text': 'Vitórias'
+//   } ).append( `V: ${playerInfo.totalVitorias}` );
+
+// const _createDivLobbysLose = playerInfo => $( '<div />',
+//   {
+//     class: 'gcbooster-info-lobbyes-lose',
+//     title: 'Derrotas',
+//     'data-tip-text': 'Derrotas'
+//   } ).append( `D: ${playerInfo.totalDerrotas}` );
 
 const createClose = lobbyId => $( '<div />',
   {
@@ -71,12 +78,6 @@ const createClose = lobbyId => $( '<div />',
     'data-tip-text': 'Fechar'
   } ).append( 'X' ).on( 'click', () => $( `#infos_lobby_${lobbyId}` ).empty( ).remove() );
 
-const createDivLobbysLose = playerInfo => $( '<div />',
-  {
-    class: 'gcbooster-info-lobbyes-lose',
-    title: 'Derrotas',
-    'data-tip-text': 'Derrotas'
-  } ).append( `D: ${playerInfo.totalDerrotas}` );
 
 const createDivAnotacao = playerInfo => $( '<div />',
   {
@@ -88,13 +89,13 @@ const createDivAnotacao = playerInfo => $( '<div />',
   playerInfo.anotacao === 'Positiva' ? '👍' :
     playerInfo.anotacao === 'Negativa' ? '👎' : '-'
 }` );
-  
+
 const createDivTitle = () => $( '<div />',
-{
-  class: 'gcbooster-info-titles',
-  title: 'Informações dos jogadores',
-  'data-tip-text': 'Informações dos jogadores'
-} ).append( 'Estatisticas' );
+  {
+    class: 'gcbooster-info-titles',
+    title: 'Informações dos jogadores',
+    'data-tip-text': 'Informações dos jogadores'
+  } ).append( 'Estatisticas' );
 
 const createDivPlayers = playerInfo => $( '<div/>',
   {

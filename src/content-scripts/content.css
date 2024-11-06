@@ -376,7 +376,7 @@ input[type="range"].filterKdr::-ms-track {
 }
 
 .infos_lobby {
-  top: 0;
+  top: 210px;
   left: 0;
   z-index: 9999;
   -webkit-backface-visibility: hidden;
@@ -385,7 +385,7 @@ input[type="range"].filterKdr::-ms-track {
   /* top: 15px; */
   border-radius: 7px;
   background: var(--color-transparent-black-2);
-  padding: 1px 5px;
+  padding: 2px 4px;
   box-shadow: 0 0 10px var(--color-transparent-orange-4);
   border: 1px solid var(--color-orange);
   -webkit-backdrop-filter: blur(4px);
@@ -393,6 +393,10 @@ input[type="range"].filterKdr::-ms-track {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   width: 100%;
+}
+
+.gcbooster-padding-bottom {
+  padding-bottom: 2px;
 }
 
 .gcbooster-info-player {
@@ -423,8 +427,8 @@ input[type="range"].filterKdr::-ms-track {
 
 .gcbooster-info-close {
   position: absolute;
-  right: 3px;
-  top: -5px;
+  right: -4px;
+  top: -12px;
   color: var(--color-white);
   cursor: pointer;
   font-weight: 400;
