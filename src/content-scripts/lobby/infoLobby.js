@@ -48,13 +48,6 @@ const createDivAnotacao = playerInfo => $( '<div />',
     playerInfo.anotacao === 'Negativa' ? '👎' : '-'
 }` );
 
-const createDivTitle = () => $( '<div />',
-  {
-    class: 'gcbooster-info-titles',
-    title: 'Informações dos jogadores',
-    'data-tip-text': 'Informações dos jogadores'
-  } ).append( 'Estatisticas' );
-
 const createDivPlayers = playerInfo => $( '<div/>',
   {
     class: 'gcbooster-info-player'
@@ -134,7 +127,7 @@ const createModalForElementNew = ( element, getPlayersIdsFunction, type, lobbyId
       $( div ).parent().append( modal );
 
       const players = getPlayersIdsFunction( element );
-      console.log( 'PLAYERS:',{ players } );
+      console.log( 'PLAYERS:', { players } );
       $( `#infos_lobby_${lobbyId}` ).append( createClose( lobbyId ) );
       for ( const player of players ) {
         const response = await getPlayerInfo( player );
