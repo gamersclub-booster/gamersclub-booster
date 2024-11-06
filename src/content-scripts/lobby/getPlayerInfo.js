@@ -4,16 +4,39 @@ const BASE_URL = 'https://gamersclub.com.br/player';
 
 const SELETOR_DATA_CRIACAO = '.gc-list-title:contains("Registrado em")';
 
-// @TODO: Criar uma função que limpa o cache a cada X tempo ou a cada request e remove os ids que o TTL já expirou
-// const limparCache = () => {
-// }
+const DOIS_DIAS = ( 2 * 24 * 60 * 60 * 1000 );
+
+// Limpa o cache a cada 2 dias se o TTL for menor q 'agora'
+const limparCache = async () => {
+  const cache = await getFromStorage( 'lupaCache' ) || {};
+  for ( const [ id, obj ] of Object.entries( cache ) ) {
+    if ( obj.ttl <= Date.now() ) {
+      delete cache[id];
+    }
+  }
+  await setStorage( 'lupaCache', cache );
+  await setStorage( 'ultimaLimpezaCache', Date.now() );
+};
+
+const getAnotacao = html => {
+  if ( $( html ).find( '.gc-button-notes-negative' )[0] ) {
+    return 'Negativa';
+  }
+  if ( $( html ).find( '.gc-button-notes-positive' )[0] ) {
+    return 'Positiva';
+  }
+  return 'Nenhuma';
+};
 
 export async function getPlayerInfo( id ) {
+  const ultimaLimpezaCache = await getFromStorage( 'ultimaLimpezaCache' );
+  if ( !ultimaLimpezaCache || ultimaLimpezaCache < Date.now() - DOIS_DIAS ) {
+    await limparCache();
+  }
   const lupaCache = await getFromStorage( 'lupaCache' ) || {};
   if ( lupaCache?.[id]?.ttl > Date.now() ) {
     return lupaCache[id];
   }
-
   const promise = new Promise( ( resolve, reject ) => {
     try {
       const url = `${BASE_URL}/${id}`;
@@ -36,14 +59,17 @@ export async function getPlayerInfo( id ) {
           totalDerrotas += parseInt( $( this ).html().replace( ' Derrotas', '' ) );
         } );
         porcentagemVitoria = ( ( totalVitorias / ( totalVitorias + totalDerrotas ) ) * 100 ).toFixed( 2 );
+
+        const anotacao = getAnotacao( html );
         const response = {
           dataCriacao,
           totalPartidas,
           totalVitorias,
           totalDerrotas,
           porcentagemVitoria,
+          anotacao,
           // 2 dias de cache
-          ttl: Date.now() + ( 2 * 24 * 60 * 60 * 1000 )
+          ttl: Date.now() + DOIS_DIAS
         };
         lupaCache[id] = response;
         setStorage( 'lupaCache', lupaCache );
