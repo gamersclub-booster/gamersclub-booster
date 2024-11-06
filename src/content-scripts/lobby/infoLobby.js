@@ -4,7 +4,7 @@ const IMAGE_ALT = '[GC Booster]: Buscar informações da lobby';
 const createDiv = lobbyId => $( '<div/>',
   {
     id: `gcbooster_lupa_${lobbyId}`,
-    class: 'gcbooster_lupa',
+    class: 'gcbooster_lupa draw-orange',
     title: IMAGE_ALT
   } );
 
@@ -31,7 +31,7 @@ const createDivLobbys = playerInfo => $( '<div />',
 
 const createClose = lobbyId => $( '<div />',
   {
-    class: 'gcbooster-info-close',
+    class: 'gcbooster-info-close draw-orange',
     title: 'Fechar',
     'data-tip-text': 'Fechar'
   } ).append( 'X' ).on( 'click', () => $( `#infos_lobby_${lobbyId}` ).empty( ).remove() );

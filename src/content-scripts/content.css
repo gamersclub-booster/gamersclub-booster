@@ -349,10 +349,8 @@ input[type="range"].filterKdr::-ms-track {
 
 .gcbooster_lupa {
   z-index: 1;
-  border: 1px solid var(--color-orange);
-  box-shadow: 0 0 9px var(--color-transparent-orange-2);
-  bottom: 3px;
-  right: 3px;
+  bottom: 2px;
+  right: 2px;
   position: absolute;
   cursor: pointer;
   background: var(--color-dark-gray);
@@ -362,15 +360,15 @@ input[type="range"].filterKdr::-ms-track {
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: 0;
-  pointer-events: none;
 }
 
-.gcbooster_lupa,
-.sala-lineup-players .gcbooster_lupa {
-  opacity: 1;
-  pointer-events: initial;
-  transform: translateY(0);
+.LobbyChallengeLineUpCard .gcbooster_lupa {
+  transform: translateX(-50%);
+}
+
+.LobbyChallengeLineUpCard .infos_lobby  {
+  width: 90%;
+  left: 6px;
 }
 
 .infos_lobby {
@@ -424,7 +422,7 @@ input[type="range"].filterKdr::-ms-track {
 
 .gcbooster-info-close {
   position: absolute;
-  right: -4px;
+  right: -12px;
   top: -12px;
   color: var(--color-white);
   cursor: pointer;
@@ -503,6 +501,7 @@ input[type="range"].filterKdr::-ms-track {
 .ocultar-notificacao-complete .LobbyComplete {
   display: none !important;
 }
+
 .LobbyPlayerHorizontal__kick-button {
   right: 3px !important;
   left: auto !important;
