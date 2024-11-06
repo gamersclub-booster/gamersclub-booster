@@ -78,12 +78,23 @@ const createDivLobbysLose = playerInfo => $( '<div />',
     'data-tip-text': 'Derrotas'
   } ).append( `D: ${playerInfo.totalDerrotas}` );
 
-const createDivTitle = () => $( '<div />',
+const createDivAnotacao = playerInfo => $( '<div />',
   {
-    class: 'gcbooster-info-titles',
-    title: 'Informações dos jogadores',
-    'data-tip-text': 'Informações dos jogadores'
-  } ).append( 'Estatisticas' );
+    class: 'gcbooster-info-lobbyes-anotacao',
+    title: 'Anotação',
+    'data-tip-text': 'Anotação'
+  } ).append( `A: ${
+  // eslint-disable-next-line no-nested-ternary
+  playerInfo.anotacao === 'Positiva' ? '👍' :
+    playerInfo.anotacao === 'Negativa' ? '👎' : '-'
+}` );
+  
+const createDivTitle = () => $( '<div />',
+{
+  class: 'gcbooster-info-titles',
+  title: 'Informações dos jogadores',
+  'data-tip-text': 'Informações dos jogadores'
+} ).append( 'Estatisticas' );
 
 const createDivPlayers = playerInfo => $( '<div/>',
   {
@@ -91,9 +102,10 @@ const createDivPlayers = playerInfo => $( '<div/>',
   } )
   .append( createDivDateCreate( playerInfo ) )
   .append( createDivLobbys( playerInfo ) )
-  .append( createDivLobbysWin( playerInfo ) )
-  .append( createDivLobbysLose( playerInfo ) )
-  .append( createDivVitory( playerInfo ) );
+  // .append( createDivLobbysWin( playerInfo ) )
+  // .append( createDivLobbysLose( playerInfo ) )
+  .append( createDivVitory( playerInfo ) )
+  .append( createDivAnotacao( playerInfo ) );
 
 const createImage = lobbyId => $( '<img/>', {
   id: `gcbooster_lupa_img_${lobbyId}`,
@@ -161,16 +173,42 @@ const getPlayersIdsNew = element => element
   .toArray()
   .map( e => e.href.split( '/' ).pop() );
 
+const createModalForElementNew = ( element, getPlayersIdsFunction, lobbyId ) => {
+  if ( element.find( `#gcbooster_lupa_${lobbyId}` ).length === 0 ) {
+    const div = createDiv( lobbyId );
+    const modal = createModal( lobbyId );
+    const image = createImage( lobbyId );
+
+    div.append( image );
+
+    div.on( 'click', async () => {
+      $( `#infos_lobby_${lobbyId}` ).empty( ).remove();
+      //bloqueia todas as outras lupas enquanto carrega
+      $.each( $( '.gcbooster_lupa' ), ( _, lupa ) => { lupa.style = 'display: none'; } );
+
+      $( div ).parent().append( modal );
+
+      const players = getPlayersIdsFunction( element );
+
+      $( `#infos_lobby_${lobbyId}` ).append( createClose( lobbyId ) );
+      for ( const player of players ) {
+        const response = await getPlayerInfo( player );
+        $( `#infos_lobby_${lobbyId}` ).append( createDivPlayers( response ) );
+      }
+      $.each( $( '.gcbooster_lupa' ), ( _, lupa ) => { lupa.style = 'display: flex'; } );
+    } );
+    element.append( div );
+  }
+};
 
 export const infoLobby = mutations => {
-
   $.each( mutations, ( _, mutation ) => {
     $( mutation.addedNodes )
       .find( '.RoomCardWrapper' )
       .addBack( '.RoomCardWrapper' )
       .each( ( _, element ) => {
         const lobbyId = $( element ).attr( 'id' );
-        createModalForElement( $( element ), getPlayersIdsNew, lobbyId );
+        createModalForElementNew( $( element ), getPlayersIdsNew, lobbyId );
       } );
   } );
 };

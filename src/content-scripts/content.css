@@ -382,7 +382,7 @@ input[type="range"].filterKdr::-ms-track {
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   position: absolute;
-  top: 15px;
+  /* top: 15px; */
   border-radius: 7px;
   background: var(--color-transparent-black-2);
   padding: 10px 3px;
@@ -424,7 +424,7 @@ input[type="range"].filterKdr::-ms-track {
 .gcbooster-info-close {
   position: absolute;
   right: 3px;
-  top: -17px;
+  top: -5px;
   color: var(--color-white);
   cursor: pointer;
   font-weight: 400;
