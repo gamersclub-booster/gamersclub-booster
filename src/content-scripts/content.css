@@ -364,8 +364,6 @@ input[type="range"].filterKdr::-ms-track {
   align-items: center;
   opacity: 0;
   pointer-events: none;
-  /* transform: translateY(20px); */
-  /* transition: opacity 0.25s cubic-bezier(0, 0.47, 0.34, 1), transform 0.25s cubic-bezier(0, 0.47, 0.34, 1); */
 }
 
 .gcbooster_lupa,
@@ -382,7 +380,6 @@ input[type="range"].filterKdr::-ms-track {
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   position: absolute;
-  /* top: 15px; */
   border-radius: 7px;
   background: var(--color-transparent-black-2);
   padding: 2px 4px;
