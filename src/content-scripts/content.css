@@ -249,7 +249,7 @@ input[type="range"].filterKdr::-ms-track {
 .lobby.compact #lobbies-wrapper {
   grid-template-columns: repeat(auto-fill, minmax(214px, 1fr)) !important;
   padding: 16px 0 !important;
-  gap: 16px !important;
+  gap: 8px !important;
 }
 
 .lobby.compact .RoomCardWrapper {
@@ -262,6 +262,14 @@ input[type="range"].filterKdr::-ms-track {
 .lobby.compact .LobbyRoom button,
 .lobby.compact .LobbyHeader__actions {
   border-radius: 0 !important;
+}
+
+.lobby.compact .LobbyRoom__lineup {
+  gap: 0;
+}
+
+.lobby.compact .LobbyPlayerVertical {
+  padding: var(--wasd-spacing-xxs) .09rem
 }
 
 .bar-level {
@@ -366,7 +374,7 @@ input[type="range"].filterKdr::-ms-track {
   transform: translateX(-50%);
 }
 
-.LobbyChallengeLineUpCard .infos_lobby  {
+.LobbyChallengeLineUpCard .infos_lobby {
   width: 90%;
   left: 6px;
 }
