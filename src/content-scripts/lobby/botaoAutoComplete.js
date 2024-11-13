@@ -78,22 +78,20 @@ async function intervalerAutoComplete() {
   intervalId = setInterval( async function () {
     // Verifique se não estamos no lobby
     if ( $( '#SidebarSala' ).length === 0 ) {
-      const acceptBtn = $( '.scroll-content > li > .btn-actions > a.accept-btn' );
+      const acceptBtn = $( '.LobbyComplete__requestItemContainer > button' );
 
       if ( acceptBtn.length ) {
-        const scoreSpans = $( '.scroll-content > li > .match-info > .result-type > .score > span' );
-        const mapCode = getMapCode( $( '.map-name' ).text() );
+        const scoreWinning = parseInt( $( '.LobbyComplete__requestItemScore .LobbyComplete__requestItemScoreWinning' ).eq( 0 ).text() );
+        const scoreLosing = parseInt( $( '.LobbyComplete__requestItemScore .LobbyComplete__requestItemScoreLosing' ).eq( 0 ).text() );
+        const mapCode = getMapCode( $( '.LobbyComplete__requestItemMap' ).text() );
 
-        if ( scoreSpans.length === 2 && mapCode ) {
-          const score1 = parseInt( scoreSpans.eq( 0 ).text() );
-          const score2 = parseInt( scoreSpans.eq( 1 ).text() );
-
+        if ( scoreWinning && scoreLosing && mapCode ) {
           chrome.storage.sync.get( [ 'complete', 'roundsDiff', 'roundsMin' ], res => {
             const { complete, roundsDiff, roundsMin } = res || {};
 
             const isInCheckedMaps = !complete || complete.includes( mapCode );
-            const hasMinRounds = ( score1 + score2 ) >= roundsMin;
-            const isInDiff = Math.abs( score1 - score2 ) <= roundsDiff;
+            const hasMinRounds = ( scoreWinning + scoreLosing ) >= roundsMin;
+            const isInDiff = Math.abs( scoreWinning - scoreLosing ) <= roundsDiff;
 
             if ( isInCheckedMaps && hasMinRounds && isInDiff ) {
               acceptBtn.get( 0 ).click();
