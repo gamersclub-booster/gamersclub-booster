@@ -1,6 +1,7 @@
 import { getFromStorage, setStorage } from '../../lib/storage';
+import { GC_URL } from '../../lib/constants';
 
-const BASE_URL = 'https://gamersclub.com.br/player';
+const BASE_URL = `https://${GC_URL}/player`;
 
 const SELETOR_DATA_CRIACAO = '.gc-list-title:contains("Registrado em")';
 
