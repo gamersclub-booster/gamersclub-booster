@@ -8,28 +8,24 @@
   "commitlint": {
     "extends": "@commitlint/config-conventional"
   },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
   "scripts": {
     "dev": "webpack --watch --config webpack.dev.js",
     "build": "webpack",
     "precommit": "commitlint -E HUSKY_GIT_PARAMS",
     "lint": "eslint --config ./.eslintrc ./src",
-    "lint:fix": "eslint --fix --config ./.eslintrc ./src"
+    "lint:fix": "eslint --fix --config ./.eslintrc ./src",
+    "prepare": "husky"
   },
   "dependencies": {
     "axios": "^0.28.0",
     "jquery": "^3.6.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.6.1",
-    "@commitlint/config-conventional": "^12.1.4",
+    "@commitlint/cli": "^19.6.0",
+    "@commitlint/config-conventional": "^19.6.0",
     "copy-webpack-plugin": "^8.1.1",
     "eslint": "^7.32.0",
-    "husky": "^8.0.3",
+    "husky": "^9.1.7",
     "rimraf": "^3.0.2",
     "webpack": "^5.96.1",
     "webpack-cli": "^4.9.1"
