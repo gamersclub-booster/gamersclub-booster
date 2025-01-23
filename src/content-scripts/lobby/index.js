@@ -15,6 +15,7 @@ import { infoChallenge, infoLobby } from './infoLobby';
 import { ocultarNotificacaoComplete } from './ocultarNotificacaoComplete';
 import { ocultarSugestaoDeLobbies } from './ocultarSugestaoDeLobbies';
 import { tocarSomSeVoceForExpulsoDaLobby } from './tocarSomSeVoceForExpulsoDaLobby';
+import { autoMostrarIp } from './autoMostrarIp';
 
 
 chrome.storage.sync.get( null, function ( _result ) {
@@ -67,6 +68,8 @@ const initLobby = async () => {
   // adicionarFiltroKdr();
   // Feature de discord na hora de copiar o ip
   partidaInfo();
+  //Feature que mostra ip assim que server é liberado
+  autoMostrarIp();
 };
 
 const criarObserver = ( seletor, exec, type ) => {
