@@ -8,7 +8,7 @@
     "128": "images/icon_128.png"
   },
   "host_permissions": [
-    "https://*gamersclub.com.br/",
+    "https://*.gamersclub.com.br/",
     "https://cs.gamersclub.gg/",
     "https://discord.com/api/webhooks/*"
   ],
