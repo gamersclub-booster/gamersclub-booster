@@ -85,15 +85,16 @@ async function intervalerAutoComplete() {
         const scoreLosing = parseInt( $( '.LobbyComplete__requestItemScore .LobbyComplete__requestItemScoreLosing' ).eq( 0 ).text() );
         const mapCode = getMapCode( $( '.LobbyComplete__requestItemMap' ).text() );
 
-        if ( scoreWinning && scoreLosing && mapCode ) {
-          chrome.storage.sync.get( [ 'complete', 'roundsDiff', 'roundsMin' ], res => {
-            const { complete, roundsDiff, roundsMin } = res || {};
+        if ( Number.isFinite( scoreWinning ) && Number.isFinite( scoreLosing ) && mapCode ) {
+          chrome.storage.sync.get( [ 'complete', 'roundsDiff', 'roundsMin', 'roundsMax' ], res => {
+            const { complete, roundsDiff, roundsMin, roundsMax } = res || {};
 
             const isInCheckedMaps = !complete || complete.includes( mapCode );
             const hasMinRounds = ( scoreWinning + scoreLosing ) >= roundsMin;
             const isInDiff = Math.abs( scoreWinning - scoreLosing ) <= roundsDiff;
+            const hasMaxWinningRounds = scoreWinning <= roundsMax;
 
-            if ( isInCheckedMaps && hasMinRounds && isInDiff ) {
+            if ( isInCheckedMaps && hasMinRounds && isInDiff && hasMaxWinningRounds ) {
               acceptBtn.get( 0 ).click();
               $( '#completePlayerModal > div > div.buttons > button.sm-button-accept.btn.btn-success' ).get( 0 ).click();
             }
