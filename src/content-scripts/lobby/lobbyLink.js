@@ -33,9 +33,9 @@ export const lobbyLink = mutations =>
                     `<button
                       class="MyRoomHeader__button"
                       id="discordLobbyButton"
-                      title="Excluir sala"title="Enviar lobby Discord"
+                      title="Enviar lobby Discord"
                       data-jsaction="gcCommonTooltip"
-                      data-tip-text="Convidar Amigos"
+                      data-tip-text="Enviar lobby Discord"
                       style="width:75px;margin-left:var(--wasd-spacing-xxs);background:#5865F2"
                       >
                       <img src="${discordSvgUrl}" width="15px"/>
