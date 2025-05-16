@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "GamersClub Booster",
   "description": "Extensão para o Google Chrome que adiciona algumas melhorias na plataforma da GamersClub.",
-  "version": "2.65.5",
+  "version": "2.65.6",
   "icons": {
     "48": "images/icon_128.png",
     "128": "images/icon_128.png"
