@@ -528,3 +528,206 @@ input[type="range"].filterKdr::-ms-track {
   font-size: 20px;
   color: white;
 }
+
+/* Player Levels */
+.PlayerLevel {
+  position: relative
+}
+
+.PlayerLevel,
+.PlayerLevel__background {
+  display: flex;
+  align-items: center;
+  justify-content: center
+}
+
+.PlayerLevel__background {
+  width: 100%;
+  height: 100%;
+  overflow: hidden
+}
+
+.PlayerLevel__text {
+  color: #fff;
+  font-family: Poppins, sans-serif;
+  font-weight: 700;
+  z-index: 1;
+  line-height: 1em
+}
+
+.PlayerLevel--nonSubscriber .PlayerLevel__background {
+  width: 85%;
+  height: 85%;
+  border-radius: 50%
+}
+
+.PlayerLevel--subscriber .PlayerLevel__background {
+  background-position: 50%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding-bottom: 3%
+}
+
+.PlayerLevel--nonSubscriber.PlayerLevel--0 .PlayerLevel__background {
+  background-color: #58597a
+}
+
+.PlayerLevel--subscriber.PlayerLevel--0 .PlayerLevel__background {
+  background-image: url(https://gcv1-assets.gamersclub.com.br/assets/images/level/0.svg)
+}
+
+.PlayerLevel--nonSubscriber.PlayerLevel--1 .PlayerLevel__background {
+  background-color: #643284
+}
+
+.PlayerLevel--subscriber.PlayerLevel--1 .PlayerLevel__background {
+  background-image: url(https://gcv1-assets.gamersclub.com.br/assets/images/level/1.svg)
+}
+
+.PlayerLevel--nonSubscriber.PlayerLevel--2 .PlayerLevel__background {
+  background-color: #5c2d84
+}
+
+.PlayerLevel--subscriber.PlayerLevel--2 .PlayerLevel__background {
+  background-image: url(https://gcv1-assets.gamersclub.com.br/assets/images/level/2.svg)
+}
+
+.PlayerLevel--nonSubscriber.PlayerLevel--3 .PlayerLevel__background {
+  background-color: #532883
+}
+
+.PlayerLevel--subscriber.PlayerLevel--3 .PlayerLevel__background {
+  background-image: url(https://gcv1-assets.gamersclub.com.br/assets/images/level/3.svg)
+}
+
+.PlayerLevel--nonSubscriber.PlayerLevel--4 .PlayerLevel__background {
+  background-color: #492381
+}
+
+.PlayerLevel--subscriber.PlayerLevel--4 .PlayerLevel__background {
+  background-image: url(https://gcv1-assets.gamersclub.com.br/assets/images/level/4.svg)
+}
+
+.PlayerLevel--nonSubscriber.PlayerLevel--5 .PlayerLevel__background {
+  background-color: #402686
+}
+
+.PlayerLevel--subscriber.PlayerLevel--5 .PlayerLevel__background {
+  background-image: url(https://gcv1-assets.gamersclub.com.br/assets/images/level/5.svg)
+}
+
+.PlayerLevel--nonSubscriber.PlayerLevel--6 .PlayerLevel__background {
+  background-color: #2d3a8a
+}
+
+.PlayerLevel--subscriber.PlayerLevel--6 .PlayerLevel__background {
+  background-image: url(https://gcv1-assets.gamersclub.com.br/assets/images/level/6.svg)
+}
+
+.PlayerLevel--nonSubscriber.PlayerLevel--7 .PlayerLevel__background {
+  background-color: #2967b0
+}
+
+.PlayerLevel--subscriber.PlayerLevel--7 .PlayerLevel__background {
+  background-image: url(https://gcv1-assets.gamersclub.com.br/assets/images/level/7.svg)
+}
+
+.PlayerLevel--nonSubscriber.PlayerLevel--8 .PlayerLevel__background {
+  background-color: #2967b0
+}
+
+.PlayerLevel--subscriber.PlayerLevel--8 .PlayerLevel__background {
+  background-image: url(https://gcv1-assets.gamersclub.com.br/assets/images/level/8.svg)
+}
+
+.PlayerLevel--nonSubscriber.PlayerLevel--9 .PlayerLevel__background {
+  background-color: #2a7bc2
+}
+
+.PlayerLevel--subscriber.PlayerLevel--9 .PlayerLevel__background {
+  background-image: url(https://gcv1-assets.gamersclub.com.br/assets/images/level/9.svg)
+}
+
+.PlayerLevel--nonSubscriber.PlayerLevel--10 .PlayerLevel__background {
+  background-color: #2a8acc
+}
+
+.PlayerLevel--subscriber.PlayerLevel--10 .PlayerLevel__background {
+  background-image: url(https://gcv1-assets.gamersclub.com.br/assets/images/level/10.svg)
+}
+
+.PlayerLevel--nonSubscriber.PlayerLevel--11 .PlayerLevel__background {
+  background-color: #3e9cb7
+}
+
+.PlayerLevel--subscriber.PlayerLevel--11 .PlayerLevel__background {
+  background-image: url(https://gcv1-assets.gamersclub.com.br/assets/images/level/11.svg)
+}
+
+.PlayerLevel--nonSubscriber.PlayerLevel--12 .PlayerLevel__background {
+  background-color: #53a18b
+}
+
+.PlayerLevel--subscriber.PlayerLevel--12 .PlayerLevel__background {
+  background-image: url(https://gcv1-assets.gamersclub.com.br/assets/images/level/12.svg)
+}
+
+.PlayerLevel--nonSubscriber.PlayerLevel--13 .PlayerLevel__background {
+  background-color: #68a761
+}
+
+.PlayerLevel--subscriber.PlayerLevel--13 .PlayerLevel__background {
+  background-image: url(https://gcv1-assets.gamersclub.com.br/assets/images/level/13.svg)
+}
+
+.PlayerLevel--nonSubscriber.PlayerLevel--14 .PlayerLevel__background {
+  background-color: #7cac35
+}
+
+.PlayerLevel--subscriber.PlayerLevel--14 .PlayerLevel__background {
+  background-image: url(https://gcv1-assets.gamersclub.com.br/assets/images/level/14.svg)
+}
+
+.PlayerLevel--nonSubscriber.PlayerLevel--15 .PlayerLevel__background {
+  background-color: #91b20a
+}
+
+.PlayerLevel--subscriber.PlayerLevel--15 .PlayerLevel__background {
+  background-image: url(https://gcv1-assets.gamersclub.com.br/assets/images/level/15.svg)
+}
+
+.PlayerLevel--nonSubscriber.PlayerLevel--16 .PlayerLevel__background {
+  background-color: #bdb700
+}
+
+.PlayerLevel--subscriber.PlayerLevel--16 .PlayerLevel__background {
+  background-image: url(https://gcv1-assets.gamersclub.com.br/assets/images/level/16.svg)
+}
+
+.PlayerLevel--nonSubscriber.PlayerLevel--17 .PlayerLevel__background {
+  background-color: #f0bc00
+}
+
+.PlayerLevel--subscriber.PlayerLevel--17 .PlayerLevel__background {
+  background-image: url(https://gcv1-assets.gamersclub.com.br/assets/images/level/17.svg)
+}
+
+.PlayerLevel--nonSubscriber.PlayerLevel--18 .PlayerLevel__background {
+  background-color: #f89a06
+}
+
+.PlayerLevel--subscriber.PlayerLevel--18 .PlayerLevel__background {
+  background-image: url(https://gcv1-assets.gamersclub.com.br/assets/images/level/18.svg)
+}
+
+.PlayerLevel--nonSubscriber.PlayerLevel--19 .PlayerLevel__background {
+  background-color: #f46e12
+}
+
+.PlayerLevel--subscriber.PlayerLevel--19 .PlayerLevel__background {
+  background-image: url(https://gcv1-assets.gamersclub.com.br/assets/images/level/19.svg)
+}
+
+.PlayerLevel--nonSubscriber.PlayerLevel--20 .PlayerLevel__background {
+  background-color: #eb2f2f
+}
