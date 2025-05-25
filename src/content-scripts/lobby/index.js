@@ -16,6 +16,7 @@ import { ocultarNotificacaoComplete } from './ocultarNotificacaoComplete';
 import { ocultarSugestaoDeLobbies } from './ocultarSugestaoDeLobbies';
 import { tocarSomSeVoceForExpulsoDaLobby } from './tocarSomSeVoceForExpulsoDaLobby';
 import { autoMostrarIp } from './autoMostrarIp';
+import { ocultarChat, chatFixoDireita } from './chat';
 
 
 chrome.storage.sync.get( null, function ( _result ) {
@@ -70,6 +71,10 @@ const initLobby = async () => {
   partidaInfo();
   //Feature que mostra ip assim que server é liberado
   autoMostrarIp();
+  // Feature que oculta o chat durante a criação de lobbies
+  ocultarChat();
+  // Feature que fixa o chat na direita
+  chatFixoDireita();
 };
 
 const criarObserver = ( seletor, exec, type ) => {
