@@ -95,5 +95,9 @@
   "warmup-fim": "¡El calentamiento ha terminado!",
   "complete-mapas": "Mapas que se aceptarán:",
   "complete-rounds-minimos": "Rondas mínimas jugadas:",
-  "complete-max-diff": "Diferencia máxima entre puntuaciones:"
+  "complete-max-diff": "Diferencia máxima entre puntuaciones:",
+  "complete-max-rounds": "Puntuación máxima del equipo ganador:",
+  "chat": "Chat",
+  "ocultar-chat": "Ocultar Chat",
+  "chat-fixo-direita": "Chat fijo a la derecha"
 }

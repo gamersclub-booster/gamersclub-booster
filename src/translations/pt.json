@@ -48,7 +48,7 @@
   "ao-aceitar-ready": "Ao Aceitar Ready",
   "ao-ser-expulso": "Ao ser Expulso",
   "volume": "Volume",
-  "sons-myinstants-linha-1": "* Todos os sons estão sendo executados diretamente do site: myinstants.com",
+  "sons-myinstants-linha-1": "* Todos os sons estão sendo executados diretamente do site: myinstants.com.",
   "sons-myinstants-linha-2": "* Você pode customizar utilizando outros sons de lá copiando a URL do link \"Download MP3\" abaixo do botão.",
   "discord": "Discord",
   "como-criar-sua-webhook": "Como criar sua webhook",
@@ -65,9 +65,9 @@
   "em-breve-mapas": "Em breve teremos opções de veto automático de mapas.",
   "entre-no-nosso-discord": "Entre no nosso discord e tire duvidas, informe bugs, deixe uma sugestão ou feedback.",
   "informe-um-bug": "Informe um bug ou abra uma solicitação",
-  "abra-uma-issue": "Abra uma issue no github explicando em detalhes o seu problema/solicitação de melhoria",
+  "abra-uma-issue": "Abra uma issue no github explicando em detalhes o seu problema/solicitação de melhoria.",
   "quer-contribuir": "Quer contribuir?",
-  "estenxao-codigo-aberto": "Esta é uma extensão de código aberto e toda contribuição da comunidade é bem vinda",
+  "estenxao-codigo-aberto": "Esta é uma extensão de código aberto e toda contribuição da comunidade é bem vinda.",
   "codigo-fonte": "Código fonte",
   "colaboradores": "Colaboradores",
   "veja-quem-sao": "Veja quem são as pessoas que fazem parte desse projeto",
@@ -96,5 +96,9 @@
   "warmup-fim": "O warmup chegou ao fim!",
   "complete-mapas": "Mapas a serem aceitos:",
   "complete-rounds-minimos": "Rounds mínimos jogados:",
-  "complete-max-diff": "Diferença máxima entre placares:"
+  "complete-max-diff": "Diferença máxima entre placares:",
+  "complete-max-rounds": "Placar máximo da equipe vencedora:",
+  "chat": "Chat",
+  "ocultar-chat": "Ocultar Chat",
+  "chat-fixo-direita": "Chat fixo na direita"
 }
