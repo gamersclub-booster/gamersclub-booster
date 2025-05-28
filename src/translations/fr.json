@@ -95,5 +95,6 @@
   "warmup-fim": "L'échauffement est terminé!",
   "complete-mapas": "Cartes à accepter :",
   "complete-rounds-minimos": "Tours minimum joués :",
-  "complete-max-diff": "Différence maximale entre les scores :"
+  "complete-max-diff": "Différence maximale entre les scores :",
+  "auto-kick-negativados": "Supprimer joueurs avec une annotation négative"
 }

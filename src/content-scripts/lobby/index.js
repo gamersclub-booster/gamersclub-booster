@@ -16,7 +16,7 @@ import { ocultarNotificacaoComplete } from './ocultarNotificacaoComplete';
 import { ocultarSugestaoDeLobbies } from './ocultarSugestaoDeLobbies';
 import { tocarSomSeVoceForExpulsoDaLobby } from './tocarSomSeVoceForExpulsoDaLobby';
 import { autoMostrarIp } from './autoMostrarIp';
-
+import { autoKickNegativados } from './autoKickNegativados';
 
 chrome.storage.sync.get( null, function ( _result ) {
   if ( window.location.pathname.includes( 'partida' ) || window.location.pathname.includes( '/match/' ) ) {
@@ -70,6 +70,8 @@ const initLobby = async () => {
   partidaInfo();
   //Feature que mostra ip assim que server é liberado
   autoMostrarIp();
+  // Feature para auto remover negativados
+  autoKickNegativados();
 };
 
 const criarObserver = ( seletor, exec, type ) => {

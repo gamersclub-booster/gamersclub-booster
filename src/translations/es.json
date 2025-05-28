@@ -95,5 +95,6 @@
   "warmup-fim": "¡El calentamiento ha terminado!",
   "complete-mapas": "Mapas que se aceptarán:",
   "complete-rounds-minimos": "Rondas mínimas jugadas:",
-  "complete-max-diff": "Diferencia máxima entre puntuaciones:"
+  "complete-max-diff": "Diferencia máxima entre puntuaciones:",
+  "auto-kick-negativados": "Eliminar los jugadores con anotación negativa"
 }

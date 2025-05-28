@@ -96,5 +96,6 @@
   "warmup-fim": "O warmup chegou ao fim!",
   "complete-mapas": "Mapas a serem aceitos:",
   "complete-rounds-minimos": "Rounds mínimos jogados:",
-  "complete-max-diff": "Diferença máxima entre placares:"
+  "complete-max-diff": "Diferença máxima entre placares:",
+  "auto-kick-negativados": "Remover jogadores com anotação negativa"
 }

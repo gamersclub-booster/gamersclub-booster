@@ -60,7 +60,8 @@ export const features = [
   'warmupTimer',
   'enviarLinkLobby',
   'enviarPartida',
-  'lobbyPrivada'
+  'lobbyPrivada',
+  'autoKickNegativados'
 ];
 export const preVetosMapas = [
   {

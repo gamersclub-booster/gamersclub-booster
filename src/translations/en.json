@@ -95,5 +95,6 @@
   "warmup-fim": "Warmup is over!",
   "complete-mapas": "Maps to be accepted:",
   "complete-rounds-minimos": "Minimum rounds played:",
-  "complete-max-diff": "Maximum difference between scores:"
+  "complete-max-diff": "Maximum difference between scores:",
+  "auto-kick-negativados": "Remove players with negative record"
 }
