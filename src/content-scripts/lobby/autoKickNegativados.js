@@ -10,10 +10,10 @@ export const autoKickNegativados = () =>
 
           const $player = $( player );
 
-          // Verifica se possui anotação positiva
-          const hasPositiveNote = $player.find( '.PlayerAnnotations--negative' ).length > 0;
+          // Verifica se possui anotação negativa
+          const hasNegativeNote = $player.find( '.PlayerAnnotations--negative' ).length > 0;
 
-          if ( hasPositiveNote ) {
+          if ( hasNegativeNote ) {
             // Pega o id do wrapper que contém o número do jogador
             const idWrapper = $player.find( '[id^="player-trigger-wrapper-"]' ).attr( 'id' );
 
@@ -23,7 +23,9 @@ export const autoKickNegativados = () =>
               const formData = new FormData();
               formData.append( 'idplayer', playerId );
 
-              axios.post( `https://${GC_URL}/lobbyBeta/kickFromRoom`, formData )
+              axios.post( `https://${GC_URL}/lobbyBeta/kickFromRoom`, formData, {
+                withCredentials: true
+              } )
                 .then( response => {
                   console.log( `Player ${playerId} kickado com sucesso`, response.data );
                 } )
