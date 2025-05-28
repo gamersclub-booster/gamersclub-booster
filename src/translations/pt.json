@@ -97,5 +97,8 @@
   "complete-mapas": "Mapas a serem aceitos:",
   "complete-rounds-minimos": "Rounds mínimos jogados:",
   "complete-max-diff": "Diferença máxima entre placares:",
-  "complete-max-rounds": "Placar máximo da equipe vencedora:"
+  "complete-max-rounds": "Placar máximo da equipe vencedora:",
+  "chat": "Chat",
+  "ocultar-chat": "Ocultar Chat",
+  "chat-fixo-direita": "Chat fixo na direita"
 }

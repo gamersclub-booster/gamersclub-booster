@@ -96,5 +96,8 @@
   "complete-mapas": "Cartes à accepter :",
   "complete-rounds-minimos": "Tours minimum joués :",
   "complete-max-diff": "Différence maximale entre les scores :",
-  "complete-max-rounds": "Score maximum de l'équipe gagnante:"
+  "complete-max-rounds": "Score maximum de l'équipe gagnante:",
+  "chat": "Chat",
+  "ocultar-chat": "Cacher le chat",
+  "chat-fixo-direita": "Chat fixe à droite"
 }

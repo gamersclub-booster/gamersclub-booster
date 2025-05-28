@@ -96,5 +96,8 @@
   "complete-mapas": "Maps to be accepted:",
   "complete-rounds-minimos": "Minimum rounds played:",
   "complete-max-diff": "Maximum difference between scores:",
-  "complete-max-rounds": "Maximum score of the winning team:"
+  "complete-max-rounds": "Maximum score of the winning team:",
+  "chat": "Chat",
+  "ocultar-chat": "Hide Chat",
+  "chat-fixo-direita": "Fixed chat on the right"
 }
