@@ -481,6 +481,30 @@
             </label> -->
           </div>
         </div>
+        <h3 class="subtitulo" translation-key="chat"></h3>
+        <label
+          class="container"
+          for="ocultarChat"
+          title="Ocultar Chat"
+          translation-key="ocultar-chat"
+          translation-attr="title"
+        >
+          <p class="descricao" translation-key="ocultar-chat"></p>
+          <input type="checkbox" id="ocultarChat" />
+          <span class="checkmark"></span>
+        </label>
+        <label
+          class="container"
+          for="chatFixoDireita"
+          title="Chat fixo na direita"
+          translation-key="chat-fixo-direita"
+          translation-attr="title"
+        >
+          <p class="descricao" translation-key="chat-fixo-direita"></p>
+          <input type="checkbox" id="chatFixoDireita" />
+          <span class="checkmark"></span>
+        </label>
+        <br />
       </div>
 
       <div class="pagina" id="complete">
@@ -513,6 +537,22 @@
         <h3 style="display: inline-block; margin-right: 10px" id="rounds-diff">
           13 rounds
         </h3>
+
+        <p translation-key="complete-max-rounds"></p>
+
+        <input
+          type="range"
+          title="Rounds"
+          id="slider-rounds-max"
+          name="rounds-max"
+          min="0"
+          max="12"
+          value="12"
+        />
+        <h3 style="display: inline-block; margin-right: 10px" id="rounds-max">
+          12 rounds
+        </h3>
+
         <h3 class="subtitulo" translation-key="complete-mapas"></h3>
 
         <div class="row">

@@ -2,7 +2,7 @@
   "name": "gamersclub-booster",
   "description": "Extensão para navegadores que adiciona algumas melhorias na plataforma da GamersClub",
   "repository": "https://github.com/gamersclub-booster/gamersclub-booster",
-  "version": "2.65.7",
+  "version": "2.67.0",
   "main": "index.js",
   "license": "GPL-3.0",
   "commitlint": {
@@ -17,17 +17,17 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "axios": "^0.28.0",
-    "jquery": "^3.6.0"
+    "axios": "^0.28.1",
+    "jquery": "^3.7.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.6.0",
-    "@commitlint/config-conventional": "^19.6.0",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "copy-webpack-plugin": "^12.0.2",
     "eslint": "^7.32.0",
     "husky": "^9.1.7",
     "rimraf": "^3.0.2",
-    "webpack": "^5.96.1",
-    "webpack-cli": "^4.9.1"
+    "webpack": "^5.99.9",
+    "webpack-cli": "^4.10.0"
   }
 }

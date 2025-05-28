@@ -61,6 +61,8 @@ export const features = [
   'enviarLinkLobby',
   'enviarPartida',
   'lobbyPrivada',
+  'ocultarChat',
+  'chatFixoDireita',
   'autoKickNegativados'
 ];
 export const preVetosMapas = [

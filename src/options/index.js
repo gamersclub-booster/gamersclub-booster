@@ -624,6 +624,7 @@ function marcarJogarCom() {
 
 const sliderDiff = document.getElementById( 'slider-rounds-diff' );
 const sliderMin = document.getElementById( 'slider-rounds-min' );
+const sliderMax = document.getElementById( 'slider-rounds-max' );
 
 function popularComplete() {
   chrome.storage.sync.get( [ 'roundsDiff' ], response => {
@@ -635,6 +636,11 @@ function popularComplete() {
     if ( !response.roundsMin ) { return false; }
     sliderMin.value = response.roundsMin;
     completeMinText();
+  } );
+  chrome.storage.sync.get( [ 'roundsMax' ], response => {
+    if ( !response.roundsMax ) { return false; }
+    sliderMax.value = response.roundsMax;
+    completeMaxText();
   } );
 }
 
@@ -656,6 +662,16 @@ function completeMinText() {
   const value = sliderMin.value;
   document.getElementById( 'rounds-min' ).innerHTML = value + ' rounds';
   chrome.storage.sync.set( { 'roundsMin': value } );
+}
+
+sliderMax.addEventListener( 'change', function () {
+  completeMaxText();
+} );
+
+function completeMaxText() {
+  const value = sliderMax.value;
+  document.getElementById( 'rounds-max' ).innerHTML = value + ' rounds';
+  chrome.storage.sync.set( { 'roundsMax': value } );
 }
 
 limparOpcoesInvalidas();
