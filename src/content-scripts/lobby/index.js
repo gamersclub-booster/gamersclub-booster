@@ -17,7 +17,7 @@ import { ocultarSugestaoDeLobbies } from './ocultarSugestaoDeLobbies';
 import { tocarSomSeVoceForExpulsoDaLobby } from './tocarSomSeVoceForExpulsoDaLobby';
 import { autoMostrarIp } from './autoMostrarIp';
 import { ocultarChat, chatFixoDireita } from './chat';
-
+import { autoKickNegativados } from './autoKickNegativados';
 
 chrome.storage.sync.get( null, function ( _result ) {
   if ( window.location.pathname.includes( 'partida' ) || window.location.pathname.includes( '/match/' ) ) {
@@ -75,6 +75,8 @@ const initLobby = async () => {
   ocultarChat();
   // Feature que fixa o chat na direita
   chatFixoDireita();
+  // Feature para auto remover negativados
+  autoKickNegativados();
 };
 
 const criarObserver = ( seletor, exec, type ) => {
