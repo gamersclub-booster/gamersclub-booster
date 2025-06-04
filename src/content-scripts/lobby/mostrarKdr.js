@@ -57,7 +57,6 @@ export const mostrarKdr = mutations => {
 export const mostrarKdrDesafios = () => {
   const observer = new MutationObserver( () => {
     const challengeCardSelector = '.LobbyChallengeLineUpCard';
-    console.log();
     if ( $( challengeCardSelector ).length ) {
 
       $( challengeCardSelector ).find( 'a.LobbyPlayerVertical, .sala-lineup-imagem a' )
