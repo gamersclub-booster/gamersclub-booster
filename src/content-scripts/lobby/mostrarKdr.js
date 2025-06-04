@@ -111,9 +111,20 @@ export const mostrarKdrDesafios = () => {
 };
 
 
-// @TODO: Criar uma função que limpa o cache a cada X tempo ou a cada request e remove os ids que o TTL já expirou
-// const limparCache = () => {
-// }
+// Limpa o cache a cada 2 dias se o TTL for menor q 'agora'
+const limparCache = async ( cacheToClear, tempoDeCache ) => {
+  const ultimaLimpezaCache = await getFromStorage( `ultimaLimpeza${cacheToClear}` );
+  if ( !ultimaLimpezaCache || ultimaLimpezaCache < Date.now() - tempoDeCache ) {
+    const cache = await getFromStorage( cacheToClear ) || {};
+    for ( const [ id, obj ] of Object.entries( cache ) ) {
+      if ( obj.ttl <= Date.now() ) {
+        delete cache[id];
+      }
+    }
+    await setStorage( cacheToClear, cache );
+    await setStorage( `ultimaLimpeza${cacheToClear}`, Date.now() );
+  }
+};
 
 function getKdrFromTitle( title ) {
   const regexp = /KDR:\s+(\d+\.\d+)\s/g;
@@ -121,6 +132,9 @@ function getKdrFromTitle( title ) {
 }
 
 const fetchKdr = async id => {
+  // Limpa o cache
+  await limparCache( 'kdrCache', 20 * 60 * 1000 ); // 20 minutos
+
   const kdrCache = await getFromStorage( 'kdrCache' ) || {};
 
   if ( kdrCache?.[id]?.ttl > Date.now() ) {
@@ -146,6 +160,9 @@ const fetchKdr = async id => {
 
 
 export const fetchFlag = async id => {
+  // Limpa o cache
+  await limparCache( 'flagCache', 10 * 24 * 60 * 60 * 1000 ); // 10 dias
+
   const flagCache = await getFromStorage( 'flagCache' ) || {};
 
   const respostaPlayer = await fetch( `https://gamersclub.com.br/api/player-card/${id}`, {
@@ -160,10 +177,10 @@ export const fetchFlag = async id => {
 
   flagCache[id] = {
     flag,
-    // 20min de ttl
-    ttl: Date.now() + ( 20 * 60 * 1000 )
+    // TTL de 10 dias
+    ttl: Date.now() + ( 10 * 24 * 60 * 60 * 1000 )
   };
-  await setStorage( 'kdrCache', flagCache );
+  await setStorage( 'flagCache', flagCache );
 
   return flag;
 };
