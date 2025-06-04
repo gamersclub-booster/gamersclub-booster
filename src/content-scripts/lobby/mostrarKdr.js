@@ -57,8 +57,9 @@ export const mostrarKdr = mutations => {
 export const mostrarKdrDesafios = () => {
   const observer = new MutationObserver( () => {
     const challengeCardSelector = '.LobbyChallengeLineUpCard';
-
+    console.log();
     if ( $( challengeCardSelector ).length ) {
+
       $( challengeCardSelector ).find( 'a.LobbyPlayerVertical, .sala-lineup-imagem a' )
         .addBack( 'a.LobbyPlayerVertical, .sala-lineup-imagem a' )
         .each( ( _, element ) => {
@@ -144,10 +145,43 @@ const fetchKdr = async id => {
   return kdr;
 };
 
+
+export const fetchFlag = async id => {
+  const flagCache = await getFromStorage( 'flagCache' ) || {};
+
+  const respostaPlayer = await fetch( `https://gamersclub.com.br/api/player-card/${id}`, {
+    headers
+  } );
+  const dadosPlayer = await respostaPlayer.json();
+  const flag = dadosPlayer.countryFlag;
+
+  if ( flagCache?.[id]?.ttl > Date.now() ) {
+    return flagCache[id].countryFlag;
+  }
+
+  flagCache[id] = {
+    flag,
+    // 20min de ttl
+    ttl: Date.now() + ( 20 * 60 * 1000 )
+  };
+  await setStorage( 'kdrCache', flagCache );
+
+  return flag;
+};
+
 export const mostrarKdrSalaIntervaler = () => {
   setInterval( () => {
     $( '[class^=LobbyPlayerHorizontal]' ).each( ( _, player ) => {
       ( async () => {
+        const infoPlayer = $( player ).find( '.LobbyPlayerHorizontal__nickname a' ).attr( 'href' );
+        if ( infoPlayer ) {
+          const idPlayer = infoPlayer.split( '/' ).pop();
+          const flagUrl = await fetchFlag( idPlayer );
+          const flagImg = `<img src="${flagUrl}" alt="Flag" style="width: 16px; height: 11px; margin-right: 4px;">`;
+          if ( !$( player ).find( '.LobbyPlayerHorizontal__nickname img' ).length ) {
+            $( player ).find( '.LobbyPlayerHorizontal__nickname' ).prepend( flagImg );
+          }
+        }
         const kdrInfos = $( player ).find( '.LobbyPlayerHorizontal__kdr' );
         const kdrValue = kdrInfos.text().split( 'KDR' )[1];
         kdrInfos.attr( 'title', `[GC Booster]: KDR médio: ${kdrValue}` );
@@ -159,6 +193,7 @@ export const mostrarKdrSalaIntervaler = () => {
         } );
       } )();
     } );
+
   }, 1500 );
 };
 
