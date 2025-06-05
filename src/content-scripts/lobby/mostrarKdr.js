@@ -53,6 +53,66 @@ export const mostrarKdr = mutations => {
       } );
   } );
 };
+export const fetchFlag = mutations => {
+  $.each( mutations, async ( _, mutation ) => {
+    $( mutation.addedNodes )
+      .find( 'div.LobbyPlayerHorizontal, div.LobbyPlayerHorizontal--lite' )
+      .parent()
+      .each( async ( _, element ) => {
+        const $element = $( element );
+        const $nodeChildren = $element.find( '.LobbyPlayerHorizontal__nickname' );
+
+        const playerLink = $nodeChildren.children( 'a' ).attr( 'href' );
+        console.log( $nodeChildren );
+        const playerId = playerLink?.split( '/' ).pop() ;
+        if ( playerId ) {
+          await getPlayerInfo( playerId ).then( infoPlayer => {
+            const completeUrl = getUrlFlag( infoPlayer?.infoPlayer?.countryFlag );
+            const flagImg = `<img src="${completeUrl}" alt="Flag" class="b-lazy">`;
+            $nodeChildren.prepend( flagImg );
+          } ).catch( error => {
+            console.error( 'Erro ao obter informações do jogador:', error );
+          } );
+        }
+      } );
+  } );
+};
+
+const getUrlFlag = url => {
+  const infoPlayerFlag = url?.split( '/' ).pop(); // br.png
+  const upperCaseFlag = infoPlayerFlag?.split( '.' )[0].toUpperCase(); // BR
+  const urlFlag = `24x24/${upperCaseFlag}.png`; // 24x24/BR.png
+  const completeUrl = `https://gcv1-assets.gamersclub.com.br/assets/images/flags/${urlFlag}`;
+
+  return completeUrl;
+};
+
+
+const getPlayerInfo = async id => {
+  // Limpa o cache
+  await limparCache( 'infoPlayerCache', 10 * 24 * 60 * 60 * 1000 ); // 10 dias
+
+  const infoPlayerCache = await getFromStorage( 'infoPlayerCache' ) || {};
+
+  const respostaPlayer = await fetch( `https://gamersclub.com.br/api/player-card/${id}`, {
+    headers
+  } );
+  const dadosPlayer = await respostaPlayer.json();
+  const infoPlayer = dadosPlayer;
+
+  if ( infoPlayerCache?.[id]?.ttl > Date.now() ) {
+    return infoPlayerCache[id];
+  }
+
+  infoPlayerCache[id] = {
+    infoPlayer,
+    // TTL de 10 dias
+    ttl: Date.now() + ( 10 * 24 * 60 * 60 * 1000 )
+  };
+  await setStorage( 'infoPlayerCache', infoPlayerCache );
+
+  return infoPlayer ;
+};
 
 export const mostrarKdrDesafios = () => {
   const observer = new MutationObserver( () => {
@@ -110,7 +170,6 @@ export const mostrarKdrDesafios = () => {
   observer.observe( document.body, { childList: true, subtree: true } );
 };
 
-
 // Limpa o cache a cada 2 dias se o TTL for menor q 'agora'
 const limparCache = async ( cacheToClear, tempoDeCache ) => {
   const ultimaLimpezaCache = await getFromStorage( `ultimaLimpeza${cacheToClear}` );
@@ -158,46 +217,10 @@ const fetchKdr = async id => {
   return kdr;
 };
 
-
-export const fetchFlag = async id => {
-  // Limpa o cache
-  await limparCache( 'flagCache', 10 * 24 * 60 * 60 * 1000 ); // 10 dias
-
-  const flagCache = await getFromStorage( 'flagCache' ) || {};
-
-  const respostaPlayer = await fetch( `https://gamersclub.com.br/api/player-card/${id}`, {
-    headers
-  } );
-  const dadosPlayer = await respostaPlayer.json();
-  const flag = dadosPlayer.countryFlag;
-
-  if ( flagCache?.[id]?.ttl > Date.now() ) {
-    return flagCache[id].countryFlag;
-  }
-
-  flagCache[id] = {
-    flag,
-    // TTL de 10 dias
-    ttl: Date.now() + ( 10 * 24 * 60 * 60 * 1000 )
-  };
-  await setStorage( 'flagCache', flagCache );
-
-  return flag;
-};
-
 export const mostrarKdrSalaIntervaler = () => {
   setInterval( () => {
     $( '[class^=LobbyPlayerHorizontal]' ).each( ( _, player ) => {
       ( async () => {
-        const infoPlayer = $( player ).find( '.LobbyPlayerHorizontal__nickname a' ).attr( 'href' );
-        if ( infoPlayer ) {
-          const idPlayer = infoPlayer.split( '/' ).pop();
-          const flagUrl = await fetchFlag( idPlayer );
-          const flagImg = `<img src="${flagUrl}" alt="Flag" style="width: 16px; height: 11px; margin-right: 4px;">`;
-          if ( !$( player ).find( '.LobbyPlayerHorizontal__nickname img' ).length ) {
-            $( player ).find( '.LobbyPlayerHorizontal__nickname' ).prepend( flagImg );
-          }
-        }
         const kdrInfos = $( player ).find( '.LobbyPlayerHorizontal__kdr' );
         const kdrValue = kdrInfos.text().split( 'KDR' )[1];
         kdrInfos.attr( 'title', `[GC Booster]: KDR médio: ${kdrValue}` );

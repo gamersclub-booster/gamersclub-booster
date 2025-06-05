@@ -6,18 +6,18 @@ import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
 import { initListaBloqueio } from './botaoListaBloqueio';
 import { listaBloqueio } from './listaBloqueio';
 import { lobbyLink } from './lobbyLink';
-import { mostrarKdr, mostrarKdrRanked, mostrarKdrSalaIntervaler, mostrarKdrDesafios } from './mostrarKdr';
+import { fetchFlag, mostrarKdr, mostrarKdrDesafios, mostrarKdrRanked, mostrarKdrSalaIntervaler } from './mostrarKdr';
 import { partidaInfo } from './partidaInfo';
 import { somReady, somReadySetInterval } from './somReady';
 // import { adicionarFiltroKdr } from './filtrarKdr';
 import { infoChallenge, infoLobby } from './infoLobby';
 
+import { autoKickNegativados } from './autoKickNegativados';
+import { autoMostrarIp } from './autoMostrarIp';
+import { chatFixoDireita, ocultarChat } from './chat';
 import { ocultarNotificacaoComplete } from './ocultarNotificacaoComplete';
 import { ocultarSugestaoDeLobbies } from './ocultarSugestaoDeLobbies';
 import { tocarSomSeVoceForExpulsoDaLobby } from './tocarSomSeVoceForExpulsoDaLobby';
-import { autoMostrarIp } from './autoMostrarIp';
-import { ocultarChat, chatFixoDireita } from './chat';
-import { autoKickNegativados } from './autoKickNegativados';
 
 chrome.storage.sync.get( null, function ( _result ) {
   if ( window.location.pathname.includes( 'partida' ) || window.location.pathname.includes( '/match/' ) ) {
@@ -43,8 +43,10 @@ const initLobby = async () => {
 
   criarObserver( '#lobbies-wrapper', mostrarKdr );
   criarObserver( '#lobbies-wrapper', infoLobby );
+  criarObserver( '#lobbies-wrapper', fetchFlag );
   criarObserver( '.lobby', infoChallenge );
   criarObserver( '#GamersClubCSApp-globals-globalToaster', tocarSomSeVoceForExpulsoDaLobby );
+
 
   mostrarKdrDesafios();
 
