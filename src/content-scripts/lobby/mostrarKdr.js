@@ -67,7 +67,8 @@ export const fetchFlag = mutations => {
         const playerId = playerLink?.split( '/' ).pop() ;
         if ( playerId ) {
           await getPlayerInfo( playerId ).then( infoPlayer => {
-            const completeUrl = getUrlFlag( infoPlayer?.infoPlayer?.countryFlag );
+            console.log( 'Info do jogador:', infoPlayer );
+            const completeUrl = getUrlFlag( infoPlayer?.countryFlag );
             const flagImg = `<img src="${completeUrl}" alt="Flag" class="b-lazy">`;
             $nodeChildren.prepend( flagImg );
           } ).catch( error => {
@@ -90,7 +91,7 @@ const getUrlFlag = url => {
 
 const getPlayerInfo = async id => {
   // Limpa o cache
-  await limparCache( 'infoPlayerCache', 10 * 24 * 60 * 60 * 1000 ); // 10 dias
+  await limparCache( 'infoPlayerCache', 2 * 60 * 60 * 1000 ); // 3 horas
 
   const infoPlayerCache = await getFromStorage( 'infoPlayerCache' ) || {};
 
@@ -101,13 +102,13 @@ const getPlayerInfo = async id => {
   const infoPlayer = dadosPlayer;
 
   if ( infoPlayerCache?.[id]?.ttl > Date.now() ) {
-    return infoPlayerCache[id];
+    return infoPlayerCache[id]?.infoPlayer;
   }
 
   infoPlayerCache[id] = {
     infoPlayer,
     // TTL de 10 dias
-    ttl: Date.now() + ( 10 * 24 * 60 * 60 * 1000 )
+    ttl: Date.now() + ( 2 * 60 * 60 * 1000 ) // 2 horas
   };
   await setStorage( 'infoPlayerCache', infoPlayerCache );
 
@@ -271,3 +272,55 @@ export const mostrarKdrRanked = () => {
   }, 1500 );
 };
 
+// Example playerInfo
+// [ {
+//   infoPlayer: {
+//     'avatar': 'https://static.gamersclub.com.br/players/avatar/2230397/2230397_full.jpg',
+//     'countryFlag': 'https://gcv1-assets.gamersclub.com.br/assets/images/flags/br.png',
+//     'currentMonthMatchesHistory': {
+//       'loss': 8,
+//       'matches': 13,
+//       'wins': 5
+//     },
+//     'currentSeasonPosition': 0,
+//     'featuredMedal': {
+//       'color': '',
+//       'id': '1299',
+//       'image': 'https://gcv1-assets.gamersclub.com.br/images/medalhas/1299.png',
+//       'name': 'O Rei do Level 21 - Eu joguei'
+//     },
+//     'isCalibrating': false,
+//     'isMajorPlayer': false,
+//     'isMuted': 0,
+//     'isOfficial': false,
+//     'isPrime': true,
+//     'level': 15,
+//     'mainRole': {
+//       'gaming_role_id': '4',
+//       'role': 'entry_fragger',
+//       'role_order': '1'
+//     },
+//     'name': 'Jully Pocca',
+//     'playerFrame': 'https://assets.gamersclub.com.br/marketplace/avatar-frame-pixel-geek',
+//     'playerId': '2230397',
+//     'playerNick': '@jully.poca',
+//     'stats': [
+//       {
+//         'stat': 'KDR',
+//         'value': '0.73'
+//       },
+//       {
+//         'stat': 'ADR',
+//         'value': 70
+//       },
+//       {
+//         'stat': 'KAST%',
+//         'value': '65%'
+//       }
+//     ],
+//     'streaming': null,
+//     'subscription': 'plus',
+//     'verified': false
+//   },
+//   ttl: 1749963468500
+// } ];
