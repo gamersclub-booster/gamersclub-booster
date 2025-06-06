@@ -69,8 +69,30 @@ export const fetchFlag = mutations => {
           await getPlayerInfo( playerId ).then( infoPlayer => {
             console.log( 'Info do jogador:', infoPlayer );
             const completeUrl = getUrlFlag( infoPlayer?.countryFlag );
-            const flagImg = `<img src="${completeUrl}" alt="Flag" class="b-lazy">`;
+            const flagImg = `<img src="${completeUrl}" alt="Flag" class="gcboost-flag b-lazy draw-orange">`;
             $nodeChildren.prepend( flagImg );
+
+            const playerWins = infoPlayer?.currentMonthMatchesHistory?.wins || 0;
+            const playerLoss = infoPlayer?.currentMonthMatchesHistory?.loss || 0;
+            const playerMatches = infoPlayer?.currentMonthMatchesHistory?.matches || 0;
+            const calcWidthPercentage = Math.round( ( playerWins / playerMatches ) * 100 ) + '%';
+
+            const infos = `
+            <div class="gcboost-content">
+              <div class="gcboost-continaer">
+                <div class="gcboost-bar">
+                  <span class="wins" style="width: ${calcWidthPercentage}"></span>
+                  <span class="losses"></span>
+                </div>
+              </div>
+              <div class="gcboost-result">
+                <div>Vitórias: ${playerWins}</div>
+                <div class="gcboost-low">Partidas: ${playerMatches}</div>
+                <div>Derrotas: ${playerLoss}</div>
+              </div>
+            </div>`;
+            $element.prepend( infos );
+
           } ).catch( error => {
             console.error( 'Erro ao obter informações do jogador:', error );
           } );
@@ -88,22 +110,22 @@ const getUrlFlag = url => {
   return completeUrl;
 };
 
-
 const getPlayerInfo = async id => {
   // Limpa o cache
   await limparCache( 'infoPlayerCache', 2 * 60 * 60 * 1000 ); // 3 horas
 
   const infoPlayerCache = await getFromStorage( 'infoPlayerCache' ) || {};
 
-  const respostaPlayer = await fetch( `https://gamersclub.com.br/api/player-card/${id}`, {
-    headers
-  } );
-  const dadosPlayer = await respostaPlayer.json();
-  const infoPlayer = dadosPlayer;
-
   if ( infoPlayerCache?.[id]?.ttl > Date.now() ) {
     return infoPlayerCache[id]?.infoPlayer;
   }
+
+  const respostaPlayer = await fetch( `https://gamersclub.com.br/api/player-card/${id}`, {
+    headers
+  } );
+
+  const dadosPlayer = await respostaPlayer.json();
+  const infoPlayer = dadosPlayer;
 
   infoPlayerCache[id] = {
     infoPlayer,
