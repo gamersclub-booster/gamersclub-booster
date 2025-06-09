@@ -799,9 +799,11 @@ input[type="range"].filterKdr::-ms-track {
   display: flex;
   flex-direction: column;
   font-size: 0.75rem;
-  padding: 6px 8px 2px;
+  padding: 2px 6px 0px 6px;
   box-sizing: border-box;
   text-transform: capitalize;
+  background-color: black;
+  margin-bottom: 4px;
 }
 
 .gcboost-continaer {
@@ -875,4 +877,16 @@ input[type="range"].filterKdr::-ms-track {
   left: 2px;
   top: 2px;
   object-fit: none;
+}
+
+.LobbyPlayerHorizontal__kdr {
+  display: none !important;
+}
+
+.gcboost-kdr-color {
+  padding: 2px 4px;
+}
+
+.MyRoomPlayers .player {
+  background-color: black !important;
 }

@@ -251,7 +251,7 @@ export const mostrarInfoPlayerIntervaler = () => {
           const calcWidthPercentage = Math.round( ( playerWins / playerMatches ) * 100 ) + '%';
 
           const infos = `
-          <div class="gcboost-content">
+          <div class="gcboost-content draw-orange">
             <div class="gcboost-continaer">
               <div class="gcboost-bar">
                 <span class="wins" style="width: ${calcWidthPercentage}"></span>
@@ -260,6 +260,11 @@ export const mostrarInfoPlayerIntervaler = () => {
             </div>
             <div class="gcboost-result">
               <div>Vitórias: ${playerWins}</div>
+              <div class="gcboost-kdr-color" title="[GC Booster]: KDR médio: ${kdrValue}" style="background-color: ${kdrValue <= 2.5 ? '' :
+  'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)'};
+    background: ${kdrValue <= 2.5 ? levelColor[Math.round( kdrValue * 10 )] + 'cc' : 'initial'}
+    "
+              >${kdrValue}</div>
               <div>Derrotas: ${playerLoss}</div>
             </div>
           </div>`;
@@ -267,13 +272,8 @@ export const mostrarInfoPlayerIntervaler = () => {
           $nodeChildren.prepend( flagImg );
           $element.prepend( infos );
 
-          kdrInfos.attr( 'title', `[GC Booster]: KDR médio: ${kdrValue}` );
+          kdrInfos.attr( 'title' );
           kdrInfos.addClass( 'draw-orange' );
-          kdrInfos.css( {
-            'background': kdrValue <= 2.5 ? '' :
-              'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)',
-            'background-color': kdrValue <= 2.5 ? levelColor[Math.round( kdrValue * 10 )] + 'cc' : 'initial'
-          } );
 
         } ).catch( error => {
           console.error( 'Erro ao obter informações do jogador:', error );
