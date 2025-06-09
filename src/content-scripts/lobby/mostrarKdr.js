@@ -294,6 +294,51 @@ export const mostrarKdrRanked = () => {
   }, 1500 );
 };
 
+export const mostrarInfoPlayerIntervaler = () => {
+  setInterval( () => {
+    $( '#integrantesLobbyShort .LobbyPlayerHorizontal[id^="player-trigger-wrapper-"] ' ).each( async ( _, player ) => {
+      const fullId = $( player ).attr( 'id' );
+      const playerId = fullId.replace( 'player-trigger-wrapper-', '' );
+      ( async () => {
+        if ( playerId && !$( `#gcb-flag-${playerId}` ).length ) {
+          await getPlayerInfo( playerId ).then( infoPlayer => {
+            console.log( 'Info do jogador:', infoPlayer );
+            const completeUrl = getUrlFlag( infoPlayer?.countryFlag );
+            const flagImg = `<img src="${completeUrl}" id="gcb-flag-${playerId}" alt="Flag" class="gcboost-flag b-lazy draw-orange">`;
+            if ( !$( `#gcb-flag-${playerId}` ).length ) {
+              $( `.LobbyPlayerHorizontal#player-trigger-wrapper-${playerId} ` ).prepend( flagImg );
+            }
+
+            const playerWins = infoPlayer?.currentMonthMatchesHistory?.wins || 0;
+            const playerLoss = infoPlayer?.currentMonthMatchesHistory?.loss || 0;
+            const playerMatches = infoPlayer?.currentMonthMatchesHistory?.matches || 0;
+            const calcWidthPercentage = Math.round( ( playerWins / playerMatches ) * 100 ) + '%';
+
+            const infos = `
+          <div class="gcboost-content">
+            <div class="gcboost-continaer">
+              <div class="gcboost-bar">
+                <span class="wins" style="width: ${calcWidthPercentage}"></span>
+                <span class="losses"></span>
+              </div>
+            </div>
+            <div class="gcboost-result">
+              <div>Vitórias: ${playerWins}</div>
+              <div class="gcboost-low">Partidas: ${playerMatches}</div>
+              <div>Derrotas: ${playerLoss}</div>
+            </div>
+          </div>`;
+            $( player ).prepend( infos );
+          } ).catch( error => {
+            console.error( 'Erro ao obter informações do jogador:', error );
+          } );
+        }
+      } )();
+    } );
+
+  }, 1500 );
+};
+
 // Example playerInfo
 // [ {
 //   infoPlayer: {

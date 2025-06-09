@@ -6,7 +6,7 @@ import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
 import { initListaBloqueio } from './botaoListaBloqueio';
 import { listaBloqueio } from './listaBloqueio';
 import { lobbyLink } from './lobbyLink';
-import { fetchFlag, mostrarKdr, mostrarKdrDesafios, mostrarKdrRanked, mostrarKdrSalaIntervaler } from './mostrarKdr';
+import { mostrarKdr, mostrarKdrDesafios, mostrarKdrRanked, mostrarKdrSalaIntervaler, mostrarInfoPlayerIntervaler } from './mostrarKdr';
 import { partidaInfo } from './partidaInfo';
 import { somReady, somReadySetInterval } from './somReady';
 // import { adicionarFiltroKdr } from './filtrarKdr';
@@ -43,7 +43,7 @@ const initLobby = async () => {
 
   criarObserver( '#lobbies-wrapper', mostrarKdr );
   criarObserver( '#lobbies-wrapper', infoLobby );
-  criarObserver( '#lobbies-wrapper', fetchFlag );
+  // criarObserver( '#lobbies-wrapper', fetchFlag );
   criarObserver( '.lobby', infoChallenge );
   criarObserver( '#GamersClubCSApp-globals-globalToaster', tocarSomSeVoceForExpulsoDaLobby );
 
@@ -67,6 +67,7 @@ const initLobby = async () => {
   // Feature para mostrar kdr dos players
   mostrarKdrRanked();
   mostrarKdrSalaIntervaler();
+  mostrarInfoPlayerIntervaler();
   // Feature para filtrar por KD
   // adicionarFiltroKdr();
   // Feature de discord na hora de copiar o ip
