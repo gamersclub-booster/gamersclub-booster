@@ -515,7 +515,7 @@ input[type="range"].filterKdr::-ms-track {
 }
 
 .LobbyPlayerHorizontal__kick-button {
-  right: 3px !important;
+  right: 0 !important;
   left: auto !important;
   width: 25px !important;
   height: 100% !important;

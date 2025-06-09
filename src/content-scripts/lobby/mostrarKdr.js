@@ -53,54 +53,6 @@ export const mostrarKdr = mutations => {
       } );
   } );
 };
-export const fetchFlag = mutations => {
-  $.each( mutations, async ( _, mutation ) => {
-    $( mutation.addedNodes )
-      .find( 'div.LobbyPlayerHorizontal, div.LobbyPlayerHorizontal--lite' )
-      .parent()
-      .each( async ( _, element ) => {
-        const $element = $( element );
-        const $nodeChildren = $element.find( '.LobbyPlayerHorizontal__nickname' );
-
-        const playerLink = $nodeChildren.children( 'a' ).attr( 'href' );
-        console.log( $nodeChildren );
-        const playerId = playerLink?.split( '/' ).pop() ;
-        if ( playerId ) {
-          await getPlayerInfo( playerId ).then( infoPlayer => {
-            console.log( 'Info do jogador:', infoPlayer );
-            const completeUrl = getUrlFlag( infoPlayer?.countryFlag );
-            const flagImg = `<img src="${completeUrl}" alt="Flag" class="gcboost-flag b-lazy draw-orange">`;
-            $nodeChildren.prepend( flagImg );
-
-            const playerWins = infoPlayer?.currentMonthMatchesHistory?.wins || 0;
-            const playerLoss = infoPlayer?.currentMonthMatchesHistory?.loss || 0;
-            const playerMatches = infoPlayer?.currentMonthMatchesHistory?.matches || 0;
-            const calcWidthPercentage = Math.round( ( playerWins / playerMatches ) * 100 ) + '%';
-
-            const infos = `
-            <div class="gcboost-content">
-              <div class="gcboost-continaer">
-                <div class="gcboost-bar">
-                  <span class="wins" style="width: ${calcWidthPercentage}"></span>
-                  <span class="losses"></span>
-                </div>
-              </div>
-              <div class="gcboost-result">
-                <div>Vitórias: ${playerWins}</div>
-                <div class="gcboost-low">Partidas: ${playerMatches}</div>
-                <div>Derrotas: ${playerLoss}</div>
-              </div>
-            </div>`;
-            $element.prepend( infos );
-
-          } ).catch( error => {
-            console.error( 'Erro ao obter informações do jogador:', error );
-          } );
-        }
-      } );
-  } );
-};
-
 const getUrlFlag = url => {
   const infoPlayerFlag = url?.split( '/' ).pop(); // br.png
   const upperCaseFlag = infoPlayerFlag?.split( '.' )[0].toUpperCase(); // BR
@@ -240,25 +192,6 @@ const fetchKdr = async id => {
   return kdr;
 };
 
-export const mostrarKdrSalaIntervaler = () => {
-  setInterval( () => {
-    $( '[class^=LobbyPlayerHorizontal]' ).each( ( _, player ) => {
-      ( async () => {
-        const kdrInfos = $( player ).find( '.LobbyPlayerHorizontal__kdr' );
-        const kdrValue = kdrInfos.text().split( 'KDR' )[1];
-        kdrInfos.attr( 'title', `[GC Booster]: KDR médio: ${kdrValue}` );
-        kdrInfos.addClass( 'draw-orange' );
-        kdrInfos.css( {
-          'background': kdrValue <= 2.5 ? '' :
-            'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)',
-          'background-color': kdrValue <= 2.5 ? levelColor[Math.round( kdrValue * 10 )] + 'cc' : 'initial'
-        } );
-      } )();
-    } );
-
-  }, 1500 );
-};
-
 export const mostrarKdrRanked = () => {
   const kdrRankedInterval = setInterval( () => {
     $( '[class^=PlayerCardWrapper] [id^=trigger-]' ).each( ( _, element ) => {
@@ -296,25 +229,28 @@ export const mostrarKdrRanked = () => {
 
 export const mostrarInfoPlayerIntervaler = () => {
   setInterval( () => {
-    $( '#integrantesLobbyShort .LobbyPlayerHorizontal[id^="player-trigger-wrapper-"] ' ).each( async ( _, player ) => {
-      const fullId = $( player ).attr( 'id' );
-      const playerId = fullId.replace( 'player-trigger-wrapper-', '' );
-      ( async () => {
-        if ( playerId && !$( `#gcb-flag-${playerId}` ).length ) {
-          await getPlayerInfo( playerId ).then( infoPlayer => {
-            console.log( 'Info do jogador:', infoPlayer );
-            const completeUrl = getUrlFlag( infoPlayer?.countryFlag );
-            const flagImg = `<img src="${completeUrl}" id="gcb-flag-${playerId}" alt="Flag" class="gcboost-flag b-lazy draw-orange">`;
-            if ( !$( `#gcb-flag-${playerId}` ).length ) {
-              $( `.LobbyPlayerHorizontal#player-trigger-wrapper-${playerId} ` ).prepend( flagImg );
-            }
+    $( '#integrantesLobbyShort .player' ).each( async ( _, player ) => {
+      const $element = $( player );
 
-            const playerWins = infoPlayer?.currentMonthMatchesHistory?.wins || 0;
-            const playerLoss = infoPlayer?.currentMonthMatchesHistory?.loss || 0;
-            const playerMatches = infoPlayer?.currentMonthMatchesHistory?.matches || 0;
-            const calcWidthPercentage = Math.round( ( playerWins / playerMatches ) * 100 ) + '%';
+      if ( $element.attr( 'id' ) === undefined || $element.attr( 'id' ) === '' ) {
+        const $nodeChildren = $element.find( '.LobbyPlayerHorizontal__nickname' );
 
-            const infos = `
+        const kdrInfos = $element.find( '.LobbyPlayerHorizontal__kdr' );
+        const kdrValue = kdrInfos.text().split( 'KDR' )[1];
+
+        const playerLink = $nodeChildren.children( 'a' ).attr( 'href' );
+        const playerId = playerLink?.split( '/' ).pop() ;
+        $element.attr( 'id', `gcboost-content-${playerId}` );
+
+        await getPlayerInfo( playerId ).then( infoPlayer => {
+          const completeUrl = getUrlFlag( infoPlayer?.countryFlag );
+          const flagImg = `<img src="${completeUrl}" id="gcb-flag-${playerId}" alt="Flag" class="gcboost-flag b-lazy draw-orange">`;
+          const playerWins = infoPlayer?.currentMonthMatchesHistory?.wins || 0;
+          const playerLoss = infoPlayer?.currentMonthMatchesHistory?.loss || 0;
+          const playerMatches = infoPlayer?.currentMonthMatchesHistory?.matches || 0;
+          const calcWidthPercentage = Math.round( ( playerWins / playerMatches ) * 100 ) + '%';
+
+          const infos = `
           <div class="gcboost-content">
             <div class="gcboost-continaer">
               <div class="gcboost-bar">
@@ -324,19 +260,27 @@ export const mostrarInfoPlayerIntervaler = () => {
             </div>
             <div class="gcboost-result">
               <div>Vitórias: ${playerWins}</div>
-              <div class="gcboost-low">Partidas: ${playerMatches}</div>
               <div>Derrotas: ${playerLoss}</div>
             </div>
           </div>`;
-            $( player ).prepend( infos );
-          } ).catch( error => {
-            console.error( 'Erro ao obter informações do jogador:', error );
-          } );
-        }
-      } )();
-    } );
 
-  }, 1500 );
+          $nodeChildren.prepend( flagImg );
+          $element.prepend( infos );
+
+          kdrInfos.attr( 'title', `[GC Booster]: KDR médio: ${kdrValue}` );
+          kdrInfos.addClass( 'draw-orange' );
+          kdrInfos.css( {
+            'background': kdrValue <= 2.5 ? '' :
+              'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)',
+            'background-color': kdrValue <= 2.5 ? levelColor[Math.round( kdrValue * 10 )] + 'cc' : 'initial'
+          } );
+
+        } ).catch( error => {
+          console.error( 'Erro ao obter informações do jogador:', error );
+        } );
+      }
+    } );
+  }, 1000 );
 };
 
 // Example playerInfo
