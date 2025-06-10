@@ -1,5 +1,6 @@
 import { headers, levelColor } from '../../lib/constants';
 import { getFromStorage, setStorage } from '../../lib/storage';
+import { GC_URL } from '../../lib/constants';
 
 export const mostrarKdr = mutations => {
   $.each( mutations, async ( _, mutation ) => {
@@ -53,12 +54,47 @@ export const mostrarKdr = mutations => {
       } );
   } );
 };
+const getUrlFlag = url => {
+  const infoPlayerFlag = url?.split( '/' ).pop(); // br.png
+  const upperCaseFlag = infoPlayerFlag?.split( '.' )[0].toUpperCase(); // BR
+  const urlFlag = `24x24/${upperCaseFlag}.png`; // 24x24/BR.png
+  const completeUrl = `https://gcv1-assets.gamersclub.com.br/assets/images/flags/${urlFlag}`;
+
+  return completeUrl;
+};
+
+const getPlayerInfo = async id => {
+  // Limpa o cache
+  await limparCache( 'infoPlayerCache', 2 * 60 * 60 * 1000 ); // 3 horas
+
+  const infoPlayerCache = await getFromStorage( 'infoPlayerCache' ) || {};
+
+  if ( infoPlayerCache?.[id]?.ttl > Date.now() ) {
+    return infoPlayerCache[id]?.infoPlayer;
+  }
+
+  const respostaPlayer = await fetch( `https://${GC_URL}/api/player-card/${id}`, {
+    headers
+  } );
+
+  const dadosPlayer = await respostaPlayer.json();
+  const infoPlayer = dadosPlayer;
+
+  infoPlayerCache[id] = {
+    infoPlayer,
+    // TTL 20 min
+    ttl: Date.now() + ( 20 * 60 * 1000 )
+  };
+  await setStorage( 'infoPlayerCache', infoPlayerCache );
+
+  return infoPlayer ;
+};
 
 export const mostrarKdrDesafios = () => {
   const observer = new MutationObserver( () => {
     const challengeCardSelector = '.LobbyChallengeLineUpCard';
-
     if ( $( challengeCardSelector ).length ) {
+
       $( challengeCardSelector ).find( 'a.LobbyPlayerVertical, .sala-lineup-imagem a' )
         .addBack( 'a.LobbyPlayerVertical, .sala-lineup-imagem a' )
         .each( ( _, element ) => {
@@ -110,10 +146,20 @@ export const mostrarKdrDesafios = () => {
   observer.observe( document.body, { childList: true, subtree: true } );
 };
 
-
-// @TODO: Criar uma função que limpa o cache a cada X tempo ou a cada request e remove os ids que o TTL já expirou
-// const limparCache = () => {
-// }
+// Limpa o cache a cada 2 dias se o TTL for menor q 'agora'
+const limparCache = async ( cacheToClear, tempoDeCache ) => {
+  const ultimaLimpezaCache = await getFromStorage( `ultimaLimpeza${cacheToClear}` );
+  if ( !ultimaLimpezaCache || ultimaLimpezaCache < Date.now() - tempoDeCache ) {
+    const cache = await getFromStorage( cacheToClear ) || {};
+    for ( const [ id, obj ] of Object.entries( cache ) ) {
+      if ( obj.ttl <= Date.now() ) {
+        delete cache[id];
+      }
+    }
+    await setStorage( cacheToClear, cache );
+    await setStorage( `ultimaLimpeza${cacheToClear}`, Date.now() );
+  }
+};
 
 function getKdrFromTitle( title ) {
   const regexp = /KDR:\s+(\d+\.\d+)\s/g;
@@ -121,6 +167,9 @@ function getKdrFromTitle( title ) {
 }
 
 const fetchKdr = async id => {
+  // Limpa o cache
+  await limparCache( 'kdrCache', 20 * 60 * 1000 ); // 20 minutos
+
   const kdrCache = await getFromStorage( 'kdrCache' ) || {};
 
   if ( kdrCache?.[id]?.ttl > Date.now() ) {
@@ -142,24 +191,6 @@ const fetchKdr = async id => {
   await setStorage( 'kdrCache', kdrCache );
 
   return kdr;
-};
-
-export const mostrarKdrSalaIntervaler = () => {
-  setInterval( () => {
-    $( '[class^=LobbyPlayerHorizontal]' ).each( ( _, player ) => {
-      ( async () => {
-        const kdrInfos = $( player ).find( '.LobbyPlayerHorizontal__kdr' );
-        const kdrValue = kdrInfos.text().split( 'KDR' )[1];
-        kdrInfos.attr( 'title', `[GC Booster]: KDR médio: ${kdrValue}` );
-        kdrInfos.addClass( 'draw-orange' );
-        kdrInfos.css( {
-          'background': kdrValue <= 2.5 ? '' :
-            'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)',
-          'background-color': kdrValue <= 2.5 ? levelColor[Math.round( kdrValue * 10 )] + 'cc' : 'initial'
-        } );
-      } )();
-    } );
-  }, 1500 );
 };
 
 export const mostrarKdrRanked = () => {
@@ -197,3 +228,111 @@ export const mostrarKdrRanked = () => {
   }, 1500 );
 };
 
+export const mostrarInfoPlayerIntervaler = () => {
+  setInterval( () => {
+    $( '#integrantesLobbyShort .player' ).each( async ( _, player ) => {
+      const $element = $( player );
+
+      if ( $element.attr( 'id' ) === undefined || $element.attr( 'id' ) === '' ) {
+        const $nodeChildren = $element.find( '.LobbyPlayerHorizontal__nickname' );
+
+        const kdrInfos = $element.find( '.LobbyPlayerHorizontal__kdr' );
+        const kdrValue = kdrInfos.text().split( 'KDR' )[1];
+
+        const playerLink = $nodeChildren.children( 'a' ).attr( 'href' );
+        const playerId = playerLink?.split( '/' ).pop() ;
+        $element.attr( 'id', `gcboost-content-${playerId}` );
+
+        await getPlayerInfo( playerId ).then( infoPlayer => {
+          const completeUrl = getUrlFlag( infoPlayer?.countryFlag );
+          const flagImg = `<img src="${completeUrl}" id="gcb-flag-${playerId}" alt="Flag" class="gcboost-flag b-lazy draw-orange">`;
+          const playerWins = infoPlayer?.currentMonthMatchesHistory?.wins || 0;
+          const playerLoss = infoPlayer?.currentMonthMatchesHistory?.loss || 0;
+          const playerMatches = infoPlayer?.currentMonthMatchesHistory?.matches || 0;
+          const calcWidthPercentage = Math.round( ( playerWins / playerMatches ) * 100 ) + '%';
+
+          const infos = `
+          <div class="gcboost-content draw-orange">
+            <div class="gcboost-continaer">
+              <div class="gcboost-bar">
+                <span class="wins" style="width: ${calcWidthPercentage}"></span>
+                <span class="losses"></span>
+              </div>
+            </div>
+            <div class="gcboost-result">
+              <div>Vitórias: ${playerWins}</div>
+              <div class="gcboost-kdr-color" title="[GC Booster]: KDR médio: ${kdrValue}" style="background-color: ${kdrValue <= 2.5 ? '' :
+  'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)'};
+    background: ${kdrValue <= 2.5 ? levelColor[Math.round( kdrValue * 10 )] + 'cc' : 'initial'}
+    "
+              >${kdrValue}</div>
+              <div>Derrotas: ${playerLoss}</div>
+            </div>
+          </div>`;
+
+          $nodeChildren.prepend( flagImg );
+          $element.prepend( infos );
+
+          kdrInfos.attr( 'title' );
+          kdrInfos.addClass( 'draw-orange' );
+
+        } ).catch( error => {
+          console.error( 'Erro ao obter informações do jogador:', error );
+        } );
+      }
+    } );
+  }, 1000 );
+};
+
+// Example playerInfo
+// [ {
+//   infoPlayer: {
+//     'avatar': 'https://static.gamersclub.com.br/players/avatar/2230397/2230397_full.jpg',
+//     'countryFlag': 'https://gcv1-assets.gamersclub.com.br/assets/images/flags/br.png',
+//     'currentMonthMatchesHistory': {
+//       'loss': 8,
+//       'matches': 13,
+//       'wins': 5
+//     },
+//     'currentSeasonPosition': 0,
+//     'featuredMedal': {
+//       'color': '',
+//       'id': '1299',
+//       'image': 'https://gcv1-assets.gamersclub.com.br/images/medalhas/1299.png',
+//       'name': 'O Rei do Level 21 - Eu joguei'
+//     },
+//     'isCalibrating': false,
+//     'isMajorPlayer': false,
+//     'isMuted': 0,
+//     'isOfficial': false,
+//     'isPrime': true,
+//     'level': 15,
+//     'mainRole': {
+//       'gaming_role_id': '4',
+//       'role': 'entry_fragger',
+//       'role_order': '1'
+//     },
+//     'name': 'Jully Pocca',
+//     'playerFrame': 'https://assets.gamersclub.com.br/marketplace/avatar-frame-pixel-geek',
+//     'playerId': '2230397',
+//     'playerNick': '@jully.poca',
+//     'stats': [
+//       {
+//         'stat': 'KDR',
+//         'value': '0.73'
+//       },
+//       {
+//         'stat': 'ADR',
+//         'value': 70
+//       },
+//       {
+//         'stat': 'KAST%',
+//         'value': '65%'
+//       }
+//     ],
+//     'streaming': null,
+//     'subscription': 'plus',
+//     'verified': false
+//   },
+//   ttl: 1749963468500
+// } ];

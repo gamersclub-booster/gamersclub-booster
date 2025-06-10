@@ -100,5 +100,6 @@
   "complete-max-rounds": "Placar máximo da equipe vencedora:",
   "chat": "Chat",
   "ocultar-chat": "Ocultar Chat",
-  "chat-fixo-direita": "Chat fixo na direita"
+  "chat-fixo-direita": "Chat fixo na direita",
+  "auto-kick-negativados": "Remover jogadores com anotação negativa"
 }

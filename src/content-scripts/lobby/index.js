@@ -6,18 +6,18 @@ import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
 import { initListaBloqueio } from './botaoListaBloqueio';
 import { listaBloqueio } from './listaBloqueio';
 import { lobbyLink } from './lobbyLink';
-import { mostrarKdr, mostrarKdrRanked, mostrarKdrSalaIntervaler, mostrarKdrDesafios } from './mostrarKdr';
+import { mostrarInfoPlayerIntervaler, mostrarKdr, mostrarKdrDesafios, mostrarKdrRanked } from './mostrarKdr';
 import { partidaInfo } from './partidaInfo';
 import { somReady, somReadySetInterval } from './somReady';
 // import { adicionarFiltroKdr } from './filtrarKdr';
 import { infoChallenge, infoLobby } from './infoLobby';
 
+import { autoKickNegativados } from './autoKickNegativados';
+import { autoMostrarIp } from './autoMostrarIp';
+import { chatFixoDireita, ocultarChat } from './chat';
 import { ocultarNotificacaoComplete } from './ocultarNotificacaoComplete';
 import { ocultarSugestaoDeLobbies } from './ocultarSugestaoDeLobbies';
 import { tocarSomSeVoceForExpulsoDaLobby } from './tocarSomSeVoceForExpulsoDaLobby';
-import { autoMostrarIp } from './autoMostrarIp';
-import { ocultarChat, chatFixoDireita } from './chat';
-
 
 chrome.storage.sync.get( null, function ( _result ) {
   if ( window.location.pathname.includes( 'partida' ) || window.location.pathname.includes( '/match/' ) ) {
@@ -46,6 +46,7 @@ const initLobby = async () => {
   criarObserver( '.lobby', infoChallenge );
   criarObserver( '#GamersClubCSApp-globals-globalToaster', tocarSomSeVoceForExpulsoDaLobby );
 
+
   mostrarKdrDesafios();
 
   // Esconde a sugestão de lobbies para entrar
@@ -64,7 +65,7 @@ const initLobby = async () => {
   // adicionarBotaoForcarCriarLobby();
   // Feature para mostrar kdr dos players
   mostrarKdrRanked();
-  mostrarKdrSalaIntervaler();
+  mostrarInfoPlayerIntervaler();
   // Feature para filtrar por KD
   // adicionarFiltroKdr();
   // Feature de discord na hora de copiar o ip
@@ -75,6 +76,8 @@ const initLobby = async () => {
   ocultarChat();
   // Feature que fixa o chat na direita
   chatFixoDireita();
+  // Feature para auto remover negativados
+  autoKickNegativados();
 };
 
 const criarObserver = ( seletor, exec, type ) => {

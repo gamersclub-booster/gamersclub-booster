@@ -99,5 +99,6 @@
   "complete-max-rounds": "Maximum score of the winning team:",
   "chat": "Chat",
   "ocultar-chat": "Hide Chat",
-  "chat-fixo-direita": "Fixed chat on the right"
+  "chat-fixo-direita": "Fixed chat on the right",
+  "auto-kick-negativados": "Remove players with negative record"
 }
