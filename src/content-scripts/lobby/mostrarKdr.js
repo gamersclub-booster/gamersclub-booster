@@ -1,5 +1,6 @@
 import { headers, levelColor } from '../../lib/constants';
 import { getFromStorage, setStorage } from '../../lib/storage';
+import { GC_URL } from '../../lib/constants';
 
 export const mostrarKdr = mutations => {
   $.each( mutations, async ( _, mutation ) => {
@@ -72,7 +73,7 @@ const getPlayerInfo = async id => {
     return infoPlayerCache[id]?.infoPlayer;
   }
 
-  const respostaPlayer = await fetch( `https://gamersclub.com.br/api/player-card/${id}`, {
+  const respostaPlayer = await fetch( `https://${GC_URL}/api/player-card/${id}`, {
     headers
   } );
 
@@ -81,8 +82,8 @@ const getPlayerInfo = async id => {
 
   infoPlayerCache[id] = {
     infoPlayer,
-    // TTL de 10 dias
-    ttl: Date.now() + ( 2 * 60 * 60 * 1000 ) // 2 horas
+    // TTL 20 min
+    ttl: Date.now() + ( 20 * 60 * 1000 )
   };
   await setStorage( 'infoPlayerCache', infoPlayerCache );
 
