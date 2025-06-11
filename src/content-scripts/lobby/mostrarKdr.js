@@ -1,6 +1,5 @@
-import { headers, levelColor } from '../../lib/constants';
+import { GC_URL, headers, levelColor } from '../../lib/constants';
 import { getFromStorage, setStorage } from '../../lib/storage';
-import { GC_URL } from '../../lib/constants';
 
 export const mostrarKdr = mutations => {
   $.each( mutations, async ( _, mutation ) => {
@@ -245,36 +244,25 @@ export const mostrarInfoPlayerIntervaler = () => {
 
         await getPlayerInfo( playerId ).then( infoPlayer => {
           const completeUrl = getUrlFlag( infoPlayer?.countryFlag );
-          const flagImg = `<img src="${completeUrl}" id="gcb-flag-${playerId}" alt="Flag" class="gcboost-flag b-lazy draw-orange">`;
+          const flagImg = `<img src="${completeUrl}" id="gcb-flag-${playerId}" alt="Flag" class="gcboost-flag b-lazy">`;
           const playerWins = infoPlayer?.currentMonthMatchesHistory?.wins || 0;
           const playerLoss = infoPlayer?.currentMonthMatchesHistory?.loss || 0;
-          const playerMatches = infoPlayer?.currentMonthMatchesHistory?.matches || 0;
-          const calcWidthPercentage = Math.round( ( playerWins / playerMatches ) * 100 ) + '%';
 
           const infos = `
-          <div class="gcboost-content draw-orange">
-            <div class="gcboost-continaer">
-              <div class="gcboost-bar">
-                <span class="wins" style="width: ${calcWidthPercentage}"></span>
-                <span class="losses"></span>
-              </div>
-            </div>
+          <div class="gcboost-content">
             <div class="gcboost-result">
-              <div>Vitórias: ${playerWins}</div>
+              <div class="wins">Vitórias: ${playerWins}</div>
               <div class="gcboost-kdr-color" title="[GC Booster]: KDR médio: ${kdrValue}" style="background-color: ${kdrValue <= 2.5 ? '' :
   'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)'};
     background: ${kdrValue <= 2.5 ? levelColor[Math.round( kdrValue * 10 )] + 'cc' : 'initial'}
     "
               >${kdrValue}</div>
-              <div>Derrotas: ${playerLoss}</div>
+              <div class="losses">Derrotas: ${playerLoss}</div>
             </div>
           </div>`;
 
           $nodeChildren.prepend( flagImg );
-          $element.prepend( infos );
-
-          kdrInfos.attr( 'title' );
-          kdrInfos.addClass( 'draw-orange' );
+          $element.append( infos );
 
         } ).catch( error => {
           console.error( 'Erro ao obter informações do jogador:', error );

@@ -800,83 +800,34 @@ input[type="range"].filterKdr::-ms-track {
   flex-direction: column;
   font-size: 0.75rem;
   padding: 2px 6px 0px 6px;
-  box-sizing: border-box;
   text-transform: capitalize;
   background-color: black;
   margin-bottom: 4px;
 }
 
-.gcboost-continaer {
-  display: flex;
-  flex-direction: row;
-}
-
-.gcboost-bar {
-  width: 100%;
-  position: relative;
-  display: flex;
-  height: 10px;
-  margin: 5px 0px 0px;
-}
-
-.gcboost-bar .wins {
-  max-width: 100%;
-  width: 0%;
-  position: relative;
-  background: rgb(140, 168, 0);
-  z-index: 2;
-  transition: width 0.5s;
-  display: inline-block;
-  height: 4px;
-  border-radius: 4px;
-}
-
-.gcboost-bar .wins::after {
-  display: block;
-  position: absolute;
-  content: " ";
-  background: white;
-  width: 10px;
-  height: 10px;
-  border-radius: 100%;
-  top: -3px;
-  right: 0px;
-}
-
-.gcboost-bar .losses {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  right: 0px;
-  width: 100%;
-  background: rgb(251, 75, 86);
-  display: inline-block;
-  height: 4px;
-  border-radius: 4px;
-}
-
 .gcboost-result {
   display: flex;
-  flex-direction: row;
-  -webkit-box-pack: justify;
+  align-items: center;
   justify-content: space-between;
 }
 
-.gcboost-result .gcboost-low {
-  color: rgba(255, 255, 255, 0.45);
+.gcboost-result .wins {
+  color: rgb(140, 168, 0);
+}
+
+.gcboost-result .losses {
+  color: rgb(251, 75, 86);
 }
 
 .gcboost-flag {
   position: absolute;
-  left: 0;
   z-index: 1;
-  top: 0;
-  width: 20px;
-  transform: rotate(-45deg);
-  border-radius: 50%;
-  left: 2px;
-  top: 2px;
-  object-fit: none;
+  top: -12px;
+  left: -5px;
+  border-radius: 0px 15px 27px 0px;
+  width: 30px;
+  height: 32px;
+  box-sizing: border-box;
 }
 
 .LobbyPlayerHorizontal__kdr {
@@ -884,9 +835,36 @@ input[type="range"].filterKdr::-ms-track {
 }
 
 .gcboost-kdr-color {
-  padding: 2px 4px;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
 }
 
 .MyRoomPlayers .player {
   background-color: black !important;
+  margin: 4px !important;
+  margin-left: 5px !important;
+  padding: 8px 4px 2px 4px !important;
+  border-radius: 6px !important;
+  border: 1px solid #444 !important;
+  overflow: hidden !important;
+  border-left: 4px solid #f0b400 !important;
+}
+
+.LobbyPlayerHorizontal {
+  border: none !important;
+}
+
+.FriendsBrackets {
+  left: -4px !important;
+}
+
+.FriendsBrackets__line {
+  background-color: #f0b400 !important;
+}
+
+.FriendsBrackets__line .areFriends {
+  background-color: #f0b400 !important;
 }
