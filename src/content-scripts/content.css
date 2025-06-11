@@ -819,6 +819,10 @@ input[type="range"].filterKdr::-ms-track {
   color: rgb(251, 75, 86);
 }
 
+.player:hover .gcboost-flag {
+  opacity: 1;
+}
+
 .gcboost-flag {
   position: absolute;
   z-index: 1;
@@ -828,7 +832,8 @@ input[type="range"].filterKdr::-ms-track {
   width: 30px;
   height: 32px;
   box-sizing: border-box;
-  display: none;
+  opacity: 0;
+  transition: opacity 0.17s ease-in;
 }
 
 .LobbyPlayerHorizontal__kdr {
@@ -869,4 +874,8 @@ input[type="range"].filterKdr::-ms-track {
 
 .FriendsBrackets__line .areFriends {
   background-color: #f0b400 !important;
+}
+
+.FriendsBrackets--dashed .FriendsBrackets__line {
+  background: repeating-linear-gradient(180deg, #000, #000 .0625rem, #0000 .3125rem, #0000 0);
 }
