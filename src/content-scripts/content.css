@@ -802,7 +802,7 @@ input[type="range"].filterKdr::-ms-track {
   padding: 2px 6px 0px 6px;
   text-transform: capitalize;
   background-color: black;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .gcboost-result {
@@ -828,6 +828,7 @@ input[type="range"].filterKdr::-ms-track {
   width: 30px;
   height: 32px;
   box-sizing: border-box;
+  display: none;
 }
 
 .LobbyPlayerHorizontal__kdr {
@@ -837,7 +838,7 @@ input[type="range"].filterKdr::-ms-track {
 .gcboost-kdr-color {
   font-size: 12px;
   font-weight: bold;
-  padding: 2px 8px;
+  padding: 1px 8px;
   border-radius: 4px;
   white-space: nowrap;
 }
@@ -850,11 +851,12 @@ input[type="range"].filterKdr::-ms-track {
   border-radius: 6px !important;
   border: 1px solid #444 !important;
   overflow: hidden !important;
-  border-left: 4px solid #f0b400 !important;
+  border-left: 3px solid #f0b400 !important;
 }
 
 .LobbyPlayerHorizontal {
   border: none !important;
+  padding: 1px 4px 2px !important;
 }
 
 .FriendsBrackets {
