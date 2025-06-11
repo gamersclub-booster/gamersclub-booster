@@ -877,5 +877,9 @@ input[type="range"].filterKdr::-ms-track {
 }
 
 .FriendsBrackets--dashed .FriendsBrackets__line {
-  background: repeating-linear-gradient(180deg, #000, #000 .0625rem, #0000 .3125rem, #0000 0);
+  background: repeating-linear-gradient(180deg, #f0b400, #f0b400 .0625rem, #0000 .3125rem, #0000 0) !important;
+}
+
+.FriendsBrackets--dashed .FriendsBrackets__line .areFriends {
+  background: repeating-linear-gradient(90deg, #f0b400, #f0b400 .0625rem, #0000 .375rem, #0000 0) !important;
 }
