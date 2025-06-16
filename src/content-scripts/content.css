@@ -937,7 +937,8 @@ input[type="range"].filterKdr::-ms-track {
 .dark-mode .MyRoomFilters,
 .dark-mode .MyRoomPlayers,
 .dark-mode #lobby-filters-container,
-.dark-mode .lobby-header-ads>div {
+.dark-mode .lobby-header-ads>div,
+.dark-mode .ChatPreview {
   background: var(--color-black) !important;
 }
 
