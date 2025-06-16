@@ -228,27 +228,30 @@ export const mostrarKdrRanked = () => {
 };
 
 export const mostrarInfoPlayerIntervaler = () => {
-  setInterval( () => {
-    $( '#integrantesLobbyShort .player' ).each( async ( _, player ) => {
-      const $element = $( player );
+  chrome.storage.sync.get( [ 'autoInfoPlayer' ], function ( result ) {
+    if ( result.autoInfoPlayer ) {
+      document.body.classList.add( 'gboost-info-player' );
+      setInterval( () => {
+        $( '#integrantesLobbyShort .player' ).each( async ( _, player ) => {
+          const $element = $( player );
 
-      if ( $element.attr( 'id' ) === undefined || $element.attr( 'id' ) === '' ) {
-        const $nodeChildren = $element.find( '.LobbyPlayerHorizontal__nickname' );
+          if ( $element.attr( 'id' ) === undefined || $element.attr( 'id' ) === '' ) {
+            const $nodeChildren = $element.find( '.LobbyPlayerHorizontal__nickname' );
 
-        const kdrInfos = $element.find( '.LobbyPlayerHorizontal__kdr' );
-        const kdrValue = kdrInfos.text().split( 'KDR' )[1];
+            const kdrInfos = $element.find( '.LobbyPlayerHorizontal__kdr' );
+            const kdrValue = kdrInfos.text().split( 'KDR' )[1];
 
-        const playerLink = $nodeChildren.children( 'a' ).attr( 'href' );
-        const playerId = playerLink?.split( '/' ).pop() ;
-        $element.attr( 'id', `gcboost-content-${playerId}` );
+            const playerLink = $nodeChildren.children( 'a' ).attr( 'href' );
+            const playerId = playerLink?.split( '/' ).pop() ;
+            $element.attr( 'id', `gcboost-content-${playerId}` );
 
-        await getPlayerInfo( playerId ).then( infoPlayer => {
-          const completeUrl = getUrlFlag( infoPlayer?.countryFlag );
-          const flagImg = `<img src="${completeUrl}" id="gcb-flag-${playerId}" alt="Flag" class="gcboost-flag b-lazy">`;
-          const playerWins = infoPlayer?.currentMonthMatchesHistory?.wins || 0;
-          const playerLoss = infoPlayer?.currentMonthMatchesHistory?.loss || 0;
+            await getPlayerInfo( playerId ).then( infoPlayer => {
+              const completeUrl = getUrlFlag( infoPlayer?.countryFlag );
+              const flagImg = `<img src="${completeUrl}" id="gcb-flag-${playerId}" alt="Flag" class="gcboost-flag b-lazy">`;
+              const playerWins = infoPlayer?.currentMonthMatchesHistory?.wins || 0;
+              const playerLoss = infoPlayer?.currentMonthMatchesHistory?.loss || 0;
 
-          const infos = `
+              const infos = `
           <div class="gcboost-content">
             <div class="gcboost-result">
               <div class="wins">Vitórias: ${playerWins}</div>
@@ -261,15 +264,18 @@ export const mostrarInfoPlayerIntervaler = () => {
             </div>
           </div>`;
 
-          $nodeChildren.prepend( flagImg );
-          $element.append( infos );
+              $nodeChildren.prepend( flagImg );
+              $element.append( infos );
 
-        } ).catch( error => {
-          console.error( 'Erro ao obter informações do jogador:', error );
+            } ).catch( error => {
+              console.error( 'Erro ao obter informações do jogador:', error );
+            } );
+          }
         } );
-      }
-    } );
-  }, 1000 );
+      }, 1000 );
+    }
+  }
+  );
 };
 
 // Example playerInfo

@@ -757,8 +757,8 @@ input[type="range"].filterKdr::-ms-track {
 
 .chat-fixo-direita .ChatPreview__openButton {
   position: fixed;
-  right: 20px;
-  bottom: 20px;
+  right: 76px;
+  bottom: 12px;
   width: 80px;
   height: 80px;
   border-radius: 999px;
@@ -794,7 +794,7 @@ input[type="range"].filterKdr::-ms-track {
 }
 
 /* Barra informativa na lobby */
-.gcboost-content {
+.gboost-info-player .gcboost-content {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -805,25 +805,25 @@ input[type="range"].filterKdr::-ms-track {
   margin-bottom: 2px;
 }
 
-.gcboost-result {
+.gboost-info-player .gcboost-result {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.gcboost-result .wins {
+.gboost-info-player .gcboost-result .wins {
   color: rgb(140, 168, 0);
 }
 
-.gcboost-result .losses {
+.gboost-info-player .gcboost-result .losses {
   color: rgb(251, 75, 86);
 }
 
-.player:hover .gcboost-flag {
+.gboost-info-player .player:hover .gcboost-flag {
   opacity: 1;
 }
 
-.gcboost-flag {
+.gboost-info-player .gcboost-flag {
   position: absolute;
   z-index: 1;
   top: -12px;
@@ -836,11 +836,11 @@ input[type="range"].filterKdr::-ms-track {
   transition: opacity 0.17s ease-in;
 }
 
-.LobbyPlayerHorizontal__kdr {
+.gboost-info-player .LobbyPlayerHorizontal__kdr {
   display: none !important;
 }
 
-.gcboost-kdr-color {
+.gboost-info-player .gcboost-kdr-color {
   font-size: 12px;
   font-weight: bold;
   padding: 1px 8px;
@@ -848,7 +848,7 @@ input[type="range"].filterKdr::-ms-track {
   white-space: nowrap;
 }
 
-.MyRoomPlayers .player {
+.gboost-info-player .MyRoomPlayers .player {
   background-color: black !important;
   margin: 4px !important;
   margin-left: 5px !important;
@@ -859,27 +859,89 @@ input[type="range"].filterKdr::-ms-track {
   border-left: 3px solid #f0b400 !important;
 }
 
-.LobbyPlayerHorizontal {
+.gboost-info-player .LobbyPlayerHorizontal {
   border: none !important;
   padding: 1px 4px 2px !important;
 }
 
-.FriendsBrackets {
+.gboost-info-player .FriendsBrackets {
   left: -5px !important;
 }
 
-.FriendsBrackets__line {
+.gboost-info-player .FriendsBrackets__line {
   background-color: #f0b400 !important;
 }
 
-.FriendsBrackets__line .areFriends {
+.gboost-info-player .FriendsBrackets__line .areFriends {
   background-color: #f0b400 !important;
 }
 
-.FriendsBrackets--dashed .FriendsBrackets__line {
+.gboost-info-player .FriendsBrackets--dashed .FriendsBrackets__line {
   background: repeating-linear-gradient(180deg, #f0b400, #f0b400 .0625rem, #0000 .3125rem, #0000 0) !important;
 }
 
-.FriendsBrackets--dashed .FriendsBrackets__line .areFriends {
+.gboost-info-player .FriendsBrackets--dashed .FriendsBrackets__line .areFriends {
   background: repeating-linear-gradient(90deg, #f0b400, #f0b400 .0625rem, #0000 .375rem, #0000 0) !important;
+}
+
+/* Mostrar filtros */
+.gcboost-show-filter {
+  background-color: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 45px;
+  margin: 2px auto;
+}
+
+.gcboost-arrow-down {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid var(--color-orange);
+  border-top: none;
+  margin-left: -5px;
+}
+
+.gcboost-hide-filter .gcboost-arrow-down {
+  border-top: 5px solid var(--color-orange);
+  border-bottom: none;
+}
+
+.gcboost-hide-filter .MyRoomFilters .MyRoomFilters__section {
+  display: none !important;
+}
+
+.dark-mode .lobby-panel-content-info,
+.dark-mode .LobbyHeader,
+.dark-mode .Topbar__freeBg,
+.dark-mode #lobby-rooms-page,
+.dark-mode .GamersClubCSApp,
+.dark-mode .GamersClubApp,
+.dark-mode .LobbyHeader,
+.dark-mode .MainHeader,
+.dark-mode .MainHeader__logo,
+.dark-mode .footer,
+.dark-mode .no-padding.sitemap,
+.dark-mode body,
+.dark-mode .SettingsMenu,
+.dark-mode .gcf-room-list-scroll,
+.dark-mode .body-page,
+.dark-mode .home-secondary,
+.dark-mode .panel-content-info,
+.dark-mode .GamersClubCSApp>div,
+.dark-mode .gcf-menu,
+.dark-mode #suaLobby,
+.dark-mode .MyRoomFilters,
+.dark-mode .MyRoomPlayers,
+.dark-mode #lobby-filters-container,
+.dark-mode .lobby-header-ads>div,
+.dark-mode .ChatPreview {
+  background: var(--color-black) !important;
+}
+
+.dark-mode .ChallengesList {
+  background: #0e0e0e
 }

@@ -100,5 +100,7 @@
   "chat": "Chat",
   "ocultar-chat": "Hide Chat",
   "chat-fixo-direita": "Fixed chat on the right",
-  "auto-kick-negativados": "Remove players with negative record"
+  "auto-kick-negativados": "Remove players with negative record",
+  "hide-filter-lobby": "Hide filters",
+  "lobby-informations": "Player information in the Lobby"
 }
