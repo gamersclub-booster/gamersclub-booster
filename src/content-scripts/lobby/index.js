@@ -14,7 +14,7 @@ import { infoChallenge, infoLobby } from './infoLobby';
 
 import { autoKickNegativados } from './autoKickNegativados';
 import { autoMostrarIp } from './autoMostrarIp';
-import { chatFixoDireita, ocultarChat } from './chat';
+import { chatFixoDireita, ocultarChat, ocultarFiltrosSala } from './chat';
 import { ocultarNotificacaoComplete } from './ocultarNotificacaoComplete';
 import { ocultarSugestaoDeLobbies } from './ocultarSugestaoDeLobbies';
 import { tocarSomSeVoceForExpulsoDaLobby } from './tocarSomSeVoceForExpulsoDaLobby';
@@ -76,6 +76,7 @@ const initLobby = async () => {
   ocultarChat();
   // Feature que fixa o chat na direita
   chatFixoDireita();
+  ocultarFiltrosSala();
   // Feature para auto remover negativados
   autoKickNegativados();
 };

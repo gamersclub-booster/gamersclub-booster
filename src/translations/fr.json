@@ -100,5 +100,7 @@
   "chat": "Chat",
   "ocultar-chat": "Cacher le chat",
   "chat-fixo-direita": "Chat fixe à droite",
-  "auto-kick-negativados": "Supprimer joueurs avec une annotation négative"
+  "auto-kick-negativados": "Supprimer joueurs avec une annotation négative",
+  "hide-filter-lobby": "Masquer les filtres",
+  "lobby-informations": "Informations sur le joueur dans le salon"
 }

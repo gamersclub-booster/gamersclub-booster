@@ -1,6 +1,6 @@
-import { adicionarBarraLevel } from './barraLevel';
-import { autoDarkMode } from './autoDarkMode';
 import { autoCompactMode } from './autoCompactMode';
+import { autoDarkMode } from './autoDarkMode';
+import { adicionarBarraLevel } from './barraLevel';
 import injectPageScripts from './injectPageScripts';
 
 let generalOptions = [];
