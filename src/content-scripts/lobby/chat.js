@@ -27,3 +27,27 @@ export const chatFixoDireita = async () => {
     }
   } );
 };
+
+export const ocultarFiltrosSala = async () => {
+  await waitForElement( '.MyRoomFilters' );
+
+  chrome.storage.sync.get( [ 'autoHideFilter' ], function ( result ) {
+    if ( result.autoHideFilter ) {
+      const content = document.createElement( 'button' );
+      content.classList.add( 'gcboost-show-filter' );
+      content.classList.add( 'draw-orange' );
+      content.title = '[GC Booster]: Ocultar Filtros';
+
+      content.innerHTML = '<span class="gcboost-arrow-down" />';
+
+      content.addEventListener( 'click', () => {
+        document.body.classList.toggle( 'gcboost-hide-filter' );
+      } );
+
+      // Wait for the MyRoomFilters element to be available before appending
+      document.body.classList.add( 'gcboost-hide-filter' );
+      document.body.querySelector( '.MyRoomFilters' ).append( content );
+    }
+  }
+  );
+};

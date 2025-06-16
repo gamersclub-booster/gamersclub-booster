@@ -55,6 +55,8 @@ export const features = [
   'ocultarNotificacaoComplete',
   'autoDarkMode',
   'autoCompactMode',
+  'autoHideFilter',
+  'autoInfoPlayer',
   'autoConcordarTermosRanked',
   'mostrarLevelProgress',
   'warmupTimer',
