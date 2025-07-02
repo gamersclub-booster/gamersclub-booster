@@ -251,15 +251,17 @@ export const mostrarInfoPlayerIntervaler = () => {
               const playerWins = infoPlayer?.currentMonthMatchesHistory?.wins || 0;
               const playerLoss = infoPlayer?.currentMonthMatchesHistory?.loss || 0;
 
+              const colorKrdDefault = kdrValue <= 2 ? '#000' :
+                'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)';
+              const colorKdr = kdrValue <= 2 ? levelColor[Math.round( kdrValue * 10 )] : colorKrdDefault;
+
               const infos = `
           <div class="gcboost-content">
             <div class="gcboost-result">
               <div class="wins">Vitórias: ${playerWins}</div>
-              <div class="gcboost-kdr-color" title="[GC Booster]: KDR médio: ${kdrValue}" style="background-color: ${kdrValue <= 2.5 ? '' :
-  'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)'};
-    background: ${kdrValue <= 2.5 ? levelColor[Math.round( kdrValue * 10 )] + 'cc' : 'initial'}
-    "
-              >${kdrValue}</div>
+              <div class="gcboost-kdr-color" title="[GC Booster]: KDR médio: ${kdrValue}" style="background-color: ${colorKdr}">
+                ${kdrValue || '0.00'}
+              </div>
               <div class="losses">Derrotas: ${playerLoss}</div>
             </div>
           </div>`;
