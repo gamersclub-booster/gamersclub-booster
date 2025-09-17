@@ -6,6 +6,10 @@ import { alertaMsg } from '../../lib/messageAlerts';
 export const lobbyLink = mutations =>
   chrome.storage.sync.get( [ 'webhookLink', 'enviarLinkLobby' ], function ( result ) {
     if ( result.webhookLink && result.webhookLink.length > 0 ) {
+      if ( document.getElementById( 'discordLobbyButton' ) ) {
+        return;
+      }
+
       mutations.forEach( async mutation => {
         if ( !mutation.addedNodes ) {
           return;
@@ -19,35 +23,35 @@ export const lobbyLink = mutations =>
           ) {
             if ( result.webhookLink.startsWith( 'http' ) ) {
               if ( document.getElementById( 'discordLobbyButton' ) ) {
-                return false;
-              } else {
-                if ( result.enviarLinkLobby ) {
-                  const lobbyInfo = await axios.post( `https://${ GC_URL }/lobbyBeta/openRoom` );
-                  await sendLobby( result.webhookLink, lobbyInfo.data );
-                  alertaMsg( '[Discord] - Enviado com sucesso' );
-                }
-
-                const discordSvgUrl = chrome.runtime.getURL( '/images/discord.svg' );
-                $( 'button.MyRoomHeader__button.MyRoomHeader__button--delete-room' )
-                  .before(
-                    `<button
-                      class="MyRoomHeader__button"
-                      id="discordLobbyButton"
-                      title="Enviar lobby Discord"
-                      data-jsaction="gcCommonTooltip"
-                      data-tip-text="Enviar lobby Discord"
-                      style="width:75px;margin-left:var(--wasd-spacing-xxs);background:#5865F2"
-                      >
-                      <img src="${discordSvgUrl}" width="15px"/>
-                    </button>`
-                  );
-
-                document.getElementById( 'discordLobbyButton' ).addEventListener( 'click', async function () {
-                  const lobbyInfo = await axios.post( `https://${ GC_URL }/lobbyBeta/openRoom` );
-                  await sendLobby( result.webhookLink, lobbyInfo.data );
-                  alertaMsg( '[Discord] - Enviado com sucesso' );
-                } );
+                return;
               }
+
+              if ( result.enviarLinkLobby ) {
+                const lobbyInfo = await axios.post( `https://${ GC_URL }/lobbyBeta/openRoom` );
+                await sendLobby( result.webhookLink, lobbyInfo.data );
+                alertaMsg( '[Discord] - Enviado com sucesso' );
+              }
+
+              const discordSvgUrl = chrome.runtime.getURL( '/images/discord.svg' );
+              $( 'button.MyRoomHeader__button.MyRoomHeader__button--delete-room' )
+                .before(
+                  `<button
+                    class="MyRoomHeader__button"
+                    id="discordLobbyButton"
+                    title="Enviar lobby Discord"
+                    data-jsaction="gcCommonTooltip"
+                    data-tip-text="Enviar lobby Discord"
+                    style="width:75px;margin-left:var(--wasd-spacing-xxs);background:#5865F2"
+                    >
+                    <img src="${discordSvgUrl}" width="15px"/>
+                  </button>`
+                );
+
+              document.getElementById( 'discordLobbyButton' ).addEventListener( 'click', async function () {
+                const lobbyInfo = await axios.post( `https://${ GC_URL }/lobbyBeta/openRoom` );
+                await sendLobby( result.webhookLink, lobbyInfo.data );
+                alertaMsg( '[Discord] - Enviado com sucesso' );
+              } );
             }
           }
         }
