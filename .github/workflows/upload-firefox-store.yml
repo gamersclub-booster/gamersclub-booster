@@ -20,10 +20,10 @@ jobs:
         run: unzip -p release.xpi manifest.json >manifest.json
 
       - name: Upload to Firefox Store
-        uses: trmcnvn/firefox-addon@v1
+        uses: wdzeng/firefox-addon@v1
         with:
-          uuid: ${{ secrets.FIREFOX_STORE_UUID }}
-          xpi: "release.xpi"
-          manifest: manifest.json
-          api-key: ${{ secrets.FIREFOX_STORE_API_KEY }}
-          api-secret: ${{ secrets.FIREFOX_STORE_API_SECRET }}
+          addon-guid: ${{ secrets.FIREFOX_STORE_UUID }}
+          xpi-path: "release.xpi"
+          self-hosted: false
+          jwt-issuer: ${{ secrets.FIREFOX_JWT_ISSUER }}
+          jwt-secret: ${{ secrets.FIREFOX_JWT_SECRET }}
