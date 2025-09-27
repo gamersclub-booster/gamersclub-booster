@@ -914,6 +914,33 @@ input[type="range"].filterKdr::-ms-track {
   display: none !important;
 }
 
+/* Spinner Animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.gcbooster-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-gray);
+  border-top: 2px solid var(--color-orange);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 5px auto;
+}
+
+.gcbooster-info-player-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 40px;
+  background: transparent;
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+
+
 .dark-mode .lobby-panel-content-info,
 .dark-mode .LobbyHeader,
 .dark-mode .Topbar__freeBg,
