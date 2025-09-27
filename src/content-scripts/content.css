@@ -935,7 +935,7 @@ input[type="range"].filterKdr::-ms-track {
   justify-content: center;
   align-items: center;
   min-height: 40px;
-  background: var(--color-transparent-black);
+  background: transparent;
   border-radius: 4px;
   margin-bottom: 5px;
 }
