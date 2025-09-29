@@ -142,9 +142,7 @@ const createModalForElementNew = ( element, getPlayersIdsFunction, type, lobbyId
 
       for ( const player of players ) {
         const response = await getPlayerInfo( player );
-
-        $( `#loading-${player}` ).remove();
-        $( `#infos_lobby_${lobbyId}` ).append( createDivPlayers( response ) );
+        $( `#loading-${player}` ).replaceWith( createDivPlayers( response ) );
       }
       $.each( $( '.gcbooster_lupa' ), ( _, lupa ) => { lupa.style = 'display: flex'; } );
     } );
