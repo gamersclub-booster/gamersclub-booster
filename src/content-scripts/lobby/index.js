@@ -6,6 +6,7 @@ import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
 import { initListaBloqueio } from './botaoListaBloqueio';
 import { listaBloqueio } from './listaBloqueio';
 import { lobbyLink } from './lobbyLink';
+import { autoCopyLobbyLink } from './autoCopyLobbyLink';
 import { mostrarInfoPlayerIntervaler, mostrarKdr, mostrarKdrDesafios, mostrarKdrRanked } from './mostrarKdr';
 import { partidaInfo } from './partidaInfo';
 import { somReady, somReadySetInterval } from './somReady';
@@ -39,6 +40,7 @@ const initLobby = async () => {
 
   criarObserver( '#lobbyContent', autoFixarMenuLobby );
   criarObserver( '.lobby', lobbyLink );
+  criarObserver( '.lobby', autoCopyLobbyLink );
   criarObserver( '#lobbyContent', listaBloqueio );
 
   criarObserver( '#lobbies-wrapper', mostrarKdr );
