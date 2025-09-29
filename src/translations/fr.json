@@ -102,5 +102,6 @@
   "chat-fixo-direita": "Chat fixe à droite",
   "auto-kick-negativados": "Supprimer joueurs avec une annotation négative",
   "hide-filter-lobby": "Masquer les filtres",
-  "lobby-informations": "Informations sur le joueur dans le salon"
+  "lobby-informations": "Informations sur le joueur dans le salon",
+  "auto-copy-lobby-link": "Copier automatiquement le lien du salon"
 }
