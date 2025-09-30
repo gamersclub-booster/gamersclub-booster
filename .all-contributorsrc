@@ -241,6 +241,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "LsSens",
+      "name": "Lucas Sens",
+      "avatar_url": "https://avatars.githubusercontent.com/u/104603408?v=4",
+      "profile": "https://github.com/LsSens",
+      "contributions": [
+        "code",
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
