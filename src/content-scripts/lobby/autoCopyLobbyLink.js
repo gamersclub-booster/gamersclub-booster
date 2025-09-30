@@ -3,7 +3,6 @@ import { GC_URL } from '../../lib/constants';
 import { alertaMsg } from '../../lib/messageAlerts';
 
 let lobbyLinkCopied = false;
-let currentLobbyId = null;
 
 const copyToClipboard = async text => {
   try {
@@ -63,14 +62,11 @@ export const autoCopyLobbyLink = mutations => {
 
             if ( !url ) { throw new Error( 'Lobby URL não disponível' ); }
 
-            if ( currentLobbyId !== lobbyId ) {
-              const copySuccess = await copyToClipboard( url );
+            const copySuccess = await copyToClipboard( url );
 
-              if ( copySuccess ) {
-                alertaMsg( '[GC Booster] - Link da lobby copiado automaticamente!' );
-                lobbyLinkCopied = true;
-                currentLobbyId = lobbyId;
-              }
+            if ( copySuccess ) {
+              alertaMsg( '[GC Booster] - Link da lobby copiado automaticamente!' );
+              lobbyLinkCopied = true;
             }
           } catch ( error ) {
             console.error( 'Erro ao obter/copiar link da lobby:', error );
@@ -83,5 +79,4 @@ export const autoCopyLobbyLink = mutations => {
 
 export const resetLobbyLinkState = () => {
   lobbyLinkCopied = false;
-  currentLobbyId = null;
 };
