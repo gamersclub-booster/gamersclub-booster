@@ -102,5 +102,6 @@
   "chat-fixo-direita": "Fixed chat on the right",
   "auto-kick-negativados": "Remove players with negative record",
   "hide-filter-lobby": "Hide filters",
-  "lobby-informations": "Player information in the Lobby"
+  "lobby-informations": "Player information in the Lobby",
+  "auto-copy-lobby-link": "Automatically copy the lobby link"
 }

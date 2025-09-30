@@ -128,9 +128,21 @@ const createModalForElementNew = ( element, getPlayersIdsFunction, type, lobbyId
       const players = getPlayersIdsFunction( element );
 
       $( `#infos_lobby_${lobbyId}` ).append( createClose( lobbyId ) );
+
+      // Cria spinners
+      players.forEach( playerId => {
+        const loadingDiv = $( '<div/>', {
+          id: `loading-${playerId}`,
+          class: 'gcbooster-info-player-loading'
+        } ).append( $( '<div/>', {
+          class: 'gcbooster-spinner'
+        } ) );
+        $( `#infos_lobby_${lobbyId}` ).append( loadingDiv );
+      } );
+
       for ( const player of players ) {
         const response = await getPlayerInfo( player );
-        $( `#infos_lobby_${lobbyId}` ).append( createDivPlayers( response ) );
+        $( `#loading-${player}` ).replaceWith( createDivPlayers( response ) );
       }
       $.each( $( '.gcbooster_lupa' ), ( _, lupa ) => { lupa.style = 'display: flex'; } );
     } );

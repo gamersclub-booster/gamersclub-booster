@@ -232,6 +232,25 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "N7z",
+      "name": "Paulo Junior",
+      "avatar_url": "https://avatars.githubusercontent.com/u/73448096?v=4",
+      "profile": "https://github.com/N7z",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "LsSens",
+      "name": "Lucas Sens",
+      "avatar_url": "https://avatars.githubusercontent.com/u/104603408?v=4",
+      "profile": "https://github.com/LsSens",
+      "contributions": [
+        "code",
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,

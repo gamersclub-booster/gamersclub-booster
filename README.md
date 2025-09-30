@@ -1,5 +1,5 @@
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-24-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-26-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # GamersClub Booster
@@ -63,6 +63,8 @@ Obrigado vai para essas pessoas maravilhosas ([emoji key](https://allcontributor
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/DanielHeringer"><img src="https://avatars.githubusercontent.com/u/35229999?v=4?s=100" width="100px;" alt="Daniel Lamounier Heringer"/><br /><sub><b>Daniel Lamounier Heringer</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=DanielHeringer" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/AlexGabrielSilveira"><img src="https://avatars.githubusercontent.com/u/61164399?v=4?s=100" width="100px;" alt="Alex"/><br /><sub><b>Alex</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=AlexGabrielSilveira" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://medium.com/@joaopedrocosta.contato"><img src="https://avatars.githubusercontent.com/u/26715721?v=4?s=100" width="100px;" alt="João Costa"/><br /><sub><b>João Costa</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=llinq" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/N7z"><img src="https://avatars.githubusercontent.com/u/73448096?v=4?s=100" width="100px;" alt="Paulo Junior"/><br /><sub><b>Paulo Junior</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=N7z" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/LsSens"><img src="https://avatars.githubusercontent.com/u/104603408?v=4?s=100" width="100px;" alt="Lucas Sens"/><br /><sub><b>Lucas Sens</b></sub></a><br /><a href="https://github.com/gamersclub-booster/gamersclub-booster/commits?author=LsSens" title="Code">💻</a> <a href="https://github.com/gamersclub-booster/gamersclub-booster/issues?q=author%3ALsSens" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
