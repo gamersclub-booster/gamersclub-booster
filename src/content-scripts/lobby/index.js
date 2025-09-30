@@ -6,7 +6,7 @@ import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
 import { initListaBloqueio } from './botaoListaBloqueio';
 import { listaBloqueio } from './listaBloqueio';
 import { lobbyLink } from './lobbyLink';
-import { autoCopyLobbyLink } from './autoCopyLobbyLink';
+import { autoCopyLobbyLink, resetLobbyLinkState } from './autoCopyLobbyLink';
 import { mostrarInfoPlayerIntervaler, mostrarKdr, mostrarKdrDesafios, mostrarKdrRanked } from './mostrarKdr';
 import { partidaInfo } from './partidaInfo';
 import { somReady, somReadySetInterval } from './somReady';
@@ -33,6 +33,9 @@ const initLobbyPartida = async () => {
 };
 
 const initLobby = async () => {
+  // Resetar estado do auto copy lobby link quando entrar no lobby
+  resetLobbyLinkState();
+
   // Esses dois não estão funcionando, verificar o motivo, criei o intervaler pra substituir por enquanto...
   criarObserver( '.lobby,.ranking', somReady );
   criarObserver( '.lobby,.ranking', autoAceitarReady );
