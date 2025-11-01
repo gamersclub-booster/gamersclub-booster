@@ -1,5 +1,7 @@
 export function getUserInfo() {
-  const rawUserObject = document.documentElement.innerHTML.match( /window\.hj\('identify', userId, ({[^}]*})/ )?.[1];
+  const rawUserObject = document.documentElement.innerHTML.match(
+    /window\.hj\('identify',\s*userId,\s*({[\s\S]*?})\s*\)/
+  )?.[1];
   const doubleQuotedUserObject = rawUserObject.replace( /'/g, '"' );
   const userObject = JSON.parse( doubleQuotedUserObject );
   return userObject;
