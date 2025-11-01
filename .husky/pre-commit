@@ -1,4 +1,4 @@
 #!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
+# pre-commit hook Husky v10+
 
 npm run lint
