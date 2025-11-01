@@ -1,957 +1,719 @@
 <!DOCTYPE html>
 <!-- HTML5 -->
 <html>
-  <head>
-    <title>Gamers Club Booster</title>
 
-    <meta charset="utf-8" />
-    <link
-      href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700|Oswald:300,400,700|Teko"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://assets.gamersclub.com.br/csgo-frontend/static/css/main.css?v=1209"
-    />
-    <link
-      rel="stylesheet"
-      href="https://assets.gamersclub.com.br/header/css/app.css?v=1210"
-    />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
+<head>
+  <title>Gamers Club Booster</title>
 
-  <body>
-    <div class="header">
+  <meta charset="utf-8" />
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700|Oswald:300,400,700|Teko"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://assets.gamersclub.com.br/csgo-frontend/static/css/main.css?v=1209" />
+  <link rel="stylesheet" href="https://assets.gamersclub.com.br/header/css/app.css?v=1210" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="header">
+    <div>
+      <a href="https://gamersclub-booster.github.io" class="logo" target="_blank"
+        translation-key="gamersclub-booster"></a>
+      <div id="versao">
+        <div class="versao-texto" translation-key="versao-footer"></div>
+        <a href="https://github.com/gamersclub-booster/gamersclub-booster/releases/" rel="noopener noreferrer"
+          target="_blank" title="Versão">
+          <div class="versao"></div>
+        </a>
+
+        <!-- FOOTER -->
+        <div id="footer" class="footer">
+          <div id="translate">
+            <div class="translate" translation-key="idioma"></div>
+            <div class="translate-option" id="traducao-pt">PT-BR</div>
+            <div class="translate-option" id="traducao-en">EN</div>
+            <div class="translate-option" id="traducao-es">ES</div>
+            <div class="translate-option" id="traducao-fr">FR</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <img src="images/icon_48.png" alt="Gamers Club Booster" />
+  </div>
+  <div class="containerMensagem">
+    <div class="caixaMensagem" translation-key="mensagemDeEntendi"></div>
+    <button id="botaoEntendi" class="CustomButton CustomButton--secondary">
+      <span class="CustomButton__text" translation-key="botaoDeEntendi"></span>
+    </button>
+  </div>
+
+  <div class="conteudo">
+    <!-- MENU -->
+    <div class="menu">
+      <ul>
+        <li id="link-novidades" class="active">
+          <img src="images/menu/novidades.svg" alt="Novidades" class="img-menu" />
+          <a href="#novidades" translation-key="news-menu"></a>
+        </li>
+        <li id="link-geral">
+          <img src="images/menu/geral.svg" alt="Geral" class="img-menu" />
+          <a href="#geral" translation-key="geral"></a>
+        </li>
+        <li id="link-sons">
+          <img src="images/menu/som.svg" alt="Som" class="img-menu" />
+          <a href="#sons" translation-key="sons"></a>
+        </li>
+        <li id="link-mapas" style="display: none">
+          <img src="images/menu/lobby.svg" alt="Mapas" class="img-menu" />
+          <a href="#mapas" translation-key="mapas"></a>
+        </li>
+        <li id="link-lobby">
+          <img src="images/menu/lobby.svg" alt="Lobby" class="img-menu" />
+          <a href="#lobby" translation-key="lobby"></a>
+        </li>
+        <li id="link-complete">
+          <img src="images/menu/complete.svg" alt="Complete" class="img-menu" />
+          <a href="#complete" translation-key="complete"></a>
+        </li>
+        <li id="link-integracoes">
+          <img src="images/menu/integracoes.svg" alt="Integrações" class="img-menu" />
+          <a href="#integracoes" translation-key="discord"></a>
+        </li>
+        <li id="link-blocklist">
+          <img src="images/menu/bloqueio.svg" alt="Blocks" class="img-menu" />
+          <a href="#blocklist" translation-key="blockList"></a>
+        </li>
+        <li id="link-backup">
+          <img src="images/menu/backup.svg" alt="Backup" class="img-menu" />
+          <a href="#backup" translation-key="backup"></a>
+        </li>
+        <li id="link-contato">
+          <img src="images/menu/contato.svg" alt="Contato" class="img-menu" />
+          <a href="#contato" translation-key="contato"></a>
+        </li>
+        <li id="link-sobre">
+          <img src="images/menu/sobre.svg" alt="Sobre" class="img-menu" />
+          <a href="#sobre" translation-key="sobre"></a>
+        </li>
+        <li id="link-doacao">
+          <img src="images/menu/doacao.svg" alt="Doação" class="img-menu" />
+          <a href="#doacao" translation-key="donate"></a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- NOVIDADES -->
+    <div class="pagina ativo" id="novidades">
       <div>
-        <a
-          href="https://gamersclub-booster.github.io"
-          class="logo"
-          target="_blank"
-          translation-key="gamersclub-booster"
-        ></a>
-        <div id="versao">
-          <div class="versao-texto" translation-key="versao-footer"></div>
-          <a
-            href="https://github.com/gamersclub-booster/gamersclub-booster/releases/"
-            rel="noopener noreferrer"
-            target="_blank"
-            title="Versão"
-          >
-            <div class="versao"></div>
-          </a>
-
-          <!-- FOOTER -->
-          <div id="footer" class="footer">
-            <div id="translate">
-              <div class="translate" translation-key="idioma"></div>
-              <div class="translate-option" id="traducao-pt">PT-BR</div>
-              <div class="translate-option" id="traducao-en">EN</div>
-              <div class="translate-option" id="traducao-es">ES</div>
-              <div class="translate-option" id="traducao-fr">FR</div>
-            </div>
-          </div>
-        </div>
+        <h3 class="subtitulo">Estatísticas do Jogador!</h3>
+        <img src="images/news/stats_collapsed.jpg" alt="Estatísticas do Jogador" />
+        <p>
+          Visualize suas estatísticas detalhadas de desempenho nos mapas!
+          Descubra qual é o seu <strong>melhor mapa</strong> e o <strong>pior mapa</strong>:
+          <br><br>
+          🏆 <strong>Melhor mapa:</strong> de_dust2 — 55,56% de win rate<br>
+          ⚠️ <strong>Pior mapa:</strong> de_inferno — 10% de win rate
+          <br><br>
+          Acompanhe sua taxa de vitórias e partidas jogadas em cada mapa para aprimorar suas estratégias.
+        </p>
+        <img src="images/news/stats_expand.jpg" alt="Estatísticas do Jogador" />
       </div>
-      <img src="images/icon_48.png" alt="Gamers Club Booster" />
+
+      <div>
+        <h3 class="subtitulo">Completar partida!</h3>
+        <img src="images/news/complete.jpg" alt="Estatísticas" />
+        <p>
+          Escolha quando completar partidas, e quais mapas você mais gosta,
+          chega de ficar entrando em partidas 14x15.
+        </p>
+      </div>
+      <div>
+        <h3 class="subtitulo">Nova função estatistica!</h3>
+        <img src="images/news/stats.jpg" alt="Estatísticas" />
+        <p>
+          Agora você consegue dar aquela olhada antes de jogar contra seu
+          oponente, quantas partidas ele já jogou, indice de vitórias, e tempo
+          da conta :). Assim fica mais fácil decidir e não jogar contra
+          smurfs.
+        </p>
+      </div>
+      <div>
+        <h3 class="subtitulo">Nova lobby na GC!</h3>
+        <img src="images/news/novo-layout-gc.png" alt="Status bar" />
+        <p>
+          A GC está melhorando e adicionando novas features! Com isso a
+          extensão parou de funcionar em vários pontos. Já estamos cientes e
+          desativamos boa parte da extensão para que não ocorra erros durante
+          o uso da GC. Assim que possível, tudo estará funcionando como deve
+          :)
+        </p>
+      </div>
+      <div>
+        <h3 class="subtitulo">Lista de bloqueados!</h3>
+        <h3>Lista de bloqueados!</h3>
+        <img src="images/news/block-list.jpg" alt="Status bar" />
+        <p>
+          Encontrou aquele amiguinho tóxico e quer saber se ele entrou na
+          lobby, agora você pode adicionar ele ao final da partida na sua
+          lista de bloqueados, assim que ele entrar na sala você saberá
+          daiii?.
+        </p>
+      </div>
+      <div>
+        <h3 class="subtitulo">Barra de progresso!</h3>
+        <h3>Barra de progresso!</h3>
+        <img src="images/news/nav-status.jpg" alt="Status bar" />
+        <p>
+          Veja sua evolução com a barra em todos os lugares, voce vai saber
+          quantos pontos faltam para você cair, ou subir de level, tambem foi
+          adicionado o KDR e a foto de perfil.
+        </p>
+      </div>
+      <div>
+        <h3 class="subtitulo">Salas compactadas!</h3>
+        <h3>Salas compactadas!</h3>
+        <img src="images/news/compact-lobby.jpg" alt="Lobby compacta" />
+        <p>
+          Agora você pode compactar sua sala, antes era possível ver apenas 8
+          salas por vez, com o modo compacto podemos ver 20 salas dependendo
+          do seu monitor.
+        </p>
+      </div>
     </div>
-    <div class="containerMensagem">
-      <div class="caixaMensagem" translation-key="mensagemDeEntendi"></div>
-      <button id="botaoEntendi" class="CustomButton CustomButton--secondary">
-        <span
-          class="CustomButton__text"
-          translation-key="botaoDeEntendi"
-        ></span>
-      </button>
+
+    <!-- GERAL -->
+    <div class="pagina" id="geral">
+      <h3 class="subtitulo" translation-key="automacoes"></h3>
+      <label class="container" for="autoAceitarReady" title="Aceita automaticamente o ready">
+        <p class="descricao" translation-key="aceitar-ready"></p>
+        <input type="checkbox" id="autoAceitarReady" />
+        <span class="checkmark"></span>
+      </label>
+
+      <label class="container" for="autoCopiarIp" title="Copia o IP automáticamente assim que disponível"
+        style="display: none">
+        <p class="descricao" translation-key="copiar-ip"></p>
+        <input type="checkbox" id="autoCopiarIp" />
+        <span class="checkmark"></span>
+      </label>
+      <label class="container" for="autoConcordarTermosRanked" title="Aceita automaticamente os termos da ranked">
+        <p class="descricao" translation-key="aceitar-termos-da-ranked"></p>
+        <input type="checkbox" id="autoConcordarTermosRanked" />
+        <span class="checkmark"></span>
+      </label>
+      <label class="container" for="autoCopyLobbyLink" title="Copia automaticamente o link da lobby">
+        <p class="descricao" translation-key="auto-copy-lobby-link"></p>
+        <input type="checkbox" id="autoCopyLobbyLink" />
+        <span class="checkmark"></span>
+      </label>
+      <label class="container" for="autoMostrarIp" title="Mostra o IP assim que disponível">
+        <p class="descricao" translation-key="auto-mostrar-ip"></p>
+        <input type="checkbox" id="autoMostrarIp" />
+        <span class="checkmark"></span>
+      </label>
+      <label class="container" for="autoKickNegativados" title="Auto remover jogadores com anotação negativa">
+        <p class="descricao" translation-key="auto-kick-negativados"></p>
+        <input type="checkbox" id="autoKickNegativados" />
+        <span class="checkmark"></span>
+      </label>
+      <br />
+      <h3 class="subtitulo" translation-key="melhorias"></h3>
+
+      <label class="container" for="autoDarkMode" title="Modo escuro / Dark mode">
+        <p class="descricao" translation-key="dark-mode"></p>
+        <input type="checkbox" id="autoDarkMode" />
+        <span class="checkmark"></span>
+      </label>
+
+      <label class="container" for="autoInfoPlayer"
+        title="Informações do jogador na sala / Player information in lobby">
+        <p class="descricao" translation-key="lobby-informations"></p>
+        <input type="checkbox" id="autoInfoPlayer" />
+        <span class="checkmark"></span>
+      </label>
+
+      <label class="container" for="autoCompactMode" title="Modo compacto / Compact mode">
+        <p class="descricao" translation-key="compact-mode"></p>
+        <input type="checkbox" id="autoCompactMode" />
+        <span class="checkmark"></span>
+      </label>
+
+      <label class="container" for="autoHideFilter" title="Ocultar Filtro / Hide Filter">
+        <p class="descricao" translation-key="hide-filter-lobby"></p>
+        <input type="checkbox" id="autoHideFilter" />
+        <span class="checkmark"></span>
+      </label>
+
+      <label class="container" for="autoFixarMenuLobby"
+        title="Trava a lobby e os desáfios no topo melhorando a usabilidade">
+        <p class="descricao" translation-key="fixar-menu-do-lobby"></p>
+        <input type="checkbox" id="autoFixarMenuLobby" />
+        <span class="checkmark"></span>
+      </label>
+
+      <label class="container" for="ocultarSugestaoDeLobbies" title="Oculta a sugestões de lobbies para entrar">
+        <p class="descricao" translation-key="ocultar-sugestao-de-lobbies"></p>
+        <input type="checkbox" id="ocultarSugestaoDeLobbies" />
+        <span class="checkmark"></span>
+      </label>
+
+      <label class="container" for="ocultarNotificacaoComplete" title="Oculta as notificações de complete">
+        <p class="descricao" translation-key="ocultar-notificacao-complete"></p>
+        <input type="checkbox" id="ocultarNotificacaoComplete" />
+        <span class="checkmark"></span>
+      </label>
+      <label class="container" for="mostrarLevelProgress"
+        title="Mostra seu Level, Rating atual, e quantos pontos é preciso para chegar ao proximo Level.">
+        <p class="descricao" translation-key="mostrar-seu-progresso-no-menu"></p>
+        <input type="checkbox" id="mostrarLevelProgress" />
+        <span class="checkmark"></span>
+      </label>
+
+      <label class="container" for="warmupTimer"
+        title="Mostra um timer na janela de lobby com o tempo restante de aquecimento..">
+        <p class="descricao" translation-key="mostrar-warmup-timer"></p>
+        <input type="checkbox" id="warmupTimer" />
+        <span class="checkmark"></span>
+      </label>
+      <label class="container" for="showStats" title="Exibir estatísticas do jogador na Lobby">
+        <p class="descricao" translation-key="show-stats"></p>
+        <input type="checkbox" id="showStats" />
+        <span class="checkmark"></span>
+      </label>
     </div>
 
-    <div class="conteudo">
-      <!-- MENU -->
-      <div class="menu">
-        <ul>
-          <li id="link-novidades" class="active">
-            <img
-              src="images/menu/novidades.svg"
-              alt="Novidades"
-              class="img-menu"
-            />
-            <a href="#novidades" translation-key="news-menu"></a>
-          </li>
-          <li id="link-geral">
-            <img src="images/menu/geral.svg" alt="Geral" class="img-menu" />
-            <a href="#geral" translation-key="geral"></a>
-          </li>
-          <li id="link-sons">
-            <img src="images/menu/som.svg" alt="Som" class="img-menu" />
-            <a href="#sons" translation-key="sons"></a>
-          </li>
-          <li id="link-mapas" style="display: none">
-            <img src="images/menu/lobby.svg" alt="Mapas" class="img-menu" />
-            <a href="#mapas" translation-key="mapas"></a>
-          </li>
-          <li id="link-lobby">
-            <img src="images/menu/lobby.svg" alt="Lobby" class="img-menu" />
-            <a href="#lobby" translation-key="lobby"></a>
-          </li>
-          <li id="link-complete">
-            <img
-              src="images/menu/complete.svg"
-              alt="Complete"
-              class="img-menu"
-            />
-            <a href="#complete" translation-key="complete"></a>
-          </li>
-          <li id="link-integracoes">
-            <img
-              src="images/menu/integracoes.svg"
-              alt="Integrações"
-              class="img-menu"
-            />
-            <a href="#integracoes" translation-key="discord"></a>
-          </li>
-          <li id="link-blocklist">
-            <img src="images/menu/bloqueio.svg" alt="Blocks" class="img-menu" />
-            <a href="#blocklist" translation-key="blockList"></a>
-          </li>
-          <li id="link-backup">
-            <img src="images/menu/backup.svg" alt="Backup" class="img-menu" />
-            <a href="#backup" translation-key="backup"></a>
-          </li>
-          <li id="link-contato">
-            <img src="images/menu/contato.svg" alt="Contato" class="img-menu" />
-            <a href="#contato" translation-key="contato"></a>
-          </li>
-          <li id="link-sobre">
-            <img src="images/menu/sobre.svg" alt="Sobre" class="img-menu" />
-            <a href="#sobre" translation-key="sobre"></a>
-          </li>
-          <li id="link-doacao">
-            <img src="images/menu/doacao.svg" alt="Doação" class="img-menu" />
-            <a href="#doacao" translation-key="donate"></a>
-          </li>
-        </ul>
-      </div>
-
-      <!-- NOVIDADES -->
-      <div class="pagina ativo" id="novidades">
-        <div>
-          <h3 class="subtitulo">Completar partida!</h3>
-          <img src="images/news/complete.jpg" alt="Estatísticas" />
-          <p>
-            Escolha quando completar partidas, e quais mapas você mais gosta,
-            chega de ficar entrando em partidas 14x15.
-          </p>
+    <!-- LOBBY -->
+    <div class="pagina" id="lobby">
+      <h3 class="subtitulo" translation-key="lobby"></h3>
+      <label class="container" for="lobbyPrivada" title="Lobby privada" translation-key="lobby-privada"
+        translation-attr="title">
+        <p class="descricao" translation-key="lobby-privada"></p>
+        <input type="checkbox" id="lobbyPrivada" />
+        <span class="checkmark"></span>
+      </label>
+      <br />
+      <h3 class="subtitulo" translation-key="jogar-apenas-com"></h3>
+      <div class="row">
+        <div class="column">
+          <label class="container" for="lobbyTodos" title="Todos" translation-key="todos" translation-attr="title">
+            <p class="descricao" translation-key="todos"></p>
+            <input type="radio" id="lobbyTodos" name="jogarCom" value="0" />
+            <span class="checkmark"></span>
+          </label>
         </div>
-        <div>
-          <h3 class="subtitulo">Nova função estatistica!</h3>
-          <img src="images/news/stats.jpg" alt="Estatísticas" />
-          <p>
-            Agora você consegue dar aquela olhada antes de jogar contra seu
-            oponente, quantas partidas ele já jogou, indice de vitórias, e tempo
-            da conta :). Assim fica mais fácil decidir e não jogar contra
-            smurfs.
-          </p>
-        </div>
-        <div>
-          <h3 class="subtitulo">Nova lobby na GC!</h3>
-          <img src="images/news/novo-layout-gc.png" alt="Status bar" />
-          <p>
-            A GC está melhorando e adicionando novas features! Com isso a
-            extensão parou de funcionar em vários pontos. Já estamos cientes e
-            desativamos boa parte da extensão para que não ocorra erros durante
-            o uso da GC. Assim que possível, tudo estará funcionando como deve
-            :)
-          </p>
-        </div>
-        <div>
-          <h3 class="subtitulo">Lista de bloqueados!</h3>
-          <h3>Lista de bloqueados!</h3>
-          <img src="images/news/block-list.jpg" alt="Status bar" />
-          <p>
-            Encontrou aquele amiguinho tóxico e quer saber se ele entrou na
-            lobby, agora você pode adicionar ele ao final da partida na sua
-            lista de bloqueados, assim que ele entrar na sala você saberá
-            daiii?.
-          </p>
-        </div>
-        <div>
-          <h3 class="subtitulo">Barra de progresso!</h3>
-          <h3>Barra de progresso!</h3>
-          <img src="images/news/nav-status.jpg" alt="Status bar" />
-          <p>
-            Veja sua evolução com a barra em todos os lugares, voce vai saber
-            quantos pontos faltam para você cair, ou subir de level, tambem foi
-            adicionado o KDR e a foto de perfil.
-          </p>
-        </div>
-        <div>
-          <h3 class="subtitulo">Salas compactadas!</h3>
-          <h3>Salas compactadas!</h3>
-          <img src="images/news/compact-lobby.jpg" alt="Lobby compacta" />
-          <p>
-            Agora você pode compactar sua sala, antes era possível ver apenas 8
-            salas por vez, com o modo compacto podemos ver 20 salas dependendo
-            do seu monitor.
-          </p>
+        <div class="column">
+          <label class="container" for="lobbyVerificados" title="Verificados" translation-key="verificados"
+            translation-attr="title">
+            <p class="descricao" translation-key="verificados"></p>
+            <input type="radio" id="lobbyVerificados" name="jogarCom" value="2" />
+            <span class="checkmark"></span>
+          </label>
         </div>
       </div>
-
-      <!-- GERAL -->
-      <div class="pagina" id="geral">
-        <h3 class="subtitulo" translation-key="automacoes"></h3>
-        <label
-          class="container"
-          for="autoAceitarReady"
-          title="Aceita automaticamente o ready"
-        >
-          <p class="descricao" translation-key="aceitar-ready"></p>
-          <input type="checkbox" id="autoAceitarReady" />
-          <span class="checkmark"></span>
-        </label>
-
-        <label
-          class="container"
-          for="autoCopiarIp"
-          title="Copia o IP automáticamente assim que disponível"
-          style="display: none"
-        >
-          <p class="descricao" translation-key="copiar-ip"></p>
-          <input type="checkbox" id="autoCopiarIp" />
-          <span class="checkmark"></span>
-        </label>
-        <label
-          class="container"
-          for="autoConcordarTermosRanked"
-          title="Aceita automaticamente os termos da ranked"
-        >
-          <p class="descricao" translation-key="aceitar-termos-da-ranked"></p>
-          <input type="checkbox" id="autoConcordarTermosRanked" />
-          <span class="checkmark"></span>
-        </label>
-        <label
-          class="container"
-          for="autoCopyLobbyLink"
-          title="Copia automaticamente o link da lobby"
-        >
-          <p class="descricao" translation-key="auto-copy-lobby-link"></p>
-          <input type="checkbox" id="autoCopyLobbyLink" />
-          <span class="checkmark"></span>
-        </label>
-        <label
-          class="container"
-          for="autoMostrarIp"
-          title="Mostra o IP assim que disponível"
-        >
-          <p class="descricao" translation-key="auto-mostrar-ip"></p>
-          <input type="checkbox" id="autoMostrarIp" />
-          <span class="checkmark"></span>
-        </label>
-        <label
-          class="container"
-          for="autoKickNegativados"
-          title="Auto remover jogadores com anotação negativa"
-        >
-          <p class="descricao" translation-key="auto-kick-negativados"></p>
-          <input type="checkbox" id="autoKickNegativados" />
-          <span class="checkmark"></span>
-        </label>
-        <br />
-        <h3 class="subtitulo" translation-key="melhorias"></h3>
-
-        <label
-          class="container"
-          for="autoDarkMode"
-          title="Modo escuro / Dark mode"
-        >
-          <p class="descricao" translation-key="dark-mode"></p>
-          <input type="checkbox" id="autoDarkMode" />
-          <span class="checkmark"></span>
-        </label>
-
-        <label
-          class="container"
-          for="autoInfoPlayer"
-          title="Informações do jogador na sala / Player information in lobby"
-        >
-          <p class="descricao" translation-key="lobby-informations"></p>
-          <input type="checkbox" id="autoInfoPlayer" />
-          <span class="checkmark"></span>
-        </label>
-
-        <label
-          class="container"
-          for="autoCompactMode"
-          title="Modo compacto / Compact mode"
-        >
-          <p class="descricao" translation-key="compact-mode"></p>
-          <input type="checkbox" id="autoCompactMode" />
-          <span class="checkmark"></span>
-        </label>
-
-        <label
-          class="container"
-          for="autoHideFilter"
-          title="Ocultar Filtro / Hide Filter"
-        >
-          <p class="descricao" translation-key="hide-filter-lobby"></p>
-          <input type="checkbox" id="autoHideFilter" />
-          <span class="checkmark"></span>
-        </label>
-
-        <label
-          class="container"
-          for="autoFixarMenuLobby"
-          title="Trava a lobby e os desáfios no topo melhorando a usabilidade"
-        >
-          <p class="descricao" translation-key="fixar-menu-do-lobby"></p>
-          <input type="checkbox" id="autoFixarMenuLobby" />
-          <span class="checkmark"></span>
-        </label>
-
-        <label
-          class="container"
-          for="ocultarSugestaoDeLobbies"
-          title="Oculta a sugestões de lobbies para entrar"
-        >
-          <p
-            class="descricao"
-            translation-key="ocultar-sugestao-de-lobbies"
-          ></p>
-          <input type="checkbox" id="ocultarSugestaoDeLobbies" />
-          <span class="checkmark"></span>
-        </label>
-
-        <label
-          class="container"
-          for="ocultarNotificacaoComplete"
-          title="Oculta as notificações de complete"
-        >
-          <p
-            class="descricao"
-            translation-key="ocultar-notificacao-complete"
-          ></p>
-          <input type="checkbox" id="ocultarNotificacaoComplete" />
-          <span class="checkmark"></span>
-        </label>
-        <label
-          class="container"
-          for="mostrarLevelProgress"
-          title="Mostra seu Level, Rating atual, e quantos pontos é preciso para chegar ao proximo Level."
-        >
-          <p
-            class="descricao"
-            translation-key="mostrar-seu-progresso-no-menu"
-          ></p>
-          <input type="checkbox" id="mostrarLevelProgress" />
-          <span class="checkmark"></span>
-        </label>
-
-        <label
-          class="container"
-          for="warmupTimer"
-          title="Mostra um timer na janela de lobby com o tempo restante de aquecimento.."
-        >
-          <p class="descricao" translation-key="mostrar-warmup-timer"></p>
-          <input type="checkbox" id="warmupTimer" />
-          <span class="checkmark"></span>
-        </label>
+      <div class="row">
+        <div class="column">
+          <label class="container" for="lobbyVerificadosOuPrime" title="Verificados ou Prime"
+            translation-key="verificados-ou-prime" translation-attr="title">
+            <p class="descricao" translation-key="verificados-ou-prime"></p>
+            <input type="radio" id="lobbyVerificadosOuPrime" name="jogarCom" value="1" />
+            <span class="checkmark"></span>
+          </label>
+        </div>
       </div>
+      <br />
+      <h3 class="subtitulo" id="prevetoTitle" translation-key="pre-vetos-3-escolhas"></h3>
+      <div class="row">
+        <div class="column">
+          <label class="container" for="preVetode_dust2">
+            <p class="descricao">de_dust2</p>
+            <input type="checkbox" id="preVetode_dust2" codigo="1" />
+            <span class="checkmark"></span>
+          </label>
 
-      <!-- LOBBY -->
-      <div class="pagina" id="lobby">
-        <h3 class="subtitulo" translation-key="lobby"></h3>
-        <label
-          class="container"
-          for="lobbyPrivada"
-          title="Lobby privada"
-          translation-key="lobby-privada"
-          translation-attr="title"
-        >
-          <p class="descricao" translation-key="lobby-privada"></p>
-          <input type="checkbox" id="lobbyPrivada" />
-          <span class="checkmark"></span>
-        </label>
-        <br />
-        <h3 class="subtitulo" translation-key="jogar-apenas-com"></h3>
-        <div class="row">
-          <div class="column">
-            <label
-              class="container"
-              for="lobbyTodos"
-              title="Todos"
-              translation-key="todos"
-              translation-attr="title"
-            >
-              <p class="descricao" translation-key="todos"></p>
-              <input type="radio" id="lobbyTodos" name="jogarCom" value="0" />
-              <span class="checkmark"></span>
-            </label>
-          </div>
-          <div class="column">
-            <label
-              class="container"
-              for="lobbyVerificados"
-              title="Verificados"
-              translation-key="verificados"
-              translation-attr="title"
-            >
-              <p class="descricao" translation-key="verificados"></p>
-              <input
-                type="radio"
-                id="lobbyVerificados"
-                name="jogarCom"
-                value="2"
-              />
-              <span class="checkmark"></span>
-            </label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="column">
-            <label
-              class="container"
-              for="lobbyVerificadosOuPrime"
-              title="Verificados ou Prime"
-              translation-key="verificados-ou-prime"
-              translation-attr="title"
-            >
-              <p class="descricao" translation-key="verificados-ou-prime"></p>
-              <input
-                type="radio"
-                id="lobbyVerificadosOuPrime"
-                name="jogarCom"
-                value="1"
-              />
-              <span class="checkmark"></span>
-            </label>
-          </div>
-        </div>
-        <br />
-        <h3
-          class="subtitulo"
-          id="prevetoTitle"
-          translation-key="pre-vetos-3-escolhas"
-        ></h3>
-        <div class="row">
-          <div class="column">
-            <label class="container" for="preVetode_dust2">
-              <p class="descricao">de_dust2</p>
-              <input type="checkbox" id="preVetode_dust2" codigo="1" />
-              <span class="checkmark"></span>
-            </label>
+          <label class="container" for="preVetode_nuke">
+            <p class="descricao">de_nuke</p>
+            <input type="checkbox" id="preVetode_nuke" codigo="2" />
+            <span class="checkmark"></span>
+          </label>
 
-            <label class="container" for="preVetode_nuke">
-              <p class="descricao">de_nuke</p>
-              <input type="checkbox" id="preVetode_nuke" codigo="2" />
-              <span class="checkmark"></span>
-            </label>
+          <label class="container" for="preVetode_train">
+            <p class="descricao">de_train</p>
+            <input type="checkbox" id="preVetode_train" codigo="3" />
+            <span class="checkmark"></span>
+          </label>
 
-            <label class="container" for="preVetode_train">
-              <p class="descricao">de_train</p>
-              <input type="checkbox" id="preVetode_train" codigo="3" />
-              <span class="checkmark"></span>
-            </label>
+          <label class="container" for="preVetode_mirage">
+            <p class="descricao">de_mirage</p>
+            <input type="checkbox" id="preVetode_mirage" codigo="5" />
+            <span class="checkmark"></span>
+          </label>
 
-            <label class="container" for="preVetode_mirage">
-              <p class="descricao">de_mirage</p>
-              <input type="checkbox" id="preVetode_mirage" codigo="5" />
-              <span class="checkmark"></span>
-            </label>
-
-            <!-- <label class="container" for="preVetode_cache">
+          <!-- <label class="container" for="preVetode_cache">
               <p class="descricao">de_cache</p>
               <input type="checkbox" id="preVetode_cache" codigo="6" />
               <span class="checkmark"></span>
             </label> -->
 
-            <label class="container" for="preVetode_overpass">
-              <p class="descricao">de_overpass</p>
-              <input type="checkbox" id="preVetode_overpass" codigo="7" />
-              <span class="checkmark"></span>
-            </label>
+          <label class="container" for="preVetode_overpass">
+            <p class="descricao">de_overpass</p>
+            <input type="checkbox" id="preVetode_overpass" codigo="7" />
+            <span class="checkmark"></span>
+          </label>
 
-            <label class="container" for="preVetode_inferno">
-              <p class="descricao">de_inferno</p>
-              <input type="checkbox" id="preVetode_inferno" codigo="8" />
-              <span class="checkmark"></span>
-            </label>
-          </div>
+          <label class="container" for="preVetode_inferno">
+            <p class="descricao">de_inferno</p>
+            <input type="checkbox" id="preVetode_inferno" codigo="8" />
+            <span class="checkmark"></span>
+          </label>
+        </div>
 
-          <div class="column">
-            <label class="container" for="preVetode_vertigo">
-              <p class="descricao">de_vertigo</p>
-              <input type="checkbox" id="preVetode_vertigo" codigo="10" />
-              <span class="checkmark"></span>
-            </label>
+        <div class="column">
+          <label class="container" for="preVetode_vertigo">
+            <p class="descricao">de_vertigo</p>
+            <input type="checkbox" id="preVetode_vertigo" codigo="10" />
+            <span class="checkmark"></span>
+          </label>
 
-            <!-- <label class="container" for="preVetode_cbble_classic">
+          <!-- <label class="container" for="preVetode_cbble_classic">
               <p class="descricao">de_cbble_classic</p>
               <input type="checkbox" id="preVetode_cbble_classic" codigo="11" />
               <span class="checkmark"></span>
             </label> -->
 
-            <label class="container" for="preVetode_ancient">
-              <p class="descricao">de_ancient</p>
-              <input type="checkbox" id="preVetode_ancient" codigo="12" />
-              <span class="checkmark"></span>
-            </label>
+          <label class="container" for="preVetode_ancient">
+            <p class="descricao">de_ancient</p>
+            <input type="checkbox" id="preVetode_ancient" codigo="12" />
+            <span class="checkmark"></span>
+          </label>
 
-            <!-- <label class="container" for="preVetode_tuscan">
+          <!-- <label class="container" for="preVetode_tuscan">
               <p class="descricao">de_tuscan</p>
               <input type="checkbox" id="preVetode_tuscan" codigo="13" />
               <span class="checkmark"></span>
             </label> -->
 
-            <label class="container" for="preVetode_anubis">
-              <p class="descricao">de_anubis</p>
-              <input type="checkbox" id="preVetode_anubis" codigo="14" />
-              <span class="checkmark"></span>
-            </label>
+          <label class="container" for="preVetode_anubis">
+            <p class="descricao">de_anubis</p>
+            <input type="checkbox" id="preVetode_anubis" codigo="14" />
+            <span class="checkmark"></span>
+          </label>
 
-            <!-- <label class="container" for="preVetode_cache_old">
+          <!-- <label class="container" for="preVetode_cache_old">
               <p class="descricao">de_cache_old</p>
               <input type="checkbox" id="preVetode_cache_old" codigo="16" />
               <span class="checkmark"></span>
             </label> -->
-          </div>
         </div>
-        <h3 class="subtitulo" translation-key="chat"></h3>
-        <label
-          class="container"
-          for="ocultarChat"
-          title="Ocultar Chat"
-          translation-key="ocultar-chat"
-          translation-attr="title"
-        >
-          <p class="descricao" translation-key="ocultar-chat"></p>
-          <input type="checkbox" id="ocultarChat" />
-          <span class="checkmark"></span>
-        </label>
-        <label
-          class="container"
-          for="chatFixoDireita"
-          title="Chat fixo na direita"
-          translation-key="chat-fixo-direita"
-          translation-attr="title"
-        >
-          <p class="descricao" translation-key="chat-fixo-direita"></p>
-          <input type="checkbox" id="chatFixoDireita" />
-          <span class="checkmark"></span>
-        </label>
-        <br />
       </div>
+      <h3 class="subtitulo" translation-key="chat"></h3>
+      <label class="container" for="ocultarChat" title="Ocultar Chat" translation-key="ocultar-chat"
+        translation-attr="title">
+        <p class="descricao" translation-key="ocultar-chat"></p>
+        <input type="checkbox" id="ocultarChat" />
+        <span class="checkmark"></span>
+      </label>
+      <label class="container" for="chatFixoDireita" title="Chat fixo na direita" translation-key="chat-fixo-direita"
+        translation-attr="title">
+        <p class="descricao" translation-key="chat-fixo-direita"></p>
+        <input type="checkbox" id="chatFixoDireita" />
+        <span class="checkmark"></span>
+      </label>
+      <br />
+    </div>
 
-      <div class="pagina" id="complete">
-        <h3 class="subtitulo" translation-key="complete"></h3>
-        <p translation-key="complete-rounds-minimos"></p>
-        <input
-          type="range"
-          title="Rounds"
-          id="slider-rounds-min"
-          name="rounds-min"
-          min="0"
-          max="26"
-          value="0"
-        />
-        <h3 style="display: inline-block; margin-right: 10px" id="rounds-min">
-          0 rounds
-        </h3>
+    <div class="pagina" id="complete">
+      <h3 class="subtitulo" translation-key="complete"></h3>
+      <p translation-key="complete-rounds-minimos"></p>
+      <input type="range" title="Rounds" id="slider-rounds-min" name="rounds-min" min="0" max="26" value="0" />
+      <h3 style="display: inline-block; margin-right: 10px" id="rounds-min">
+        0 rounds
+      </h3>
 
-        <p translation-key="complete-max-diff"></p>
+      <p translation-key="complete-max-diff"></p>
 
-        <input
-          type="range"
-          title="Rounds"
-          id="slider-rounds-diff"
-          name="rounds-diff"
-          min="0"
-          max="13"
-          value="13"
-        />
-        <h3 style="display: inline-block; margin-right: 10px" id="rounds-diff">
-          13 rounds
-        </h3>
+      <input type="range" title="Rounds" id="slider-rounds-diff" name="rounds-diff" min="0" max="13" value="13" />
+      <h3 style="display: inline-block; margin-right: 10px" id="rounds-diff">
+        13 rounds
+      </h3>
 
-        <p translation-key="complete-max-rounds"></p>
+      <p translation-key="complete-max-rounds"></p>
 
-        <input
-          type="range"
-          title="Rounds"
-          id="slider-rounds-max"
-          name="rounds-max"
-          min="0"
-          max="12"
-          value="12"
-        />
-        <h3 style="display: inline-block; margin-right: 10px" id="rounds-max">
-          12 rounds
-        </h3>
+      <input type="range" title="Rounds" id="slider-rounds-max" name="rounds-max" min="0" max="12" value="12" />
+      <h3 style="display: inline-block; margin-right: 10px" id="rounds-max">
+        12 rounds
+      </h3>
 
-        <h3 class="subtitulo" translation-key="complete-mapas"></h3>
+      <h3 class="subtitulo" translation-key="complete-mapas"></h3>
 
-        <div class="row">
-          <div class="column">
-            <label class="container" for="completede_dust2">
-              <p class="descricao">de_dust2</p>
-              <input type="checkbox" id="completede_dust2" codigo="1" />
-              <span class="checkmark"></span>
-            </label>
+      <div class="row">
+        <div class="column">
+          <label class="container" for="completede_dust2">
+            <p class="descricao">de_dust2</p>
+            <input type="checkbox" id="completede_dust2" codigo="1" />
+            <span class="checkmark"></span>
+          </label>
 
-            <label class="container" for="completede_nuke">
-              <p class="descricao">de_nuke</p>
-              <input type="checkbox" id="completede_nuke" codigo="2" />
-              <span class="checkmark"></span>
-            </label>
+          <label class="container" for="completede_nuke">
+            <p class="descricao">de_nuke</p>
+            <input type="checkbox" id="completede_nuke" codigo="2" />
+            <span class="checkmark"></span>
+          </label>
 
-            <label class="container" for="completede_train">
-              <p class="descricao">de_train</p>
-              <input type="checkbox" id="completede_train" codigo="3" />
-              <span class="checkmark"></span>
-            </label>
+          <label class="container" for="completede_train">
+            <p class="descricao">de_train</p>
+            <input type="checkbox" id="completede_train" codigo="3" />
+            <span class="checkmark"></span>
+          </label>
 
-            <label class="container" for="completede_mirage">
-              <p class="descricao">de_mirage</p>
-              <input type="checkbox" id="completede_mirage" codigo="5" />
-              <span class="checkmark"></span>
-            </label>
+          <label class="container" for="completede_mirage">
+            <p class="descricao">de_mirage</p>
+            <input type="checkbox" id="completede_mirage" codigo="5" />
+            <span class="checkmark"></span>
+          </label>
 
-            <!-- <label class="container" for="completede_cache">
+          <!-- <label class="container" for="completede_cache">
               <p class="descricao">de_cache</p>
               <input type="checkbox" id="completede_cache" codigo="6" />
               <span class="checkmark"></span>
             </label> -->
 
-            <label class="container" for="completede_overpass">
-              <p class="descricao">de_overpass</p>
-              <input type="checkbox" id="completede_overpass" codigo="7" />
-              <span class="checkmark"></span>
-            </label>
-          </div>
-          <div class="column">
-            <label class="container" for="completede_inferno">
-              <p class="descricao">de_inferno</p>
-              <input type="checkbox" id="completede_inferno" codigo="8" />
-              <span class="checkmark"></span>
-            </label>
+          <label class="container" for="completede_overpass">
+            <p class="descricao">de_overpass</p>
+            <input type="checkbox" id="completede_overpass" codigo="7" />
+            <span class="checkmark"></span>
+          </label>
+        </div>
+        <div class="column">
+          <label class="container" for="completede_inferno">
+            <p class="descricao">de_inferno</p>
+            <input type="checkbox" id="completede_inferno" codigo="8" />
+            <span class="checkmark"></span>
+          </label>
 
-            <label class="container" for="completede_vertigo">
-              <p class="descricao">de_vertigo</p>
-              <input type="checkbox" id="completede_vertigo" codigo="10" />
-              <span class="checkmark"></span>
-            </label>
-            <!-- <label class="container" for="completede_cbble_classic">
+          <label class="container" for="completede_vertigo">
+            <p class="descricao">de_vertigo</p>
+            <input type="checkbox" id="completede_vertigo" codigo="10" />
+            <span class="checkmark"></span>
+          </label>
+          <!-- <label class="container" for="completede_cbble_classic">
               <p class="descricao">de_cbble_classic</p>
               <input type="checkbox" id="completede_cbble_classic" codigo="11" />
               <span class="checkmark"></span>
             </label> -->
-            <label class="container" for="completede_ancient">
-              <p class="descricao">de_ancient</p>
-              <input type="checkbox" id="completede_ancient" codigo="12" />
-              <span class="checkmark"></span>
-            </label>
+          <label class="container" for="completede_ancient">
+            <p class="descricao">de_ancient</p>
+            <input type="checkbox" id="completede_ancient" codigo="12" />
+            <span class="checkmark"></span>
+          </label>
 
-            <!-- <label class="container" for="completede_tuscan">
+          <!-- <label class="container" for="completede_tuscan">
               <p class="descricao">de_tuscan</p>
               <input type="checkbox" id="completede_tuscan" codigo="13" />
               <span class="checkmark"></span>
             </label> -->
 
-            <label class="container" for="completede_anubis">
-              <p class="descricao">de_anubis</p>
-              <input type="checkbox" id="completede_anubis" codigo="14" />
-              <span class="checkmark"></span>
-            </label>
+          <label class="container" for="completede_anubis">
+            <p class="descricao">de_anubis</p>
+            <input type="checkbox" id="completede_anubis" codigo="14" />
+            <span class="checkmark"></span>
+          </label>
 
-            <!-- <label class="container" for="completede_cache_old">
+          <!-- <label class="container" for="completede_cache_old">
               <p class="descricao">de_cache_old</p>
               <input type="checkbox" id="completede_cache_old" codigo="16" />
               <span class="checkmark"></span>
             </label> -->
-          </div>
         </div>
-      </div>
-
-      <!-- SONS -->
-      <div class="pagina" id="sons">
-        <h3 class="subtitulo" translation-key="sons"></h3>
-        <div>
-          <div class="form-input">
-            <span translation-key="ao-aceitar-ready"></span>
-            <div class="input-container">
-              <select id="somReady" title="sons"></select>
-            </div>
-          </div>
-          <button
-            class="btn btn-primary"
-            id="testarSomReady"
-            translation-key="testar"
-          ></button>
-          <div
-            id="p-customSomReady"
-            class="form-input"
-            style="display: none; margin-top: 10px"
-          >
-            <span translation-key="url-som-customizado"></span>
-            <div class="input-container">
-              <input type="text" title="url" id="customSomReady" />
-            </div>
-          </div>
-        </div>
-        <div>
-          <div class="form-input">
-            <span translation-key="ao-ser-expulso"></span>
-            <div class="input-container">
-              <select id="somKicked" title="sons"></select>
-            </div>
-          </div>
-          <button
-            class="btn btn-primary"
-            id="testarSomKicked"
-            translation-key="testar"
-          ></button>
-          <div
-            id="p-customSomKicked"
-            class="form-input"
-            style="display: none; margin-top: 10px"
-          >
-            <span translation-key="url-som-customizado"></span>
-            <div class="input-container">
-              <input type="text" title="url" id="customSomKicked" />
-            </div>
-          </div>
-        </div>
-        <div>
-          <p>
-            <span translation-key="volume"></span>: <b id="volumeValue">50%</b>
-          </p>
-          <input
-            type="range"
-            title="volume"
-            id="volume"
-            name="volume"
-            min="0"
-            max="100"
-            value="50"
-          />
-        </div>
-        <div>
-          <p translation-key="sons-myinstants-linha-1"></p>
-          <p translation-key="sons-myinstants-linha-2"></p>
-        </div>
-      </div>
-
-      <!-- DISCORD -->
-      <div class="pagina" id="integracoes">
-        <a
-          class="subtituloh2"
-          href="https://github.com/gamersclub-booster/gamersclub-booster/blob/main/DISCORD.md"
-          target="_blank"
-          translation-key="como-criar-sua-webhook"
-          rel="noopener noreferrer"
-          title="como-criar-sua-webhook"
-        ></a>
-        <h3 class="subtitulo" translation-key="discord"></h3>
-        <div>
-          <div class="form-input">
-            <span>Nome do servidor</span>
-            <div class="input-container">
-              <input
-                type="text"
-                id="campoWebhookName"
-                translation-key="nome-servidor-discord"
-                translation-attr="placeholder"
-                class="input-form-gray form-control"
-              />
-            </div>
-            <span translation-key="url"></span>
-            <div class="input-container">
-              <input
-                type="text"
-                id="campoWebhookLink"
-                translation-key="cole-aqui-a-url-do-seu-webhook"
-                translation-attr="placeholder"
-                class="input-form-gray form-control"
-              />
-            </div>
-            <button class="btn btn-success" id="addWebhook">
-              Adicionar server
-            </button>
-          </div>
-
-          <div id="group-add-server">
-            <hr />
-            <div class="input-container">
-              <select id="serversSelect" title="Discord Servers"></select>
-            </div>
-            <button
-              class="btn btn-success"
-              id="testarWebhook"
-              translation-key="testar-e-salvar"
-            ></button>
-            <button
-              class="btn btn-warning"
-              id="botaoLimparDiscord"
-              translation-key="redefinir"
-            ></button>
-            <div>
-              <p
-                style="display: inline-block"
-                translation-key="status-da-url"
-              ></p>
-              <p style="display: inline-block" id="statusWebhook"></p>
-            </div>
-
-            <div id="divDoDiscord" hidden="true">
-              <h3
-                class="subtitulo"
-                translation-key="enviar-automaticamente-no-discord"
-              ></h3>
-              <label
-                class="container"
-                for="enviarLinkLobby"
-                translation-key="envia-automaticamente-link-lobby-discord-title"
-                translation-attr="title"
-              >
-                <p class="descricao" translation-key="lobby-link-kd"></p>
-                <input type="checkbox" id="enviarLinkLobby" />
-                <span class="checkmark"></span>
-              </label>
-              <label
-                class="container"
-                for="enviarPartida"
-                translation-key="envia-automaticamente-partida-title"
-                translation-attr="title"
-                title=""
-              >
-                <p class="descricao" translation-key="partida-ip-times"></p>
-                <input type="checkbox" id="enviarPartida" />
-                <span class="checkmark"></span>
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- LISTA DE BLOQUEADOS -->
-      <div class="pagina" id="blocklist">
-        <h3 class="subtitulo">
-          <div translation-key="blockList"></div>
-        </h3>
-        <div class="listaBlocks" id="lista"></div>
-      </div>
-
-      <!-- BACKUP -->
-      <div class="pagina" id="backup">
-        <h3 class="subtitulo">
-          <div translation-key="backup"></div>
-        </h3>
-        <div class="export">
-          <h3 translation-key="comoexportar-titulo"></h3>
-          <span translation-key="comoexportar-texto"></span>
-          <button
-            class="btn btn-warning"
-            id="exportButton"
-            translation-key="exportar"
-            style="margin-top: 10px"
-          ></button>
-        </div>
-        <div class="import">
-          <h3 translation-key="comoimportar-titulo"></h3>
-          <span translation-key="comoimportar-texto"></span>
-          <button
-            class="btn btn-warning"
-            id="importButton"
-            translation-key="importar"
-            style="margin-top: 10px"
-          ></button>
-          <input
-            type="file"
-            title="import"
-            id="importOrig"
-            accept=".json"
-            style="display: none"
-          />
-        </div>
-      </div>
-
-      <!-- CONTATO -->
-      <div class="pagina" id="contato">
-        <a href="https://discord.gg/umx6bbuawh" target="_blank">
-          <h3 class="subtitulo" translation-key="discord"></h3>
-          <p class="descricao" translation-key="entre-no-nosso-discord"></p>
-        </a>
-        <br />
-        <a
-          href="https://github.com/gamersclub-booster/gamersclub-booster/issues"
-          target="_blank"
-        >
-          <h3 class="subtitulo" translation-key="informe-um-bug"></h3>
-          <p class="descricao" translation-key="abra-uma-issue"></p>
-        </a>
-        <br />
-        <a
-          href="https://github.com/gamersclub-booster/gamersclub-booster/"
-          target="_blank"
-        >
-          <h3 class="subtitulo" translation-key="quer-contribuir"></h3>
-          <p class="descricao" translation-key="estenxao-codigo-aberto"></p>
-        </a>
-      </div>
-
-      <!-- SOBRE -->
-      <div class="pagina" id="sobre">
-        <a
-          href="https://github.com/gamersclub-booster/gamersclub-booster"
-          target="_blank"
-        >
-          <h3 class="subtitulo" translation-key="codigo-fonte"></h3>
-          <p class="descricao">GitHub</p>
-        </a>
-        <br />
-        <a
-          href="https://github.com/gamersclub-booster/gamersclub-booster/?tab=readme-ov-file#contribuidores-"
-          target="_blank"
-        >
-          <h3 class="subtitulo" translation-key="colaboradores"></h3>
-          <p class="descricao" translation-key="veja-quem-sao"></p>
-        </a>
-
-        <br />
-        <h3 class="subtitulo" translation-key="downloads"></h3>
-        <p class="descricao">
-          <img
-            src="https://img.shields.io/chrome-web-store/users/dahnmmlhchpmmlgebpkpaofbefjdlpin?label=Downloads&color=2196f3"
-          />
-        </p>
-
-        <br />
-        <h3 class="subtitulo" translation-key="versao"></h3>
-        <p class="descricao versao"></p>
-      </div>
-
-      <!-- DOACAO -->
-      <div class="pagina" id="doacao">
-        <h3 class="subtitulo" translation-key="faca-sua-doacao"></h3>
-        <h3>PIX</h3>
-        <a href="https://nubank.com.br/pagar/3pub5/x5kLXWaLS1" target="_blank">
-          <p class="descricao" translation-key="doacao-descricao"></p>
-          <p>
-            <img src="images/qrcode.jpg" width="140px" />
-          </p>
-        </a>
-
-        <h3>Paypal</h3>
-        <p class="descricao" translation-key="doacao-paypal"></p>
-        <p>
-          Email:
-          <a
-            href="https://streamelements.com/hnr9/tip"
-            target="_blank"
-            class="link-white"
-            >hnrqdev@gmail.com</a
-          >
-        </p>
       </div>
     </div>
-  </body>
-  <script src="index.js"></script>
+
+    <!-- SONS -->
+    <div class="pagina" id="sons">
+      <h3 class="subtitulo" translation-key="sons"></h3>
+      <div>
+        <div class="form-input">
+          <span translation-key="ao-aceitar-ready"></span>
+          <div class="input-container">
+            <select id="somReady" title="sons"></select>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="testarSomReady" translation-key="testar"></button>
+        <div id="p-customSomReady" class="form-input" style="display: none; margin-top: 10px">
+          <span translation-key="url-som-customizado"></span>
+          <div class="input-container">
+            <input type="text" title="url" id="customSomReady" />
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="form-input">
+          <span translation-key="ao-ser-expulso"></span>
+          <div class="input-container">
+            <select id="somKicked" title="sons"></select>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="testarSomKicked" translation-key="testar"></button>
+        <div id="p-customSomKicked" class="form-input" style="display: none; margin-top: 10px">
+          <span translation-key="url-som-customizado"></span>
+          <div class="input-container">
+            <input type="text" title="url" id="customSomKicked" />
+          </div>
+        </div>
+      </div>
+      <div>
+        <p>
+          <span translation-key="volume"></span>: <b id="volumeValue">50%</b>
+        </p>
+        <input type="range" title="volume" id="volume" name="volume" min="0" max="100" value="50" />
+      </div>
+      <div>
+        <p translation-key="sons-myinstants-linha-1"></p>
+        <p translation-key="sons-myinstants-linha-2"></p>
+      </div>
+    </div>
+
+    <!-- DISCORD -->
+    <div class="pagina" id="integracoes">
+      <a class="subtituloh2" href="https://github.com/gamersclub-booster/gamersclub-booster/blob/main/DISCORD.md"
+        target="_blank" translation-key="como-criar-sua-webhook" rel="noopener noreferrer"
+        title="como-criar-sua-webhook"></a>
+      <h3 class="subtitulo" translation-key="discord"></h3>
+      <div>
+        <div class="form-input">
+          <span>Nome do servidor</span>
+          <div class="input-container">
+            <input type="text" id="campoWebhookName" translation-key="nome-servidor-discord"
+              translation-attr="placeholder" class="input-form-gray form-control" />
+          </div>
+          <span translation-key="url"></span>
+          <div class="input-container">
+            <input type="text" id="campoWebhookLink" translation-key="cole-aqui-a-url-do-seu-webhook"
+              translation-attr="placeholder" class="input-form-gray form-control" />
+          </div>
+          <button class="btn btn-success" id="addWebhook">
+            Adicionar server
+          </button>
+        </div>
+
+        <div id="group-add-server">
+          <hr />
+          <div class="input-container">
+            <select id="serversSelect" title="Discord Servers"></select>
+          </div>
+          <button class="btn btn-success" id="testarWebhook" translation-key="testar-e-salvar"></button>
+          <button class="btn btn-warning" id="botaoLimparDiscord" translation-key="redefinir"></button>
+          <div>
+            <p style="display: inline-block" translation-key="status-da-url"></p>
+            <p style="display: inline-block" id="statusWebhook"></p>
+          </div>
+
+          <div id="divDoDiscord" hidden="true">
+            <h3 class="subtitulo" translation-key="enviar-automaticamente-no-discord"></h3>
+            <label class="container" for="enviarLinkLobby"
+              translation-key="envia-automaticamente-link-lobby-discord-title" translation-attr="title">
+              <p class="descricao" translation-key="lobby-link-kd"></p>
+              <input type="checkbox" id="enviarLinkLobby" />
+              <span class="checkmark"></span>
+            </label>
+            <label class="container" for="enviarPartida" translation-key="envia-automaticamente-partida-title"
+              translation-attr="title" title="">
+              <p class="descricao" translation-key="partida-ip-times"></p>
+              <input type="checkbox" id="enviarPartida" />
+              <span class="checkmark"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LISTA DE BLOQUEADOS -->
+    <div class="pagina" id="blocklist">
+      <h3 class="subtitulo">
+        <div translation-key="blockList"></div>
+      </h3>
+      <div class="listaBlocks" id="lista"></div>
+    </div>
+
+    <!-- BACKUP -->
+    <div class="pagina" id="backup">
+      <h3 class="subtitulo">
+        <div translation-key="backup"></div>
+      </h3>
+      <div class="export">
+        <h3 translation-key="comoexportar-titulo"></h3>
+        <span translation-key="comoexportar-texto"></span>
+        <button class="btn btn-warning" id="exportButton" translation-key="exportar" style="margin-top: 10px"></button>
+      </div>
+      <div class="import">
+        <h3 translation-key="comoimportar-titulo"></h3>
+        <span translation-key="comoimportar-texto"></span>
+        <button class="btn btn-warning" id="importButton" translation-key="importar" style="margin-top: 10px"></button>
+        <input type="file" title="import" id="importOrig" accept=".json" style="display: none" />
+      </div>
+    </div>
+
+    <!-- CONTATO -->
+    <div class="pagina" id="contato">
+      <a href="https://discord.gg/umx6bbuawh" target="_blank">
+        <h3 class="subtitulo" translation-key="discord"></h3>
+        <p class="descricao" translation-key="entre-no-nosso-discord"></p>
+      </a>
+      <br />
+      <a href="https://github.com/gamersclub-booster/gamersclub-booster/issues" target="_blank">
+        <h3 class="subtitulo" translation-key="informe-um-bug"></h3>
+        <p class="descricao" translation-key="abra-uma-issue"></p>
+      </a>
+      <br />
+      <a href="https://github.com/gamersclub-booster/gamersclub-booster/" target="_blank">
+        <h3 class="subtitulo" translation-key="quer-contribuir"></h3>
+        <p class="descricao" translation-key="estenxao-codigo-aberto"></p>
+      </a>
+    </div>
+
+    <!-- SOBRE -->
+    <div class="pagina" id="sobre">
+      <a href="https://github.com/gamersclub-booster/gamersclub-booster" target="_blank">
+        <h3 class="subtitulo" translation-key="codigo-fonte"></h3>
+        <p class="descricao">GitHub</p>
+      </a>
+      <br />
+      <a href="https://github.com/gamersclub-booster/gamersclub-booster/?tab=readme-ov-file#contribuidores-"
+        target="_blank">
+        <h3 class="subtitulo" translation-key="colaboradores"></h3>
+        <p class="descricao" translation-key="veja-quem-sao"></p>
+      </a>
+
+      <br />
+      <h3 class="subtitulo" translation-key="downloads"></h3>
+      <p class="descricao">
+        <img
+          src="https://img.shields.io/chrome-web-store/users/dahnmmlhchpmmlgebpkpaofbefjdlpin?label=Downloads&color=2196f3" />
+      </p>
+
+      <br />
+      <h3 class="subtitulo" translation-key="versao"></h3>
+      <p class="descricao versao"></p>
+    </div>
+
+    <!-- DOACAO -->
+    <div class="pagina" id="doacao">
+      <h3 class="subtitulo" translation-key="faca-sua-doacao"></h3>
+      <h3>PIX</h3>
+      <a href="https://nubank.com.br/pagar/3pub5/x5kLXWaLS1" target="_blank">
+        <p class="descricao" translation-key="doacao-descricao"></p>
+        <p>
+          <img src="images/qrcode.jpg" width="140px" />
+        </p>
+      </a>
+
+      <h3>Paypal</h3>
+      <p class="descricao" translation-key="doacao-paypal"></p>
+      <p>
+        Email:
+        <a href="https://streamelements.com/hnr9/tip" target="_blank" class="link-white">hnrqdev@gmail.com</a>
+      </p>
+    </div>
+  </div>
+</body>
+<script src="index.js"></script>
+
 </html>

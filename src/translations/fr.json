@@ -103,5 +103,6 @@
   "auto-kick-negativados": "Supprimer joueurs avec une annotation négative",
   "hide-filter-lobby": "Masquer les filtres",
   "lobby-informations": "Informations sur le joueur dans le salon",
-  "auto-copy-lobby-link": "Copier automatiquement le lien du salon"
+  "auto-copy-lobby-link": "Copier automatiquement le lien du salon",
+  "show-stats": "Afficher les statistiques du joueur dans le Lobby"
 }

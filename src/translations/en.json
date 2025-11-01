@@ -103,5 +103,6 @@
   "auto-kick-negativados": "Remove players with negative record",
   "hide-filter-lobby": "Hide filters",
   "lobby-informations": "Player information in the Lobby",
-  "auto-copy-lobby-link": "Automatically copy the lobby link"
+  "auto-copy-lobby-link": "Automatically copy the lobby link",
+  "show-stats": "Show player stats in the Lobby"
 }
