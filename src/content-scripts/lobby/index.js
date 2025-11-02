@@ -19,6 +19,7 @@ import { chatFixoDireita, ocultarChat, ocultarFiltrosSala } from './chat';
 import { ocultarNotificacaoComplete } from './ocultarNotificacaoComplete';
 import { ocultarSugestaoDeLobbies } from './ocultarSugestaoDeLobbies';
 import { tocarSomSeVoceForExpulsoDaLobby } from './tocarSomSeVoceForExpulsoDaLobby';
+import { showStats } from './showStats';
 
 chrome.storage.sync.get( null, function ( _result ) {
   if ( window.location.pathname.includes( 'partida' ) || window.location.pathname.includes( '/match/' ) ) {
@@ -84,6 +85,8 @@ const initLobby = async () => {
   ocultarFiltrosSala();
   // Feature para auto remover negativados
   autoKickNegativados();
+  // Feature para exibir as estatísticas do jogador
+  showStats();
 };
 
 const criarObserver = ( seletor, exec, type ) => {
