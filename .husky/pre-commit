@@ -1,2 +1,4 @@
+#!/bin/sh
+# pre-commit hook Husky v10+
+
 npm run lint
-commitlint --edit $1

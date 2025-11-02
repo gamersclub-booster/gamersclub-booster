@@ -104,5 +104,6 @@
   "auto-kick-negativados": "Remover jogadores com anotação negativa",
   "hide-filter-lobby": "Ocultar filtros",
   "lobby-informations": "Informações do jogador na Lobby",
-  "auto-copy-lobby-link": "Copiar automaticamente o link da lobby"
+  "auto-copy-lobby-link": "Copiar automaticamente o link da lobby",
+  "show-stats": "Exibir estatísticas do jogador na Lobby"
 }
