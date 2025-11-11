@@ -37,6 +37,16 @@ const createClose = lobbyId => $( '<div />',
   } ).append( 'X' ).on( 'click', () => $( `#infos_lobby_${lobbyId}` ).empty( ).remove() );
 
 
+const createDivAnotacao = playerInfo => $( '<div />',
+  {
+    class: 'gcbooster-info-lobbyes-anotacao',
+    title: 'Anotação',
+    'data-tip-text': 'Anotação'
+  } ).append( `A: ${
+  // eslint-disable-next-line no-nested-ternary
+  playerInfo.anotacao === 'Positiva' ? '👍' :
+    playerInfo.anotacao === 'Negativa' ? '👎' : '-'
+}` );
 
 const createDivPlayers = playerInfo => $( '<div/>',
   {
@@ -44,7 +54,8 @@ const createDivPlayers = playerInfo => $( '<div/>',
   } )
   .append( createDivDateCreate( playerInfo ) )
   .append( createDivLobbys( playerInfo ) )
-  .append( createDivVitory( playerInfo ) );
+  .append( createDivVitory( playerInfo ) )
+  .append( createDivAnotacao( playerInfo ) );
 
 const createImage = lobbyId => $( '<img/>', {
   id: `gcbooster_lupa_img_${lobbyId}`,
@@ -67,30 +78,32 @@ const createModal = ( lobbyId, type ) => $( '<div />',
     title: 'Estatísticas'
   } );
 
-const calcAge = yearMonth => {
-  if ( !yearMonth || !/^\d{4}-\d{2}$/.test( yearMonth ) ) {
-    return 'Nova';
+const calcAge = ageDate => {
+  const dateNow = new Date();
+
+  const s = ageDate;
+  const [ dia, mes, ano ] = s.split( /[/: ]/ ).map( v => parseInt( v ) );
+  const dataFormated = new Date( ano, mes - 1, dia );
+
+  const diff = Math.floor( dateNow.getTime() - dataFormated.getTime() );
+  const day = 1000 * 60 * 60 * 24;
+
+  const days = Math.floor( diff / day );
+  const months = Math.floor( days / 31 );
+  const years = Math.floor( months / 12 );
+
+  const finalMonths = months - ( years * 12 );
+
+  if ( years > 0 ) {
+    return `+${years}a`;
   }
 
-  const [ year, month ] = yearMonth.split( '-' ).map( v => parseInt( v, 10 ) );
-  const dataInicial = new Date( year, month - 1, 1 );
-  const dataAtual = new Date();
-
-  // Diferença em meses
-  const meses = ( ( dataAtual.getFullYear() - dataInicial.getFullYear() ) * 12 ) + ( dataAtual.getMonth() - dataInicial.getMonth() );
-
-  if ( meses <= 0 ) { return 'Nova'; }
-
-  const anos = Math.floor( meses / 12 );
-  const mesesRestantes = meses % 12;
-
-  if ( anos > 0 ) {
-    return `+${anos}a`;
+  if ( finalMonths > 0 ) {
+    return `${finalMonths}m`;
   }
 
-  return `${mesesRestantes}m`;
+  return 'Nova';
 };
-
 
 const getPlayersIdsNew = element => element
   .find( '.LobbyPlayerVertical' )
