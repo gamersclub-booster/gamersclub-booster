@@ -105,5 +105,6 @@
   "hide-filter-lobby": "Ocultar filtros",
   "lobby-informations": "Informações do jogador na Lobby",
   "auto-copy-lobby-link": "Copiar automaticamente o link da lobby",
-  "show-stats": "Exibir estatísticas do jogador na Lobby"
+  "show-stats": "Exibir estatísticas do jogador na Lobby",
+  "disable-show-map-stats-suggestions": "Desativar sugestões de estatísticas de mapas na Lobby"
 }

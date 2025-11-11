@@ -1,7 +1,7 @@
 import { GC_URL, headers as auth } from '../../lib/constants';
 
 const PAGE_SIZE = 20;
-const MIN_MATCHES_FOR_STATS = 1; // 5;
+const MIN_MATCHES_FOR_STATS = 5;
 
 // PARA DESENVOLVIMENTO LOCAL FORA DA EXTENSÃO, A REQUEST PRECISA DO ID DA SESSION SE NAO RETORNA ERRO 500
 //const GC_COOKIE = 'gclubsess=260bfd5baa28b5fd*****************';
@@ -53,17 +53,12 @@ async function fetchJSON( url, useAuth = false, extraHeaders = {} ) {
   }
 }
 
-/**
- * Analisa o histórico de partidas do jogador e identifica o melhor e o pior mapa
- * com base na taxa de vitória (%).
- */
 async function getPlayerMapPreferences( data ) {
   const nome = data.nick || data.player?.nick || 'Desconhecido';
   const id = data.id || data.idplayer;
 
   console.log( `[GC-BOOSTER] Analisando jogador: ${nome} (ID: ${id})` );
 
-  // Busca meses disponíveis (último mês apenas)
   const monthsData = await fetchJSON( `https://${GC_URL}/api/box/history/${id}?json`, true );
   const availableMonths = monthsData?.months;
 
@@ -84,7 +79,6 @@ async function getPlayerMapPreferences( data ) {
     return { id, nome, mapas: [] };
   }
 
-  // Busca todas as páginas do histórico do último mês
   const totalPages = Math.ceil( totalMatches / PAGE_SIZE );
   const pagePromises = Array.from( { length: totalPages }, ( _, i ) =>
     fetchJSON( `https://${GC_URL}/api/box/historyMatchesPage/${id}/${latestMonth}/${i}`, true )
@@ -284,11 +278,21 @@ async function analisadorDeLobby( matchId = '' ) {
   console.log( '\n[GC-BOOSTER] --- RESULTADO FINAL ---' );
   console.log( JSON.stringify( resultadoFinal, null, 2 ) );
 
-  return resultadoFinal;
+  return {
+    ...resultadoFinal,
+    lobbyDataParaCalculo
+  };
 }
 
 
 export async function lobbyMapSuggestions( partidaId = '' ) {
+
+  chrome.storage.sync.get( [ 'disableShowMapStatsSuggestions' ], function ( result ) {
+    if ( result.disableShowMapStatsSuggestions ) {
+      return;
+    }
+  } );
+
   console.log( '[GC-BOOSTER] Aguardando carregamento dos cards de veto...' );
 
   function criarBadge( texto, team ) {
@@ -306,9 +310,68 @@ export async function lobbyMapSuggestions( partidaId = '' ) {
     badge.innerText = texto;
     badge.style.padding = '3px 8px';
     badge.style.height = '25px';
-    badge.style.border = '1px solid ' + team === 'a' ? '#2196fd' : '#7db720';
+    badge.style.border = `1px solid ${team === 'a' ? '#2196fd' : '#7db720'}`;
     return badge;
   }
+
+  function adicionarTooltip( element, team, mapName, lobbyDataParaCalculo ) {
+    const teamData = team === 'a' ? lobbyDataParaCalculo.timeA : lobbyDataParaCalculo.timeB;
+    const jogadores = teamData
+      .map( j => {
+        const mapa = j.mapas.find( m => m.nome === mapName );
+        if ( !mapa ) { return null; }
+        return { nome: j.nome, partidas: mapa.partidas, vitorias: mapa.vitorias, winRate: mapa.winRate };
+      } )
+      .filter( Boolean );
+
+    if ( jogadores.length === 0 ) { return; }
+
+    const tooltip = document.createElement( 'div' );
+    tooltip.classList.add( 'gc-tooltip' );
+    Object.assign( tooltip.style, {
+      position: 'fixed',
+      background: 'rgba(0,0,0,0.9)',
+      color: '#fff',
+      padding: '8px 10px',
+      borderRadius: '8px',
+      fontSize: '12px',
+      lineHeight: '1.4',
+      zIndex: '999999',
+      maxWidth: '250px',
+      boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
+      pointerEvents: 'none',
+      whiteSpace: 'normal',
+      display: 'none'
+    } );
+
+    tooltip.innerHTML = `
+    <div style="font-weight:600; margin-bottom:5px; text-align:center;">
+      ${team === 'a' ? 'Time A' : 'Time B'} – ${mapName}
+    </div>
+    ${jogadores.map( j => `
+      <div style="margin-bottom:4px;">
+        <strong>- ${j.nome}</strong>: ${j.vitorias}V / ${j.partidas}P 
+        <span style="color:${team === 'a' ? '#2196fd' : '#7db720'}">(${j.winRate.toFixed( 1 )}%)</span>
+      </div>
+    ` ).join( '' )}
+  `;
+    document.body.appendChild( tooltip );
+
+    element.addEventListener( 'mouseenter', e => {
+      tooltip.style.display = 'block';
+      requestAnimationFrame( () => {
+        const rect = e.target.getBoundingClientRect();
+        tooltip.style.top = `${rect.top - tooltip.offsetHeight - 10}px`;
+        tooltip.style.left = `${rect.left + ( rect.width / 2 ) - ( tooltip.offsetWidth / 2 )}px`;
+      } );
+    } );
+
+    element.addEventListener( 'mouseleave', () => {
+      tooltip.style.display = 'none';
+    } );
+  }
+
+
 
   async function processarLobby() {
     console.log( '[GC-BOOSTER] Detectado DOM com mapas, iniciando análise...' );
@@ -318,7 +381,7 @@ export async function lobbyMapSuggestions( partidaId = '' ) {
       return;
     }
 
-    const { recomendacoes, estatisticasPorMapa } = result;
+    const { recomendacoes, estatisticasPorMapa, lobbyDataParaCalculo } = result;
     const cards = document.querySelectorAll( '.WasdMapCard__content' );
 
     if ( !cards.length ) {
@@ -351,6 +414,10 @@ export async function lobbyMapSuggestions( partidaId = '' ) {
         const badgeB = criarBadge( `${stats.timeB}%`, 'b' );
         badgesContainer.appendChild( badgeA );
         badgesContainer.appendChild( badgeB );
+
+        adicionarTooltip( badgeA, 'a', mapName, lobbyDataParaCalculo );
+        adicionarTooltip( badgeB, 'b', mapName, lobbyDataParaCalculo );
+
       } else {
         const badgeN = criarBadge( '--', 'a' );
         badgesContainer.appendChild( badgeN );
@@ -383,7 +450,8 @@ export async function lobbyMapSuggestions( partidaId = '' ) {
       boxInfo.innerHTML = `
         <div style="color: #fff; text-align: center; font-size: 14px; margin-bottom: 10px; font-weight: 400; line-height: 1.5;">
           Confira abaixo as sugestões de <strong>pick</strong> com base no desempenho dos últimos <strong>30 dias</strong>.
-          <br>Os resultados consideram a <strong>taxa de vitórias</strong> e um mínimo de <strong>5 partidas por mapa</strong> para cada jogador.
+          <br>Os resultados consideram a <strong>taxa de vitórias</strong> e um mínimo de 
+          <strong>${ MIN_MATCHES_FOR_STATS } partida(s) por mapa</strong> para cada jogador.
         </div>
       `;
 

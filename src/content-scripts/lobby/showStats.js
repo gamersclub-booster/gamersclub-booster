@@ -282,8 +282,6 @@ function injectHTML() {
   const lobbyHeader = document.querySelector( '.LobbyHeader' );
   if ( lobbyHeader ) {
     lobbyHeader.parentNode.insertBefore( container, lobbyHeader );
-  } else {
-    document.body.prepend( container );
   }
 
 }
