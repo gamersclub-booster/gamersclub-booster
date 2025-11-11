@@ -1,27 +1,11 @@
-import { GC_URL, headers as auth } from '../../lib/constants';
+import { GC_URL, headers as auth, lobbyMapSuggestionsConsts } from '../../lib/constants';
 
-const PAGE_SIZE = 20;
-const MIN_MATCHES_FOR_STATS = 5;
-
-// PARA DESENVOLVIMENTO LOCAL FORA DA EXTENSÃO, A REQUEST PRECISA DO ID DA SESSION SE NAO RETORNA ERRO 500
-//const GC_COOKIE = 'gclubsess=260bfd5baa28b5fd*****************';
-
-// Constante com mapas válidos
-const mapasDisponiveis = [
-  'de_mirage',
-  'de_dust2',
-  'de_inferno',
-  'de_anubis',
-  'de_vertigo',
-  'de_ancient',
-  'de_nuke',
-  'de_overpass',
-  'de_train',
-  'de_cache',
-  'de_cache_nova',
-  'de_thera'
-  //'de_ancient_night'
-];
+const {
+  PAGE_SIZE,
+  MIN_MATCHES_FOR_STATS,
+  MONTH_LIMIT,
+  mapasDisponiveis
+} = lobbyMapSuggestionsConsts;
 
 async function fetchJSON( url, useAuth = false, extraHeaders = {} ) {
   try {
@@ -67,25 +51,39 @@ async function getPlayerMapPreferences( data ) {
     return { id, nome, mapas: [] };
   }
 
-  const latestMonth = availableMonths[0];
-  const totalMatchesData = await fetchJSON(
-    `https://${GC_URL}/api/box/historyFilterDate/${id}/${latestMonth}`,
-    true
-  );
-  const totalMatches = totalMatchesData?.matches?.matches || 0;
+  const monthsToFetch = availableMonths.slice( 0, MONTH_LIMIT ?? 1 );
 
-  if ( totalMatches === 0 ) {
-    console.warn( `[GC-BOOSTER] Nenhuma partida encontrada no último mês para ${nome}.` );
-    return { id, nome, mapas: [] };
+  const allMatches = [];
+
+  for ( const month of monthsToFetch ) {
+    const totalMatchesData = await fetchJSON(
+      `https://${GC_URL}/api/box/historyFilterDate/${id}/${month}`,
+      true
+    );
+
+    const totalMatches = totalMatchesData?.matches?.matches || 0;
+
+    if ( totalMatches === 0 ) {
+      console.warn( `[GC-BOOSTER] Nenhuma partida encontrada para ${nome} em ${month}.` );
+      continue;
+    }
+
+    const totalPages = Math.ceil( totalMatches / PAGE_SIZE );
+    const pagePromises = Array.from( { length: totalPages }, ( _, i ) =>
+      fetchJSON( `https://${GC_URL}/api/box/historyMatchesPage/${id}/${month}/${i}`, true )
+    );
+
+    const pagesResults = await Promise.all( pagePromises );
+    const monthMatches = pagesResults.flatMap( page => page?.monthMatches || [] );
+    allMatches.push( ...monthMatches );
   }
 
-  const totalPages = Math.ceil( totalMatches / PAGE_SIZE );
-  const pagePromises = Array.from( { length: totalPages }, ( _, i ) =>
-    fetchJSON( `https://${GC_URL}/api/box/historyMatchesPage/${id}/${latestMonth}/${i}`, true )
-  );
-
-  const pagesResults = await Promise.all( pagePromises );
-  const allMatches = pagesResults.flatMap( page => page?.monthMatches || [] );
+  if ( allMatches.length === 0 ) {
+    console.warn(
+      `[GC-BOOSTER] Nenhuma partida encontrada nos últimos ${MONTH_LIMIT} mês(es) para ${nome}.`
+    );
+    return { id, nome, mapas: [] };
+  }
 
   // Estatísticas por mapa
   const mapStats = {};
