@@ -1,13 +1,11 @@
 import { getFromStorage, setStorage } from '../../lib/storage';
-import { GC_URL } from '../../lib/constants';
-
-const BASE_URL = `https://${GC_URL}/player`;
-
-const SELETOR_DATA_CRIACAO = '.gc-list-title:contains("Registrado em")';
+import { getOverallPlayerStats } from './getOverallPlayerStats';
 
 const DOIS_DIAS = ( 2 * 24 * 60 * 60 * 1000 );
 
-// Limpa o cache a cada 2 dias se o TTL for menor q 'agora'
+/**
+ * Limpa o cache de jogadores expirado.
+ */
 const limparCache = async () => {
   const cache = await getFromStorage( 'lupaCache' ) || {};
   for ( const [ id, obj ] of Object.entries( cache ) ) {
@@ -19,64 +17,45 @@ const limparCache = async () => {
   await setStorage( 'ultimaLimpezaCache', Date.now() );
 };
 
-const getAnotacao = html => {
-  if ( $( html ).find( '.gc-button-notes-negative' )[0] ) {
-    return 'Negativa';
-  }
-  if ( $( html ).find( '.gc-button-notes-positive' )[0] ) {
-    return 'Positiva';
-  }
-  return 'Nenhuma';
-};
-
+/**
+ * Retorna os dados calculados via getOverallPlayerStats().
+ *
+ * @param {string|number} id - ID do jogador (playerId).
+ * @returns {Promise<object>} Dados agregados do jogador.
+ */
 export async function getPlayerInfo( id ) {
   const ultimaLimpezaCache = await getFromStorage( 'ultimaLimpezaCache' );
   if ( !ultimaLimpezaCache || ultimaLimpezaCache < Date.now() - DOIS_DIAS ) {
     await limparCache();
   }
-  const lupaCache = await getFromStorage( 'lupaCache' ) || {};
+
+  const lupaCache = ( await getFromStorage( 'lupaCache' ) ) || {};
   if ( lupaCache?.[id]?.ttl > Date.now() ) {
+    console.log( `[GC-LUPA] Dados do jogador ${id} retornados do cache.` );
     return lupaCache[id];
   }
-  const promise = new Promise( ( resolve, reject ) => {
-    try {
-      const url = `${BASE_URL}/${id}`;
 
-      $.get( url, function ( html ) {
-        const dataCriacao = $( html ).find( SELETOR_DATA_CRIACAO ).next().text();
-        const firstTab = $( html ).find( '#cs2-history-list' ).first();
-        let totalPartidas = 0;
-        let totalVitorias = 0;
-        let totalDerrotas = 0;
+  try {
+    console.log( `[GC-LUPA] Buscando estatísticas atualizadas do jogador ${id}...` );
+    const stats = await getOverallPlayerStats( id );
 
-        firstTab.find( '.gc-card-history-text' ).each( function () {
-          totalPartidas += parseInt( $( this ).html().trimEnd() );
-        } );
-        firstTab.find( 'span:contains(\'Vitórias\')' ).each( function () {
-          totalVitorias += parseInt( $( this ).html().replace( ' Vitórias', '' ) );
-        } );
-        firstTab.find( 'span:contains(\'Derrotas\')' ).each( function () {
-          totalDerrotas += parseInt( $( this ).html().replace( ' Derrotas', '' ) );
-        } );
-        const porcentagemVitoria = ( ( totalVitorias / ( totalVitorias + totalDerrotas ) ) * 100 ).toFixed( 2 );
+    const response = {
+      dataCriacao: stats.firstMonth || 'Desconhecido',
+      totalPartidas: stats.totalMatches || 0,
+      porcentagemVitoria: stats.winRate || 0,
+      ttl: Date.now() + DOIS_DIAS
+    };
 
-        const anotacao = getAnotacao( html );
-        const response = {
-          dataCriacao,
-          totalPartidas,
-          porcentagemVitoria,
-          anotacao,
-          // 2 dias de cache
-          ttl: Date.now() + DOIS_DIAS
-        };
-        lupaCache[id] = response;
-        setStorage( 'lupaCache', lupaCache );
-        resolve( response );
-      } );
-    } catch ( e ) {
-      reject( e );
-    }
-  } );
+    lupaCache[id] = response;
+    await setStorage( 'lupaCache', lupaCache );
 
-  return promise;
+    console.log(
+      `[GC-LUPA] Dados de ${id} armazenados em cache: ${response.totalPartidas} partidas, ${response.porcentagemVitoria}% de vitória.`
+    );
+
+    return response;
+  } catch ( error ) {
+    console.error( `[GC-LUPA] Erro ao buscar informações do jogador ${id}:`, error.message );
+    throw error;
+  }
 }
