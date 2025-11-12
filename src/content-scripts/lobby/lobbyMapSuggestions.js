@@ -322,8 +322,6 @@ export async function lobbyMapSuggestions( partidaId = '' ) {
       } )
       .filter( Boolean );
 
-    if ( jogadores.length === 0 ) { return; }
-
     const tooltip = document.createElement( 'div' );
     tooltip.classList.add( 'gc-tooltip' );
     Object.assign( tooltip.style, {
@@ -346,27 +344,30 @@ export async function lobbyMapSuggestions( partidaId = '' ) {
     <div style="font-weight:600; margin-bottom:5px; text-align:center;">
       ${team === 'a' ? 'Time A' : 'Time B'} – ${mapName}
     </div>
-    ${jogadores.map( j => `
+    ${jogadores.length > 0 ? jogadores.map( j => `
       <div style="margin-bottom:4px;">
         <strong>- ${j.nome}</strong>: ${j.vitorias}V / ${j.partidas}P 
         <span style="color:${team === 'a' ? '#2196fd' : '#7db720'}">(${j.winRate.toFixed( 1 )}%)</span>
       </div>
-    ` ).join( '' )}
+    ` ).join( '' ) : '<div style="margin-bottom:4px; color: #999;">Sem dados disponíveis</div>'}
   `;
     document.body.appendChild( tooltip );
 
-    element.addEventListener( 'mouseenter', e => {
+    const mostrarTooltip = e => {
       tooltip.style.display = 'block';
       requestAnimationFrame( () => {
         const rect = e.target.getBoundingClientRect();
         tooltip.style.top = `${rect.top - tooltip.offsetHeight - 10}px`;
         tooltip.style.left = `${rect.left + ( rect.width / 2 ) - ( tooltip.offsetWidth / 2 )}px`;
       } );
-    } );
+    };
 
-    element.addEventListener( 'mouseleave', () => {
+    const ocultarTooltip = () => {
       tooltip.style.display = 'none';
-    } );
+    };
+
+    element.addEventListener( 'mouseenter', mostrarTooltip );
+    element.addEventListener( 'mouseleave', ocultarTooltip );
   }
 
 
@@ -380,7 +381,7 @@ export async function lobbyMapSuggestions( partidaId = '' ) {
     }
 
     const { recomendacoes, estatisticasPorMapa, lobbyDataParaCalculo } = result;
-    const cards = document.querySelectorAll( '.WasdMapCard__content' );
+    const cards = document.querySelectorAll( '.WasdMapCard' );
 
     if ( !cards.length ) {
       console.log( '[GC-BOOSTER] Nenhum card encontrado após análise.' );
@@ -421,7 +422,7 @@ export async function lobbyMapSuggestions( partidaId = '' ) {
         badgesContainer.appendChild( badgeN );
       }
 
-      mapTitleEl.insertAdjacentElement( 'afterend', badgesContainer );
+      card.insertAdjacentElement( 'afterend', badgesContainer );
     } );
 
     const contentContainer = document.querySelector( '.Content-ssi08s-4' );
@@ -481,7 +482,7 @@ export async function lobbyMapSuggestions( partidaId = '' ) {
   }
 
   const observer = new MutationObserver( () => {
-    if ( document.querySelector( '.WasdMapCard__content' ) ) {
+    if ( document.querySelector( '.WasdMapCard' ) ) {
       observer.disconnect();
       processarLobby();
     }
