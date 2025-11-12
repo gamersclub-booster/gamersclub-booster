@@ -3,7 +3,7 @@ import { GC_URL } from '../../lib/constants';
 
 const BASE_URL = `https://${GC_URL}/player`;
 
-const SELETOR_DATA_CRIACAO = '.gc-list-title:contains("Registrado em")';
+const SELETOR_DATA_CRIACAO = '.gc-list-title';
 
 const DOIS_DIAS = ( 2 * 24 * 60 * 60 * 1000 );
 
@@ -43,22 +43,43 @@ export async function getPlayerInfo( id ) {
       const url = `${BASE_URL}/${id}`;
 
       $.get( url, function ( html ) {
-        const dataCriacao = $( html ).find( SELETOR_DATA_CRIACAO ).next().text();
-        const firstTab = $( html ).find( '#cs2-history-list' ).first();
+        const $html = $( html );
+
+        const dataCriacaoElement = $html.find( SELETOR_DATA_CRIACAO ).filter( function () {
+          const text = $( this ).text().trim().toLowerCase();
+          return /(registrado\s*(em|el)|registered\s*in)/i.test( text );
+        } ).first();
+
+        const dataCriacao = dataCriacaoElement.next().text().trim();
+        const firstTab = $html.find( '#cs2-history-list' ).first();
+
         let totalPartidas = 0;
         let totalVitorias = 0;
         let totalDerrotas = 0;
 
         firstTab.find( '.gc-card-history-text' ).each( function () {
-          totalPartidas += parseInt( $( this ).html().trimEnd() );
+          const text = $( this ).clone().children().remove().end().text().trim();
+          const qtd = parseInt( text.replace( /\D/g, '' ), 10 );
+          if ( !isNaN( qtd ) ) { totalPartidas += qtd; }
         } );
-        firstTab.find( 'span:contains(\'Vitórias\')' ).each( function () {
-          totalVitorias += parseInt( $( this ).html().replace( ' Vitórias', '' ) );
+
+        firstTab.find( '.gc-card-history-detail span' ).each( function () {
+          const txt = $( this ).text().trim().toLowerCase();
+
+          if ( /vit[óo]ri(a|as)|victor(y|ies|ias)/i.test( txt ) ) {
+            const qtd = parseInt( txt.replace( /\D/g, '' ), 10 );
+            if ( !isNaN( qtd ) ) { totalVitorias += qtd; }
+          }
+
+          if ( /derrotas?|defeat(s)?/i.test( txt ) ) {
+            const qtd = parseInt( txt.replace( /\D/g, '' ), 10 );
+            if ( !isNaN( qtd ) ) { totalDerrotas += qtd; }
+          }
         } );
-        firstTab.find( 'span:contains(\'Derrotas\')' ).each( function () {
-          totalDerrotas += parseInt( $( this ).html().replace( ' Derrotas', '' ) );
-        } );
-        const porcentagemVitoria = ( ( totalVitorias / ( totalVitorias + totalDerrotas ) ) * 100 ).toFixed( 2 );
+
+        const totalJogos = totalVitorias + totalDerrotas;
+        const porcentagemVitoria =
+    totalJogos > 0 ? ( ( totalVitorias / totalJogos ) * 100 ).toFixed( 2 ) : '0.00';
 
         const anotacao = getAnotacao( html );
         const response = {
@@ -66,9 +87,9 @@ export async function getPlayerInfo( id ) {
           totalPartidas,
           porcentagemVitoria,
           anotacao,
-          // 2 dias de cache
           ttl: Date.now() + DOIS_DIAS
         };
+
         lupaCache[id] = response;
         setStorage( 'lupaCache', lupaCache );
         resolve( response );
