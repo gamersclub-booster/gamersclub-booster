@@ -2,9 +2,9 @@ import { GC_URL, headers as auth, lobbyMapSuggestionsConsts } from '../../lib/co
 
 const {
   PAGE_SIZE,
-  MIN_MATCHES_FOR_STATS,
   MONTH_LIMIT,
-  mapasDisponiveis
+  PLAYERS_PER_TEAM,
+  AVAILABLE_MAPS
 } = lobbyMapSuggestionsConsts;
 
 async function fetchJSON( url, useAuth = false, extraHeaders = {} ) {
@@ -89,7 +89,7 @@ async function getPlayerMapPreferences( data ) {
   const mapStats = {};
   allMatches.forEach( match => {
     const map = match?.map;
-    if ( !map || !mapasDisponiveis.includes( map ) ) { return; }
+    if ( !map || !AVAILABLE_MAPS.includes( map ) ) { return; }
 
     if ( !mapStats[map] ) {
       mapStats[map] = { partidas: 0, vitorias: 0 };
@@ -108,13 +108,10 @@ async function getPlayerMapPreferences( data ) {
       partidas: stats.partidas,
       vitorias: stats.vitorias,
       winRate: ( stats.vitorias / stats.partidas ) * 100
-    } ) )
-    .filter( m => m.partidas >= MIN_MATCHES_FOR_STATS );
+    } ) );
 
   if ( relevantMaps.length === 0 ) {
-    console.log(
-      `- ${nome} não possui mapas com o mínimo de ${MIN_MATCHES_FOR_STATS} partidas.`
-    );
+    console.log( `- ${nome} não possui mapas com dados suficientes.` );
     return { id, nome, mapas: [] };
   }
 
@@ -143,24 +140,20 @@ function calcularSugestoesDeVeto( lobbyData ) {
 
   const mapaStats = {};
 
-  for ( const mapa of mapasDisponiveis ) {
+  for ( const mapa of AVAILABLE_MAPS ) {
     // Média de winrate do time A no mapa
     const winRatesA = lobbyData.timeA
       .map( j => j.mapas?.find( m => m.nome === mapa )?.winRate )
       .filter( rate => rate !== undefined );
-    const mediaA =
-      winRatesA.length > 0 ?
-        winRatesA.reduce( ( a, b ) => a + b, 0 ) / winRatesA.length :
-        0;
+    const somaWinRateA = winRatesA.reduce( ( a, b ) => a + b, 0 );
+    const mediaA = somaWinRateA / PLAYERS_PER_TEAM;
 
     // Média de winrate do time B no mapa
     const winRatesB = lobbyData.timeB
       .map( j => j.mapas?.find( m => m.nome === mapa )?.winRate )
       .filter( rate => rate !== undefined );
-    const mediaB =
-      winRatesB.length > 0 ?
-        winRatesB.reduce( ( a, b ) => a + b, 0 ) / winRatesB.length :
-        0;
+    const somaWinRateB = winRatesB.reduce( ( a, b ) => a + b, 0 );
+    const mediaB = somaWinRateB / PLAYERS_PER_TEAM;
 
     mapaStats[mapa] = {
       timeA: parseFloat( mediaA.toFixed( 2 ) ),
@@ -448,9 +441,8 @@ export async function lobbyMapSuggestions( partidaId = '' ) {
       const boxInfo = document.createElement( 'div' );
       boxInfo.innerHTML = `
         <div style="color: #fff; text-align: center; font-size: 14px; margin-bottom: 10px; font-weight: 400; line-height: 1.5;">
-          Confira abaixo as sugestões de <strong>pick</strong> com base no desempenho dos últimos <strong>30 dias</strong>.
-          <br>Os resultados consideram a <strong>taxa de vitórias</strong> e um mínimo de 
-          <strong>${ MIN_MATCHES_FOR_STATS } partida(s) por mapa</strong> para cada jogador.
+          Confira abaixo as sugestões de <strong>pick</strong> com base no desempenho dos últimos <strong>90 dias</strong>.
+          <br>Os resultados consideram a <strong>taxa de vitórias</strong> calculada a partir das partidas registradas por jogador.
         </div>
       `;
 

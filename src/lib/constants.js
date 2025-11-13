@@ -174,10 +174,10 @@ export const headers = {
 // lobby map suggestions constants
 export const lobbyMapSuggestionsConsts = {
   PAGE_SIZE: 20,
-  MIN_MATCHES_FOR_STATS: 5,
+  PLAYERS_PER_TEAM: 5,
   GC_COOKIE: 'gclubsess=260bfd5baa28b5fd*****************',
   MONTH_LIMIT: 3,
-  mapasDisponiveis: [
+  AVAILABLE_MAPS: [
     'de_mirage',
     'de_dust2',
     'de_inferno',
