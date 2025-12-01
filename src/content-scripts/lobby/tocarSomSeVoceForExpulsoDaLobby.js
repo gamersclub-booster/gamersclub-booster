@@ -3,6 +3,8 @@ export const tocarSomSeVoceForExpulsoDaLobby = mutations => {
     const som = result.somKicked === 'custom' ? result.customSomKicked : result.somKicked;
     if ( gcToastExists( mutations ) ) {
       const audio = new Audio( som );
+      const volume = result.volume || 100;
+      audio.volume = volume / 100;
       audio.play();
     }
   } );
