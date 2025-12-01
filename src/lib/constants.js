@@ -177,6 +177,8 @@ export const lobbyMapSuggestionsConsts = {
   PLAYERS_PER_TEAM: 5,
   GC_COOKIE: 'gclubsess=260bfd5baa28b5fd*****************',
   MONTH_LIMIT: 3,
+  CACHE_KEY_PREFIX: 'gc_player_cache_',
+  CACHE_TTL: 2 * 24 * 60 * 60 * 1000,
   AVAILABLE_MAPS: [
     'de_mirage',
     'de_dust2',

@@ -4,8 +4,37 @@ const {
   PAGE_SIZE,
   MONTH_LIMIT,
   PLAYERS_PER_TEAM,
-  AVAILABLE_MAPS
+  AVAILABLE_MAPS,
+  CACHE_KEY_PREFIX,
+  CACHE_TTL
 } = lobbyMapSuggestionsConsts;
+
+function loadCache( playerId ) {
+  const raw = localStorage.getItem( CACHE_KEY_PREFIX + playerId );
+  if ( !raw ) { return null; }
+
+  try {
+    const cached = JSON.parse( raw );
+    if ( cached.expire > Date.now() ) {
+      return cached.data;
+    } else {
+      localStorage.removeItem( CACHE_KEY_PREFIX + playerId );
+      return null;
+    }
+  } catch {
+    return null;
+  }
+}
+
+function saveCache( playerId, data ) {
+  localStorage.setItem(
+    CACHE_KEY_PREFIX + playerId,
+    JSON.stringify( {
+      expire: Date.now() + CACHE_TTL,
+      data
+    } )
+  );
+}
 
 async function fetchJSON( url, useAuth = false, extraHeaders = {} ) {
   try {
@@ -41,13 +70,18 @@ async function getPlayerMapPreferences( data ) {
   const nome = data.nick || data.player?.nick || 'Desconhecido';
   const id = data.id || data.idplayer;
 
-  console.log( `[GC-BOOSTER] Analisando jogador: ${nome} (ID: ${id})` );
+  const cached = loadCache( id );
+  if ( cached ) {
+    console.log( `[GC-BOOSTER] Cache encontrado para: ${nome}` );
+    return cached;
+  }
+
+  console.log( `[GC-BOOSTER] Buscando histórico do jogador: ${nome}` );
 
   const monthsData = await fetchJSON( `https://${GC_URL}/api/box/history/${id}?json`, true );
   const availableMonths = monthsData?.months;
 
   if ( !availableMonths || availableMonths.length === 0 ) {
-    console.warn( `[GC-BOOSTER] Nenhum histórico de partidas encontrado para ${nome}.` );
     return { id, nome, mapas: [] };
   }
 
@@ -64,7 +98,6 @@ async function getPlayerMapPreferences( data ) {
     const totalMatches = totalMatchesData?.matches?.matches || 0;
 
     if ( totalMatches === 0 ) {
-      console.warn( `[GC-BOOSTER] Nenhuma partida encontrada para ${nome} em ${month}.` );
       continue;
     }
 
@@ -79,9 +112,6 @@ async function getPlayerMapPreferences( data ) {
   }
 
   if ( allMatches.length === 0 ) {
-    console.warn(
-      `[GC-BOOSTER] Nenhuma partida encontrada nos últimos ${MONTH_LIMIT} mês(es) para ${nome}.`
-    );
     return { id, nome, mapas: [] };
   }
 
@@ -101,28 +131,14 @@ async function getPlayerMapPreferences( data ) {
     }
   } );
 
-  // Calcula winrate por mapa
-  const relevantMaps = Object.entries( mapStats )
-    .map( ( [ map, stats ] ) => ( {
-      map,
-      partidas: stats.partidas,
-      vitorias: stats.vitorias,
-      winRate: ( stats.vitorias / stats.partidas ) * 100
-    } ) );
+  const relevantMaps = Object.entries( mapStats ).map( ( [ map, stats ] ) => ( {
+    map,
+    partidas: stats.partidas,
+    vitorias: stats.vitorias,
+    winRate: ( stats.vitorias / stats.partidas ) * 100
+  } ) );
 
-  if ( relevantMaps.length === 0 ) {
-    console.log( `- ${nome} não possui mapas com dados suficientes.` );
-    return { id, nome, mapas: [] };
-  }
-
-  console.log( `[GC-BOOSTER] Estatísticas calculadas para ${nome}:` );
-  relevantMaps.forEach( m =>
-    console.log(
-      `   - ${m.map}: ${m.vitorias} vitórias em ${m.partidas} partidas (${m.winRate.toFixed( 2 )}%)`
-    )
-  );
-
-  return {
+  const finalResult = {
     id,
     nome,
     mapas: relevantMaps.map( m => ( {
@@ -132,15 +148,19 @@ async function getPlayerMapPreferences( data ) {
       winRate: parseFloat( m.winRate.toFixed( 2 ) )
     } ) )
   };
+
+  saveCache( id, finalResult );
+  return finalResult;
 }
 
 // --- CÁLCULO DO VETO ---
-function calcularSugestoesDeVeto( lobbyData ) {
+function calcularSugestoesDeVeto( lobbyData, mapasVisiveis ) {
   console.log( '[GC-BOOSTER] Calculando sugestões de veto...' );
 
   const mapaStats = {};
+  const mapasParaAvaliar = AVAILABLE_MAPS.filter( m => mapasVisiveis.includes( m ) );
 
-  for ( const mapa of AVAILABLE_MAPS ) {
+  for ( const mapa of mapasParaAvaliar ) {
     // Média de winrate do time A no mapa
     const winRatesA = lobbyData.timeA
       .map( j => j.mapas?.find( m => m.nome === mapa )?.winRate )
@@ -175,20 +195,6 @@ function calcularSugestoesDeVeto( lobbyData ) {
     }
   }
 
-  console.log( '[GC-BOOSTER] Estatísticas consolidadas por mapa:' );
-  Object.entries( mapaStats ).forEach( ( [ mapa, stats ] ) => {
-    console.log(
-      `   - ${mapa}: Time A ${stats.timeA.toFixed( 2 )}% | Time B ${stats.timeB.toFixed( 2 )}%`
-    );
-  } );
-
-  console.log(
-    `[GC-BOOSTER] Melhor mapa para Time A: ${maiorVantagemTimeA.mapa} (+${maiorVantagemTimeA.diff.toFixed( 2 )}%)`
-  );
-  console.log(
-    `[GC-BOOSTER] Melhor mapa para Time B: ${maiorVantagemTimeB.mapa} (${( maiorVantagemTimeB.diff.toFixed( 2 ) * -1 )}%)`
-  );
-
   return {
     recomendacoes: {
       time_A: {
@@ -216,7 +222,7 @@ function calcularSugestoesDeVeto( lobbyData ) {
   };
 }
 
-async function analisadorDeLobby( matchId = '' ) {
+async function analisadorDeLobby( matchId = '', mapasVisiveis = [] ) {
   console.log(
     `\n[GC-BOOSTER] INICIANDO ANÁLISE DE VETO PARA A PARTIDA ${matchId} ...`
   );
@@ -237,9 +243,6 @@ async function analisadorDeLobby( matchId = '' ) {
     [];
 
   if ( !teamA.length || !teamB.length ) {
-    console.error(
-      '[GC-BOOSTER] ERRO: Não foi possível obter os dados dos jogadores.'
-    );
     return null;
   }
 
@@ -248,9 +251,6 @@ async function analisadorDeLobby( matchId = '' ) {
   const playerPreferences = await Promise.all(
     allPlayers.map( p => getPlayerMapPreferences( p ) )
   );
-
-  console.log( '\n[GC-BOOSTER] --- DADOS COLETADOS ---' );
-  console.log( JSON.stringify( playerPreferences, null, 2 ) );
 
   const lobbyDataParaCalculo = {
     timeA: playerPreferences.filter( pref =>
@@ -261,13 +261,7 @@ async function analisadorDeLobby( matchId = '' ) {
     )
   };
 
-  console.log( '\n[GC-BOOSTER] --- DADOS PARA CALCULO ---' );
-  console.log( JSON.stringify( lobbyDataParaCalculo, null, 2 ) );
-
-  const resultadoFinal = calcularSugestoesDeVeto( lobbyDataParaCalculo );
-
-  console.log( '\n[GC-BOOSTER] --- RESULTADO FINAL ---' );
-  console.log( JSON.stringify( resultadoFinal, null, 2 ) );
+  const resultadoFinal = calcularSugestoesDeVeto( lobbyDataParaCalculo, mapasVisiveis );
 
   return {
     ...resultadoFinal,
@@ -284,7 +278,13 @@ export async function lobbyMapSuggestions( partidaId = '' ) {
     }
   } );
 
-  console.log( '[GC-BOOSTER] Aguardando carregamento dos cards de veto...' );
+  const style = document.createElement( 'style' );
+  style.innerHTML = `
+    .gFpUQE {
+      transform: translateY(-100px) !important;
+    }
+  `;
+  document.head.appendChild( style );
 
   function criarBadge( texto, team ) {
     const badge = document.createElement( 'span' );
@@ -307,6 +307,7 @@ export async function lobbyMapSuggestions( partidaId = '' ) {
 
   function adicionarTooltip( element, team, mapName, lobbyDataParaCalculo ) {
     const teamData = team === 'a' ? lobbyDataParaCalculo.timeA : lobbyDataParaCalculo.timeB;
+
     const jogadores = teamData
       .map( j => {
         const mapa = j.mapas.find( m => m.nome === mapName );
@@ -366,14 +367,22 @@ export async function lobbyMapSuggestions( partidaId = '' ) {
 
 
   async function processarLobby() {
-    console.log( '[GC-BOOSTER] Detectado DOM com mapas, iniciando análise...' );
-    const result = await analisadorDeLobby( partidaId );
+    const mapasVisiveis = [ ...document.querySelectorAll( '.WasdMapCard__mapTitle' ) ].map(
+      t => t.textContent.trim()
+    );
+
+    const result = await analisadorDeLobby( partidaId, mapasVisiveis );
     if ( !result || !result.recomendacoes ) {
-      console.warn( '[GC-BOOSTER] Nenhum dado retornado pela análise do lobby.' );
       return;
     }
 
-    const { recomendacoes, estatisticasPorMapa, lobbyDataParaCalculo } = result;
+    const { lobbyDataParaCalculo } = result;
+
+    const { recomendacoes, estatisticasPorMapa } = calcularSugestoesDeVeto(
+      lobbyDataParaCalculo,
+      mapasVisiveis
+    );
+
     const cards = document.querySelectorAll( '.WasdMapCard' );
 
     if ( !cards.length ) {
@@ -409,10 +418,6 @@ export async function lobbyMapSuggestions( partidaId = '' ) {
 
         adicionarTooltip( badgeA, 'a', mapName, lobbyDataParaCalculo );
         adicionarTooltip( badgeB, 'b', mapName, lobbyDataParaCalculo );
-
-      } else {
-        const badgeN = criarBadge( '--', 'a' );
-        badgesContainer.appendChild( badgeN );
       }
 
       card.insertAdjacentElement( 'afterend', badgesContainer );
