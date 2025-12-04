@@ -120,7 +120,7 @@ function injectHTML() {
 .gc-stats-container {
   color: var(--gc-text-primary);
   background: #1f1f1f;
-  border: 1px solid #faf9f714;
+  border: 1px solid #ffa50087;
   margin: 1rem auto;
   width: 100%;
   overflow: hidden;
@@ -264,7 +264,7 @@ function injectHTML() {
       <button data-months="1">1 Mês</button>
       <button data-months="3">3 Meses</button>
       <button data-months="6">6 Meses</button>
-      <button data-months="0">Tudo</button> 
+      <!--<button data-months="0">Tudo</button>-->
     </div>
     <div id="gcStatsLoading" class="gc-stats-loading" style="display:none;">
       <div class="spinner"></div><p>Carregando estatísticas...</p>
@@ -282,8 +282,6 @@ function injectHTML() {
   const lobbyHeader = document.querySelector( '.LobbyHeader' );
   if ( lobbyHeader ) {
     lobbyHeader.parentNode.insertBefore( container, lobbyHeader );
-  } else {
-    document.body.prepend( container );
   }
 
 }

@@ -170,3 +170,31 @@ export const isBlink = ( isChrome || isOpera ) && !!window.CSS;
 export const headers = {
   Authorization: 'Basic Z2MtYm9vc3RlcjowZG5tTjBKVDNMQXcwc3B5SVVJck13NHI'
 };
+
+// lobby map suggestions constants
+export const lobbyMapSuggestionsConsts = {
+  PAGE_SIZE: 20,
+  PLAYERS_PER_TEAM: 5,
+  GC_COOKIE: 'gclubsess=260bfd5baa28b5fd*****************',
+  MONTH_LIMIT: 3,
+  CACHE_KEY_PREFIX: 'gc_player_cache_',
+  CACHE_TTL: 2 * 24 * 60 * 60 * 1000,
+  AVAILABLE_MAPS: [
+    'de_mirage',
+    'de_dust2',
+    'de_inferno',
+    'de_anubis',
+    'de_vertigo',
+    'de_ancient',
+    'de_nuke',
+    'de_overpass',
+    'de_train',
+    'de_cache',
+    'de_cache_nova',
+    'de_thera',
+    'de_ancient_night',
+    'de_cbble_classic',
+    'de_cache_old',
+    'de_tuscan'
+  ]
+};

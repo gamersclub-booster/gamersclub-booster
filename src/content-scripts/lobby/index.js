@@ -20,9 +20,11 @@ import { ocultarNotificacaoComplete } from './ocultarNotificacaoComplete';
 import { ocultarSugestaoDeLobbies } from './ocultarSugestaoDeLobbies';
 import { tocarSomSeVoceForExpulsoDaLobby } from './tocarSomSeVoceForExpulsoDaLobby';
 import { showStats } from './showStats';
+import { lobbyMapSuggestions } from './lobbyMapSuggestions';
 
 chrome.storage.sync.get( null, function ( _result ) {
   if ( window.location.pathname.includes( 'partida' ) || window.location.pathname.includes( '/match/' ) ) {
+    //lobbyMapSuggestions( '25270001' );
     initLobbyPartida();
   } else {
     initLobby();
@@ -87,6 +89,7 @@ const initLobby = async () => {
   autoKickNegativados();
   // Feature para exibir as estatísticas do jogador
   showStats();
+  lobbyMapSuggestions();
 };
 
 const criarObserver = ( seletor, exec, type ) => {
