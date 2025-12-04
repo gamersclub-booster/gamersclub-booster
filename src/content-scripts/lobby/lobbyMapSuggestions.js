@@ -1,8 +1,6 @@
 import { GC_URL, headers as auth, lobbyMapSuggestionsConsts } from '../../lib/constants';
 
 const {
-  PAGE_SIZE,
-  MONTH_LIMIT,
   PLAYERS_PER_TEAM,
   AVAILABLE_MAPS,
   CACHE_KEY_PREFIX,
@@ -78,40 +76,9 @@ async function getPlayerMapPreferences( data ) {
 
   console.log( `[GC-BOOSTER] Buscando histórico do jogador: ${nome}` );
 
-  const monthsData = await fetchJSON( `https://${GC_URL}/api/box/history/${id}?json`, true );
-  const availableMonths = monthsData?.months;
+  const allMatches = await fetchJSON( `https://${GC_URL}/api/box/history/${id}/maps`, true );
 
-  if ( !availableMonths || availableMonths.length === 0 ) {
-    return { id, nome, mapas: [] };
-  }
-
-  const monthsToFetch = availableMonths.slice( 0, MONTH_LIMIT ?? 1 );
-
-  const allMatches = [];
-
-  for ( const month of monthsToFetch ) {
-    const totalMatchesData = await fetchJSON(
-      `https://${GC_URL}/api/box/historyFilterDate/${id}/${month}`,
-      true
-    );
-
-    const totalMatches = totalMatchesData?.matches?.matches || 0;
-
-    if ( totalMatches === 0 ) {
-      continue;
-    }
-
-    const totalPages = Math.ceil( totalMatches / PAGE_SIZE );
-    const pagePromises = Array.from( { length: totalPages }, ( _, i ) =>
-      fetchJSON( `https://${GC_URL}/api/box/historyMatchesPage/${id}/${month}/${i}`, true )
-    );
-
-    const pagesResults = await Promise.all( pagePromises );
-    const monthMatches = pagesResults.flatMap( page => page?.monthMatches || [] );
-    allMatches.push( ...monthMatches );
-  }
-
-  if ( allMatches.length === 0 ) {
+  if ( !allMatches || allMatches.length === 0 ) {
     return { id, nome, mapas: [] };
   }
 
