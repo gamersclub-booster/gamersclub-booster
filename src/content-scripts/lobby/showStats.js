@@ -5,7 +5,7 @@ import { getUserInfo } from '../../lib/dom';
 const { plID: PLAYER_ID } = getUserInfo();
 const PAGE_SIZE = 20;
 const DEFAULT_MONTHS = 1;
-const CACHE_DURATION = 60 * 60 * 1000;
+const CACHE_DURATION = 20 * 60 * 1000;
 
 async function fetchJSON( url, headers = {} ) {
   try {
