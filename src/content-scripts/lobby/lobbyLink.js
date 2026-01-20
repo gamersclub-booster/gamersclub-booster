@@ -18,8 +18,8 @@ export const lobbyLink = mutations =>
           const node = mutation.addedNodes[i];
           if (
             node.nextElementSibling &&
-          node.nextElementSibling.className &&
-          node.nextElementSibling.className.includes( 'MyRoom' )
+            node.nextElementSibling.className &&
+            node.nextElementSibling.className.includes( 'MyRoom' )
           ) {
             if ( result.webhookLink.startsWith( 'http' ) ) {
               if ( document.getElementById( 'discordLobbyButton' ) ) {
