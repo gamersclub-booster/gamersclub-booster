@@ -280,6 +280,69 @@ export const mostrarInfoPlayerIntervaler = () => {
   );
 };
 
+export const showKdrMatch = () => {
+  const observer = new MutationObserver( () => {
+    $( '[id^="trigger-"]' ).each( ( _, element ) => {
+      if ( element.dataset.gcboosterProcessed ) {
+        return;
+      }
+
+      const $trigger = $( element );
+      const triggerId = element.id; // trigger-{playerId}
+      const playerId = triggerId.replace( 'trigger-', '' );
+
+      element.dataset.gcboosterProcessed = 'true';
+
+      ( async () => {
+        const $playerListCard = $trigger.closest( '.PlayerListCard' );
+        const $badges = $playerListCard.find( '.PlayerIdentityBadges' );
+
+        const infoPlayer = await getPlayerInfo( playerId );
+        const kdrStat = infoPlayer?.stats?.find( stat => stat.stat === 'KDR' );
+        const playerKdr = kdrStat ? parseFloat( kdrStat.value ).toFixed( 2 ) : '0.00';
+
+        const colorKrdDefault = playerKdr <= 2 ? '#000' :
+          'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)';
+        const colorKdr = playerKdr <= 2 ? levelColor[Math.round( playerKdr * 10 )] : colorKrdDefault;
+
+        const $kdrElement = $( '<div/>', {
+          'id': 'gcbooster_kdr_match_' + playerId,
+          'class': 'WasdTooltip__wrapper PlayerIdentityBadges__KDR',
+          'css': {
+            'background': colorKdr,
+            'color': 'white',
+            'font-weight': '600',
+            'font-size': '10px',
+            'padding': '2px 4px',
+            'margin-top': '2px',
+            'margin-left': '4px',
+            'text-align': 'center',
+            'display': 'flex',
+            'align-items': 'center',
+            'justify-content': 'center'
+          },
+          'title': `[GC Booster]: KDR: ${playerKdr}`,
+          'text': playerKdr
+        } );
+
+        const isLeftSide = $playerListCard.hasClass( 'PlayerListCard--left' );
+
+        if ( $badges.length > 0 ) {
+          $badges.append( $kdrElement );
+          if ( isLeftSide ) {
+            $kdrElement.css( 'order', '10' );
+          } else {
+            $kdrElement.css( { 'order': '-1', 'margin-left': '0', 'margin-right': '4px' } );
+          }
+        }
+      } )();
+    } );
+  } );
+
+  observer.observe( document.body, { childList: true, subtree: true } );
+};
+
+
 // Example playerInfo
 // [ {
 //   infoPlayer: {
