@@ -442,7 +442,7 @@ export async function lobbyMapSuggestions( partidaId = '' ) {
 
         sug.innerText = suggestionText;
         card.style.position = 'relative';
-        card.style.boxShadow = '0 0 18px ' + color + '65';
+        card.style.boxShadow = '0 0 18px ' + color + '80';
         card.parentNode.insertBefore( sug, card );
       }
 
