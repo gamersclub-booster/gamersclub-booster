@@ -4,7 +4,8 @@ const {
   PLAYERS_PER_TEAM,
   AVAILABLE_MAPS,
   CACHE_KEY_PREFIX,
-  CACHE_TTL
+  CACHE_TTL,
+  DEBUG_FAKE_DATA
 } = lobbyMapSuggestionsConsts;
 
 function loadCache( playerId ) {
@@ -345,6 +346,43 @@ export async function lobbyMapSuggestions( partidaId = '' ) {
 
     const { lobbyDataParaCalculo } = result;
 
+    if ( DEBUG_FAKE_DATA ) {
+      console.log( '[GC-BOOSTER] MODO DEBUG ATIVO — usando dados simulados' );
+      const partidas = 20;
+      const vitorias = Math.floor( Math.random() * ( partidas + 1 ) );
+      lobbyDataParaCalculo.timeA = Array.from( { length: 5 } ).map( ( _, i ) => ( {
+        id: i + 1,
+        nome: 'Player A' + i,
+        mapas: AVAILABLE_MAPS.map( map => {
+          const winRate = parseFloat( ( ( vitorias / partidas ) * 100 ).toFixed( 2 ) );
+          return {
+            nome: map,
+            partidas,
+            vitorias,
+            winRate
+          };
+
+        } )
+      } ) );
+
+      lobbyDataParaCalculo.timeB = Array.from( { length: 5 } ).map( ( _, i ) => ( {
+        id: i + 10,
+        nome: 'Player B' + i,
+        mapas: AVAILABLE_MAPS.map( map => {
+          const winRate = parseFloat( ( ( vitorias / partidas ) * 100 ).toFixed( 2 ) );
+          return {
+            nome: map,
+            partidas,
+            vitorias,
+            winRate
+          };
+
+        } )
+      } ) );
+    }
+
+
+
     const { recomendacoes, estatisticasPorMapa } = calcularSugestoesDeVeto(
       lobbyDataParaCalculo,
       mapasVisiveis
@@ -366,6 +404,47 @@ export async function lobbyMapSuggestions( partidaId = '' ) {
 
       const mapName = mapTitleEl.textContent.trim();
       const stats = estatisticasPorMapa[mapName];
+
+      let suggestionText = null;
+      let color = null;
+
+      if ( recomendacoes.time_A.pick.mapa === recomendacoes.time_B.pick.mapa && mapName === recomendacoes.time_A.pick.mapa ) {
+        suggestionText = 'SUGESTÃO A & B';
+        color = '#9c6bff';
+      } else if ( mapName === recomendacoes.time_A.pick.mapa ) {
+        suggestionText = 'SUGESTÃO TIME A';
+        color = '#2196fd';
+      } else if ( mapName === recomendacoes.time_B.pick.mapa ) {
+        suggestionText = 'SUGESTÃO TIME B';
+        color = '#7db720';
+      }
+
+      if ( suggestionText ) {
+        card.querySelectorAll( '.gc-suggestion-badge' ).forEach( e => e.remove() );
+
+        const sug = document.createElement( 'div' );
+        sug.classList.add( 'gc-suggestion-badge' );
+
+        Object.assign( sug.style, {
+          position: 'absolute',
+          top: '-15px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          borderRadius: '0',
+          background: color,
+          padding: '4px 10px',
+          fontSize: '11px',
+          fontWeight: '700',
+          color: '#fff',
+          zIndex: '1000',
+          width: '120px'
+        } );
+
+        sug.innerText = suggestionText;
+        card.style.position = 'relative';
+        card.style.boxShadow = '0 0 18px ' + color + '65';
+        card.parentNode.insertBefore( sug, card );
+      }
 
       const badgesContainer = document.createElement( 'div' );
       badgesContainer.classList.add( 'gc-map-badges' );
@@ -401,44 +480,6 @@ export async function lobbyMapSuggestions( partidaId = '' ) {
       wrapper.style.fontWeight = '600';
       wrapper.style.gap = '15px';
 
-      const pickMapaA = recomendacoes.time_A.pick.mapa;
-      const pickMapaB = recomendacoes.time_B.pick.mapa;
-
-      const pickStatsA = estatisticasPorMapa[pickMapaA];
-      const pickStatsB = estatisticasPorMapa[pickMapaB];
-
-      const percentA = pickStatsA ? pickStatsA.timeA.toFixed( 1 ) : 0;
-      const percentB = pickStatsB ? pickStatsB.timeB.toFixed( 1 ) : 0;
-
-      const boxInfo = document.createElement( 'div' );
-      boxInfo.innerHTML = `
-        <div style="color: #fff; text-align: center; font-size: 14px; margin-bottom: 10px; font-weight: 400; line-height: 1.5;">
-          Confira abaixo as sugestões de <strong>pick</strong> com base no desempenho dos últimos <strong>90 dias</strong>.
-          <br>Os resultados consideram a <strong>taxa de vitórias</strong> calculada a partir das partidas registradas por jogador.
-        </div>
-      `;
-
-      const cardWrapper = document.createElement( 'div' );
-      cardWrapper.style.display = 'flex';
-      cardWrapper.style.justifyContent = 'space-between';
-
-      const cardA = document.createElement( 'div' );
-      cardA.innerHTML = `
-        <div style="color:#2196fd;">Pick Sugerido Time A</div>
-        <div>${pickMapaA} (${percentA}%)</div>
-      `;
-
-      const cardB = document.createElement( 'div' );
-      cardB.innerHTML = `
-        <div style="color:#7db720;">Pick Sugerido Time B</div>
-        <div>${pickMapaB} (${percentB}%)</div>
-      `;
-
-      cardWrapper.appendChild( cardA );
-      cardWrapper.appendChild( cardB );
-
-      wrapper.appendChild( boxInfo );
-      wrapper.appendChild( cardWrapper );
       contentContainer.insertAdjacentElement( 'beforebegin', wrapper );
     }
 
