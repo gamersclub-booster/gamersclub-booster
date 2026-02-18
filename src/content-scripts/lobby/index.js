@@ -7,7 +7,7 @@ import { initListaBloqueio } from './botaoListaBloqueio';
 import { listaBloqueio } from './listaBloqueio';
 import { lobbyLink } from './lobbyLink';
 import { autoCopyLobbyLink, resetLobbyLinkState } from './autoCopyLobbyLink';
-import { mostrarInfoPlayerIntervaler, mostrarKdr, mostrarKdrDesafios, mostrarKdrRanked } from './mostrarKdr';
+import { mostrarInfoPlayerIntervaler, mostrarKdr, mostrarKdrDesafios, mostrarKdrRanked, showKdrMatch } from './mostrarKdr';
 import { partidaInfo } from './partidaInfo';
 import { somReady, somReadySetInterval } from './somReady';
 // import { adicionarFiltroKdr } from './filtrarKdr';
@@ -90,6 +90,7 @@ const initLobby = async () => {
   // Feature para exibir as estatísticas do jogador
   showStats();
   lobbyMapSuggestions();
+  showKdrMatch();
 };
 
 const criarObserver = ( seletor, exec, type ) => {

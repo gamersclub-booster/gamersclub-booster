@@ -179,6 +179,7 @@ export const lobbyMapSuggestionsConsts = {
   MONTH_LIMIT: 3,
   CACHE_KEY_PREFIX: 'gc_player_cache_',
   CACHE_TTL: 2 * 24 * 60 * 60 * 1000,
+  DEBUG_FAKE_DATA: false,
   AVAILABLE_MAPS: [
     'de_mirage',
     'de_dust2',
