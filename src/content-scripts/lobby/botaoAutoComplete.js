@@ -97,6 +97,12 @@ async function intervalerAutoComplete() {
             if ( isInCheckedMaps && hasMinRounds && isInDiff && hasMaxWinningRounds ) {
               acceptBtn.get( 0 ).click();
               $( '#completePlayerModal > div > div.buttons > button.sm-button-accept.btn.btn-success' ).get( 0 ).click();
+
+              clearInterval( intervalId );
+
+              setTimeout( () => {
+                window.location.reload();
+              }, 1500 );
             }
           } );
         }

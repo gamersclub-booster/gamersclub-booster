@@ -302,12 +302,9 @@ function selecionarSons() {
     if ( !response ) { return false; }
     for ( const config of configValues ) {
       document.getElementById( config ).value = response[config] || '';
-      if ( response[config] === 'custom' ) {
-        const customObj = document.getElementById( `p-custom${config[0].toUpperCase()}${config.slice( 1 )}` );
-        if ( customObj ) { customObj.style.display = 'block'; }
-      } else {
-        const customObj = document.getElementById( `p-custom${response[config][0].toUpperCase()}${response[config].slice( 1 )}` );
-        if ( customObj ) { customObj.style.display = 'none'; }
+      const customObj = document.getElementById( `p-custom${config[0].toUpperCase()}${config.slice( 1 )}` );
+      if ( customObj ) {
+        customObj.style.display = ( response[config] === 'custom' ? 'block' : 'none' );
       }
     }
   } );
