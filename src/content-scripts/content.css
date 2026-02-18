@@ -102,11 +102,6 @@ input[type="range"].filterKdr::-ms-track {
   position: relative;
 }
 
-.blocked {
-  background: var(--color-red);
-  background-image: none !important;
-}
-
 /* Filtro de paises */
 .filterPais {
   width: 200px !important;
