@@ -1,6 +1,4 @@
-import { loadJson, saveJson } from '../lib/blockList';
 import { audios, configValues, features, paginas, preVetosMapas } from '../lib/constants';
-// import { removerDaLista } from '../lib/blockList';
 import manifest from '../../manifest.json';
 import { testWebhook } from '../lib/discord';
 import en from '../translations/en.json';
@@ -14,6 +12,29 @@ const translations = {
   'es': es,
   'fr': fr
 };
+
+function saveJson( obj ) {
+  const myArray = JSON.stringify( obj, null, 4 );
+  const vLink = document.createElement( 'a' ),
+    vBlob = new Blob( [ myArray ], { type: 'octet/stream' } ),
+    vName = 'configGCBooster.json',
+    vUrl = window.URL.createObjectURL( vBlob );
+  vLink.setAttribute( 'href', vUrl );
+  vLink.setAttribute( 'download', vName );
+  vLink.click();
+}
+
+function loadJson( e, callback ) {
+  const importOrig = document.getElementById( 'importOrig' );
+  const files = e.target.files, reader = new FileReader();
+  reader.onload = _imp;
+  reader.readAsText( files[0] );
+  function _imp() {
+    const _myImportedData = JSON.parse( this.result );
+    callback( _myImportedData );
+    importOrig.value = '';
+  }
+}
 
 function iniciarPaginaOpcoes() {
   mostrarMensagemAtencao();
@@ -32,8 +53,7 @@ function iniciarPaginaOpcoes() {
   adicionarListenersSons();
   loadWebhook();
   adicionarListenerTraducao();
-  loadBlockList();
-  listenerButtonBlockList();
+  listenerButtonBackup();
   listenerJogarCom();
   marcarJogarCom();
   popularComplete();
@@ -495,7 +515,7 @@ async function popularServerWebHookOptions() {
 
 //Block List
 
-function listenerButtonBlockList() {
+function listenerButtonBackup() {
   const buttonImport = document.getElementById( 'importButton' );
   const buttonExport = document.getElementById( 'exportButton' );
   const importOrig = document.getElementById( 'importOrig' );
@@ -543,60 +563,6 @@ function listenerButtonBlockList() {
   } );
 }
 
-function loadBlockList() {
-  const blackBlackList = `
-  <ul>
-    <li translation-key="ninguemNaLista"></li>
-    <li translation-key="comoAddnaLista"></li>
-    <li translation-key="notificacao"></li>
-  </ul>`;
-
-  chrome.storage.sync.get( [ 'blockList' ], function ( data ) {
-    const listHTML = document.getElementById( 'lista' );
-
-    if ( data.blockList ) {
-      if ( typeof data.blockList === 'object' && data.blockList.length > 0 ) {
-        data.blockList.map( each => {
-          const { id, avatarURL, nick } = each;
-
-          const numericId = id.split( '/' ).pop();
-
-          // Adicionar o jogar na lista e o botão remover
-          listHTML.innerHTML += `<div class="jogador ${numericId}">
-                                  <a href="${id}" target="_blank" class="links jogador-info">
-                                  <img src="${avatarURL}" alt="" class="circle" />
-                                  <span>${nick}</span>
-                                  </a>
-                                  <button class="btn btn-secondary" remove-button="${numericId}">Remover</button></div>`;
-
-
-        } );
-
-        // Remover o jogador da lista
-        $( '[remove-button]' ).each( function () {
-          const numericId = $( this ).attr( 'remove-button' );
-
-          $( this ).on( 'click', function ( ) {
-            chrome.storage.sync.get( [ 'blockList' ], function ( data ) {
-              const list = data.blockList;
-              const newList = list.filter( each => each.id.split( '/' ).pop() !== numericId );
-
-              chrome.storage.sync.set( { ['blockList']: newList }, function () {
-                carregarTraducao();
-                $( '.jogador.' + numericId ).remove();
-              } );
-            } );
-          } );
-        } );
-
-      } else {
-        listHTML.innerHTML += blackBlackList;
-      }
-    } else {
-      listHTML.innerHTML += blackBlackList;
-    }
-  } );
-}
 
 function listenerJogarCom() {
   const radioButtons = document.getElementsByName( 'jogarCom' );

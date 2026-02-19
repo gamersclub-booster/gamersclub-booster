@@ -12,9 +12,10 @@ export async function adicionarBotaoAutoComplete() {
   const voceEstaEmLobbyText = getTranslationText( 'voce-esta-em-uma-lobby', traducao );
 
 
-  const handleStartAutoComplete = async btn => {
+  const handleStartAutoComplete = btn => {
     // Se não estiver em lobby
     if ( !$( '#SidebarSala' ).length ) {
+      clearInterval( intervalId );
       intervalerAutoComplete();
       btn.text( procurandoCompleteText ).addClass( 'cancel-auto-complete' );
 
@@ -22,7 +23,7 @@ export async function adicionarBotaoAutoComplete() {
     } else { alertaMsg( voceEstaEmLobbyText ); }
   };
 
-  const handleStopAutoComplete = async btn => {
+  const handleStopAutoComplete = btn => {
     clearInterval( intervalId );
 
     btn.text( completarPartidaText ).removeClass( 'cancel-auto-complete' );
@@ -39,7 +40,7 @@ export async function adicionarBotaoAutoComplete() {
       'padding': '12px 12px'
     } );
 
-    $autoCompleteBtn.on( 'click', async function () {
+    $autoCompleteBtn.on( 'click', function () {
       if ( $autoCompleteBtn.hasClass( 'cancel-auto-complete' ) ) { // Se já estiver buscando
         handleStopAutoComplete( $autoCompleteBtn );
 
@@ -63,20 +64,21 @@ export async function adicionarBotaoAutoComplete() {
           'id': 'btn-auto-complete',
           'class': 'WasdButton WasdButton--primary WasdButton--lg WasdButton--block draw-orange btn-visible',
           'type': 'button',
-          'text': `${completarPartidaText}`,
+          'text': completarPartidaText,
           'title': `[GC Booster]: ${completarPartidaText}`
         } ) );
 
       addListeners();
+      observer.disconnect();
     } );
 
     observer.observe( document.body, { childList: true, subtree: true } );
   }
 }
 
-async function intervalerAutoComplete() {
-  intervalId = setInterval( async function () {
-    // Verifique se não estamos no lobby
+function intervalerAutoComplete() {
+  intervalId = setInterval( function () {
+    // Verifique se não está no lobby
     if ( $( '#SidebarSala' ).length === 0 ) {
       const acceptBtn = $( '.LobbyComplete__requestItemContainer > button' );
 
@@ -90,19 +92,46 @@ async function intervalerAutoComplete() {
             const { complete, roundsDiff, roundsMin, roundsMax } = res || {};
 
             const isInCheckedMaps = !complete || complete.includes( mapCode );
-            const hasMinRounds = ( scoreWinning + scoreLosing ) >= roundsMin;
-            const isInDiff = Math.abs( scoreWinning - scoreLosing ) <= roundsDiff;
-            const hasMaxWinningRounds = scoreWinning <= roundsMax;
+            const hasMinRounds = ( scoreWinning + scoreLosing ) >= ( roundsMin || 0 );
+            const isInDiff = Math.abs( scoreWinning - scoreLosing ) <= ( roundsDiff || 13 );
+            const hasMaxWinningRounds = scoreWinning <= ( roundsMax || 12 );
 
             if ( isInCheckedMaps && hasMinRounds && isInDiff && hasMaxWinningRounds ) {
-              acceptBtn.get( 0 ).click();
-              $( '#completePlayerModal > div > div.buttons > button.sm-button-accept.btn.btn-success' ).get( 0 ).click();
-
               clearInterval( intervalId );
 
+              // Clica no botão de aceitar do complete
+              acceptBtn.get( 0 ).click();
+
+              // Aguarda o modal aparecer e clica na confirmação
+              const confirmationAttempt = setInterval( () => {
+                let confirmBtn = $( '#completePlayerModal .sm-button-accept.btn.btn-success' );
+
+                // Fallback: procura por qualquer botão de confirmação no modal
+                if ( !confirmBtn.length ) {
+                  confirmBtn = $( '#completePlayerModal button.btn-success' );
+                }
+
+                // Se encontrou o botão, clica e aguarda redirecionamento
+                if ( confirmBtn.length ) {
+                  confirmBtn.eq( 0 ).click();
+                  clearInterval( confirmationAttempt );
+
+                  // Fallback: reload se o redirecionamento não acontecer em 2 segundos
+                  setTimeout( () => {
+                    if ( window.location.pathname.includes( 'lobby' ) ) {
+                      window.location.reload();
+                    }
+                  }, 2000 );
+                }
+              }, 100 );
+
+              // Timeout: se não encontrar o botão de confirmação em 3s, avisa o usuário
               setTimeout( () => {
-                window.location.reload();
-              }, 1500 );
+                clearInterval( confirmationAttempt );
+                if ( window.location.pathname.includes( 'lobby' ) ) {
+                  alertaMsg( 'Não foi possível confirmar o complete automaticamente' );
+                }
+              }, 3000 );
             }
           } );
         }
@@ -114,11 +143,11 @@ async function intervalerAutoComplete() {
 }
 
 function getMapCode( mapName ) {
-  if ( mapName ) {
-    return preVetosMapas.filter( e => {
-      return e.mapa === mapName;
-    } )[0].codigo;
-  } else {
+  if ( !mapName || typeof mapName !== 'string' ) {
     return null;
   }
+
+  const mapData = preVetosMapas.find( e => e.mapa === mapName.trim() );
+
+  return mapData ? mapData.codigo : null;
 }
