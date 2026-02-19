@@ -120,7 +120,7 @@ export const preVetosMapas = [
   // }
 ];
 export const configValues = [ 'somReady', 'volume', 'customSomReady', 'somKicked', 'customSomKicked' ];
-export const paginas = [ 'novidades', 'geral', 'mapas', 'lobby', 'complete', 'contato', 'sobre', 'sons', 'integracoes', 'blocklist',
+export const paginas = [ 'novidades', 'geral', 'mapas', 'lobby', 'complete', 'contato', 'sobre', 'sons', 'integracoes',
   'backup', 'doacao' ];
 export const audios = {
   '': 'Nenhum',

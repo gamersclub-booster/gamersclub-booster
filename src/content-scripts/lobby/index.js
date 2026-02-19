@@ -3,8 +3,6 @@ import { autoConcordarTermosRanked } from './autoConcordarTermosRanked';
 import { autoFixarMenuLobby } from './autoFixarMenuLobby';
 import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
 // import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
-import { initListaBloqueio } from './botaoListaBloqueio';
-import { listaBloqueio } from './listaBloqueio';
 import { lobbyLink } from './lobbyLink';
 import { autoCopyLobbyLink, resetLobbyLinkState } from './autoCopyLobbyLink';
 import { mostrarInfoPlayerIntervaler, mostrarKdr, mostrarKdrDesafios, mostrarKdrRanked, showKdrMatch } from './mostrarKdr';
@@ -25,15 +23,10 @@ import { lobbyMapSuggestions } from './lobbyMapSuggestions';
 chrome.storage.sync.get( null, function ( _result ) {
   if ( window.location.pathname.includes( 'partida' ) || window.location.pathname.includes( '/match/' ) ) {
     //lobbyMapSuggestions( '25270001' );
-    initLobbyPartida();
-  } else {
-    initLobby();
+    return;
   }
+  initLobby();
 } );
-
-const initLobbyPartida = async () => {
-  initListaBloqueio();
-};
 
 const initLobby = async () => {
   // Resetar estado do auto copy lobby link quando entrar no lobby
@@ -47,7 +40,6 @@ const initLobby = async () => {
   criarObserver( '#lobbyContent', autoFixarMenuLobby );
   criarObserver( '.lobby', lobbyLink );
   criarObserver( '.lobby', autoCopyLobbyLink );
-  criarObserver( '#lobbyContent', listaBloqueio );
 
   criarObserver( '#lobbies-wrapper', mostrarKdr );
   criarObserver( '#lobbies-wrapper', infoLobby );

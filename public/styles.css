@@ -468,31 +468,6 @@ input:not([type="range"]) {
 
 
 
-.jogador {
-  display: flex;
-  justify-content: space-between;
-  border: 1px solid #1c6ea4;
-  align-items: center;
-  margin: 5px 0;
-  padding: 12px;
-  background-color: rgba(255, 255, 255, 0.13);
-}
-
-.jogador-info {
-  display: flex;
-  align-items: center;
-}
-
-.jogador img {
-  border-radius: 50%;
-  width: 30px;
-  margin-right: 8px;
-}
-
-.listaBlocks {
-  flex: 1;
-}
-
 .export {
   display: flex;
   flex-direction: column;
