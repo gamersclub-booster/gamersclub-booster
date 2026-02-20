@@ -13,7 +13,7 @@ const colors = [
 
 const getColor = argVal => ( colors.find( ( { val } ) => ( argVal > val ) ) || colors[0] ).color;
 
-export const buildTimer = ( warmupFinished, targetContainer, timeleft, maxtime = 180 ) => {
+export const buildTimer = ( warmupFinished, targetContainer, timeleft, maxtime = 180, onTick = () => {} ) => {
 
   const timeUtil = input => `${Math.floor( input / 60 ) > 0 ? `${Math.floor( input / 60 )}min ` : ''}${Math.floor( input % 60 )}s`;
 
@@ -25,8 +25,10 @@ export const buildTimer = ( warmupFinished, targetContainer, timeleft, maxtime =
           <progress style="accent-color: ${getColor( timeleft )}" id="warmup_progressbar" value="${timeleft}" max="${maxtime}"></progress>`;
   if ( timeleft === 0 ) { baseContent = warmupFinished; }
   targetContainer.append( `<div id="warmup_timer">${baseContent}</div>` );
+  onTick( timeleft );
   const x = setInterval( function () {
     const distance = endTime - Math.floor( Date.now() / 1000 );
+    onTick( distance );
     $( '#warmup_progressbar' ).attr( 'value', distance );
     $( '#warmup_left_wrapper > b' ).html( timeUtil( distance ) );
     $( '#warmup_left_wrapper > b' ).css( 'color', getColor( distance ) );
@@ -44,38 +46,67 @@ export const partidaInfo = async () => {
   const { traducao } = await getAllStorageSyncData();
   const warmupFinished = getTranslationText( 'warmup-fim', traducao );
 
-  chrome.storage.sync.get( [ 'webhookLink', 'enviarPartida', 'warmupTimer' ], function ( result ) {
+  chrome.storage.sync.get( [
+    'webhookLink',
+    'enviarPartida',
+    'warmupTimer',
+    'somWarmup',
+    'customSomWarmup',
+    'warmupSoundTime',
+    'volume'
+  ], function ( result ) {
     const needDisc = result.webhookLink && result.webhookLink.length > 0;
     const needWarmup = result.warmupTimer;
-    if ( needDisc || needWarmup ) {
+    const needWarmupSound = Boolean( result.somWarmup );
+    let warmupSoundPlayed = false;
+
+    const playWarmupSoundIfNeeded = warmupTimeLeft => {
+      if ( !needWarmupSound || warmupSoundPlayed || warmupTimeLeft < 0 ) {
+        return;
+      }
+      const triggerAt = Number( result.warmupSoundTime ?? 10 );
+      if ( warmupTimeLeft <= triggerAt ) {
+        const som = result.somWarmup === 'custom' ? result.customSomWarmup : result.somWarmup;
+        const audio = new Audio( som );
+        const volume = Number( result.volume ?? 100 );
+        audio.volume = volume;
+        audio.play();
+        warmupSoundPlayed = true;
+      }
+    };
+
+    if ( needDisc || needWarmup || needWarmupSound ) {
       setInterval( async () => {
-        const selector = '.Disclaimer-sc-1ylcea4-5';
+        const selector = '.Disclaimer-sc-1ylcea4-5'; //'.Disclaimer-sc-1ylcea4-7'
         const disclaimerInput = $( selector );
         const discElement = document.getElementById( 'botaoDiscordNoDOM' );
         const warmupElement = document.getElementById( 'warmup_timer' );
+        const needMatchInfo = needWarmupSound || ( needDisc && !discElement ) || ( needWarmup && !warmupElement );
 
-        if ( disclaimerInput ) {
+        if ( disclaimerInput.length && needMatchInfo ) {
           const parentDisclaimer = $( '.Container-sc-1ylcea4-0' ).parent();
-          if ( ( needDisc && !discElement ) || ( needWarmup && !warmupElement ) ) {
-            const listenGame = await axios.get( `https://${GC_URL}/api/lobby/match` );
-            if ( listenGame?.data?.data?.step === 'onServerReady' ) {
+          const listenGame = await axios.get( `https://${GC_URL}/api/lobby/match` );
+          if ( listenGame?.data?.data?.step === 'onServerReady' ) {
+            const warmupTimeLeft = listenGame.data.data.warmupExpiresInSeconds;
+            playWarmupSoundIfNeeded( warmupTimeLeft );
 
-              if ( needWarmup && !warmupElement ) {
-                buildTimer( warmupFinished, parentDisclaimer, listenGame.data.data.warmupExpiresInSeconds );
-              }
-              if ( needDisc && !discElement ) {
-                parentDisclaimer.append(
-                  `<button id="botaoDiscordNoDOM" class="WasdButton WasdButton--success WasdButton--lg botaoDiscordNoDOM-sc-1ylcea4-4"
+            if ( needWarmup && !warmupElement ) {
+              buildTimer( warmupFinished, parentDisclaimer, warmupTimeLeft, 180, playWarmupSoundIfNeeded );
+            }
+            if ( needDisc && !discElement ) {
+              parentDisclaimer.append(
+                `<button id="botaoDiscordNoDOM" class="WasdButton WasdButton--success WasdButton--lg botaoDiscordNoDOM-sc-1ylcea4-4"
                   title="[GC Booster]: Clique para enviar no discord">Enviar no Discord</button>`
-                );
-                document.getElementById( 'botaoDiscordNoDOM' ).addEventListener( 'click', async function () {
-                  await sendMatchInfo( result.webhookLink, listenGame.data.data );
-                } );
-                if ( result.enviarPartida ) {
-                  await sendMatchInfo( result.webhookLink, listenGame.data.data );
-                }
+              );
+              document.getElementById( 'botaoDiscordNoDOM' ).addEventListener( 'click', async function () {
+                await sendMatchInfo( result.webhookLink, listenGame.data.data );
+              } );
+              if ( result.enviarPartida ) {
+                await sendMatchInfo( result.webhookLink, listenGame.data.data );
               }
             }
+          } else {
+            warmupSoundPlayed = false;
           }
         }
       }, 3000 );
