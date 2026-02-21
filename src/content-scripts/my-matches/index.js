@@ -54,7 +54,7 @@ const verificarBans = async ( partida, statsColumns, retries = 0 ) => {
           )
       );
     }
-  } catch ( e ) {
+  } catch ( _error ) {
     log( 'Fetch errored, trying again.' );
     return setTimeout( async () => {
       verificarBans( partida, statsColumns, retries + 1 );

@@ -444,7 +444,7 @@ function loadWebhook() {
           document.getElementById( 'statusWebhook' ).innerText = 'OK';
           document.getElementById( 'divDoDiscord' ).removeAttribute( 'hidden' );
         } );
-      } catch ( e ) {
+      } catch ( _error ) {
         document.getElementById( 'statusWebhook' ).innerText = 'Erro na URL, tente novamente.';
         document.getElementById( 'divDoDiscord' ).setAttribute( 'hidden', true );
       }
@@ -505,7 +505,7 @@ function loadWebhook() {
           // });
         } );
 
-      } catch ( e ) {
+      } catch ( _error ) {
         $( '#statusWebhook' ).text( 'Erro na URL, tente novamente.' );
         // document.getElementById( 'divDoDiscord' ).setAttribute( 'hidden', true );
       }
@@ -535,7 +535,7 @@ async function popularServerWebHookOptions() {
         $( '#group-add-server' ).hide();
       }
     } );
-  } catch ( error ) {
+  } catch ( _error ) {
     // console.log( error, 'error' );
   }
 }

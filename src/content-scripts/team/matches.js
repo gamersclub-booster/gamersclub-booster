@@ -39,7 +39,7 @@ const baixarDemo = async ( partida, campeonato, tentativas = 0 ) => {
       link[0].click();
       $( 'body' ).remove( link );
     } );
-  } catch ( e ) {
+  } catch ( _error ) {
     revelarMapa( partida, campeonato, tentativas + 1 );
   }
 };
@@ -58,7 +58,7 @@ const revelarMapa = async ( partida, elemento, tentativas = 0 ) => {
       elemento.html( 'W.O.' );
     }
     elemento.addClass( 'finished' );
-  } catch ( e ) {
+  } catch ( _error ) {
     revelarMapa( partida, elemento, tentativas + 1 );
   }
 };

@@ -13,9 +13,9 @@ async function fetchJSON( url, headers = {} ) {
     return res.data;
   } catch ( error ) {
     if ( error.response ) {
-      throw new Error( `HTTP error! status: ${error.response.status}` );
+      throw new Error( `HTTP error! status: ${error.response.status}`, { cause: error } );
     } else {
-      throw new Error( `Request failed: ${error.message}` );
+      throw new Error( `Request failed: ${error.message}`, { cause: error } );
     }
   }
 }

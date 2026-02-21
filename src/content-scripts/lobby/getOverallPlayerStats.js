@@ -12,7 +12,7 @@ async function fetchJSON( url, headers = {} ) {
     return res.data;
   } catch ( error ) {
     throw new Error(
-      error.response ? `HTTP ${error.response.status}` : `Request failed: ${error.message}`
+      error.response ? `HTTP ${error.response.status}` : `Request failed: ${error.message}`, { cause: error }
     );
   }
 }
