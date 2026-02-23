@@ -60,6 +60,19 @@ export const partidaInfo = async () => {
     const needWarmupSound = Boolean( result.somWarmup );
     let warmupSoundPlayed = false;
 
+    const soundProxyBtn = document.createElement( 'button' );
+    soundProxyBtn.id = 'gc-booster-sound-proxy';
+    soundProxyBtn.style.cssText = 'position:fixed;width:0;height:0;opacity:0;pointer-events:none;border:none;padding:0;margin:0;overflow:hidden;';
+    soundProxyBtn.addEventListener( 'click', () => {
+      const src = soundProxyBtn.dataset.src;
+      const vol = Number( soundProxyBtn.dataset.volume ?? 1 );
+      if ( !src ) { return; }
+      const audio = new Audio( src );
+      audio.volume = vol;
+      audio.play().catch( () => {} );
+    } );
+    document.body.appendChild( soundProxyBtn );
+
     const playWarmupSoundIfNeeded = warmupTimeLeft => {
       if ( !needWarmupSound || warmupSoundPlayed || warmupTimeLeft < 0 ) {
         return;
@@ -68,14 +81,16 @@ export const partidaInfo = async () => {
       if ( warmupTimeLeft <= triggerAt ) {
         const som = result.somWarmup === 'custom' ? result.customSomWarmup : result.somWarmup;
         const volume = Number( result.volume ?? 100 ) / 100;
-        chrome.runtime.sendMessage( { type: 'play-warmup-sound', src: som, volume } );
+        soundProxyBtn.dataset.src = som;
+        soundProxyBtn.dataset.volume = volume;
+        soundProxyBtn.click();
         warmupSoundPlayed = true;
       }
     };
 
     if ( needDisc || needWarmup || needWarmupSound ) {
       setInterval( async () => {
-        const selector = '.Disclaimer-sc-1ylcea4-5'; //'.Disclaimer-sc-1ylcea4-7'
+        const selector = '.Disclaimer-sc-1ylcea4-5, .Disclaimer-sc-1ylcea4-7';
         const disclaimerInput = $( selector );
         const discElement = document.getElementById( 'botaoDiscordNoDOM' );
         const warmupElement = document.getElementById( 'warmup_timer' );

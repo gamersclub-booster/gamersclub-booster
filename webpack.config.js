@@ -9,8 +9,6 @@ module.exports = {
   mode: 'production',
   entry: {
     'index': glob.sync( './src/options/*.js' ),
-    'background': './src/background.js',
-    'offscreen/offscreen': './src/offscreen/offscreen.js',
     'content-scripts/main': contentScripts( 'main' ),
     'content-scripts/lobby': contentScripts( 'lobby' ),
     'content-scripts/missions': contentScripts( 'missions' ),
@@ -27,13 +25,7 @@ module.exports = {
   experiments: { topLevelAwait: true },
   plugins: [
     new CopyPlugin( {
-      patterns: [
-        'public',
-        'manifest.json',
-        'src/options/index.html',
-        'src/content-scripts/content.css',
-        { from: 'src/offscreen/offscreen.html', to: 'offscreen/offscreen.html' }
-      ],
+      patterns: [ 'public', 'manifest.json', 'src/options/index.html', 'src/content-scripts/content.css' ],
       options: {}
     } ),
     new webpack.ProvidePlugin( {
