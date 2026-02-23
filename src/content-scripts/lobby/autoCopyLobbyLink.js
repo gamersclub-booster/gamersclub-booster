@@ -28,7 +28,7 @@ const copyToClipboard = async text => {
     document.body.removeChild( textArea );
 
     return successful;
-  } catch ( error ) {
+  } catch ( _error ) {
     return false;
   }
 };
