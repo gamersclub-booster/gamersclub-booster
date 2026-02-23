@@ -12,9 +12,7 @@
     "https://cs.gamersclub.gg/",
     "https://discord.com/api/webhooks/*"
   ],
-  "permissions": [
-      "storage"
-  ],
+  "permissions": ["storage"],
   "content_scripts": [
     {
       "matches": ["*://*.gamersclub.com.br/*", "*://cs.gamersclub.gg/*"],
@@ -76,13 +74,11 @@
   "web_accessible_resources": [
     {
       "resources": [
-          "images/discord.svg",
-          "events-listener.js",
-          "jquery-3.7.1.min.js"
+        "images/discord.svg",
+        "events-listener.js",
+        "jquery-3.7.1.min.js"
       ],
-      "matches": [
-          "<all_urls>"
-      ]
+      "matches": ["<all_urls>"]
     }
   ],
   "options_ui": {
