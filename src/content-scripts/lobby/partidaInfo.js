@@ -67,10 +67,8 @@ export const partidaInfo = async () => {
       const triggerAt = Number( result.warmupSoundTime ?? 10 );
       if ( warmupTimeLeft <= triggerAt ) {
         const som = result.somWarmup === 'custom' ? result.customSomWarmup : result.somWarmup;
-        const audio = new Audio( som );
-        const volume = Number( result.volume ?? 100 );
-        audio.volume = volume;
-        audio.play();
+        const volume = Number( result.volume ?? 100 ) / 100;
+        chrome.runtime.sendMessage( { type: 'play-warmup-sound', src: som, volume } );
         warmupSoundPlayed = true;
       }
     };
