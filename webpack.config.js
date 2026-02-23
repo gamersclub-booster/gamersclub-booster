@@ -16,6 +16,11 @@ module.exports = {
     'content-scripts/my-matches': contentScripts( 'my-matches' ),
     'content-scripts/profile': contentScripts( 'profile' )
   },
+  resolve: {
+    alias: {
+      src: path.resolve(__dirname, 'src')
+    }
+  },
   devtool: 'source-map',
   output: {
     clean: true,
