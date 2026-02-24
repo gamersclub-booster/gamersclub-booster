@@ -7,7 +7,7 @@ import { lobbyLink } from './lobbyLink';
 import { autoCopyLobbyLink, resetLobbyLinkState } from './autoCopyLobbyLink';
 import { mostrarInfoPlayerIntervaler, mostrarKdr, mostrarKdrDesafios, mostrarKdrRanked, showKdrMatch } from './mostrarKdr';
 import { partidaInfo } from './partidaInfo';
-import { somReady, somReadySetInterval } from './somReady';
+import { somReady, somReadySetInterval, tocarSomSeVoceForExpulsoDaLobby } from './sons';
 // import { adicionarFiltroKdr } from './filtrarKdr';
 import { infoChallenge, infoLobby } from './infoLobby';
 
@@ -16,7 +16,6 @@ import { autoMostrarIp } from './autoMostrarIp';
 import { chatFixoDireita, ocultarChat, ocultarFiltrosSala } from './chat';
 import { ocultarNotificacaoComplete } from './ocultarNotificacaoComplete';
 import { ocultarSugestaoDeLobbies } from './ocultarSugestaoDeLobbies';
-import { tocarSomSeVoceForExpulsoDaLobby } from './tocarSomSeVoceForExpulsoDaLobby';
 import { showStats } from './showStats';
 import { lobbyMapSuggestions } from './lobbyMapSuggestions';
 

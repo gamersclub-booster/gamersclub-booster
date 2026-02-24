@@ -42,6 +42,8 @@
   "testar": "Test",
   "url-som-customizado": "Custom sound URL:",
   "ao-aceitar-ready": "When Accepting Ready",
+  "ao-faltar-no-warmup": "When Warmup is about to end",
+  "som-warmup-tempo": "Play when remaining (seconds)",
   "volume": "Volume",
   "sons-myinstants-linha-1": "* All sounds are being played directly from the website: myinstants.com",
   "sons-myinstants-linha-2": "* You can customize using other sounds from there by copying the URL of the \"Download MP3\" link below the button.",

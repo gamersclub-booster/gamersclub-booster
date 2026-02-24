@@ -119,7 +119,16 @@ export const preVetosMapas = [
   //   codigo: 16
   // }
 ];
-export const configValues = [ 'somReady', 'volume', 'customSomReady', 'somKicked', 'customSomKicked' ];
+export const configValues = [
+  'somReady',
+  'volume',
+  'customSomReady',
+  'somKicked',
+  'customSomKicked',
+  'somWarmup',
+  'customSomWarmup',
+  'warmupSoundTime'
+];
 export const paginas = [ 'novidades', 'geral', 'mapas', 'lobby', 'complete', 'contato', 'sobre', 'sons', 'integracoes',
   'backup', 'doacao' ];
 export const audios = {
@@ -150,7 +159,7 @@ export const isFirefox = typeof InstallTrigger !== 'undefined';
 
 // Internet Explorer 6-11
 //   Untested on IE (of course). Here because it shows some logic for isEdge.
-export const isIE = /*@cc_on!@*/false || !!document.documentMode;
+export const isIE = !!document.documentMode;
 
 // Edge 20+ (tested on Edge 38.14393.0.0)
 export const isEdge = !isIE && !!window.StyleMedia;

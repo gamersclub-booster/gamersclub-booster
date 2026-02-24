@@ -50,6 +50,7 @@ function iniciarPaginaOpcoes() {
   popularServerWebHookOptions();
   selecionarSons();
   atualizarValorVolume();
+  atualizarValorWarmupSoundTime();
   adicionarListenersSons();
   loadWebhook();
   adicionarListenerTraducao();
@@ -154,7 +155,7 @@ function carregarTraducao( language = 'pt' ) {
 }
 
 function popularAudioOptions() {
-  for ( const selectId of [ 'somReady', 'somKicked' ] ) {
+  for ( const selectId of [ 'somReady', 'somKicked', 'somWarmup' ] ) {
     const select = document.getElementById( selectId );
     for ( const index in audios ) {
       select.options[select.options.length] = new Option( audios[index], index );
@@ -300,8 +301,12 @@ function adicionarListenersPaginas() {
 function selecionarSons() {
   chrome.storage.sync.get( null, response => {
     if ( !response ) { return false; }
+    const defaultValues = {
+      volume: '50',
+      warmupSoundTime: '10'
+    };
     for ( const config of configValues ) {
-      document.getElementById( config ).value = response[config] || '';
+      document.getElementById( config ).value = response[config] ?? defaultValues[config] ?? '';
       const customObj = document.getElementById( `p-custom${config[0].toUpperCase()}${config.slice( 1 )}` );
       if ( customObj ) {
         customObj.style.display = ( response[config] === 'custom' ? 'block' : 'none' );
@@ -312,9 +317,15 @@ function selecionarSons() {
 
 function atualizarValorVolume() {
   chrome.storage.sync.get( [ 'volume' ], function ( data ) {
-    if ( data.volume ) {
-      document.getElementById( 'volumeValue' ).innerText = `${data.volume}%`;
-    }
+    const volume = data.volume ?? document.getElementById( 'volume' ).value;
+    document.getElementById( 'volumeValue' ).innerText = `${volume}%`;
+  } );
+}
+
+function atualizarValorWarmupSoundTime() {
+  chrome.storage.sync.get( [ 'warmupSoundTime' ], function ( data ) {
+    const warmupSoundTime = data.warmupSoundTime ?? document.getElementById( 'warmupSoundTime' ).value;
+    document.getElementById( 'warmupSoundTimeValue' ).innerText = `${warmupSoundTime}s`;
   } );
 }
 
@@ -354,9 +365,25 @@ function adicionarListenersSons() {
     audio.play();
   } );
 
+  document.getElementById( 'testarSomWarmup' ).addEventListener( 'click', function () {
+    const som =
+      document.getElementById( 'somWarmup' ).value === 'custom' ?
+        document.getElementById( 'customSomWarmup' ).value :
+        document.getElementById( 'somWarmup' ).value;
+    const audio = new Audio( som );
+    audio.volume = document.getElementById( 'volume' ).value / 100;
+    audio.play();
+  } );
+
   document.getElementById( 'volume' ).addEventListener( 'input', function () {
     const volume = document.getElementById( 'volume' ).value;
     document.getElementById( 'volumeValue' ).innerText = `${volume}%`;
+  } );
+
+  document.getElementById( 'warmupSoundTime' ).addEventListener( 'input', function () {
+    const warmupSoundTime = document.getElementById( 'warmupSoundTime' ).value;
+    document.getElementById( 'warmupSoundTimeValue' ).innerText = `${warmupSoundTime}s`;
+    chrome.storage.sync.set( { warmupSoundTime }, function () {} );
   } );
 }
 
@@ -417,7 +444,7 @@ function loadWebhook() {
           document.getElementById( 'statusWebhook' ).innerText = 'OK';
           document.getElementById( 'divDoDiscord' ).removeAttribute( 'hidden' );
         } );
-      } catch ( e ) {
+      } catch ( _error ) {
         document.getElementById( 'statusWebhook' ).innerText = 'Erro na URL, tente novamente.';
         document.getElementById( 'divDoDiscord' ).setAttribute( 'hidden', true );
       }
@@ -478,7 +505,7 @@ function loadWebhook() {
           // });
         } );
 
-      } catch ( e ) {
+      } catch ( _error ) {
         $( '#statusWebhook' ).text( 'Erro na URL, tente novamente.' );
         // document.getElementById( 'divDoDiscord' ).setAttribute( 'hidden', true );
       }
@@ -508,7 +535,7 @@ async function popularServerWebHookOptions() {
         $( '#group-add-server' ).hide();
       }
     } );
-  } catch ( error ) {
+  } catch ( _error ) {
     // console.log( error, 'error' );
   }
 }
