@@ -307,9 +307,12 @@ export async function lobbyMapSuggestions( partidaId = '' ) {
       display: 'none'
     } );
 
+    const teamAElement = document.querySelector( '.PlayerIdentity__nicknameBadges--left .PlayerIdentityNickname__nicknameText' );
+    const teamBElement = document.querySelector( '.PlayerIdentity__nicknameBadges--right .PlayerIdentityNickname__nicknameText' );
+
     const nomeTime = team === 'a' ?
-      ( lobbyDataParaCalculo.timeA[0]?.nome || 'Time A' ) :
-      ( lobbyDataParaCalculo.timeB[0]?.nome || 'Time B' );
+      ( teamAElement?.textContent?.trim() || lobbyDataParaCalculo.timeA[0]?.nome || 'Time A' ) :
+      ( teamBElement?.textContent?.trim() || lobbyDataParaCalculo.timeB[0]?.nome || 'Time B' );
     const tooltipColor = team === 'a' ? COLOR_A_SOLID : COLOR_B_SOLID;
 
     tooltip.innerHTML = `
@@ -420,8 +423,11 @@ export async function lobbyMapSuggestions( partidaId = '' ) {
       let suggestionText = null;
       let color = null;
 
-      const nomeTimeA = lobbyDataParaCalculo.timeA[0]?.nome || 'Time A';
-      const nomeTimeB = lobbyDataParaCalculo.timeB[0]?.nome || 'Time B';
+      const teamAElement = document.querySelector( '.PlayerIdentity__nicknameBadges--left .PlayerIdentityNickname__nicknameText' );
+      const teamBElement = document.querySelector( '.PlayerIdentity__nicknameBadges--right .PlayerIdentityNickname__nicknameText' );
+
+      const nomeTimeA = teamAElement?.textContent?.trim() || lobbyDataParaCalculo.timeA[0]?.nome || 'Time A';
+      const nomeTimeB = teamBElement?.textContent?.trim() || lobbyDataParaCalculo.timeB[0]?.nome || 'Time B';
 
       if ( recomendacoes.time_A.pick.mapa === recomendacoes.time_B.pick.mapa && mapName === recomendacoes.time_A.pick.mapa ) {
         suggestionText = `PICK: ${nomeTimeA} & ${nomeTimeB}`;
