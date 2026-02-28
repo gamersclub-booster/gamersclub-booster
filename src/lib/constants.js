@@ -152,7 +152,7 @@ export const GC_URL = window.location.hostname;
 
 // Opera 8.0+ (tested on Opera 42.0)
 export const isOpera = ( !!window.opr && !!opr.addons ) || !!window.opera ||
-                navigator.userAgent.indexOf( ' OPR/' ) >= 0;
+  navigator.userAgent.indexOf( ' OPR/' ) >= 0;
 
 // Firefox 1.0+ (tested on Firefox 45 - 53)
 export const isFirefox = typeof InstallTrigger !== 'undefined';
@@ -207,4 +207,19 @@ export const lobbyMapSuggestionsConsts = {
     'de_cache_old',
     'de_tuscan'
   ]
+};
+
+export const showPlayerSoloStatsConsts = {
+  PLAYERS_IDS_DEBUG: [
+    210696,
+    1309815,
+    2607959,
+    2663102,
+    282415,
+    2329412,
+    2530242,
+    2620770
+  ],
+  DEBUG_PLAYERS: false,
+  MONTH_LIMIT: 1
 };

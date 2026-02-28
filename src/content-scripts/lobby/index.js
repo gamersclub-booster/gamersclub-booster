@@ -18,6 +18,7 @@ import { ocultarNotificacaoComplete } from './ocultarNotificacaoComplete';
 import { ocultarSugestaoDeLobbies } from './ocultarSugestaoDeLobbies';
 import { showStats } from './showStats';
 import { lobbyMapSuggestions } from './lobbyMapSuggestions';
+import { showPlayerSoloStats } from './showPlayerSoloStats';
 
 chrome.storage.sync.get( null, function ( _result ) {
   if ( window.location.pathname.includes( 'partida' ) || window.location.pathname.includes( '/match/' ) ) {
@@ -81,6 +82,7 @@ const initLobby = async () => {
   // Feature para exibir as estatísticas do jogador
   showStats();
   lobbyMapSuggestions();
+  showPlayerSoloStats();
   showKdrMatch();
 };
 
