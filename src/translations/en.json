@@ -99,5 +99,6 @@
   "lobby-informations": "Player information in the Lobby",
   "auto-copy-lobby-link": "Automatically copy the lobby link",
   "show-stats": "Show player stats in the Lobby",
-  "disable-show-map-stats-suggestions": "Disable map stats suggestions in the Lobby"
+  "disable-show-map-stats-suggestions": "Disable map stats suggestions in the Lobby",
+  "disable-show-player-solo-stats": "Disable solo player stats in the Lobby"
 }

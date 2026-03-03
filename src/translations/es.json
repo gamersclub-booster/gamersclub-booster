@@ -99,5 +99,6 @@
   "lobby-informations": "Información del jugador en la Lobby",
   "auto-copy-lobby-link": "Copiar automáticamente el link de la lobby",
   "show-stats": "Mostrar estadísticas del jugador en el Lobby",
-  "disable-show-map-stats-suggestions": "Desactivar sugerencias de estadísticas de mapas en el Lobby"
+  "disable-show-map-stats-suggestions": "Desactivar sugerencias de estadísticas de mapas en el Lobby",
+  "disable-show-player-solo-stats": "Desactivar estadísticas solo del jugador en el Lobby"
 }
