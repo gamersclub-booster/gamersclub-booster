@@ -45,6 +45,7 @@ jobs:
           artifacts: "release.zip"
           allowUpdates: true
           body: ${{github.event.head_commit.message}}
+          generateReleaseNotes: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload artifact
