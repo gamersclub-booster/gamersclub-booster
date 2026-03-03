@@ -1,6 +1,37 @@
 import { GC_URL, headers as auth, showPlayerSoloStatsConsts } from '../../lib/constants';
 
 const { PLAYERS_IDS_DEBUG, DEBUG_PLAYERS } = showPlayerSoloStatsConsts;
+const SOLO_STATS_CACHE_TTL = 10 * 60 * 1000; // 10 minutos
+
+const soloStatsCache = new Map();
+const pendingSoloStatsRequests = new Map();
+
+function getCachedSoloStats( id ) {
+  const cached = soloStatsCache.get( id );
+
+  if ( !cached ) { return null; }
+  if ( cached.expireAt <= Date.now() ) {
+    soloStatsCache.delete( id );
+    return null;
+  }
+
+  return cached.data;
+}
+
+function setCachedSoloStats( id, data ) {
+  soloStatsCache.set( id, {
+    data,
+    expireAt: Date.now() + SOLO_STATS_CACHE_TTL
+  } );
+}
+
+function extractPlayerIdFromWrapper( wrapper ) {
+  const trigger = wrapper.querySelector( 'div[id^="trigger-"]' );
+  if ( !trigger ) { return null; }
+
+  const match = trigger.id.match( /trigger-(\d+)/ );
+  return match ? parseInt( match[1], 10 ) : null;
+}
 
 async function fetchJSON( url, useAuth = false, extraHeaders = {} ) {
   try {
@@ -34,27 +65,49 @@ async function fetchJSON( url, useAuth = false, extraHeaders = {} ) {
 }
 
 async function getPlayerStats( id ) {
-  const matches = await fetchJSON(
-    `https://${GC_URL}/api/box/history/${id}/maps`,
-    true
-  );
+  const cached = getCachedSoloStats( id );
+  if ( cached ) { return cached; }
 
-  if ( !matches || !Array.isArray( matches ) || matches.length === 0 ) {
-    return { id, winRate: 0, matches: 0, wins: 0, period: 'Total' };
+  if ( pendingSoloStatsRequests.has( id ) ) {
+    return pendingSoloStatsRequests.get( id );
   }
 
-  const wins = matches.reduce( ( acc, m ) => acc + ( m.win ? 1 : 0 ), 0 );
+  const request = ( async () => {
+    const matches = await fetchJSON(
+      `https://${GC_URL}/api/box/history/${id}/maps`,
+      true
+    );
 
-  const winRate =
-    matches.length > 0 ? ( wins / matches.length ) * 100 : 0;
+    if ( !matches || !Array.isArray( matches ) || matches.length === 0 ) {
+      const emptyStats = { id, winRate: 0, matches: 0, wins: 0, period: 'Total' };
+      setCachedSoloStats( id, emptyStats );
+      return emptyStats;
+    }
 
-  return {
-    id,
-    winRate: parseFloat( winRate.toFixed( 2 ) ),
-    matches: matches.length,
-    wins,
-    period: 'Total'
-  };
+    const wins = matches.reduce( ( acc, m ) => acc + ( m.win ? 1 : 0 ), 0 );
+
+    const winRate =
+      matches.length > 0 ? ( wins / matches.length ) * 100 : 0;
+
+    const stats = {
+      id,
+      winRate: parseFloat( winRate.toFixed( 2 ) ),
+      matches: matches.length,
+      wins,
+      period: 'Total'
+    };
+
+    setCachedSoloStats( id, stats );
+    return stats;
+  } )();
+
+  pendingSoloStatsRequests.set( id, request );
+
+  try {
+    return await request;
+  } finally {
+    pendingSoloStatsRequests.delete( id );
+  }
 }
 
 function isSoloDraftScreen() {
@@ -73,6 +126,10 @@ function isSoloDraftScreen() {
 export function showPlayerSoloStats() {
   chrome.storage.sync.get( [ 'disableShowPlayerSoloStats' ], function ( result ) {
     if ( result.disableShowPlayerSoloStats ) { return; }
+    if ( !DEBUG_PLAYERS && window._gcSoloStatsInitialized ) { return; }
+
+    window._gcSoloStatsInitialized = true;
+
     let playerIds = [];
     const processLobby = async () => {
 
@@ -88,13 +145,20 @@ export function showPlayerSoloStats() {
         ).map( trigger => trigger.closest( 'div[class*="PlayerCardWrapper"]' ) )
           .filter( Boolean );
 
-        playerIds = wrappers.map( wrapper => {
-          const trigger = wrapper.querySelector( 'div[id^="trigger-"]' );
-          if ( !trigger ) { return null; }
+        const wrappersWithoutBadge = wrappers.filter( wrapper => {
+          const userInfoContainer = wrapper.querySelector(
+            '.PlayerIdentityNickname__userInformations'
+          );
 
-          const match = trigger.id.match( /trigger-(\d+)/ );
-          return match ? parseInt( match[1], 10 ) : null;
-        } ).filter( Boolean );
+          if ( !userInfoContainer ) { return false; }
+          return !userInfoContainer.querySelector( '.gc-solo-stats-badge' );
+        } );
+
+        playerIds = wrappersWithoutBadge
+          .map( extractPlayerIdFromWrapper )
+          .filter( Boolean );
+
+        playerIds = [ ...new Set( playerIds ) ];
 
         if ( !playerIds.length ) { return; }
       }
@@ -141,12 +205,12 @@ export function showPlayerSoloStats() {
           const stat = statsMap[id];
           if ( !stat ) { return; }
 
-          const badgesContainer = card.querySelector(
-            '[data-test="div:player-identity-badges"]'
+          const userInfoContainer = card.querySelector(
+            '.PlayerIdentityNickname__userInformations'
           );
 
-          if ( !badgesContainer ) { return; }
-          if ( badgesContainer.querySelector( '.gc-solo-stats-badge' ) ) { return; }
+          if ( !userInfoContainer ) { return; }
+          if ( userInfoContainer.querySelector( '.gc-solo-stats-badge' ) ) { return; }
 
           const badge = document.createElement( 'span' );
           badge.className = 'gc-solo-stats-badge';
@@ -155,14 +219,15 @@ export function showPlayerSoloStats() {
           Object.assign( badge.style, {
             background: 'oklch(70% 0.22 50)',
             color: '#fff',
-            padding: '2px 6px',
+            padding: '0px 2px',
             fontSize: '10px',
             fontWeight: 'bold',
-            marginRight: '8px',
+            marginLeft: '8px',
             userSelect: 'none',
             display: 'inline-block',
             position: 'relative',
-            cursor: 'default'
+            cursor: 'default',
+            order: '10'
           } );
 
           const tooltip = document.createElement( 'div' );
@@ -195,7 +260,7 @@ export function showPlayerSoloStats() {
             tooltip.style.opacity = '0';
           } );
 
-          badgesContainer.appendChild( badge );
+          userInfoContainer.appendChild( badge );
         } );
       }
     };
