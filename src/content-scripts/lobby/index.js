@@ -8,7 +8,7 @@ import { autoCopyLobbyLink, resetLobbyLinkState } from './autoCopyLobbyLink';
 import { mostrarInfoPlayerIntervaler, mostrarKdr, mostrarKdrDesafios, mostrarKdrRanked, showKdrMatch } from './mostrarKdr';
 import { partidaInfo } from './partidaInfo';
 import { somReady, somReadySetInterval, tocarSomSeVoceForExpulsoDaLobby } from './sons';
-// import { adicionarFiltroKdr } from './filtrarKdr';
+import { adicionarFiltroKdr } from './filtrarKdr';
 import { infoChallenge, infoLobby } from './infoLobby';
 
 import { autoKickNegativados } from './autoKickNegativados';
@@ -66,8 +66,6 @@ const initLobby = async () => {
   // Feature para mostrar kdr dos players
   mostrarKdrRanked();
   mostrarInfoPlayerIntervaler();
-  // Feature para filtrar por KD
-  // adicionarFiltroKdr();
   // Feature de discord na hora de copiar o ip
   partidaInfo();
   //Feature que mostra ip assim que server é liberado
@@ -84,6 +82,7 @@ const initLobby = async () => {
   lobbyMapSuggestions();
   showPlayerSoloStats();
   showKdrMatch();
+  adicionarFiltroKdr();
 };
 
 const criarObserver = ( seletor, exec, type ) => {
