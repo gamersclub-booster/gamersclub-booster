@@ -972,3 +972,45 @@ input[type="range"].filterKdr::-ms-track {
 .dark-mode .ChallengesList {
   background: #0e0e0e
 }
+
+
+#filtrarKdrRangeContainer input[type="range"].filterKdrDual {
+  pointer-events: none;
+  background: transparent;
+}
+
+#filtrarKdrRangeContainer input[type="range"].filterKdrDual::-webkit-slider-runnable-track {
+  background: transparent;
+}
+
+#filtrarKdrRangeContainer input[type="range"].filterKdrDual::-moz-range-track {
+  background: transparent;
+}
+
+#filtrarKdrRangeContainer input[type="range"].filterKdrDual::-ms-track {
+  background: transparent;
+}
+
+#filtrarKdrRangeContainer input[type="range"].filterKdrDual::-webkit-slider-thumb {
+  pointer-events: auto;
+  cursor: pointer;
+  box-shadow: none;
+  border: 2px solid var(--color-white);
+  background: var(--color-white);
+}
+
+#filtrarKdrRangeContainer input[type="range"].filterKdrDual::-moz-range-thumb {
+  pointer-events: auto;
+  cursor: pointer;
+  box-shadow: none;
+  border: 2px solid var(--color-white);
+  background: var(--color-white);
+}
+
+#filtrarKdrRangeContainer input[type="range"].filterKdrDual::-ms-thumb {
+  pointer-events: auto;
+  cursor: pointer;
+  box-shadow: none;
+  border: 2px solid var(--color-white);
+  background: var(--color-white);
+}

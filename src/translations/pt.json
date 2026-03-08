@@ -99,6 +99,7 @@
   "hide-filter-lobby": "Ocultar filtros",
   "lobby-informations": "Informações do jogador na Lobby",
   "auto-copy-lobby-link": "Copiar automaticamente o link da lobby",
+  "filter-lobby-by-average-kdr": "Filtrar lobbies por KDR médio",
   "show-stats": "Exibir estatísticas do jogador na Lobby",
   "disable-show-map-stats-suggestions": "Desativar sugestões de estatísticas de mapas na Lobby",
   "disable-show-player-solo-stats": "Desativar estatísticas solo do jogador na Lobby"
