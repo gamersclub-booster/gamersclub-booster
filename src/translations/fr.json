@@ -98,6 +98,7 @@
   "hide-filter-lobby": "Masquer les filtres",
   "lobby-informations": "Informations sur le joueur dans le salon",
   "auto-copy-lobby-link": "Copier automatiquement le lien du salon",
+  "filter-lobby-by-average-kdr": "Filtrer les lobbies par KDR moyen",
   "show-stats": "Afficher les statistiques du joueur dans le Lobby",
   "disable-show-map-stats-suggestions": "Désactiver les suggestions de statistiques de la carte dans le Lobby",
   "disable-show-player-solo-stats": "Désactiver les statistiques solo du joueur dans le Lobby"
