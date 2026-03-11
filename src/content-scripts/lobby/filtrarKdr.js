@@ -1,16 +1,23 @@
+//import { mostrarKdr } from './mostrarKdr.js';
+
 let observerLobbiesWrapper = null;
 let observerPage = null;
 let frameAplicacao = null;
 let timeoutSalvarFaixa = null;
 
-const MENU_SELECTOR = '.sc-gkdAvr';
+const MENU_SELECTOR = '.sc-dwcvcB';
+
+const encontrarMenu = () => {
+  const all = document.querySelectorAll( MENU_SELECTOR );
+  return all.length ? all[all.length - 1] : null;
+};
 const LOBBIES_WRAPPER_SELECTOR = '#lobbies-wrapper';
 const FILTER_OPTION_KEY = 'filtrarKdrMedioLobby';
 const FILTER_MIN_OPTION_KEY = 'filtrarKdrMedioLobbyMin';
 const FILTER_MAX_OPTION_KEY = 'filtrarKdrMedioLobbyMax';
-const KDR_MIN_RANGE = 0.1;
-const KDR_MAX_RANGE = 10;
-const KDR_STEP = 0.1;
+const KDR_MIN_RANGE = 0;
+const KDR_MAX_RANGE = 3;
+const KDR_STEP = 0.01;
 
 const normalizarValorFaixa = ( value, fallback ) => {
   const parsed = Number.parseFloat( value );
@@ -28,7 +35,8 @@ const agendarAplicacaoFiltro = () => {
 };
 
 const formatarValorFaixa = value => {
-  return Number.parseFloat( Number( value ).toFixed( 1 ) ).toString();
+  const fixed = Number( value ).toFixed( 2 );
+  return fixed.endsWith( '.00' ) ? String( parseInt( fixed, 10 ) ) : fixed;
 };
 
 const calcularPercentualFaixa = value => {
@@ -38,7 +46,7 @@ const calcularPercentualFaixa = value => {
 };
 
 const atualizarVisualSliderDuplo = ( min, max ) => {
-  const rangeContainer = document.getElementById( 'filtrarKdrRangeContainer' );
+  const rangeContainer = document.getElementById( 'filtrarKdrTrack' );
   if ( !rangeContainer ) { return; }
 
   const minPct = Math.max( 0, Math.min( 100, calcularPercentualFaixa( min ) ) );
@@ -208,14 +216,14 @@ const aplicarFiltroKdrMedio = () => {
 };
 
 const criarUiFiltro = () => {
-  const menu = document.querySelector( MENU_SELECTOR );
+  const menu = encontrarMenu();
   if ( !menu ) { return false; }
 
   if ( !document.getElementById( 'filtrarKdrMinInput' ) ) {
     const filtroSection = $( '<div/>', {
       id: 'gcbooster_section2',
       class: 'FilterLobby_section__3UmYp'
-    } )
+    } ).css( { width: '100%' } )
       .append( $( '<p/>', {
         class: 'FilterLobby_sectionLabel__1zPew',
         text: 'Filtrar por KDR Médio',
@@ -226,19 +234,38 @@ const criarUiFiltro = () => {
         id: 'filtrarKdr'
       } ) );
 
-    $( menu ).append( filtroSection );
+    const filtroWrapper = $( '<div/>' ).css( {
+      'width': '100%',
+      height: 'fit-content',
+      display: 'flex',
+      'align-items': 'center',
+      'justify-content': 'flex-start'
+    } ).append( filtroSection );
+
+    $( menu ).append( filtroWrapper );
 
     const rangeContainer = $( '<div/>', { id: 'filtrarKdrRangeContainer' } ).css( {
       position: 'relative',
-      display: 'block',
+      display: 'flex',
       'align-items': 'center',
       flex: 1,
       width: '100%',
-      height: '12px',
-      'border-radius': '15px',
-      overflow: 'hidden',
-      background: 'var(--color-gray-200)'
+      height: '20px'
     } );
+
+    const track = $( '<div/>', { id: 'filtrarKdrTrack' } ).css( {
+      position: 'absolute',
+      left: 0,
+      top: '50%',
+      transform: 'translateY(-50%)',
+      width: '100%',
+      height: '6px',
+      'border-radius': '15px',
+      background: 'var(--color-gray-200)',
+      'pointer-events': 'none'
+    } );
+
+    rangeContainer.append( track );
 
     rangeContainer
       .append( $( '<input/>', {
@@ -252,7 +279,8 @@ const criarUiFiltro = () => {
       } ).css( {
         position: 'absolute',
         left: 0,
-        top: 0,
+        top: '50%',
+        transform: 'translateY(-50%)',
         width: '100%',
         margin: 0,
         'pointer-events': 'none',
@@ -269,7 +297,8 @@ const criarUiFiltro = () => {
       } ).css( {
         position: 'absolute',
         left: 0,
-        top: 0,
+        top: '50%',
+        transform: 'translateY(-50%)',
         width: '100%',
         margin: 0,
         'pointer-events': 'none',
@@ -278,7 +307,10 @@ const criarUiFiltro = () => {
 
     $( '#filtrarKdr' )
       .append( rangeContainer )
-      .append( '<div id="filtrarKdrValor" class="sc-kiYrGK esAFRP">0.1 - 10</div>' )
+      .append( $( '<div/>', {
+        id: 'filtrarKdrValor',
+        class: 'sc-kiYrGK esAFRP'
+      } ).css( { width: '75px', 'text-align': 'center' } ).text( '0.00 - 3.00' ) )
       .css( {
         height: '20px',
         display: 'flex',
@@ -389,6 +421,7 @@ const adicionarFiltroKdr = () => {
 
       const hasUi = !!document.getElementById( 'filtrarKdrMinInput' );
       if ( !hasUi ) {
+        //mostrarKdr();
         criarUiFiltro();
       }
 
@@ -398,6 +431,7 @@ const adicionarFiltroKdr = () => {
       }
 
       agendarAplicacaoFiltro();
+
     } );
 
     observerPage.observe( document.body, {
