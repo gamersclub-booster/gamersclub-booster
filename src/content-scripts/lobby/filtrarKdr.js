@@ -5,7 +5,7 @@ let observerPage = null;
 let frameAplicacao = null;
 let timeoutSalvarFaixa = null;
 
-const MENU_SELECTOR = '.sc-dwcvcB';
+const MENU_SELECTOR = '.hRweJW:nth-child(3)';
 
 const encontrarMenu = () => {
   const all = document.querySelectorAll( MENU_SELECTOR );
@@ -16,8 +16,10 @@ const FILTER_OPTION_KEY = 'filtrarKdrMedioLobby';
 const FILTER_MIN_OPTION_KEY = 'filtrarKdrMedioLobbyMin';
 const FILTER_MAX_OPTION_KEY = 'filtrarKdrMedioLobbyMax';
 const KDR_MIN_RANGE = 0;
-const KDR_MAX_RANGE = 3;
+const KDR_MAX_RANGE = 2;
 const KDR_STEP = 0.01;
+
+const isMaxSemLimite = value => value >= KDR_MAX_RANGE;
 
 const normalizarValorFaixa = ( value, fallback ) => {
   const parsed = Number.parseFloat( value );
@@ -113,7 +115,8 @@ const atualizarLabelFaixa = ( min, max ) => {
   const valorElement = document.getElementById( 'filtrarKdrValor' );
   if ( !valorElement ) { return; }
 
-  const texto = `${formatarValorFaixa( min )} - ${formatarValorFaixa( max )}`;
+  const maxTexto = isMaxSemLimite( max ) ? `${formatarValorFaixa( KDR_MAX_RANGE )}+` : formatarValorFaixa( max );
+  const texto = `${formatarValorFaixa( min )} - ${maxTexto}`;
   if ( valorElement.textContent !== texto ) {
     valorElement.textContent = texto;
   }
@@ -192,6 +195,7 @@ const aplicarFiltroKdrMedio = () => {
   if ( !wrapper ) { return; }
 
   const { min, max } = obterValoresFiltroAtual();
+  const ignorarFiltroMaximo = isMaxSemLimite( max );
   atualizarLabelFaixa( min, max );
 
   const rooms = wrapper.querySelectorAll( '.RoomCardWrapper' );
@@ -206,7 +210,7 @@ const aplicarFiltroKdrMedio = () => {
 
     renderizarKdrMedioLobby( room, media );
 
-    if ( media < min || media > max ) {
+    if ( media < min || ( !ignorarFiltroMaximo && media > max ) ) {
       room.style.display = 'none';
       return;
     }
@@ -234,7 +238,7 @@ const criarUiFiltro = () => {
         id: 'filtrarKdr'
       } ) );
 
-    const filtroWrapper = $( '<div/>' ).css( {
+    const filtroWrapper = $( '<div/>', { id: 'gcbooster_filtro_kdr_wrapper' } ).css( {
       'width': '100%',
       height: 'fit-content',
       display: 'flex',
@@ -309,8 +313,24 @@ const criarUiFiltro = () => {
       .append( rangeContainer )
       .append( $( '<div/>', {
         id: 'filtrarKdrValor',
-        class: 'sc-kiYrGK esAFRP'
-      } ).css( { width: '75px', 'text-align': 'center' } ).text( '0.00 - 3.00' ) )
+        class: 'gcbooster-filtrar-kdr-valor'
+      } ).css( {
+        boxSizing: 'border-box',
+        position: 'relative',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: 'rgb(255, 255, 255)',
+        fontWeight: 600,
+        fontSize: '12px',
+        width: '75px',
+        textAlign: 'center',
+        height: '20px',
+        background: 'var(--rebrand-success-primary)',
+        borderRadius: '2px',
+        marginLeft: '8px',
+        marginRight: '10px'
+      } ).text( '0.00 - 2+' ) )
       .css( {
         height: '20px',
         display: 'flex',
