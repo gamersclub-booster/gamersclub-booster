@@ -11,6 +11,14 @@ export async function adicionarBotaoAutoComplete() {
   const procurandoCompleteText = getTranslationText( 'procurando-complete', traducao );
   const voceEstaEmLobbyText = getTranslationText( 'voce-esta-em-uma-lobby', traducao );
 
+  const atualizarVisibilidadeBotao = () => {
+    const hasCreateLobbyButton = $( '#lobby-actions-create-lobby-button' ).length > 0;
+    const $autoCompleteBtn = $( '#btn-auto-complete' );
+
+    if ( !$autoCompleteBtn.length ) { return; }
+    $autoCompleteBtn.toggle( hasCreateLobbyButton );
+  };
+
 
   const handleStartAutoComplete = btn => {
     // Se não estiver em lobby
@@ -31,14 +39,23 @@ export async function adicionarBotaoAutoComplete() {
 
   const addListeners = () => {
     const $autoCompleteBtn = $( '#btn-auto-complete' );
+    const $parent = $autoCompleteBtn.parent();
 
-    $autoCompleteBtn.parent().css( {
-      'grid-template-columns': 'repeat(3, 1fr)',
-      'display': 'grid'
-    } );
-    $autoCompleteBtn.parent().parent().css( {
-      'padding': '12px 12px'
-    } );
+    if ( $parent.attr( 'id' ) === 'gcbooster_filtro_kdr_wrapper' ) {
+      $parent.css( {
+        display: 'flex',
+        'align-items': 'center',
+        gap: '8px'
+      } );
+    } else {
+      $parent.css( {
+        'grid-template-columns': 'repeat(3, 1fr)',
+        'display': 'grid'
+      } );
+      $parent.parent().css( {
+        'padding': '12px 12px'
+      } );
+    }
 
     $autoCompleteBtn.on( 'click', function () {
       if ( $autoCompleteBtn.hasClass( 'cancel-auto-complete' ) ) { // Se já estiver buscando
@@ -55,21 +72,37 @@ export async function adicionarBotaoAutoComplete() {
 
     const observer = new MutationObserver( () => {
       const btnAlreadyExists = $( '#btn-auto-complete' ).length;
-      const isReadyToInsert = $( '#lobby-actions-create-lobby-button' ).length;
+      const $filtroWrapper = $( '#gcbooster_filtro_kdr_wrapper' );
+      const hasCreateLobbyButton = $( '#lobby-actions-create-lobby-button' ).length > 0;
+      const isReadyToInsert = hasCreateLobbyButton && ( $filtroWrapper.length || hasCreateLobbyButton );
 
-      if ( btnAlreadyExists || !isReadyToInsert ) { return; }
+      if ( btnAlreadyExists ) {
+        atualizarVisibilidadeBotao();
+        return;
+      }
 
-      $( '#lobby-actions-create-lobby-button' ).parent()
-        .append( $( '<button/>', {
-          'id': 'btn-auto-complete',
-          'class': 'WasdButton WasdButton--primary WasdButton--lg WasdButton--block draw-orange btn-visible',
-          'type': 'button',
-          'text': completarPartidaText,
-          'title': `[GC Booster]: ${completarPartidaText}`
-        } ) );
+      if ( !isReadyToInsert ) { return; }
+
+      const $button = $( '<button/>', {
+        'id': 'btn-auto-complete',
+        'class': 'WasdButton WasdButton--primary WasdButton--lg WasdButton--block draw-orange btn-visible',
+        'type': 'button',
+        'text': completarPartidaText,
+        'title': `[GC Booster]: ${completarPartidaText}`
+      } ).css( {
+        width: '188.11px',
+        'min-width': '188.11px',
+        'max-width': '188.11px'
+      } );
+
+      if ( $filtroWrapper.length ) {
+        $filtroWrapper.append( $button );
+      } else {
+        $( '#lobby-actions-create-lobby-button' ).parent().append( $button );
+      }
 
       addListeners();
-      observer.disconnect();
+      atualizarVisibilidadeBotao();
     } );
 
     observer.observe( document.body, { childList: true, subtree: true } );
