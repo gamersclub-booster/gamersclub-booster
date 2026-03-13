@@ -1,6 +1,7 @@
 //import { mostrarKdr } from './mostrarKdr.js';
 
 let observerLobbiesWrapper = null;
+let observerChallengesList = null;
 let observerPage = null;
 let frameAplicacao = null;
 let timeoutSalvarFaixa = null;
@@ -12,6 +13,8 @@ const encontrarMenu = () => {
   return all.length ? all[all.length - 1] : null;
 };
 const LOBBIES_WRAPPER_SELECTOR = '#lobbies-wrapper';
+const CHALLENGES_LIST_SELECTOR = '.ChallengesList__list';
+const CHALLENGE_ITEM_SELECTOR = '.LobbyChallengeCard__item';
 const FILTER_OPTION_KEY = 'filtrarKdrMedioLobby';
 const FILTER_MIN_OPTION_KEY = 'filtrarKdrMedioLobbyMin';
 const FILTER_MAX_OPTION_KEY = 'filtrarKdrMedioLobbyMax';
@@ -33,12 +36,26 @@ const agendarAplicacaoFiltro = () => {
   frameAplicacao = window.requestAnimationFrame( () => {
     frameAplicacao = null;
     aplicarFiltroKdrMedio();
+    aplicarFiltroDesafios();
   } );
 };
 
 const formatarValorFaixa = value => {
   const fixed = Number( value ).toFixed( 2 );
   return fixed.endsWith( '.00' ) ? String( parseInt( fixed, 10 ) ) : fixed;
+};
+
+const normalizarTituloLobby = title => title?.trim() || '';
+
+const obterMediaKdrPorTitulo = title => {
+  const tituloNormalizado = normalizarTituloLobby( title );
+  if ( !tituloNormalizado ) { return null; }
+
+  const mediaElements = document.querySelectorAll( '[gcbooster_kdr_medio][gcbooster_lobby_title]' );
+
+  return Array.from( mediaElements ).find( element => {
+    return normalizarTituloLobby( element.getAttribute( 'gcbooster_lobby_title' ) ) === tituloNormalizado;
+  } ) || null;
 };
 
 const calcularPercentualFaixa = value => {
@@ -184,10 +201,64 @@ const renderizarKdrMedioLobby = ( room, media ) => {
     title.insertAdjacentElement( 'afterend', mediaElement );
   }
 
+  mediaElement.setAttribute( 'gcbooster_kdr_medio', media.toFixed( 2 ) );
+  mediaElement.setAttribute( 'gcbooster_lobby_title', normalizarTituloLobby( title.innerText ) );
+
   const mediaText = `KDR Médio: ${media.toFixed( 2 )}`;
   if ( mediaElement.textContent !== mediaText ) {
     mediaElement.textContent = mediaText;
   }
+};
+
+const aplicarFiltroDesafios = () => {
+  const challengesList = document.querySelector( CHALLENGES_LIST_SELECTOR );
+  if ( !challengesList ) { return; }
+
+  const { min, max } = obterValoresFiltroAtual();
+  const ignorarFiltroMaximo = isMaxSemLimite( max );
+  const items = challengesList.querySelectorAll( CHALLENGE_ITEM_SELECTOR );
+
+  items.forEach( item => {
+    const info = item.querySelector( '.LobbyChallengeCard__info' );
+    const titleElement = info?.querySelector( 'p' );
+    const title = normalizarTituloLobby( titleElement?.textContent );
+    const mediaElement = obterMediaKdrPorTitulo( title );
+    const media = Number.parseFloat( mediaElement?.getAttribute( 'gcbooster_kdr_medio' ) );
+
+    if ( !info || !titleElement || Number.isNaN( media ) ) {
+      item.style.display = '';
+      return;
+    }
+
+    let wrapper = info.querySelector( '.gcbooster-kdr-wrapper' );
+    if ( !wrapper ) {
+      wrapper = document.createElement( 'div' );
+      wrapper.className = 'gcbooster-kdr-wrapper';
+      wrapper.style.cssText = 'display:flex;flex-direction:column;gap:0;';
+      titleElement.insertAdjacentElement( 'beforebegin', wrapper );
+      wrapper.appendChild( titleElement );
+    }
+
+    let kdrElement = wrapper.querySelector( '.gcbooster-kdr' );
+    if ( !kdrElement ) {
+      kdrElement = document.createElement( 'span' );
+      kdrElement.className = 'gcbooster-kdr';
+      kdrElement.style.cssText = 'font-size:9px;color:orange;';
+      wrapper.appendChild( kdrElement );
+    }
+
+    const textoKdr = `KDR Medio: ${media.toFixed( 2 )}`;
+    if ( kdrElement.textContent !== textoKdr ) {
+      kdrElement.textContent = textoKdr;
+    }
+
+    if ( media < min || ( !ignorarFiltroMaximo && media > max ) ) {
+      item.style.display = 'none';
+      return;
+    }
+
+    item.style.display = '';
+  } );
 };
 
 const aplicarFiltroKdrMedio = () => {
@@ -387,10 +458,35 @@ const iniciarObserverLobbies = () => {
   agendarAplicacaoFiltro();
 };
 
+const iniciarObserverDesafios = () => {
+  const challengesList = document.querySelector( CHALLENGES_LIST_SELECTOR );
+  if ( !challengesList ) { return; }
+
+  if ( observerChallengesList ) {
+    observerChallengesList.disconnect();
+  }
+
+  observerChallengesList = new MutationObserver( () => {
+    agendarAplicacaoFiltro();
+  } );
+
+  observerChallengesList.observe( challengesList, {
+    childList: true,
+    subtree: true
+  } );
+
+  agendarAplicacaoFiltro();
+};
+
 const limparFiltro = () => {
   if ( observerLobbiesWrapper ) {
     observerLobbiesWrapper.disconnect();
     observerLobbiesWrapper = null;
+  }
+
+  if ( observerChallengesList ) {
+    observerChallengesList.disconnect();
+    observerChallengesList = null;
   }
 
   if ( observerPage ) {
@@ -433,7 +529,11 @@ const adicionarFiltroKdr = () => {
           return node.matches( MENU_SELECTOR ) ||
             !!node.querySelector( MENU_SELECTOR ) ||
             node.matches( LOBBIES_WRAPPER_SELECTOR ) ||
-            !!node.querySelector( LOBBIES_WRAPPER_SELECTOR );
+            !!node.querySelector( LOBBIES_WRAPPER_SELECTOR ) ||
+            node.matches( CHALLENGES_LIST_SELECTOR ) ||
+            !!node.querySelector( CHALLENGES_LIST_SELECTOR ) ||
+            node.matches( CHALLENGE_ITEM_SELECTOR ) ||
+            !!node.querySelector( CHALLENGE_ITEM_SELECTOR );
         } );
       } );
 
@@ -448,6 +548,15 @@ const adicionarFiltroKdr = () => {
       if ( !document.querySelector( LOBBIES_WRAPPER_SELECTOR ) ) { return; }
       if ( !observerLobbiesWrapper ) {
         iniciarObserverLobbies();
+      }
+
+      if ( document.querySelector( CHALLENGES_LIST_SELECTOR ) ) {
+        if ( !observerChallengesList ) {
+          iniciarObserverDesafios();
+        }
+      } else if ( observerChallengesList ) {
+        observerChallengesList.disconnect();
+        observerChallengesList = null;
       }
 
       agendarAplicacaoFiltro();
