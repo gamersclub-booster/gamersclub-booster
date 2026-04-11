@@ -238,11 +238,12 @@ export const mostrarInfoPlayerIntervaler = () => {
           if ( $element.attr( 'id' ) === undefined || $element.attr( 'id' ) === '' ) {
             const $nodeChildren = $element.find( '.LobbyPlayerHorizontal__nickname' );
 
-            const kdrInfos = $element.find( '.LobbyPlayerHorizontal__kdr' );
-            const kdrValue = kdrInfos.text().split( 'KDR' )[1];
-
             const playerLink = $nodeChildren.children( 'a' ).attr( 'href' );
             const playerId = playerLink?.split( '/' ).pop() ;
+
+            const kdr = await fetchKdr( playerId );
+            const kdrValue = parseFloat( kdr ).toFixed( 2 );
+
             $element.attr( 'id', `gcboost-content-${playerId}` );
 
             await getPlayerInfo( playerId ).then( infoPlayer => {
