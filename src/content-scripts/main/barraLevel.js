@@ -34,7 +34,10 @@ const grabPlayerHistory = async matchUrl => {
   const data = await response.json();
 
   const playerHistory = [];
-  playerHistory['kdr'] = data.stat[0].value;
+  const stats = Array.isArray( data.stats ) ? data.stats : [];
+  const kdrStat = stats.find( stat => stat.stat === 'KDR' );
+
+  playerHistory['kdr'] = kdrStat ? kdrStat.value : undefined;
 
   return playerHistory;
 };
@@ -45,7 +48,7 @@ export const adicionarBarraLevel = async () => {
 
   if ( !playerId ) { return; }
   const playerInfo = await grabPlayerLastMatch( `https://${GC_URL}/api/box/init/${playerId}` );
-  const playerHistory = await grabPlayerHistory( `https://${GC_URL}/api/box/history/${playerId}` );
+  const playerHistory = await grabPlayerHistory( `https://${GC_URL}/api/player-card/${playerId}` );
 
   const playerKdr = playerHistory['kdr'];
 
