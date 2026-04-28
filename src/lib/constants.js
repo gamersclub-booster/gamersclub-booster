@@ -134,6 +134,7 @@ export const paginas = [ 'novidades', 'geral', 'mapas', 'lobby', 'complete', 'co
   'backup', 'doacao' ];
 export const audios = {
   '': 'Nenhum',
+  'https://www.myinstants.com/media/sounds/serjao-ligou-ligou-ligou.mp3': 'Ligou ligou ligou - Serjão',
   'https://www.myinstants.com/media/sounds/whatsapp_ptt_2021-04-04_at_21.mp3': 'Partida encontrada',
   'https://www.myinstants.com/media/sounds/esl-pro-league-season-11-north-america-mibr-vs-furia-mapa-iii-mirage-mp3cut.mp3':
     'Começou - Gaules',
