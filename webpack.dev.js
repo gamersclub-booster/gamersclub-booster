@@ -3,12 +3,13 @@ const CopyPlugin = require( 'copy-webpack-plugin' );
 const webpack = require( 'webpack' );
 const glob = require( 'glob' );
 
-const contentScripts = name => glob.sync( `./src/content-scripts/${name}/*.js` );
+const resolveEntries = pattern => glob.sync( pattern ).map( entry => path.resolve( __dirname, entry ) );
+const contentScripts = name => resolveEntries( `./src/content-scripts/${name}/*.js` );
 
 module.exports = {
   mode: 'development',
   entry: {
-    'index': glob.sync( './src/options/*.js' ),
+    'index': resolveEntries( './src/options/*.js' ),
     'content-scripts/main': contentScripts( 'main' ),
     'content-scripts/lobby': contentScripts( 'lobby' ),
     'content-scripts/missions': contentScripts( 'missions' ),
