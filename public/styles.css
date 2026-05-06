@@ -299,6 +299,64 @@ input:not([type="range"]) {
   user-select: none;
 }
 
+.ready-delay-setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.ready-delay-setting .container {
+  margin-bottom: 0;
+  flex: 1;
+}
+
+.ready-delay-options {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ready-delay-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 48px;
+  padding: 4px 8px;
+  border: 1px solid #247eb9;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.2s ease-out;
+  font-size: 12px;
+  font-weight: 600;
+  background: rgba(20, 21, 38, 0.5);
+}
+
+.ready-delay-chip:hover {
+  background: rgba(36, 126, 185, 0.18);
+}
+
+.ready-delay-chip input {
+  margin: 0;
+}
+
+.ready-delay-chip-active {
+  background: rgba(36, 126, 185, 0.35);
+  box-shadow: inset 0 0 0 1px rgba(36, 126, 185, 0.45);
+}
+
+.ready-delay-chip-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.ready-delay-chip-disabled:hover {
+  background: rgba(20, 21, 38, 0.5);
+}
+
 /* Hide the browser's default checkbox */
 .container input {
   position: absolute;

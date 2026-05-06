@@ -13,6 +13,8 @@ const translations = {
   'fr': fr
 };
 
+const autoReadyDelayKeys = [ 'autoAceitarReadyDelay5s', 'autoAceitarReadyDelay10s' ];
+
 function saveJson( obj ) {
   const myArray = JSON.stringify( obj, null, 4 );
   const vLink = document.createElement( 'a' ),
@@ -43,6 +45,7 @@ function iniciarPaginaOpcoes() {
   marcarPreVetos();
   marcarCompleteMapas();
   adicionarListenersFeatures();
+  iniciarOpcoesDelayReady();
   adicionarListenersPaginas();
   adicionarListenerPreVetos();
   adicionarListenerCompleteMapas();
@@ -292,6 +295,96 @@ function adicionarListenersFeatures() {
       chrome.storage.sync.set( { [feature]: this.checked }, function () {} );
     } );
   }
+}
+
+function iniciarOpcoesDelayReady() {
+  // O que essa linha de codigo faz: centraliza a configuracao visual e funcional dos
+  // chips de delay do Ready no popup da extensao.
+  // Como afeta o programa: mantem 5s/10s sincronizados com o checkbox principal e com
+  // o storage, evitando combinacoes invalidas na UI.
+  const autoReadyCheckbox = document.getElementById( 'autoAceitarReady' );
+  const delay5Checkbox = document.getElementById( 'autoAceitarReadyDelay5s' );
+  const delay10Checkbox = document.getElementById( 'autoAceitarReadyDelay10s' );
+
+  const updateDelayChipVisualState = () => {
+    for ( const key of autoReadyDelayKeys ) {
+      const checkbox = document.getElementById( key );
+      const label = checkbox.closest( '.ready-delay-chip' );
+      label.classList.toggle( 'ready-delay-chip-active', checkbox.checked );
+    }
+  };
+
+  const setDelayOptionsDisabled = disabled => {
+    for ( const key of autoReadyDelayKeys ) {
+      const checkbox = document.getElementById( key );
+      const label = checkbox.closest( '.ready-delay-chip' );
+      checkbox.disabled = disabled;
+      label.classList.toggle( 'ready-delay-chip-disabled', disabled );
+    }
+  };
+
+  chrome.storage.sync.get( [ 'autoAceitarReady', ...autoReadyDelayKeys ], response => {
+    const normalized = { ...response };
+    if ( normalized.autoAceitarReadyDelay5s && normalized.autoAceitarReadyDelay10s ) {
+      // O que essa linha de codigo faz: corrige estado salvo invalido onde os dois delays
+      // aparecem ligados ao mesmo tempo.
+      // Como afeta o programa: garante que o contrato de exclusividade continue valido
+      // mesmo apos importacao de backup ou configuracao antiga.
+      normalized.autoAceitarReadyDelay10s = false;
+      chrome.storage.sync.set( { autoAceitarReadyDelay10s: false } );
+    }
+
+    delay5Checkbox.checked = Boolean( normalized.autoAceitarReadyDelay5s );
+    delay10Checkbox.checked = Boolean( normalized.autoAceitarReadyDelay10s );
+    updateDelayChipVisualState();
+    setDelayOptionsDisabled( !normalized.autoAceitarReady );
+  } );
+
+  autoReadyCheckbox.addEventListener( 'change', function () {
+    // O que essa linha de codigo faz: habilita ou desabilita os delays conforme o estado
+    // do Aceitar Ready principal.
+    // Como afeta o programa: deixa claro para o usuario que 5s/10s sao complementos da
+    // feature, nao automacoes independentes.
+    setDelayOptionsDisabled( !this.checked );
+  } );
+
+  delay5Checkbox.addEventListener( 'change', function () {
+    if ( this.disabled ) {
+      this.checked = false;
+      return;
+    }
+
+    const updates = {
+      autoAceitarReadyDelay5s: this.checked,
+      autoAceitarReadyDelay10s: this.checked ? false : delay10Checkbox.checked
+    };
+
+    // O que essa linha de codigo faz: desmarca visualmente o delay concorrente quando o
+    // usuario escolhe 5s.
+    // Como afeta o programa: impede que a UI apresente dois delays ativos ao mesmo tempo.
+    delay10Checkbox.checked = updates.autoAceitarReadyDelay10s;
+    updateDelayChipVisualState();
+    chrome.storage.sync.set( updates );
+  } );
+
+  delay10Checkbox.addEventListener( 'change', function () {
+    if ( this.disabled ) {
+      this.checked = false;
+      return;
+    }
+
+    const updates = {
+      autoAceitarReadyDelay10s: this.checked,
+      autoAceitarReadyDelay5s: this.checked ? false : delay5Checkbox.checked
+    };
+
+    // O que essa linha de codigo faz: desmarca visualmente o delay concorrente quando o
+    // usuario escolhe 10s.
+    // Como afeta o programa: preserva a exclusividade entre os modos de atraso.
+    delay5Checkbox.checked = updates.autoAceitarReadyDelay5s;
+    updateDelayChipVisualState();
+    chrome.storage.sync.set( updates );
+  } );
 }
 
 function adicionarListenersPaginas() {

@@ -168,11 +168,25 @@
     <!-- GERAL -->
     <div class="pagina" id="geral">
       <h3 class="subtitulo" translation-key="automacoes"></h3>
-      <label class="container" for="autoAceitarReady" title="Aceita automaticamente o ready">
-        <p class="descricao" translation-key="aceitar-ready"></p>
-        <input type="checkbox" id="autoAceitarReady" />
-        <span class="checkmark"></span>
-      </label>
+      <div class="ready-delay-setting">
+        <label class="container" for="autoAceitarReady" title="Aceita automaticamente o ready">
+          <p class="descricao" translation-key="aceitar-ready"></p>
+          <input type="checkbox" id="autoAceitarReady" />
+          <span class="checkmark"></span>
+        </label>
+        <div class="ready-delay-options" id="autoAceitarReadyDelayOptions">
+          <label class="ready-delay-chip" for="autoAceitarReadyDelay5s"
+            title="Espera 5 segundos antes de aceitar automaticamente. Nesse tempo você pode decidir manualmente.">
+            <input type="checkbox" id="autoAceitarReadyDelay5s" />
+            <span>5s</span>
+          </label>
+          <label class="ready-delay-chip" for="autoAceitarReadyDelay10s"
+            title="Espera 10 segundos antes de aceitar automaticamente. Nesse tempo você pode decidir manualmente.">
+            <input type="checkbox" id="autoAceitarReadyDelay10s" />
+            <span>10s</span>
+          </label>
+        </div>
+      </div>
 
       <label class="container" for="autoCopiarIp" title="Copia o IP automáticamente assim que disponível"
         style="display: none">
