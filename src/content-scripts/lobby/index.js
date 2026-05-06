@@ -1,4 +1,4 @@
-import { autoAceitarReady, autoAceitarReadySetInterval } from './autoAceitarReady';
+import { autoAceitarReady, autoAceitarReadySetInterval, resetAutoAceitarReadyState } from './autoAceitarReady';
 import { autoConcordarTermosRanked } from './autoConcordarTermosRanked';
 import { autoFixarMenuLobby } from './autoFixarMenuLobby';
 import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
@@ -31,6 +31,7 @@ chrome.storage.sync.get( null, function ( _result ) {
 const initLobby = async () => {
   // Resetar estado do auto copy lobby link quando entrar no lobby
   resetLobbyLinkState();
+  resetAutoAceitarReadyState();
 
   // Esses dois não estão funcionando, verificar o motivo, criei o intervaler pra substituir por enquanto...
   criarObserver( '.lobby,.ranking', somReady );

@@ -40,6 +40,7 @@ function iniciarPaginaOpcoes() {
   mostrarMensagemAtencao();
   adicionaVersao();
   marcarCheckboxes();
+  iniciarOpcaoDelayReady();
   marcarPreVetos();
   marcarCompleteMapas();
   adicionarListenersFeatures();
@@ -292,6 +293,44 @@ function adicionarListenersFeatures() {
       chrome.storage.sync.set( { [feature]: this.checked }, function () {} );
     } );
   }
+}
+
+function iniciarOpcaoDelayReady() {
+  const autoReadyCheckbox = document.getElementById( 'autoAceitarReady' );
+  const delaySlider = document.getElementById( 'autoAceitarReadyDelaySeconds' );
+  const delayValue = document.getElementById( 'autoAceitarReadyDelayValue' );
+  const sliderWrapper = delaySlider.closest( '.ready-delay-slider-wrapper' );
+
+  const updateDelayValue = value => {
+    delayValue.innerText = `${value}s`;
+  };
+
+  const setDelayDisabled = disabled => {
+    delaySlider.disabled = disabled;
+    sliderWrapper.classList.toggle( 'ready-delay-slider-disabled', disabled );
+  };
+
+  chrome.storage.sync.get( [ 'autoAceitarReady', 'autoAceitarReadyDelaySeconds' ], response => {
+    const delaySeconds = Math.min( Math.max( Number( response.autoAceitarReadyDelaySeconds ?? 0 ), 0 ), 10 );
+    delaySlider.value = delaySeconds;
+    updateDelayValue( delaySeconds );
+    setDelayDisabled( !response.autoAceitarReady );
+  } );
+
+  autoReadyCheckbox.addEventListener( 'change', function () {
+    // O slider e complemento visual do Aceitar Ready.
+    // Desabilitar aqui evita estado visual "solto" quando a feature principal esta off.
+    setDelayDisabled( !this.checked );
+  } );
+
+  delaySlider.addEventListener( 'input', function () {
+    updateDelayValue( this.value );
+  } );
+
+  delaySlider.addEventListener( 'change', function () {
+    // A nova configuracao passa a valer na proxima ocorrencia de Ready.
+    chrome.storage.sync.set( { autoAceitarReadyDelaySeconds: Number( this.value ) } );
+  } );
 }
 
 function adicionarListenersPaginas() {
