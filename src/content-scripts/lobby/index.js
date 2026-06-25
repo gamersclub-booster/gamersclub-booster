@@ -5,7 +5,7 @@ import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
 // import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
 import { lobbyLink } from './lobbyLink';
 import { autoCopyLobbyLink, resetLobbyLinkState } from './autoCopyLobbyLink';
-import { mostrarInfoPlayerIntervaler, mostrarKdr, mostrarKdrDesafios, mostrarKdrRanked, showKdrMatch } from './mostrarKdr';
+import { mostrarInfoPlayerIntervaler, mostrarKdr, mostrarKdrDesafios, mostrarKdrRanked, showKdrMatch, showHoursMyRoom } from './mostrarKdr';
 import { partidaInfo } from './partidaInfo';
 import { somReady, somReadySetInterval, tocarSomSeVoceForExpulsoDaLobby } from './sons';
 import { adicionarFiltroKdr } from './filtrarKdr';
@@ -83,11 +83,16 @@ const initLobby = async () => {
   lobbyMapSuggestions();
   showPlayerSoloStats();
   showKdrMatch();
+  showHoursMyRoom();
   adicionarFiltroKdr();
 };
 
 const criarObserver = ( seletor, exec, type ) => {
   const observer = new MutationObserver( mutations => {
+    if ( typeof chrome === 'undefined' || !chrome.runtime || !chrome.runtime.id ) {
+      observer.disconnect();
+      return;
+    }
 
     let shouldExec = false;
     mutations.forEach( mutation => {

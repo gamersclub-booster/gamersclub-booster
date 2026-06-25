@@ -101,5 +101,8 @@
   "filter-lobby-by-average-kdr": "Filter lobbies by average KDR",
   "show-stats": "Show player stats in the Lobby",
   "disable-show-map-stats-suggestions": "Disable map stats suggestions in the Lobby",
-  "disable-show-player-solo-stats": "Disable solo player stats in the Lobby"
+  "disable-show-player-solo-stats": "Disable solo player stats in the Lobby",
+  "show-steam-hours": "Show CS2 hours (Steam) next to KDR",
+  "steam-api-key-label": "Steam Web API Key",
+  "steam-api-key-desc": "* Required to check player hours on Steam. Get yours at <a href=\"https://steamcommunity.com/dev/apikey\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color: #00bcd4;\">https://steamcommunity.com/dev/apikey</a>."
 }
