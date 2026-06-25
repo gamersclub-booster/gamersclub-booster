@@ -2,7 +2,7 @@
   "name": "gamersclub-booster",
   "description": "Extensão para navegadores que adiciona algumas melhorias na plataforma da GamersClub",
   "repository": "https://github.com/gamersclub-booster/gamersclub-booster",
-  "version": "v2.88.1",
+  "version": "v2.88.4",
   "main": "index.js",
   "license": "GPL-3.0",
   "commitlint": {
@@ -17,7 +17,7 @@
     "prepare": "husky || true && chmod ug+x .husky/* || true"
   },
   "dependencies": {
-    "axios": "^1.15.0",
+    "axios": "^1.16.0",
     "jquery": "^3.7.1"
   },
   "devDependencies": {
