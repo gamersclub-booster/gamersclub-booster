@@ -140,11 +140,16 @@ const createModalForElementNew = ( element, getPlayersIdsFunction, type, lobbyId
         $( `#infos_lobby_${lobbyId}` ).append( loadingDiv );
       } );
 
-      for ( const player of players ) {
-        const response = await getPlayerInfo( player );
-        $( `#loading-${player}` ).replaceWith( createDivPlayers( response ) );
+      try {
+        for ( const player of players ) {
+          const response = await getPlayerInfo( player, true );
+          $( `#loading-${player}` ).replaceWith( createDivPlayers( response ) );
+        }
+      } catch ( _err ) {
+        // do nothing
+      } finally {
+        $.each( $( '.gcbooster_lupa' ), ( _, lupa ) => { lupa.style = 'display: flex'; } );
       }
-      $.each( $( '.gcbooster_lupa' ), ( _, lupa ) => { lupa.style = 'display: flex'; } );
     } );
     element.append( div );
   }
@@ -164,10 +169,10 @@ export const infoChallenge = mutations => {
 export const infoLobby = mutations => {
   $.each( mutations, ( _, mutation ) => {
     $( mutation.addedNodes )
-      .find( '.RoomCardWrapper' )
-      .addBack( '.RoomCardWrapper' )
+      .find( '.RoomCardWrapper, .LobbyRoom' )
+      .addBack( '.RoomCardWrapper, .LobbyRoom' )
       .each( ( _, element ) => {
-        const lobbyId = $( element ).attr( 'id' );
+        const lobbyId = $( element ).attr( 'id' ) || Math.random().toString( 36 ).substr( 2, 9 );
         createModalForElementNew( $( element ), getPlayersIdsNew, 'lobby', lobbyId );
       } );
   } );
