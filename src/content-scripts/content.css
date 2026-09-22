@@ -478,6 +478,15 @@ input[type="range"].filterKdr::-ms-track {
   transform: translate(0);
 }
 
+#gc-ext-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#gc-ext-wrapper #btn-auto-complete {
+  margin-left: auto;
+}
+
 #btn-auto-complete.cancel-auto-complete,
 #criar-lobby-btn.cancel-auto-complete {
   background-color: var(--color-dark-red);
