@@ -39,23 +39,6 @@ export async function adicionarBotaoAutoComplete() {
 
   const addListeners = () => {
     const $autoCompleteBtn = $( '#btn-auto-complete' );
-    const $parent = $autoCompleteBtn.parent();
-
-    if ( $parent.attr( 'id' ) === 'gcbooster_filtro_kdr_wrapper' ) {
-      $parent.css( {
-        display: 'flex',
-        'align-items': 'center',
-        gap: '8px'
-      } );
-    } else {
-      $parent.css( {
-        'grid-template-columns': 'repeat(3, 1fr)',
-        'display': 'grid'
-      } );
-      $parent.parent().css( {
-        'padding': '12px 12px'
-      } );
-    }
 
     $autoCompleteBtn.on( 'click', function () {
       if ( $autoCompleteBtn.hasClass( 'cancel-auto-complete' ) ) { // Se já estiver buscando
@@ -72,16 +55,14 @@ export async function adicionarBotaoAutoComplete() {
 
     const observer = new MutationObserver( () => {
       const btnAlreadyExists = $( '#btn-auto-complete' ).length;
-      const $filtroWrapper = $( '#gcbooster_filtro_kdr_wrapper' );
-      const hasCreateLobbyButton = $( '#lobby-actions-create-lobby-button' ).length > 0;
-      const isReadyToInsert = hasCreateLobbyButton && ( $filtroWrapper.length || hasCreateLobbyButton );
+      const $extWrapper = $( '#gc-ext-wrapper' );
 
       if ( btnAlreadyExists ) {
         atualizarVisibilidadeBotao();
         return;
       }
 
-      if ( !isReadyToInsert ) { return; }
+      if ( !$extWrapper.length ) { return; }
 
       const $button = $( '<button/>', {
         'id': 'btn-auto-complete',
@@ -95,11 +76,7 @@ export async function adicionarBotaoAutoComplete() {
         'max-width': '188.11px'
       } );
 
-      if ( $filtroWrapper.length ) {
-        $filtroWrapper.append( $button );
-      } else {
-        $( '#lobby-actions-create-lobby-button' ).parent().append( $button );
-      }
+      $extWrapper.append( $button );
 
       addListeners();
       atualizarVisibilidadeBotao();
