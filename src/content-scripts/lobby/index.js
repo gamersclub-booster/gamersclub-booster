@@ -19,6 +19,7 @@ import { ocultarSugestaoDeLobbies } from './ocultarSugestaoDeLobbies';
 import { showStats } from './showStats';
 import { lobbyMapSuggestions } from './lobbyMapSuggestions';
 import { showPlayerSoloStats } from './showPlayerSoloStats';
+import { mostrarReportDesafios, mostrarReportDesafiosInit } from './mostrarReportDesafios';
 
 chrome.storage.sync.get( null, function ( _result ) {
   if ( window.location.pathname.includes( 'partida' ) || window.location.pathname.includes( '/match/' ) ) {
@@ -45,6 +46,8 @@ const initLobby = async () => {
   criarObserver( '#lobbies-wrapper', mostrarKdr );
   criarObserver( '#lobbies-wrapper', infoLobby );
   criarObserver( '.lobby', infoChallenge );
+  criarObserver( '.lobby', mostrarReportDesafios );
+  criarObserver( '#lobbies-wrapper', mostrarReportDesafios );
   criarObserver( '#GamersClubCSApp-globals-globalToaster', tocarSomSeVoceForExpulsoDaLobby );
 
 
@@ -82,6 +85,8 @@ const initLobby = async () => {
   showStats();
   lobbyMapSuggestions();
   showPlayerSoloStats();
+  // Feature para mostrar jogadores reportados nos desafios
+  mostrarReportDesafiosInit();
   showKdrMatch();
   adicionarFiltroKdr();
 };

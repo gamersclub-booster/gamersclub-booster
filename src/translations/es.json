@@ -101,5 +101,7 @@
   "filter-lobby-by-average-kdr": "Filtrar lobbies por KDR promedio",
   "show-stats": "Mostrar estadísticas del jugador en el Lobby",
   "disable-show-map-stats-suggestions": "Desactivar sugerencias de estadísticas de mapas en el Lobby",
-  "disable-show-player-solo-stats": "Desactivar estadísticas solo del jugador en el Lobby"
+  "disable-show-player-solo-stats": "Desactivar estadísticas solo del jugador en el Lobby",
+  "mostrar-report-desafios": "Mostrar jugadores reportados en los desafíos",
+  "mostrar-anotacoes-lobby": "Mostrar anotaciones negativas de los jugadores en su lobby"
 }
