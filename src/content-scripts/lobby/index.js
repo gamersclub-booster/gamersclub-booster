@@ -2,7 +2,7 @@ import { autoAceitarReady, autoAceitarReadySetInterval, resetAutoAceitarReadySta
 import { autoConcordarTermosRanked } from './autoConcordarTermosRanked';
 import { autoFixarMenuLobby } from './autoFixarMenuLobby';
 import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
-// import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
+import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
 import { lobbyLink } from './lobbyLink';
 import { autoCopyLobbyLink, resetLobbyLinkState } from './autoCopyLobbyLink';
 import { mostrarInfoPlayerIntervaler, mostrarKdr, mostrarKdrDesafios, mostrarKdrRanked, showKdrMatch } from './mostrarKdr';
@@ -62,8 +62,7 @@ const initLobby = async () => {
   // Feature para aceitar complete automatico
   adicionarBotaoAutoComplete();
   // Feature pra criar lobby caso full
-  // GC removeu a var de limite de lobbies, n temos solução ainda pra isso...
-  // adicionarBotaoForcarCriarLobby();
+  adicionarBotaoForcarCriarLobby();
   // Feature para mostrar kdr dos players
   mostrarKdrRanked();
   mostrarInfoPlayerIntervaler();

@@ -269,7 +269,7 @@ const aplicarFiltroKdrMedio = () => {
   const ignorarFiltroMaximo = isMaxSemLimite( max );
   atualizarLabelFaixa( min, max );
 
-  const rooms = wrapper.querySelectorAll( '.RoomCardWrapper' );
+  const rooms = wrapper.querySelectorAll( '[id^="roomCardWrapper-"]' );
 
   rooms.forEach( room => {
     const media = calcularKdrMedioLobby( room );
@@ -505,7 +505,7 @@ const limparFiltro = () => {
   }
 
   $( '#gcbooster_section2' ).remove();
-  $( `${LOBBIES_WRAPPER_SELECTOR} .RoomCardWrapper` ).css( 'display', '' );
+  $( `${LOBBIES_WRAPPER_SELECTOR} [id^="roomCardWrapper-"]` ).css( 'display', '' );
 };
 
 const adicionarFiltroKdr = () => {
