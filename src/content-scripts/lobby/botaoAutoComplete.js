@@ -70,10 +70,6 @@ export async function adicionarBotaoAutoComplete() {
         'type': 'button',
         'text': completarPartidaText,
         'title': `[GC Booster]: ${completarPartidaText}`
-      } ).css( {
-        width: '188.11px',
-        'min-width': '188.11px',
-        'max-width': '188.11px'
       } );
 
       $extWrapper.append( $button );

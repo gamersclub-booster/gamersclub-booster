@@ -199,6 +199,8 @@ export const mostrarKdrRanked = () => {
         const playerId = String( element.id ).split( '-' ).pop();
         const wrapper = $( element ).closest( '[class^=PlayerCardWrapper]' );
 
+        if ( $( '.PlayerIdentityBadges__KDR', wrapper ).length > 0 ) { return; }
+
         $( '.PlayerIdentityBadges', wrapper ).append( '<div class="WasdTooltip__wrapper PlayerIdentityBadges__KDR"></div>' );
         const kdrDiv = $( '.PlayerIdentityBadges__KDR', wrapper );
 

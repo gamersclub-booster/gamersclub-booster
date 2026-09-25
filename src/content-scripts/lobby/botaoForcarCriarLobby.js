@@ -1,6 +1,4 @@
-// @TODO: cleanup e ativar? não ta sendo usado.
 import { getAllStorageSyncData, getTranslationText } from '../../utils';
-// @TODO: cleanup e ativar? não ta sendo usado.
 import axios from 'axios';
 import { GC_URL, isFirefox } from '../../lib/constants';
 import { getLobbiesLimit } from '../../lib/dom';
@@ -15,21 +13,22 @@ export async function adicionarBotaoForcarCriarLobby() {
   if ( !$( '#criar-lobby-btn' ).length ) {
     const observer = new MutationObserver( () => {
       const btnAlreadyExists = $( '#criar-lobby-btn' ).length;
-      const isReadyToInsert = $( '#lobby-actions-create-lobby-button' ).length;
+      const $extWrapper = $( '#gc-ext-wrapper' );
 
-      if ( btnAlreadyExists || !isReadyToInsert ) { return; }
+      if ( btnAlreadyExists || !$extWrapper.length ) { return; }
 
-      $( '#lobby-actions-create-lobby-button' ).parent().append(
-        $( '<button/>', {
-          'id': 'criar-lobby-btn',
-          'class': 'WasdButton WasdButton--primary WasdButton--lg WasdButton--block draw-orange btn-visible',
-          'type': 'button',
-          'text': text,
-          'title': '[GC Booster]: Vai ficar tentando criar a lobby até conseguir (caso o limite máximo de lobbies tenha sido ultrapassado)'
-        } )
-      );
+      const $button = $( '<button/>', {
+        'id': 'criar-lobby-btn',
+        'class': 'WasdButton WasdButton--primary WasdButton--lg WasdButton--block draw-orange btn-visible',
+        'type': 'button',
+        'text': text,
+        'title': '[GC Booster]: Vai ficar tentando criar a lobby até conseguir (caso o limite máximo de lobbies tenha sido ultrapassado)'
+      } );
+
+      $extWrapper.prepend( $button );
 
       addListeners();
+      observer.disconnect();
     } );
     observer.observe( document.body, { childList: true, subtree: true } );
   } else {
@@ -63,9 +62,14 @@ function addListeners() {
 function intervalerCriacaoLobby() {
   return setInterval( async () => {
     if ( !$( '.sidebar-titulo.sidebar-sala-titulo' ).text().length ) {
-      const lobbies = $( '.LobbyHeader__info div[type="default"]' )[0].innerText.match( /\d+/ )[0];
-      // N existe mais o lobbies limit... n sei uma solução pra isso ainda...
-      if ( Number( lobbies ) < getLobbiesLimit() ) {
+      const infoText = $( '.LobbyHeader__info div[type="default"]' )[0]?.innerText || '';
+      const numeros = infoText.match( /\d+/g ) || [];
+      const lobbies = Number( numeros[0] );
+      // GC removeu a var global LOBBIES_LIMIT do HTML. Quando o contador exibe "atual/limite"
+      // (ex: "1/3"), usamos o segundo número; senão caímos pro fallback de getLobbiesLimit().
+      const limite = numeros.length > 1 ? Number( numeros[1] ) : getLobbiesLimit();
+
+      if ( limite !== null && !Number.isNaN( limite ) && lobbies < limite ) {
         //Criar lobby por meio de requisição com AXIOS. ozKcs
         chrome.storage.sync.get( [ 'preVetos', 'lobbyPrivada', 'jogarCom' ], async res => {
           const preVetos = res.preVetos ? res.preVetos : [];
