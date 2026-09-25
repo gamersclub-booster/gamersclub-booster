@@ -5,6 +5,8 @@ on:
       - development
 jobs:
   publish:
+    permissions:
+      contents: write
     name: Build and tag
     runs-on: ubuntu-latest
     steps:

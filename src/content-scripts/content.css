@@ -98,7 +98,7 @@ input[type="range"].filterKdr::-ms-track {
   border: 1px solid var(--color-orange);
 }
 
-.RoomCardWrapper {
+[id^="roomCardWrapper-"] {
   position: relative;
 }
 
@@ -249,7 +249,7 @@ input[type="range"].filterKdr::-ms-track {
   gap: 8px !important;
 }
 
-.lobby.compact .RoomCardWrapper {
+.lobby.compact [id^="roomCardWrapper-"] {
   max-width: 100% !important;
 }
 
@@ -451,13 +451,15 @@ input[type="range"].filterKdr::-ms-track {
 #criar-lobby-btn {
   display: flex;
   align-items: center;
+  justify-content: center;
+  text-align: center;
   height: 40px;
   font-family: Teko;
-  font-size: 22px;
+  font-size: 17px;
   font-weight: 400;
   text-transform: uppercase;
   border-radius: 2px;
-  padding: 10px 16px 6px;
+  padding: 6px 12px;
   box-shadow: var(--color-transparent-orange-5) 0 0 9px;
   border: 1px solid var(--color-orange);
   background-color: var(--color-gray-300);
@@ -466,7 +468,8 @@ input[type="range"].filterKdr::-ms-track {
   opacity: 0;
   transition: opacity 0.25s cubic-bezier(0, 0.47, 0.34, 1),
     transform 0.25s cubic-bezier(0, 0.47, 0.34, 1);
-  width: 100%;
+  flex: 0 0 140px;
+  width: 140px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -478,12 +481,18 @@ input[type="range"].filterKdr::-ms-track {
   transform: translate(0);
 }
 
+#gc-ext-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
 #btn-auto-complete.cancel-auto-complete,
 #criar-lobby-btn.cancel-auto-complete {
   background-color: var(--color-dark-red);
   box-shadow: var(--color-dark-red-border) 0 0 9px;
   border-color: var(--color-dark-red-border);
-  font-size: 20px;
+  font-size: 16px;
 }
 
 .sidebar-desafios-team .sala-lineup-players .is-prime {

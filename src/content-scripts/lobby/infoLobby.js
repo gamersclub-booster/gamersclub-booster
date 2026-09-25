@@ -111,7 +111,7 @@ const getPlayersIdsNew = element => element
   .map( e => e.href.split( '/' ).pop() );
 
 const createModalForElementNew = ( element, getPlayersIdsFunction, type, lobbyId ) => {
-  if ( element.find( `#gcbooster_lupa_${type}_${lobbyId}` ).length === 0 ) {
+  if ( element.find( `#gcbooster_lupa_${lobbyId}` ).length === 0 ) {
     const div = createDiv( lobbyId );
     const modal = createModal( lobbyId, type );
     const image = createImage( lobbyId );
@@ -164,8 +164,8 @@ export const infoChallenge = mutations => {
 export const infoLobby = mutations => {
   $.each( mutations, ( _, mutation ) => {
     $( mutation.addedNodes )
-      .find( '.RoomCardWrapper' )
-      .addBack( '.RoomCardWrapper' )
+      .find( '[id^="roomCardWrapper-"]' )
+      .addBack( '[id^="roomCardWrapper-"]' )
       .each( ( _, element ) => {
         const lobbyId = $( element ).attr( 'id' );
         createModalForElementNew( $( element ), getPlayersIdsNew, 'lobby', lobbyId );

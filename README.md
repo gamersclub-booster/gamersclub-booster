@@ -1,5 +1,5 @@
 [![Contributors](https://img.shields.io/github/contributors/gamersclub-booster/gamersclub-booster?style=flat-square)](https://github.com/gamersclub-booster/gamersclub-booster/graphs/contributors?selectedMetric=commits)
-
+ 
 # GamersClub Booster
 Uma extensão com o intuito de melhorar a plataforma **[GamersClub](https://gamersclub.com.br/)**.
 
