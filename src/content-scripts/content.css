@@ -1023,3 +1023,171 @@ input[type="range"].filterKdr::-ms-track {
   border: 2px solid var(--color-white);
   background: var(--color-white);
 }
+
+/* ============================
+   Player Audit — Badges, Tooltip & csREP Button
+   ============================ */
+
+/* Badge principal */
+.gcbooster-audit-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 18px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  margin-left: 4px;
+  cursor: help;
+  position: relative;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  z-index: 10;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.gcbooster-audit-badge:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+}
+
+.gcbooster-audit-badge--clean   { background-color: #2ecc71; }
+.gcbooster-audit-badge--suspect { background-color: #f39c12; }
+.gcbooster-audit-badge--banned  { 
+  background-color: #e74c3c; 
+  animation: gcbooster-pulse 1.5s infinite; 
+}
+.gcbooster-audit-badge--config  { background-color: #4a5568; }
+
+
+@keyframes gcbooster-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.5); }
+  50%      { box-shadow: 0 0 0 6px rgba(231, 76, 60, 0); }
+}
+
+/* Botão csREP */
+.gcbooster-csrep-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  text-decoration: none;
+  margin-left: 4px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  opacity: 0.85;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1;
+}
+
+.gcbooster-csrep-btn:hover {
+  transform: scale(1.1);
+  opacity: 1;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.5);
+  text-decoration: none;
+  color: #fff;
+}
+
+/* Auditoria dentro de Salas para Desafiar (LobbyPlayerVertical) */
+.gcbooster-challenge-audit-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  position: relative;
+  z-index: 3;
+}
+
+.gcbooster-challenge-audit-wrap .gcbooster-audit-badge {
+  width: 14px;
+  height: 14px;
+  font-size: 8px;
+  line-height: 14px;
+}
+
+.gcbooster-challenge-audit-wrap .gcbooster-csrep-btn {
+  font-size: 8px;
+  padding: 1px 3px;
+  margin-left: 2px;
+}
+
+
+/* Tooltip rico */
+.gcbooster-audit-tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #e0e0e0;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 11px;
+  line-height: 1.6;
+  white-space: nowrap;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  z-index: 9999;
+  pointer-events: none;
+  min-width: 280px;
+}
+
+.gcbooster-audit-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 7px solid transparent;
+  border-top-color: #16213e;
+}
+
+.gcbooster-audit-badge:hover .gcbooster-audit-tooltip {
+  display: block;
+}
+
+.gcbooster-audit-tooltip-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gcbooster-audit-tooltip-section {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 3px;
+}
+
+.gcbooster-audit-tooltip-label {
+  color: #8892b0;
+  min-width: 70px;
+}
+
+.gcbooster-audit-tooltip-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 6px 0;
+}
+
+.gcbooster-audit-tooltip-reason {
+  color: #ffd93d;
+  font-size: 10px;
+}
+
+.gcbooster-audit-tooltip-csrep {
+  color: #667eea;
+  font-size: 10px;
+  font-style: italic;
+}

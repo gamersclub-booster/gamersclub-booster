@@ -59,6 +59,7 @@ function iniciarPaginaOpcoes() {
   listenerJogarCom();
   marcarJogarCom();
   popularComplete();
+  iniciarPlayerAudit();
 }
 
 function mostrarMensagemAtencao() {
@@ -709,3 +710,61 @@ function completeMaxText() {
 
 limparOpcoesInvalidas();
 iniciarPaginaOpcoes();
+
+function iniciarPlayerAudit() {
+  chrome.storage.sync.get(
+    [ 'playerAuditEnabled', 'steamApiKey' ],
+    response => {
+      const enableEl = document.getElementById( 'playerAuditEnabled' );
+      const keyEl = document.getElementById( 'steamApiKey' );
+      if ( enableEl ) { enableEl.checked = response.playerAuditEnabled || false; }
+      if ( keyEl ) { keyEl.value = response.steamApiKey || ''; }
+    }
+  );
+
+  const enableEl = document.getElementById( 'playerAuditEnabled' );
+  if ( enableEl ) {
+    enableEl.addEventListener( 'change', function () {
+      chrome.storage.sync.set( { playerAuditEnabled: this.checked } );
+    } );
+  }
+
+  const keyEl = document.getElementById( 'steamApiKey' );
+  if ( keyEl ) {
+    keyEl.addEventListener( 'change', function () {
+      chrome.storage.sync.set( { steamApiKey: this.value.trim() } );
+    } );
+  }
+
+  const testBtn = document.getElementById( 'testarSteamApiKey' );
+  if ( testBtn ) {
+    testBtn.addEventListener( 'click', async () => {
+      const key = document.getElementById( 'steamApiKey' ).value.trim();
+      const status = document.getElementById( 'statusSteamKey' );
+      if ( !key ) { status.innerText = '❌ Insira uma chave'; return; }
+      status.innerText = '⏳ Testando...';
+      try {
+        const res = await fetch(
+          `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${key}&steamids=76561197960287930`
+        );
+        if ( res.ok ) {
+          const data = await res.json();
+          if ( data.response?.players?.length ) {
+            status.innerText = '✅ Chave válida! Conectado à Steam.';
+            status.style.color = '#2ecc71';
+            chrome.storage.sync.set( { steamApiKey: key } );
+          } else {
+            status.innerText = '⚠️ Resposta inesperada da Steam';
+            status.style.color = '#f39c12';
+          }
+        } else {
+          status.innerText = '❌ Chave inválida (erro ' + res.status + ')';
+          status.style.color = '#e74c3c';
+        }
+      } catch ( _e ) {
+        status.innerText = '❌ Erro de conexão';
+        status.style.color = '#e74c3c';
+      }
+    } );
+  }
+}

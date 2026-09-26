@@ -1,4 +1,6 @@
 import { getPlayerInfo } from './getPlayerInfo';
+import { auditPlayers } from '../../lib/playerAudit';
+
 const IMAGE_ALT = '[GC Booster]: Buscar informações da lobby';
 
 const createDiv = lobbyId => $( '<div/>',
@@ -34,8 +36,7 @@ const createClose = lobbyId => $( '<div />',
     class: 'gcbooster-info-close draw-orange',
     title: 'Fechar',
     'data-tip-text': 'Fechar'
-  } ).append( 'X' ).on( 'click', () => $( `#infos_lobby_${lobbyId}` ).empty( ).remove() );
-
+  } ).append( 'X' ).on( 'click', () => $( `#infos_lobby_${lobbyId}` ).empty().remove() );
 
 const createDivAnotacao = playerInfo => $( '<div />',
   {
@@ -48,14 +49,64 @@ const createDivAnotacao = playerInfo => $( '<div />',
     playerInfo.anotacao === 'Negativa' ? '👎' : '-'
 }` );
 
-const createDivPlayers = playerInfo => $( '<div/>',
+const createDivAudit = audit => {
+  if ( !audit ) { return ''; }
+
+  const $auditDiv = $( '<div />', {
+    class: 'gcbooster-info-audit gcbooster-padding-bottom',
+    style: 'border-top: 1px solid rgba(255, 165, 0, 0.25); margin-top: 2px; padding-top: 2px;'
+  } );
+
+  let statusText = 'Steam: OK';
+  let statusColor = '#2ecc71';
+
+  if ( audit.vacBanned || audit.numberOfGameBans > 0 ) {
+    statusText = `⛔ BAN (${audit.numberOfVACBans + audit.numberOfGameBans}x)`;
+    statusColor = '#e74c3c';
+  } else if ( audit.riskLevel === 'suspect' ) {
+    statusText = '⚠️ Suspeito';
+    statusColor = '#f39c12';
+  } else if ( audit.noApiKey ) {
+    statusText = '🛡️ Raio-X';
+    statusColor = '#667eea';
+  }
+
+  $auditDiv.append( $( '<div />', {
+    text: statusText,
+    style: `font-size: 9px; font-weight: 700; color: ${statusColor}; white-space: nowrap;`
+  } ) );
+
+  if ( audit.cs2Hours !== null && audit.cs2Hours !== undefined ) {
+    $auditDiv.append( $( '<div />', {
+      text: `${audit.cs2Hours}h CS2`,
+      style: 'font-size: 9px; opacity: 0.85;'
+    } ) );
+  }
+
+  if ( audit.csrepUrl ) {
+    $auditDiv.append( $( '<a />', {
+      class: 'gcbooster-csrep-btn',
+      href: audit.csrepUrl,
+      target: '_blank',
+      rel: 'noopener noreferrer',
+      text: '🔍 csREP',
+      title: 'Abrir auditoria completa no csREP.gg',
+      style: 'font-size: 8px; padding: 1px 4px; margin-top: 2px; display: inline-flex; justify-content: center;'
+    } ) );
+  }
+
+  return $auditDiv;
+};
+
+const createDivPlayers = ( playerInfo, audit ) => $( '<div/>',
   {
     class: 'gcbooster-info-player'
   } )
   .append( createDivDateCreate( playerInfo ) )
   .append( createDivLobbys( playerInfo ) )
   .append( createDivVitory( playerInfo ) )
-  .append( createDivAnotacao( playerInfo ) );
+  .append( createDivAnotacao( playerInfo ) )
+  .append( createDivAudit( audit ) );
 
 const createImage = lobbyId => $( '<img/>', {
   id: `gcbooster_lupa_img_${lobbyId}`,
@@ -119,8 +170,8 @@ const createModalForElementNew = ( element, getPlayersIdsFunction, type, lobbyId
     div.append( image );
 
     div.on( 'click', async () => {
-      $( `#infos_lobby_${lobbyId}` ).empty( ).remove();
-      //bloqueia todas as outras lupas enquanto carrega
+      $( `#infos_lobby_${lobbyId}` ).empty().remove();
+      // Bloqueia todas as outras lupas enquanto carrega
       $.each( $( '.gcbooster_lupa' ), ( _, lupa ) => { lupa.style = 'display: none'; } );
 
       $( div ).parent().append( modal );
@@ -140,27 +191,37 @@ const createModalForElementNew = ( element, getPlayersIdsFunction, type, lobbyId
         $( `#infos_lobby_${lobbyId}` ).append( loadingDiv );
       } );
 
-      for ( const player of players ) {
-        const response = await getPlayerInfo( player );
-        $( `#loading-${player}` ).replaceWith( createDivPlayers( response ) );
-      }
+      // Carregar jogadores em paralelo para performance máxima
+      await Promise.all( players.map( async player => {
+        try {
+          const [ response, auditList ] = await Promise.all( [
+            getPlayerInfo( player ),
+            auditPlayers( [ player ] ).catch( () => [] )
+          ] );
+          $( `#loading-${player}` ).replaceWith( createDivPlayers( response, auditList?.[0] ) );
+        } catch ( e ) {
+          console.error( 'Error loading player info:', e );
+        }
+      } ) );
+
       $.each( $( '.gcbooster_lupa' ), ( _, lupa ) => { lupa.style = 'display: flex'; } );
     } );
     element.append( div );
   }
 };
+
 export const infoChallenge = mutations => {
   $.each( mutations, ( _, mutation ) => {
     $( mutation.addedNodes )
       .find( '.LobbyChallengeLineUpCard' )
       .addBack( '.LobbyChallengeLineUpCard' )
       .each( ( _, element ) => {
-        // lobbyId existe, cria o elemento, mas não aparece na tela...
         const lobbyId = $( element ).find( '.LobbyPlayerVertical' )[0].href.replace( /[\W_]+/g, ' ' ).replaceAll( ' ', '_' );
         createModalForElementNew( $( element ), getPlayersIds, 'challenge', lobbyId );
       } );
   } );
 };
+
 export const infoLobby = mutations => {
   $.each( mutations, ( _, mutation ) => {
     $( mutation.addedNodes )

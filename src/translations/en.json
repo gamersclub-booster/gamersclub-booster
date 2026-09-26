@@ -101,5 +101,7 @@
   "filter-lobby-by-average-kdr": "Filter lobbies by average KDR",
   "show-stats": "Show player stats in the Lobby",
   "disable-show-map-stats-suggestions": "Disable map stats suggestions in the Lobby",
-  "disable-show-player-solo-stats": "Disable solo player stats in the Lobby"
-}
+  "disable-show-player-solo-stats": "Disable solo player stats in the Lobby",
+  "player-audit": "Player Audit",
+  "player-audit-ativar": "Enable Player Audit"
+}
