@@ -78,6 +78,11 @@
           <img src="images/menu/integracoes.svg" alt="Integrações" class="img-menu" />
           <a href="#integracoes" translation-key="discord"></a>
         </li>
+        <li id="link-playerAudit">
+          <img src="images/menu/geral.svg" alt="Player Audit" class="img-menu" />
+          <a href="#playerAudit" translation-key="player-audit">🛡️ Player Audit</a>
+        </li>
+
         <li id="link-backup">
           <img src="images/menu/backup.svg" alt="Backup" class="img-menu" />
           <a href="#backup" translation-key="backup"></a>
@@ -650,6 +655,86 @@
               <span class="checkmark"></span>
             </label>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLAYER AUDIT -->
+    <div class="pagina" id="playerAudit">
+      <h3 class="subtitulo">🛡️ Player Audit (Raio-X do Jogador)</h3>
+      <p class="descricao">
+        Detecte jogadores banidos (VAC, Game Ban) e contas suspeitas 
+        (smurfs, contas novas) automaticamente no lobby e na partida.
+        Inclui link direto para o csREP.gg com auditoria completa por IA.
+      </p>
+      
+      <!-- Toggle principal -->
+      <label class="container" for="playerAuditEnabled" 
+        title="Ativa a verificação automática de jogadores">
+        <p class="descricao" translation-key="player-audit-ativar">Ativar Player Audit</p>
+        <input type="checkbox" id="playerAuditEnabled" />
+
+        <span class="checkmark"></span>
+      </label>
+      
+      <!-- Steam API Key -->
+      <h3 class="subtitulo">🔑 Steam Web API Key (Opcional — para VAC Bans e Horas)</h3>
+      <div class="form-input">
+
+        <span>Sua Steam API Key:</span>
+        <div class="input-container">
+          <input type="password" id="steamApiKey" 
+            placeholder="Cole aqui sua Steam API Key" 
+            class="input-form-gray form-control" />
+        </div>
+        <p class="descricao" style="margin-top: 8px; font-size: 12px; opacity: 0.8;">
+          📌 <strong>Como obter (leva 5 segundos):</strong><br>
+          1. Acesse <a href="https://steamcommunity.com/dev/apikey" 
+            target="_blank" style="color: #2196f3;">
+            steamcommunity.com/dev/apikey</a><br>
+          2. Faça login na sua conta Steam<br>
+          3. Insira qualquer nome de domínio (ex: "gamersclub.com.br")<br>
+          4. Clique em "Registrar"<br>
+          5. Copie a chave gerada e cole acima
+        </p>
+        <button class="btn btn-success" id="testarSteamApiKey">🧪 Testar Chave</button>
+        <span id="statusSteamKey" style="margin-left: 10px;"></span>
+      </div>
+      
+      <!-- csREP Info -->
+      <h3 class="subtitulo" style="margin-top: 24px;">🔍 csREP.gg — Auditoria com IA</h3>
+      <div class="form-input">
+        <p class="descricao" style="font-size: 12px; opacity: 0.8;">
+          O csREP.gg analisa demos com IA para detectar trapaças de forma avançada.<br>
+          <strong>Não precisa de API key!</strong> Um botão "🔍 csREP" aparece ao lado 
+          de cada jogador no lobby — basta clicar para abrir a análise completa.<br><br>
+          📊 <strong>O que o csREP mostra:</strong><br>
+          • Trust Score (0-100%) — pontuação de confiança baseada em IA<br>
+          • Demo Stats — TTD, Reaction Time, Crosshair Placement, Preaim<br>
+          • Anomaly Detection — boosting, manipulação de partida, skill mismatch<br>
+          • HLTV Rating 2.0, KAST%, ADR<br>
+          • Ranks cruzados — FACEIT, Premier, Wingman<br><br>
+          💡 <strong>Dica:</strong> Você também pode adicionar "w" antes de qualquer URL 
+          de perfil Steam para abrir no csREP. Ex:<br>
+          <code>steamcommunity.com/profiles/123...</code> → 
+          <code><strong>w</strong>steamcommunity.com/profiles/123...</code>
+        </p>
+      </div>
+      
+      <!-- Legenda dos badges -->
+      <h3 class="subtitulo" style="margin-top: 20px;">📊 Legenda dos Badges</h3>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="background: #2ecc71; padding: 4px 10px; border-radius: 4px; color: #fff; font-weight: bold; font-size: 12px;">✓</span>
+          <span><strong>Limpo</strong> — Sem banimentos, conta confiável</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="background: #f39c12; padding: 4px 10px; border-radius: 4px; color: #fff; font-weight: bold; font-size: 12px;">⚠</span>
+          <span><strong>Suspeito</strong> — Conta nova, poucas horas, perfil privado ou smurf</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="background: #e74c3c; padding: 4px 10px; border-radius: 4px; color: #fff; font-weight: bold; font-size: 12px;">✕</span>
+          <span><strong>Banido</strong> — VAC Ban ou Game Ban confirmado</span>
         </div>
       </div>
     </div>

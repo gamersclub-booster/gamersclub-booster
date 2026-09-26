@@ -19,6 +19,7 @@ import { ocultarSugestaoDeLobbies } from './ocultarSugestaoDeLobbies';
 import { showStats } from './showStats';
 import { lobbyMapSuggestions } from './lobbyMapSuggestions';
 import { showPlayerSoloStats } from './showPlayerSoloStats';
+import { playerAuditBadge } from './playerAuditBadge';
 
 chrome.storage.sync.get( null, function ( _result ) {
   if ( window.location.pathname.includes( 'partida' ) || window.location.pathname.includes( '/match/' ) ) {
@@ -83,6 +84,7 @@ const initLobby = async () => {
   showPlayerSoloStats();
   showKdrMatch();
   adicionarFiltroKdr();
+  playerAuditBadge();
 };
 
 const criarObserver = ( seletor, exec, type ) => {
