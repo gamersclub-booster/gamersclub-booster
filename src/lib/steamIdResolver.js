@@ -10,7 +10,7 @@ export async function resolveSteamId( gcPlayerId ) {
   try {
     const cache = await getFromStorage( RESOLVER_CACHE_KEY ) || {};
     if ( cache[gcPlayerId]?.steamId ) {
-      return cache[gcPlayerId];
+      return { ...cache[gcPlayerId], fromCache: true };
     }
   } catch ( _e ) {
     // Falha silenciosa ao ler cache de resolver

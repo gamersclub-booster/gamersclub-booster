@@ -66,10 +66,16 @@ export async function auditPlayersDirect( gcPlayerIds ) {
     // Ignora erro ao limpar cache antigo
   }
 
-  // 1. Resolver SteamIDs e URLs do GC (sem depender de apiKey)
-  const resolvedList = await Promise.all(
-    gcPlayerIds.map( id => resolveSteamId( id ) )
-  );
+  // 1. Resolver SteamIDs e URLs do GC (sequencial para evitar Rate Limit/Cloudflare)
+  const resolvedList = [];
+  for ( const id of gcPlayerIds ) {
+    const res = await resolveSteamId( id );
+    resolvedList.push( res );
+    // Se não veio do cache (teve que fazer fetch), adiciona um pequeno delay de 300ms
+    if ( res && !res.fromCache ) {
+      await new Promise( resolve => setTimeout( resolve, 300 ) );
+    }
+  }
 
   const steamIds = resolvedList.map( res => res?.steamId || null );
 

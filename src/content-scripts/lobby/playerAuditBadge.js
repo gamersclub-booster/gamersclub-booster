@@ -33,8 +33,9 @@ function renderBadge( element, playerAudit ) {
   const config = BADGE_CONFIG[playerAudit.riskLevel] || BADGE_CONFIG[RISK_LEVEL.CLEAN];
 
   // 1. Criar badge de risco
+  const playerId = playerAudit.gcId;
   const $badge = $( '<div/>', {
-    class: `gcbooster-audit-badge ${config.css}`,
+    class: `gcbooster-audit-badge gcbooster-audit-${playerId} ${config.css}`,
     title: config.label
   } ).text( config.icon );
 
@@ -44,7 +45,7 @@ function renderBadge( element, playerAudit ) {
 
   // 3. Criar botão csREP (link direto)
   const $csrepBtn = $( '<a/>', {
-    class: 'gcbooster-csrep-btn',
+    class: `gcbooster-csrep-btn gcbooster-csrep-${playerId}`,
     href: playerAudit.csrepUrl || '#',
     target: '_blank',
     title: 'Abrir Raio-X completo no csREP (Trust Score, Demo AI, Anomalias)',
@@ -68,7 +69,7 @@ function renderBadge( element, playerAudit ) {
     }
 
     if ( $target.length ) {
-      $target.find( '.gcbooster-audit-badge, .gcbooster-csrep-btn' ).remove();
+      $target.find( `.gcbooster-audit-${playerId}, .gcbooster-csrep-${playerId}` ).remove();
       $target.append( $badge );
       if ( playerAudit.csrepUrl ) {
         $target.append( $csrepBtn );
@@ -84,8 +85,7 @@ function renderBadge( element, playerAudit ) {
       $challengeWrap.append( $csrepBtn );
     }
 
-    const $parent = $( element ).parent();
-    $parent.find( '.gcbooster-challenge-audit-wrap' ).remove();
+    $( element ).find( '.gcbooster-challenge-audit-wrap' ).remove();
 
     const $kdr = $( element ).find( '#gcbooster_kdr' );
     if ( $kdr.length ) {
