@@ -9,7 +9,7 @@ import { mostrarInfoPlayerIntervaler, mostrarKdr, mostrarKdrDesafios, mostrarKdr
 import { partidaInfo } from './partidaInfo';
 import { somReady, somReadySetInterval, tocarSomSeVoceForExpulsoDaLobby } from './sons';
 import { adicionarFiltroKdr } from './filtrarKdr';
-import { infoChallenge, infoLobby } from './infoLobby';
+import { iniciarLupa } from './infoLobby';
 
 import { autoKickNegativados } from './autoKickNegativados';
 import { autoMostrarIp } from './autoMostrarIp';
@@ -19,7 +19,6 @@ import { ocultarSugestaoDeLobbies } from './ocultarSugestaoDeLobbies';
 import { showStats } from './showStats';
 import { lobbyMapSuggestions } from './lobbyMapSuggestions';
 import { showPlayerSoloStats } from './showPlayerSoloStats';
-import { playerAuditBadge } from './playerAuditBadge';
 
 chrome.storage.sync.get( null, function ( _result ) {
   if ( window.location.pathname.includes( 'partida' ) || window.location.pathname.includes( '/match/' ) ) {
@@ -44,8 +43,7 @@ const initLobby = async () => {
   criarObserver( '.lobby', autoCopyLobbyLink );
 
   criarObserver( '#lobbies-wrapper', mostrarKdr );
-  criarObserver( '#lobbies-wrapper', infoLobby );
-  criarObserver( '.lobby', infoChallenge );
+  iniciarLupa();
   criarObserver( '#GamersClubCSApp-globals-globalToaster', tocarSomSeVoceForExpulsoDaLobby );
 
 
@@ -84,7 +82,6 @@ const initLobby = async () => {
   showPlayerSoloStats();
   showKdrMatch();
   adicionarFiltroKdr();
-  playerAuditBadge();
 };
 
 const criarObserver = ( seletor, exec, type ) => {

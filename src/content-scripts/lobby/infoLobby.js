@@ -1,5 +1,6 @@
 import { getPlayerInfo } from './getPlayerInfo';
 import { auditPlayers } from '../../lib/playerAudit';
+import { GC_URL } from '../../lib/constants';
 
 const IMAGE_ALT = '[GC Booster]: Buscar informações da lobby';
 
@@ -10,51 +11,76 @@ const createDiv = lobbyId => $( '<div/>',
     title: IMAGE_ALT
   } );
 
+const createProfileLink = ( playerId, audit ) => {
+  const gcHost = GC_URL || window.location.hostname || 'gamersclub.com.br';
+  const gcUrl = `https://${gcHost}/jogador/${playerId}`;
+  const displayName = audit?.personaName ? audit.personaName : 'Jogador';
+
+  return $( '<div />', {
+    class: 'gcbooster-info-profile'
+  } ).append( $( '<a />', {
+    class: 'gcbooster-profile-redirect-link',
+    href: gcUrl,
+    target: '_blank',
+    rel: 'noopener noreferrer',
+    title: `Abrir perfil de ${displayName} na Gamers Club`,
+    text: '👤 Perfil'
+  } ) );
+};
+
 const createDivVitory = playerInfo => $( '<div />',
   {
-    'class': 'gcbooster-info-vitoria gcbooster-padding-bottom',
+    class: 'gcbooster-info-stat',
     title: 'Porcentagem de vitória',
-    'data-tip-text': 'Porcentagem de vitória'
-  } ).append( `%: ${!isNaN( playerInfo.porcentagemVitoria ) ? Math.round( playerInfo.porcentagemVitoria ) : 0}% ` );
+    'data-tip-text': 'Porcentagem de vitória',
+    text: `%: ${!isNaN( playerInfo?.porcentagemVitoria ) ? Math.round( playerInfo.porcentagemVitoria ) : 0}%`
+  } );
 
 const createDivDateCreate = playerInfo => $( '<div />',
   {
-    class: 'gcbooster-info-date-create gcbooster-padding-bottom',
+    class: 'gcbooster-info-stat',
     title: 'Tempo de conta',
-    'data-tip-text': 'Tempo de conta'
-  } ).append( `T: ${calcAge( playerInfo.dataCriacao )}` );
+    'data-tip-text': 'Tempo de conta',
+    text: `T: ${calcAge( playerInfo?.dataCriacao )}`
+  } );
 
 const createDivLobbys = playerInfo => $( '<div />',
   {
-    class: 'gcbooster-info-lobbyes gcbooster-padding-bottom',
+    class: 'gcbooster-info-stat',
     title: 'Partidas jogadas',
-    'data-tip-text': 'Partidas jogadas'
-  } ).append( `P: ${playerInfo.totalPartidas}` );
+    'data-tip-text': 'Partidas jogadas',
+    text: `P: ${playerInfo?.totalPartidas ?? 0}`
+  } );
 
-const createClose = lobbyId => $( '<div />',
-  {
+const createClose = lobbyId => {
+  const $closeBtn = $( '<div />', {
     class: 'gcbooster-info-close draw-orange',
     title: 'Fechar',
-    'data-tip-text': 'Fechar'
-  } ).append( 'X' ).on( 'click', () => $( `#infos_lobby_${lobbyId}` ).empty().remove() );
+    'data-tip-text': 'Fechar',
+    text: '✕'
+  } );
+  $closeBtn.on( 'click', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    $( `#infos_lobby_${lobbyId}` ).empty().remove();
+  } );
+  return $closeBtn;
+};
 
 const createDivAnotacao = playerInfo => $( '<div />',
   {
-    class: 'gcbooster-info-lobbyes-anotacao',
+    class: 'gcbooster-info-stat',
     title: 'Anotação',
-    'data-tip-text': 'Anotação'
-  } ).append( `A: ${
-  // eslint-disable-next-line no-nested-ternary
-  playerInfo.anotacao === 'Positiva' ? '👍' :
-    playerInfo.anotacao === 'Negativa' ? '👎' : '-'
-}` );
+    'data-tip-text': 'Anotação',
+    // eslint-disable-next-line no-nested-ternary
+    text: `A: ${playerInfo?.anotacao === 'Positiva' ? '👍' : playerInfo?.anotacao === 'Negativa' ? '👎' : '-'}`
+  } );
 
 const createDivAudit = audit => {
   if ( !audit || audit.error ) { return ''; }
 
   const $auditDiv = $( '<div />', {
-    class: 'gcbooster-info-audit gcbooster-padding-bottom',
-    style: 'border-top: 1px solid rgba(255, 165, 0, 0.25); margin-top: 2px; padding-top: 2px;'
+    class: 'gcbooster-info-audit'
   } );
 
   let statusText = 'Steam: OK';
@@ -69,40 +95,60 @@ const createDivAudit = audit => {
   }
 
   $auditDiv.append( $( '<div />', {
+    class: 'gcbooster-audit-status',
     text: statusText,
-    style: `font-size: 9px; font-weight: 700; color: ${statusColor}; white-space: nowrap;`
+    style: `color: ${statusColor};`
   } ) );
 
   if ( audit.steamLevel !== null && audit.steamLevel !== undefined ) {
     $auditDiv.append( $( '<div />', {
-      text: `Lvl ${audit.steamLevel}`,
-      style: 'font-size: 9px; opacity: 0.85;'
+      class: 'gcbooster-audit-level',
+      text: `Lvl ${audit.steamLevel}`
+    } ) );
+  }
+
+  const $actionsRow = $( '<div />', {
+    class: 'gcbooster-audit-actions-row'
+  } );
+
+  if ( audit.steamUrl ) {
+    $actionsRow.append( $( '<a />', {
+      class: 'gcbooster-steam-btn',
+      href: audit.steamUrl,
+      target: '_blank',
+      rel: 'noopener noreferrer',
+      text: '🎮 Steam',
+      title: 'Abrir perfil na Steam'
     } ) );
   }
 
   if ( audit.csrepUrl ) {
-    $auditDiv.append( $( '<a />', {
+    $actionsRow.append( $( '<a />', {
       class: 'gcbooster-csrep-btn',
       href: audit.csrepUrl,
       target: '_blank',
       rel: 'noopener noreferrer',
       text: '🔍 csREP',
-      title: 'Abrir auditoria completa no csREP.gg',
-      style: 'font-size: 8px; padding: 1px 4px; margin-top: 2px; display: inline-flex; justify-content: center;'
+      title: 'Abrir auditoria completa no csREP.gg'
     } ) );
   }
+
+  $auditDiv.append( $actionsRow );
 
   return $auditDiv;
 };
 
-const createDivPlayers = ( playerInfo, audit ) => $( '<div/>',
+const createDivPlayers = ( playerInfo, audit, playerId ) => $( '<div/>',
   {
     class: 'gcbooster-info-player'
   } )
-  .append( createDivDateCreate( playerInfo ) )
-  .append( createDivLobbys( playerInfo ) )
-  .append( createDivVitory( playerInfo ) )
-  .append( createDivAnotacao( playerInfo ) )
+  .append( createProfileLink( playerId, audit ) )
+  .append( $( '<div />', { class: 'gcbooster-info-stats-group' } )
+    .append( createDivDateCreate( playerInfo ) )
+    .append( createDivLobbys( playerInfo ) )
+    .append( createDivVitory( playerInfo ) )
+    .append( createDivAnotacao( playerInfo ) )
+  )
   .append( createDivAudit( audit ) );
 
 const createImage = lobbyId => $( '<img/>', {
@@ -114,24 +160,42 @@ const createImage = lobbyId => $( '<img/>', {
 } );
 
 const getPlayersIds = element => element
-  .find( '.LobbyPlayerVertical' )
+  .find( '.LobbyPlayerVertical, .sala-lineup-imagem a' )
   .toArray()
-  .map( e => e.href.split( '/' ).pop() );
+  .map( e => {
+    const href = e.getAttribute( 'href' ) || '';
+    const match = href.match( /\/(?:jogador|player)\/(\d+)/i );
+    if ( match ) { return match[1]; }
+    return href.split( '/' ).filter( Boolean ).pop();
+  } )
+  .filter( Boolean );
 
-const createModal = ( lobbyId, type ) => $( '<div />',
-  {
+const getPlayersIdsNew = getPlayersIds;
+
+const createModal = ( lobbyId, type ) => {
+  const $modal = $( '<div />', {
     id: `infos_lobby_${lobbyId}`,
-    class: 'infos_lobby',
-    style: type === 'challenge' ? 'top: 135px' : undefined,
+    class: `infos_lobby ${type === 'challenge' ? 'infos_lobby--challenge' : 'infos_lobby--room'}`,
     title: 'Estatísticas'
   } );
 
-const calcAge = ageDate => {
-  const dateNow = new Date();
+  const $header = $( '<div />', {
+    class: 'gcbooster-modal-header',
+    html: '<span>🛡️ Estatísticas & Raio-X</span>'
+  } );
 
-  const s = ageDate;
-  const [ dia, mes, ano ] = s.split( /[/: ]/ ).map( v => parseInt( v ) );
+  $modal.append( $header );
+  return $modal;
+};
+
+const calcAge = ageDate => {
+  if ( !ageDate || typeof ageDate !== 'string' ) { return '-'; }
+  const parts = ageDate.split( /[/: ]/ ).map( v => parseInt( v, 10 ) );
+  if ( parts.length < 3 || isNaN( parts[0] ) ) { return '-'; }
+
+  const [ dia, mes, ano ] = parts;
   const dataFormated = new Date( ano, mes - 1, dia );
+  const dateNow = new Date();
 
   const diff = Math.floor( dateNow.getTime() - dataFormated.getTime() );
   const day = 1000 * 60 * 60 * 24;
@@ -152,11 +216,6 @@ const calcAge = ageDate => {
 
   return 'Nova';
 };
-
-const getPlayersIdsNew = element => element
-  .find( '.LobbyPlayerVertical' )
-  .toArray()
-  .map( e => e.href.split( '/' ).pop() );
 
 const createModalForElementNew = ( element, getPlayersIdsFunction, type, lobbyId ) => {
   if ( element.find( `#gcbooster_lupa_${lobbyId}` ).length === 0 ) {
@@ -188,17 +247,23 @@ const createModalForElementNew = ( element, getPlayersIdsFunction, type, lobbyId
         $( `#infos_lobby_${lobbyId}` ).append( loadingDiv );
       } );
 
+      // Verifica configuração de audit
+      const syncConfig = await new Promise( resolve => {
+        chrome.storage.sync.get( [ 'playerAuditEnabled' ], resolve );
+      } );
+      const auditEnabled = syncConfig?.playerAuditEnabled !== false;
+
       // Carregar informações e auditoria em batch para performance máxima
       const [ playerInfoList, auditList ] = await Promise.all( [
         Promise.all( players.map( p => getPlayerInfo( p ).catch( () => ( {} ) ) ) ),
-        auditPlayers( players ).catch( () => [] )
+        auditEnabled ? auditPlayers( players ).catch( () => [] ) : Promise.resolve( [] )
       ] );
 
       players.forEach( ( player, idx ) => {
         const response = playerInfoList[idx];
         const audit = Array.isArray( auditList ) ?
           auditList.find( a => a && String( a.gcId ) === String( player ) ) : null;
-        $( `#loading-${player}` ).replaceWith( createDivPlayers( response, audit ) );
+        $( `#loading-${player}` ).replaceWith( createDivPlayers( response, audit, player ) );
       } );
 
       $.each( $( '.gcbooster_lupa' ), ( _, lupa ) => { lupa.style = 'display: flex'; } );
@@ -207,26 +272,41 @@ const createModalForElementNew = ( element, getPlayersIdsFunction, type, lobbyId
   }
 };
 
-export const infoChallenge = mutations => {
-  $.each( mutations, ( _, mutation ) => {
-    $( mutation.addedNodes )
-      .find( '.LobbyChallengeLineUpCard' )
-      .addBack( '.LobbyChallengeLineUpCard' )
-      .each( ( _, element ) => {
-        const lobbyId = $( element ).find( '.LobbyPlayerVertical' )[0].href.replace( /[\W_]+/g, ' ' ).replaceAll( ' ', '_' );
-        createModalForElementNew( $( element ), getPlayersIds, 'challenge', lobbyId );
-      } );
+export const scanAndInjectLupa = () => {
+  // 1. Salas de desafio (.LobbyChallengeLineUpCard)
+  $( '.LobbyChallengeLineUpCard' ).each( ( _, element ) => {
+    const firstPlayerLink = $( element ).find( '.LobbyPlayerVertical, .sala-lineup-imagem a' )[0];
+    const parts = firstPlayerLink?.href ? firstPlayerLink.href.split( '/' ).filter( Boolean ) : [];
+    const lobbyId = parts.length > 0 ?
+      `challenge_${parts[parts.length - 1]}` :
+      `challenge_${$( element ).index()}`;
+    createModalForElementNew( $( element ), getPlayersIds, 'challenge', lobbyId );
+  } );
+
+  // 2. Salas normais / lobby ([id^="roomCardWrapper-"])
+  $( '[id^="roomCardWrapper-"]' ).each( ( _, element ) => {
+    const lobbyId = $( element ).attr( 'id' );
+    createModalForElementNew( $( element ), getPlayersIdsNew, 'lobby', lobbyId );
   } );
 };
 
-export const infoLobby = mutations => {
-  $.each( mutations, ( _, mutation ) => {
-    $( mutation.addedNodes )
-      .find( '[id^="roomCardWrapper-"]' )
-      .addBack( '[id^="roomCardWrapper-"]' )
-      .each( ( _, element ) => {
-        const lobbyId = $( element ).attr( 'id' );
-        createModalForElementNew( $( element ), getPlayersIdsNew, 'lobby', lobbyId );
-      } );
+export const iniciarLupa = () => {
+  // Executa imediatamente para salas já carregadas
+  scanAndInjectLupa();
+
+  // Observer com detecção rápida para novas salas inseridas
+  const observer = new MutationObserver( () => {
+    scanAndInjectLupa();
   } );
+  observer.observe( document.body, { childList: true, subtree: true } );
+
+  // Intervalo de segurança rápido nos primeiros 5s para garantia de 0 delay
+  const intervalFast = setInterval( scanAndInjectLupa, 400 );
+  setTimeout( () => {
+    clearInterval( intervalFast );
+    setInterval( scanAndInjectLupa, 1200 );
+  }, 6000 );
 };
+
+export const infoChallenge = () => scanAndInjectLupa();
+export const infoLobby = () => scanAndInjectLupa();

@@ -6,6 +6,8 @@ prints
 /dist
 /tmp
 /out-tsc
+.test-profile
+test-local.*
 
 # Runtime data
 pids
