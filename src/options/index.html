@@ -677,30 +677,6 @@
         <span class="checkmark"></span>
       </label>
       
-      <!-- Steam API Key -->
-      <h3 class="subtitulo">🔑 Steam Web API Key (Opcional — para VAC Bans e Horas)</h3>
-      <div class="form-input">
-
-        <span>Sua Steam API Key:</span>
-        <div class="input-container">
-          <input type="password" id="steamApiKey" 
-            placeholder="Cole aqui sua Steam API Key" 
-            class="input-form-gray form-control" />
-        </div>
-        <p class="descricao" style="margin-top: 8px; font-size: 12px; opacity: 0.8;">
-          📌 <strong>Como obter (leva 5 segundos):</strong><br>
-          1. Acesse <a href="https://steamcommunity.com/dev/apikey" 
-            target="_blank" style="color: #2196f3;">
-            steamcommunity.com/dev/apikey</a><br>
-          2. Faça login na sua conta Steam<br>
-          3. Insira qualquer nome de domínio (ex: "gamersclub.com.br")<br>
-          4. Clique em "Registrar"<br>
-          5. Copie a chave gerada e cole acima
-        </p>
-        <button class="btn btn-success" id="testarSteamApiKey">🧪 Testar Chave</button>
-        <span id="statusSteamKey" style="margin-left: 10px;"></span>
-      </div>
-      
       <!-- csREP Info -->
       <h3 class="subtitulo" style="margin-top: 24px;">🔍 csREP.gg — Auditoria com IA</h3>
       <div class="form-input">
@@ -730,11 +706,11 @@
         </div>
         <div style="display: flex; align-items: center; gap: 8px;">
           <span style="background: #f39c12; padding: 4px 10px; border-radius: 4px; color: #fff; font-weight: bold; font-size: 12px;">⚠</span>
-          <span><strong>Suspeito</strong> — Conta nova, poucas horas, perfil privado ou smurf</span>
+          <span><strong>Suspeito</strong> — Nível baixo, conta limitada ou perfil privado</span>
         </div>
         <div style="display: flex; align-items: center; gap: 8px;">
           <span style="background: #e74c3c; padding: 4px 10px; border-radius: 4px; color: #fff; font-weight: bold; font-size: 12px;">✕</span>
-          <span><strong>Banido</strong> — VAC Ban ou Game Ban confirmado</span>
+          <span><strong>Banido</strong> — VAC Ban ou Trade Ban confirmado</span>
         </div>
       </div>
     </div>

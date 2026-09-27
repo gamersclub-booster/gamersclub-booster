@@ -50,7 +50,7 @@ const createDivAnotacao = playerInfo => $( '<div />',
 }` );
 
 const createDivAudit = audit => {
-  if ( !audit ) { return ''; }
+  if ( !audit || audit.error ) { return ''; }
 
   const $auditDiv = $( '<div />', {
     class: 'gcbooster-info-audit gcbooster-padding-bottom',
@@ -61,14 +61,11 @@ const createDivAudit = audit => {
   let statusColor = '#2ecc71';
 
   if ( audit.vacBanned || audit.numberOfGameBans > 0 ) {
-    statusText = `⛔ BAN (${audit.numberOfVACBans + audit.numberOfGameBans}x)`;
+    statusText = '⛔ BAN';
     statusColor = '#e74c3c';
   } else if ( audit.riskLevel === 'suspect' ) {
     statusText = '⚠️ Suspeito';
     statusColor = '#f39c12';
-  } else if ( audit.noApiKey ) {
-    statusText = '🛡️ Raio-X';
-    statusColor = '#667eea';
   }
 
   $auditDiv.append( $( '<div />', {
@@ -76,9 +73,9 @@ const createDivAudit = audit => {
     style: `font-size: 9px; font-weight: 700; color: ${statusColor}; white-space: nowrap;`
   } ) );
 
-  if ( audit.cs2Hours !== null && audit.cs2Hours !== undefined ) {
+  if ( audit.steamLevel !== null && audit.steamLevel !== undefined ) {
     $auditDiv.append( $( '<div />', {
-      text: `${audit.cs2Hours}h CS2`,
+      text: `Lvl ${audit.steamLevel}`,
       style: 'font-size: 9px; opacity: 0.85;'
     } ) );
   }
@@ -191,18 +188,18 @@ const createModalForElementNew = ( element, getPlayersIdsFunction, type, lobbyId
         $( `#infos_lobby_${lobbyId}` ).append( loadingDiv );
       } );
 
-      // Carregar jogadores em paralelo para performance máxima
-      await Promise.all( players.map( async player => {
-        try {
-          const [ response, auditList ] = await Promise.all( [
-            getPlayerInfo( player ),
-            auditPlayers( [ player ] ).catch( () => [] )
-          ] );
-          $( `#loading-${player}` ).replaceWith( createDivPlayers( response, auditList?.[0] ) );
-        } catch ( e ) {
-          console.error( 'Error loading player info:', e );
-        }
-      } ) );
+      // Carregar informações e auditoria em batch para performance máxima
+      const [ playerInfoList, auditList ] = await Promise.all( [
+        Promise.all( players.map( p => getPlayerInfo( p ).catch( () => ( {} ) ) ) ),
+        auditPlayers( players ).catch( () => [] )
+      ] );
+
+      players.forEach( ( player, idx ) => {
+        const response = playerInfoList[idx];
+        const audit = Array.isArray( auditList ) ?
+          auditList.find( a => a && String( a.gcId ) === String( player ) ) : null;
+        $( `#loading-${player}` ).replaceWith( createDivPlayers( response, audit ) );
+      } );
 
       $.each( $( '.gcbooster_lupa' ), ( _, lupa ) => { lupa.style = 'display: flex'; } );
     } );

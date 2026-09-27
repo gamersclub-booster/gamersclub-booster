@@ -1,72 +1,77 @@
-const STEAM_API_BASE = 'https://api.steampowered.com';
-const CS2_APP_ID = 730;
+const STEAM_COMMUNITY_BASE = 'https://steamcommunity.com';
 
-export async function getSteamBans( apiKey, steamIds ) {
-  if ( !steamIds || steamIds.length === 0 ) { return []; }
-  const url = `${STEAM_API_BASE}/ISteamUser/GetPlayerBans/v1/?key=${apiKey}&steamids=${steamIds.join( ',' )}`;
-  try {
-    const res = await fetch( url );
-    const data = await res.json();
-    return data.players || [];
-  } catch ( error ) {
-    console.error( 'Error fetching steam bans:', error );
-    return [];
-  }
+function extractXmlTag( xml, tag ) {
+  const re = new RegExp( `<${tag}>(?:<\\!\\[CDATA\\[([\\s\\S]*?)\\]\\]>|([\\s\\S]*?))<\\/${tag}>` );
+  const match = re.exec( xml );
+  if ( !match ) { return null; }
+  return ( match[1] !== undefined ? match[1] : match[2] ).trim();
 }
 
-export async function getSteamSummaries( apiKey, steamIds ) {
-  if ( !steamIds || steamIds.length === 0 ) { return []; }
-  const url = `${STEAM_API_BASE}/ISteamUser/GetPlayerSummaries/v2/?key=${apiKey}&steamids=${steamIds.join( ',' )}`;
-  try {
-    const res = await fetch( url );
-    const data = await res.json();
-    return data.response?.players || [];
-  } catch ( error ) {
-    console.error( 'Error fetching steam summaries:', error );
-    return [];
-  }
-}
-
-export async function getSteamGameHours( apiKey, steamId ) {
+export async function getSteamProfileXml( steamId ) {
   if ( !steamId ) { return null; }
-  const url = `${STEAM_API_BASE}/IPlayerService/GetOwnedGames/v1/?key=${apiKey}&steamid=${steamId}&include_appinfo=1&appids_filter[0]=${CS2_APP_ID}`;
+  const url = `${STEAM_COMMUNITY_BASE}/profiles/${steamId}/?xml=1`;
   try {
     const res = await fetch( url );
-    const data = await res.json();
-    const game = data.response?.games?.[0];
-    return game ? {
-      totalMinutes: game.playtime_forever || 0,
-      recentMinutes: game.playtime_2weeks || 0
-    } : null;
+    if ( !res.ok ) {
+      console.error( `[GC Booster] Steam XML profile fetch failed (status ${res.status})` );
+      return null;
+    }
+    const xml = await res.text();
+    if ( extractXmlTag( xml, 'error' ) || !xml.includes( '<profile>' ) ) {
+      return null;
+    }
+
+    const vacBannedStr = extractXmlTag( xml, 'vacBanned' );
+    const tradeBanState = extractXmlTag( xml, 'tradeBanState' ) || 'None';
+    const isLimitedStr = extractXmlTag( xml, 'isLimitedAccount' );
+    const privacyState = extractXmlTag( xml, 'privacyState' ) || 'private';
+    const visibilityStateStr = extractXmlTag( xml, 'visibilityState' );
+    const personaName = extractXmlTag( xml, 'steamID' );
+
+    return {
+      vacBanned: vacBannedStr !== null ? parseInt( vacBannedStr, 10 ) : 0,
+      tradeBanState,
+      isLimitedAccount: isLimitedStr !== null ? parseInt( isLimitedStr, 10 ) : 0,
+      privacyState,
+      visibilityState: visibilityStateStr !== null ? parseInt( visibilityStateStr, 10 ) : 1,
+      personaName: personaName || null
+    };
   } catch ( error ) {
-    console.error( `Error fetching game hours for ${steamId}:`, error );
+    console.error( `[GC Booster] Error fetching steam profile XML for ${steamId}:`, error );
     return null;
   }
 }
 
-export async function getSteamLevel( apiKey, steamId ) {
+export async function getSteamMiniprofile( steamId ) {
   if ( !steamId ) { return null; }
-  const url = `${STEAM_API_BASE}/IPlayerService/GetSteamLevel/v1/?key=${apiKey}&steamid=${steamId}`;
   try {
+    const accountId = ( BigInt( steamId ) - 76561197960265728n ).toString();
+    const url = `${STEAM_COMMUNITY_BASE}/miniprofile/${accountId}/json`;
     const res = await fetch( url );
+    if ( !res.ok ) { return null; }
     const data = await res.json();
-    return data.response?.player_level ?? null;
+    return {
+      level: typeof data.level === 'number' ? data.level : null,
+      personaName: data.persona_name || null
+    };
   } catch ( error ) {
-    console.error( `Error fetching steam level for ${steamId}:`, error );
+    console.error( `[GC Booster] Error fetching miniprofile for ${steamId}:`, error );
     return null;
   }
 }
 
-export async function resolveVanityUrl( apiKey, vanityUrl ) {
-  if ( !vanityUrl || !apiKey ) { return null; }
-  const url = `${STEAM_API_BASE}/ISteamUser/ResolveVanityURL/v1/?key=${apiKey}&vanityurl=${encodeURIComponent( vanityUrl )}`;
+export async function resolveVanityViaXml( vanityName ) {
+  if ( !vanityName ) { return null; }
+  const url = `${STEAM_COMMUNITY_BASE}/id/${encodeURIComponent( vanityName )}/?xml=1`;
   try {
     const res = await fetch( url );
-    const data = await res.json();
-    return data.response?.success === 1 ? data.response.steamid : null;
+    if ( !res.ok ) { return null; }
+    const xml = await res.text();
+    if ( extractXmlTag( xml, 'error' ) ) { return null; }
+    const steamId = extractXmlTag( xml, 'steamID64' );
+    return steamId || null;
   } catch ( error ) {
-    console.error( `Error resolving vanity url ${vanityUrl}:`, error );
+    console.error( `[GC Booster] Error resolving vanity via XML for ${vanityName}:`, error );
     return null;
   }
 }
-

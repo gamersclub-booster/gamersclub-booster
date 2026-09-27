@@ -1058,7 +1058,41 @@ input[type="range"].filterKdr::-ms-track {
   background-color: #e74c3c; 
   animation: gcbooster-pulse 1.5s infinite; 
 }
-.gcbooster-audit-badge--config  { background-color: #4a5568; }
+
+/* Botão de Refresh do Player Audit */
+.gcbooster-audit-refresh {
+  background: none;
+  border: 1px solid rgba(255, 165, 0, 0.4);
+  border-radius: 4px;
+  color: #ffa500;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px 6px;
+  margin-left: 4px;
+  transition: all 0.2s ease;
+  line-height: 1;
+  vertical-align: middle;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gcbooster-audit-refresh:hover {
+  background-color: rgba(255, 165, 0, 0.15);
+  border-color: #ffa500;
+  transform: rotate(180deg);
+}
+
+.gcbooster-audit-refresh.loading {
+  opacity: 0.5;
+  pointer-events: none;
+  animation: gcbooster-refresh-spin 1s linear infinite;
+}
+
+@keyframes gcbooster-refresh-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
 
 
 @keyframes gcbooster-pulse {

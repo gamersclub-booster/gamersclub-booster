@@ -10,6 +10,7 @@ module.exports = {
   mode: 'development',
   entry: {
     'index': resolveEntries( './src/options/*.js' ),
+    'background': './src/background/index.js',
     'content-scripts/main': contentScripts( 'main' ),
     'content-scripts/lobby': contentScripts( 'lobby' ),
     'content-scripts/missions': contentScripts( 'missions' ),
