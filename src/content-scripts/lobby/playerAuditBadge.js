@@ -96,15 +96,18 @@ function renderBadge( element, playerAudit ) {
   }
 }
 
-function injectRefreshButton( $container, onRefresh ) {
+function injectAuditButton( $container, onAudit, isAutoMode = false ) {
   if ( !$container || !$container.length || $container.find( '.gcbooster-audit-refresh' ).length ) {
     return;
   }
 
+  const initialText = isAutoMode ? '🔄' : '🛡️ Raio-X';
+  const initialTitle = isAutoMode ? 'Atualizar Raio-X' : 'Auditar jogadores da sala (Raio-X)';
+
   const $btn = $( '<button/>', {
     class: 'gcbooster-audit-refresh',
-    title: 'Atualizar Raio-X dos jogadores',
-    text: '🔄'
+    title: initialTitle,
+    text: initialText
   } );
 
   $btn.on( 'click', async e => {
@@ -113,11 +116,14 @@ function injectRefreshButton( $container, onRefresh ) {
     if ( $btn.hasClass( 'loading' ) ) { return; }
 
     $btn.addClass( 'loading' );
+    $container.addClass( 'gcbooster-audit-requested' );
+    $btn.html( '⏳' );
     try {
-      await onRefresh( $container );
+      await onAudit( $container );
     } finally {
       setTimeout( () => {
         $btn.removeClass( 'loading' );
+        $btn.html( '🔄' ).attr( 'title', 'Atualizar Raio-X' );
       }, 500 );
     }
   } );
@@ -134,7 +140,7 @@ export const playerAuditBadge = () => {
   chrome.storage.sync.get( [ 'playerAuditEnabled' ], result => {
     if ( result.playerAuditEnabled === false ) { return; }
 
-    const handleRoomRefresh = async $container => {
+    const handleRoomAudit = async $container => {
       const playerElements = $container.find( SELECTOR ).toArray();
       const playerIds = [];
 
@@ -171,6 +177,10 @@ export const playerAuditBadge = () => {
           '[id^="roomCardWrapper-"], .LobbyChallengeLineUpCard, .sala-card, [id^="lobby-"], .MatchCard, .DraftContainer'
         );
 
+        const isTrigger = element.id && element.id.startsWith( 'trigger-' );
+        const isRequested = $lobbyContainer.length && $lobbyContainer.hasClass( 'gcbooster-audit-requested' );
+        const isAuto = isTrigger || isRequested || $lobbyContainer.hasClass( 'MatchCard' ) || $lobbyContainer.hasClass( 'DraftContainer' );
+
         let roomKey = 'default';
         if ( $lobbyContainer.length ) {
           let roomId = $lobbyContainer.attr( 'id' );
@@ -188,16 +198,26 @@ export const playerAuditBadge = () => {
         if ( !lobbies[roomKey] ) {
           lobbies[roomKey] = {
             container: $lobbyContainer.length ? $lobbyContainer : null,
-            items: []
+            items: [],
+            isAuto: false
           };
         }
+        if ( isAuto ) { lobbies[roomKey].isAuto = true; }
         lobbies[roomKey].items.push( { element, playerId } );
       } );
 
-      // Processar cada sala em um único lote (batch)
-      Object.values( lobbies ).forEach( ( { container, items } ) => {
+      // Processar cada sala
+      Object.values( lobbies ).forEach( ( { container, items, isAuto } ) => {
+        if ( container && !isAuto ) {
+          injectAuditButton( container, handleRoomAudit, false );
+          items.forEach( ( { element } ) => {
+            element.dataset.gcboosterAuditProcessed = 'ready';
+          } );
+          return;
+        }
+
         if ( container ) {
-          injectRefreshButton( container, handleRoomRefresh );
+          injectAuditButton( container, handleRoomAudit, true );
         }
 
         const playerIds = [ ...new Set( items.map( item => item.playerId ) ) ];
@@ -213,6 +233,12 @@ export const playerAuditBadge = () => {
                 renderBadge( element, playerAudit );
               }
             } );
+            if ( container ) {
+              const btn = container.find( '.gcbooster-audit-refresh' );
+              if ( btn.length ) {
+                btn.html( '🔄' ).attr( 'title', 'Atualizar Raio-X' );
+              }
+            }
           } )
           .catch( err => {
             console.error( '[GC-BOOSTER] Erro no batch audit de jogadores:', err );

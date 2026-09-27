@@ -1080,18 +1080,11 @@ input[type="range"].filterKdr::-ms-track {
 .gcbooster-audit-refresh:hover {
   background-color: rgba(255, 165, 0, 0.15);
   border-color: #ffa500;
-  transform: rotate(180deg);
 }
 
 .gcbooster-audit-refresh.loading {
   opacity: 0.5;
   pointer-events: none;
-  animation: gcbooster-refresh-spin 1s linear infinite;
-}
-
-@keyframes gcbooster-refresh-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
 }
 
 
