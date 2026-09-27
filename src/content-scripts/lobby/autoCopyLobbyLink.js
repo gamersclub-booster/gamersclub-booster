@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { GC_URL } from '../../lib/constants';
 import { alertaMsg } from '../../lib/messageAlerts';
+import { isExtensionContextValid } from '../../utils';
 
 let lobbyLinkCopied = false;
 
@@ -34,47 +35,53 @@ const copyToClipboard = async text => {
 };
 
 export const autoCopyLobbyLink = mutations => {
-  chrome.storage.sync.get( [ 'autoCopyLobbyLink' ], result => {
-    if ( !result.autoCopyLobbyLink ) {
-      return;
-    }
-
-    mutations.forEach( async mutation => {
-      if ( !mutation.addedNodes ) {
+  if ( !isExtensionContextValid() ) { return; }
+  try {
+    chrome.storage.sync.get( [ 'autoCopyLobbyLink' ], result => {
+      if ( chrome.runtime?.lastError || !result ) { return; }
+      if ( !result.autoCopyLobbyLink ) {
         return;
       }
 
-      for ( let i = 0; i < mutation.addedNodes.length; i++ ) {
-        const node = mutation.addedNodes[i];
+      mutations.forEach( async mutation => {
+        if ( !mutation.addedNodes ) {
+          return;
+        }
 
-        if (
-          node.nextElementSibling &&
+        for ( let i = 0; i < mutation.addedNodes.length; i++ ) {
+          const node = mutation.addedNodes[i];
+
+          if (
+            node.nextElementSibling &&
           node.nextElementSibling.className &&
           node.nextElementSibling.className.includes( 'MyRoom' ) &&
           !lobbyLinkCopied
-        ) {
-          try {
-            const lobbyInfo = await axios.post( `https://${GC_URL}/lobbyBeta/openRoom` );
-            const lobbyId = lobbyInfo?.data?.lobby?.lobbyID;
-            const password = lobbyInfo?.data?.lobby?.password || '';
-            const url = lobbyId ?
-              `https://${GC_URL}/j/${lobbyId}/${password}` + '?utm_source=lobby&utm_medium=invite&utm_campaign=user_invitation' : null;
+          ) {
+            try {
+              const lobbyInfo = await axios.post( `https://${GC_URL}/lobbyBeta/openRoom` );
+              const lobbyId = lobbyInfo?.data?.lobby?.lobbyID;
+              const password = lobbyInfo?.data?.lobby?.password || '';
+              const url = lobbyId ?
+                `https://${GC_URL}/j/${lobbyId}/${password}` + '?utm_source=lobby&utm_medium=invite&utm_campaign=user_invitation' : null;
 
-            if ( !url ) { throw new Error( 'Lobby URL não disponível' ); }
+              if ( !url ) { throw new Error( 'Lobby URL não disponível' ); }
 
-            const copySuccess = await copyToClipboard( url );
+              const copySuccess = await copyToClipboard( url );
 
-            if ( copySuccess ) {
-              alertaMsg( '[GC Booster] - Link da lobby copiado automaticamente!' );
-              lobbyLinkCopied = true;
+              if ( copySuccess ) {
+                alertaMsg( '[GC Booster] - Link da lobby copiado automaticamente!' );
+                lobbyLinkCopied = true;
+              }
+            } catch ( error ) {
+              console.error( 'Erro ao obter/copiar link da lobby:', error );
             }
-          } catch ( error ) {
-            console.error( 'Erro ao obter/copiar link da lobby:', error );
           }
         }
-      }
+      } );
     } );
-  } );
+  } catch ( _e ) {
+    // Extension context invalidated
+  }
 };
 
 export const resetLobbyLinkState = () => {

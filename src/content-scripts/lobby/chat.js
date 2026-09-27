@@ -1,53 +1,76 @@
-import { waitForElement } from '../../utils';
+import { isExtensionContextValid, waitForElement } from '../../utils';
 
 export const ocultarChat = async () => {
   await waitForElement( '.ChatPreview' );
+  if ( !isExtensionContextValid() ) { return; }
 
-  chrome.storage.sync.get( [ 'ocultarChat' ], function ( result ) {
-    if ( result.ocultarChat ) {
-      document.body.classList.add( 'ocultar-chat' );
-    }
-  } );
+  try {
+    chrome.storage.sync.get( [ 'ocultarChat' ], function ( result ) {
+      if ( chrome.runtime?.lastError || !result ) { return; }
+      if ( result.ocultarChat ) {
+        document.body.classList.add( 'ocultar-chat' );
+      }
+    } );
+  } catch ( _e ) {
+    // Context invalidated
+  }
 };
 
 
 export const chatFixoDireita = async () => {
   await waitForElement( '.ChatPreview' );
-  chrome.storage.sync.get( [ 'chatFixoDireita' ], function ( result ) {
-    if ( result.chatFixoDireita ) {
-      document.body.classList.add( 'chat-fixo-direita' );
-      document.body.querySelector( '.ChatPreview__openButton' )
-        .innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" 
-        stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" 
-        d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3a49.5 49.5 
-        0 01-4.02-.163 2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 
-        1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 
-        3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 
-        1.157.14 1.74.194V21l4.155-4.155"/></svg>`;
-    }
-  } );
+  if ( !isExtensionContextValid() ) { return; }
+
+  try {
+    chrome.storage.sync.get( [ 'chatFixoDireita' ], function ( result ) {
+      if ( chrome.runtime?.lastError || !result ) { return; }
+      if ( result.chatFixoDireita ) {
+        document.body.classList.add( 'chat-fixo-direita' );
+        const btn = document.body.querySelector( '.ChatPreview__openButton' );
+        if ( btn ) {
+          btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" 
+          stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" 
+          d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3a49.5 49.5 
+          0 01-4.02-.163 2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 
+          1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 
+          3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 
+          1.157.14 1.74.194V21l4.155-4.155"/></svg>`;
+        }
+      }
+    } );
+  } catch ( _e ) {
+    // Context invalidated
+  }
 };
 
 export const ocultarFiltrosSala = async () => {
   await waitForElement( '.MyRoomFilters' );
+  if ( !isExtensionContextValid() ) { return; }
 
-  chrome.storage.sync.get( [ 'autoHideFilter' ], function ( result ) {
-    if ( result.autoHideFilter ) {
-      const content = document.createElement( 'button' );
-      content.classList.add( 'gcboost-show-filter' );
-      content.classList.add( 'draw-orange' );
-      content.title = '[GC Booster]: Ocultar Filtros';
+  try {
+    chrome.storage.sync.get( [ 'autoHideFilter' ], function ( result ) {
+      if ( chrome.runtime?.lastError || !result ) { return; }
+      if ( result.autoHideFilter ) {
+        const content = document.createElement( 'button' );
+        content.classList.add( 'gcboost-show-filter' );
+        content.classList.add( 'draw-orange' );
+        content.title = '[GC Booster]: Ocultar Filtros';
 
-      content.innerHTML = '<span class="gcboost-arrow-down" />';
+        content.innerHTML = '<span class="gcboost-arrow-down" />';
 
-      content.addEventListener( 'click', () => {
-        document.body.classList.toggle( 'gcboost-hide-filter' );
-      } );
+        content.addEventListener( 'click', () => {
+          document.body.classList.toggle( 'gcboost-hide-filter' );
+        } );
 
-      // Wait for the MyRoomFilters element to be available before appending
-      document.body.classList.add( 'gcboost-hide-filter' );
-      document.body.querySelector( '.MyRoomFilters' ).append( content );
-    }
+        // Wait for the MyRoomFilters element to be available before appending
+        document.body.classList.add( 'gcboost-hide-filter' );
+        const filtersContainer = document.body.querySelector( '.MyRoomFilters' );
+        if ( filtersContainer ) {
+          filtersContainer.append( content );
+        }
+      }
+    } );
+  } catch ( _e ) {
+    // Context invalidated
   }
-  );
 };

@@ -1,5 +1,6 @@
 import { GC_URL, headers, levelColor } from '../../lib/constants';
 import { getFromStorage, setStorage } from '../../lib/storage';
+import { isExtensionContextValid } from '../../utils';
 
 export const mostrarKdr = mutations => {
   $.each( mutations, async ( _, mutation ) => {
@@ -91,6 +92,10 @@ const getPlayerInfo = async id => {
 
 export const mostrarKdrDesafios = () => {
   const observer = new MutationObserver( () => {
+    if ( !isExtensionContextValid() ) {
+      observer.disconnect();
+      return;
+    }
     const challengeCardSelector = '.LobbyChallengeLineUpCard';
     if ( $( challengeCardSelector ).length ) {
 
@@ -194,6 +199,10 @@ const fetchKdr = async id => {
 
 export const mostrarKdrRanked = () => {
   const kdrRankedInterval = setInterval( () => {
+    if ( !isExtensionContextValid() ) {
+      clearInterval( kdrRankedInterval );
+      return;
+    }
     $( '[class^=PlayerCardWrapper] [id^=trigger-]' ).each( ( _, element ) => {
       ( async () => {
         const playerId = String( element.id ).split( '-' ).pop();
@@ -230,60 +239,73 @@ export const mostrarKdrRanked = () => {
 };
 
 export const mostrarInfoPlayerIntervaler = () => {
-  chrome.storage.sync.get( [ 'autoInfoPlayer' ], function ( result ) {
-    if ( result.autoInfoPlayer ) {
-      document.body.classList.add( 'gboost-info-player' );
-      setInterval( () => {
-        $( '#integrantesLobbyShort .player' ).each( async ( _, player ) => {
-          const $element = $( player );
-
-          if ( $element.attr( 'id' ) === undefined || $element.attr( 'id' ) === '' ) {
-            const $nodeChildren = $element.find( '.LobbyPlayerHorizontal__nickname' );
-
-            const kdrInfos = $element.find( '.LobbyPlayerHorizontal__kdr' );
-            const kdrValue = kdrInfos.text().split( 'KDR' )[1];
-
-            const playerLink = $nodeChildren.children( 'a' ).attr( 'href' );
-            const playerId = playerLink?.split( '/' ).pop() ;
-            $element.attr( 'id', `gcboost-content-${playerId}` );
-
-            await getPlayerInfo( playerId ).then( infoPlayer => {
-              const completeUrl = getUrlFlag( infoPlayer?.countryFlag );
-              const flagImg = `<img src="${completeUrl}" id="gcb-flag-${playerId}" alt="Flag" class="gcboost-flag b-lazy">`;
-              const playerWins = infoPlayer?.currentMonthMatchesHistory?.wins || 0;
-              const playerLoss = infoPlayer?.currentMonthMatchesHistory?.loss || 0;
-
-              const colorKrdDefault = kdrValue <= 2 ? '#000' :
-                'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)';
-              const colorKdr = kdrValue <= 2 ? levelColor[Math.round( kdrValue * 10 )] : colorKrdDefault;
-
-              const infos = `
-          <div class="gcboost-content">
-            <div class="gcboost-result">
-              <div class="wins">Vitórias: ${playerWins}</div>
-              <div class="gcboost-kdr-color" title="[GC Booster]: KDR médio: ${kdrValue}" style="background-color: ${colorKdr}">
-                ${kdrValue || '0.00'}
-              </div>
-              <div class="losses">Derrotas: ${playerLoss}</div>
-            </div>
-          </div>`;
-
-              $nodeChildren.prepend( flagImg );
-              $element.append( infos );
-
-            } ).catch( error => {
-              console.error( 'Erro ao obter informações do jogador:', error );
-            } );
+  if ( !isExtensionContextValid() ) { return; }
+  try {
+    chrome.storage.sync.get( [ 'autoInfoPlayer' ], function ( result ) {
+      if ( chrome.runtime?.lastError || !result ) { return; }
+      if ( result.autoInfoPlayer ) {
+        document.body.classList.add( 'gboost-info-player' );
+        const infoPlayerInterval = setInterval( () => {
+          if ( !isExtensionContextValid() ) {
+            clearInterval( infoPlayerInterval );
+            return;
           }
-        } );
-      }, 1000 );
-    }
+          $( '#integrantesLobbyShort .player' ).each( async ( _, player ) => {
+            const $element = $( player );
+
+            if ( $element.attr( 'id' ) === undefined || $element.attr( 'id' ) === '' ) {
+              const $nodeChildren = $element.find( '.LobbyPlayerHorizontal__nickname' );
+
+              const kdrInfos = $element.find( '.LobbyPlayerHorizontal__kdr' );
+              const kdrValue = kdrInfos.text().split( 'KDR' )[1];
+
+              const playerLink = $nodeChildren.children( 'a' ).attr( 'href' );
+              const playerId = playerLink?.split( '/' ).pop();
+              $element.attr( 'id', `gcboost-content-${playerId}` );
+
+              await getPlayerInfo( playerId ).then( infoPlayer => {
+                const completeUrl = getUrlFlag( infoPlayer?.countryFlag );
+                const flagImg = `<img src="${completeUrl}" id="gcb-flag-${playerId}" alt="Flag" class="gcboost-flag b-lazy">`;
+                const playerWins = infoPlayer?.currentMonthMatchesHistory?.wins || 0;
+                const playerLoss = infoPlayer?.currentMonthMatchesHistory?.loss || 0;
+
+                const colorKrdDefault = kdrValue <= 2 ? '#000' :
+                  'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)';
+                const colorKdr = kdrValue <= 2 ? levelColor[Math.round( kdrValue * 10 )] : colorKrdDefault;
+
+                const infos = `
+            <div class="gcboost-content">
+              <div class="gcboost-result">
+                <div class="wins">Vitórias: ${playerWins}</div>
+                <div class="gcboost-kdr-color" title="[GC Booster]: KDR médio: ${kdrValue}" style="background-color: ${colorKdr}">
+                  ${kdrValue || '0.00'}
+                </div>
+                <div class="losses">Derrotas: ${playerLoss}</div>
+              </div>
+            </div>`;
+
+                $nodeChildren.prepend( flagImg );
+                $element.append( infos );
+
+              } ).catch( error => {
+                console.error( 'Erro ao obter informações do jogador:', error );
+              } );
+            }
+          } );
+        }, 1000 );
+      }
+    } );
+  } catch ( _e ) {
+    // Context invalidated
   }
-  );
 };
 
 export const showKdrMatch = () => {
   const observer = new MutationObserver( () => {
+    if ( !isExtensionContextValid() ) {
+      observer.disconnect();
+      return;
+    }
     $( '[id^="trigger-"]' ).each( ( _, element ) => {
       if ( element.dataset.gcboosterProcessed ) {
         return;

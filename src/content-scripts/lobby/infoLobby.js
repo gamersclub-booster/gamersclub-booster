@@ -1,6 +1,7 @@
 import { getPlayerInfo } from './getPlayerInfo';
 import { auditPlayers } from '../../lib/playerAudit';
 import { GC_URL } from '../../lib/constants';
+import { isExtensionContextValid } from '../../utils';
 
 const IMAGE_ALT = '[GC Booster]: Buscar informações da lobby';
 
@@ -159,16 +160,31 @@ const createImage = lobbyId => $( '<img/>', {
   'data-tip-text': IMAGE_ALT
 } );
 
-const getPlayersIds = element => element
-  .find( '.LobbyPlayerVertical, .sala-lineup-imagem a' )
-  .toArray()
-  .map( e => {
-    const href = e.getAttribute( 'href' ) || '';
+const getPlayersIds = element => {
+  const elements = element
+    .find( 'a.LobbyPlayerVertical, .LobbyPlayerVertical, .sala-lineup-imagem a, .sala-lineup-player a' )
+    .toArray();
+
+  const ids = [];
+  elements.forEach( el => {
+    if ( $( el ).find( '.PlayerPlaceholder' ).length > 0 || $( el ).hasClass( 'PlayerPlaceholder' ) ) {
+      return;
+    }
+    const href = el.href || $( el ).attr( 'href' ) || $( el ).find( 'a' ).attr( 'href' ) || '';
     const match = href.match( /\/(?:jogador|player)\/(\d+)/i );
-    if ( match ) { return match[1]; }
-    return href.split( '/' ).filter( Boolean ).pop();
-  } )
-  .filter( Boolean );
+    if ( match && match[1] ) {
+      ids.push( match[1] );
+    } else {
+      const parts = href.split( '/' ).filter( Boolean );
+      const last = parts.pop();
+      if ( last && /^\d+$/.test( last ) ) {
+        ids.push( last );
+      }
+    }
+  } );
+
+  return Array.from( new Set( ids ) );
+};
 
 const getPlayersIdsNew = getPlayersIds;
 
@@ -218,56 +234,110 @@ const calcAge = ageDate => {
 };
 
 const createModalForElementNew = ( element, getPlayersIdsFunction, type, lobbyId ) => {
-  if ( element.find( `#gcbooster_lupa_${lobbyId}` ).length === 0 ) {
+  if ( element.find( '.gcbooster_lupa' ).length === 0 ) {
     const div = createDiv( lobbyId );
-    const modal = createModal( lobbyId, type );
     const image = createImage( lobbyId );
 
     div.append( image );
 
-    div.on( 'click', async () => {
-      $( `#infos_lobby_${lobbyId}` ).empty().remove();
-      // Bloqueia todas as outras lupas enquanto carrega
-      $.each( $( '.gcbooster_lupa' ), ( _, lupa ) => { lupa.style = 'display: none'; } );
+    let isLoading = false;
 
-      $( div ).parent().append( modal );
+    div.on( 'click', async e => {
+      e.preventDefault();
+      e.stopPropagation();
 
-      const players = getPlayersIdsFunction( element );
+      const $existingModal = $( `#infos_lobby_${lobbyId}` );
+      if ( $existingModal.length > 0 ) {
+        $existingModal.empty().remove();
+        return;
+      }
 
-      $( `#infos_lobby_${lobbyId}` ).append( createClose( lobbyId ) );
+      if ( isLoading ) { return; }
+      isLoading = true;
+      div.css( 'opacity', '0.6' );
 
-      // Cria spinners
-      players.forEach( playerId => {
-        const loadingDiv = $( '<div/>', {
-          id: `loading-${playerId}`,
-          class: 'gcbooster-info-player-loading'
-        } ).append( $( '<div/>', {
-          class: 'gcbooster-spinner'
-        } ) );
-        $( `#infos_lobby_${lobbyId}` ).append( loadingDiv );
-      } );
+      try {
+        const modal = createModal( lobbyId, type );
+        modal.append( createClose( lobbyId ) );
+        $( div ).parent().append( modal );
 
-      // Verifica configuração de audit
-      const syncConfig = await new Promise( resolve => {
-        chrome.storage.sync.get( [ 'playerAuditEnabled' ], resolve );
-      } );
-      const auditEnabled = syncConfig?.playerAuditEnabled !== false;
+        const players = getPlayersIdsFunction( element );
 
-      // Carregar informações e auditoria em batch para performance máxima
-      const [ playerInfoList, auditList ] = await Promise.all( [
-        Promise.all( players.map( p => getPlayerInfo( p ).catch( () => ( {} ) ) ) ),
-        auditEnabled ? auditPlayers( players ).catch( () => [] ) : Promise.resolve( [] )
-      ] );
+        if ( players.length === 0 ) {
+          modal.append( $( '<div />', {
+            class: 'gcbooster-info-stat',
+            style: 'grid-column: 1 / -1; padding: 10px; color: #ffa500;',
+            text: 'Nenhum jogador encontrado na sala.'
+          } ) );
+          return;
+        }
 
-      players.forEach( ( player, idx ) => {
-        const response = playerInfoList[idx];
-        const audit = Array.isArray( auditList ) ?
-          auditList.find( a => a && String( a.gcId ) === String( player ) ) : null;
-        $( `#loading-${player}` ).replaceWith( createDivPlayers( response, audit, player ) );
-      } );
+        // Cria spinners isolados para esse lobby
+        players.forEach( playerId => {
+          const loadingDiv = $( '<div/>', {
+            id: `loading-${lobbyId}-${playerId}`,
+            'data-player-id': playerId,
+            class: 'gcbooster-info-player-loading'
+          } ).append( $( '<div/>', {
+            class: 'gcbooster-spinner'
+          } ) );
+          modal.append( loadingDiv );
+        } );
 
-      $.each( $( '.gcbooster_lupa' ), ( _, lupa ) => { lupa.style = 'display: flex'; } );
+        // Verifica configuração de audit com timeout de segurança
+        const syncConfig = await new Promise( resolve => {
+          if ( !isExtensionContextValid() ) {
+            return resolve( { playerAuditEnabled: true } );
+          }
+          let timedOut = false;
+          const timer = setTimeout( () => {
+            timedOut = true;
+            resolve( { playerAuditEnabled: true } );
+          }, 600 );
+          try {
+            chrome.storage.sync.get( [ 'playerAuditEnabled' ], res => {
+              if ( !timedOut ) {
+                clearTimeout( timer );
+                resolve( res );
+              }
+            } );
+          } catch ( _e ) {
+            if ( !timedOut ) {
+              clearTimeout( timer );
+              resolve( { playerAuditEnabled: true } );
+            }
+          }
+        } );
+        const auditEnabled = syncConfig?.playerAuditEnabled !== false;
+
+        // Carregar informações e auditoria em batch para performance máxima
+        const [ playerInfoList, auditList ] = await Promise.all( [
+          Promise.all( players.map( p => getPlayerInfo( p ).catch( () => ( {
+            dataCriacao: '-',
+            totalPartidas: 0,
+            porcentagemVitoria: '0.00',
+            anotacao: 'Nenhuma'
+          } ) ) ) ),
+          auditEnabled ? auditPlayers( players ).catch( () => [] ) : Promise.resolve( [] )
+        ] );
+
+        // Se o modal foi fechado pelo usuário enquanto carregava, aborta substituição
+        if ( !document.getElementById( `infos_lobby_${lobbyId}` ) ) {
+          return;
+        }
+
+        players.forEach( ( player, idx ) => {
+          const response = playerInfoList[idx];
+          const audit = Array.isArray( auditList ) ?
+            auditList.find( a => a && String( a.gcId ) === String( player ) ) : null;
+          modal.find( `[data-player-id="${player}"]` ).replaceWith( createDivPlayers( response, audit, player ) );
+        } );
+      } finally {
+        isLoading = false;
+        div.css( 'opacity', '1' );
+      }
     } );
+
     element.append( div );
   }
 };
@@ -275,11 +345,18 @@ const createModalForElementNew = ( element, getPlayersIdsFunction, type, lobbyId
 export const scanAndInjectLupa = () => {
   // 1. Salas de desafio (.LobbyChallengeLineUpCard)
   $( '.LobbyChallengeLineUpCard' ).each( ( _, element ) => {
-    const firstPlayerLink = $( element ).find( '.LobbyPlayerVertical, .sala-lineup-imagem a' )[0];
-    const parts = firstPlayerLink?.href ? firstPlayerLink.href.split( '/' ).filter( Boolean ) : [];
-    const lobbyId = parts.length > 0 ?
-      `challenge_${parts[parts.length - 1]}` :
-      `challenge_${$( element ).index()}`;
+    let lobbyId = $( element ).attr( 'data-challenge-id' );
+    if ( !lobbyId ) {
+      const matchId = $( element ).attr( 'id' );
+      if ( matchId ) {
+        lobbyId = matchId;
+      } else {
+        const firstPlayerLink = $( element ).find( 'a.LobbyPlayerVertical, .LobbyPlayerVertical a, .sala-lineup-imagem a' )[0];
+        const href = firstPlayerLink ? ( firstPlayerLink.href || $( firstPlayerLink ).attr( 'href' ) || '' ) : '';
+        const match = href.match( /\/(?:jogador|player)\/(\d+)/i );
+        lobbyId = match ? `challenge_${match[1]}` : `challenge_${$( element ).index()}`;
+      }
+    }
     createModalForElementNew( $( element ), getPlayersIds, 'challenge', lobbyId );
   } );
 
@@ -296,15 +373,31 @@ export const iniciarLupa = () => {
 
   // Observer com detecção rápida para novas salas inseridas
   const observer = new MutationObserver( () => {
+    if ( !isExtensionContextValid() ) {
+      observer.disconnect();
+      return;
+    }
     scanAndInjectLupa();
   } );
   observer.observe( document.body, { childList: true, subtree: true } );
 
   // Intervalo de segurança rápido nos primeiros 5s para garantia de 0 delay
-  const intervalFast = setInterval( scanAndInjectLupa, 400 );
+  const intervalFast = setInterval( () => {
+    if ( !isExtensionContextValid() ) {
+      clearInterval( intervalFast );
+      return;
+    }
+    scanAndInjectLupa();
+  }, 400 );
   setTimeout( () => {
     clearInterval( intervalFast );
-    setInterval( scanAndInjectLupa, 1200 );
+    const intervalSlow = setInterval( () => {
+      if ( !isExtensionContextValid() ) {
+        clearInterval( intervalSlow );
+        return;
+      }
+      scanAndInjectLupa();
+    }, 1200 );
   }, 6000 );
 };
 

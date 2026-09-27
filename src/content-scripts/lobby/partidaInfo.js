@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { GC_URL } from '../../lib/constants';
 import { sendMatchInfo } from '../../lib/discord';
-import { getAllStorageSyncData, getTranslationText } from '../../utils';
+import { getAllStorageSyncData, getTranslationText, isExtensionContextValid } from '../../utils';
 
 const colors = [
   { val: 180, color: 'chartreuse' },
@@ -43,86 +43,96 @@ export const buildTimer = ( warmupFinished, targetContainer, timeleft, maxtime =
 };
 
 export const partidaInfo = async () => {
+  if ( !isExtensionContextValid() ) { return; }
   const { traducao } = await getAllStorageSyncData();
   const warmupFinished = getTranslationText( 'warmup-fim', traducao );
 
-  chrome.storage.sync.get( [
-    'webhookLink',
-    'enviarPartida',
-    'warmupTimer',
-    'somWarmup',
-    'customSomWarmup',
-    'warmupSoundTime',
-    'volume'
-  ], function ( result ) {
-    const needDisc = result.webhookLink && result.webhookLink.length > 0;
-    const needWarmup = result.warmupTimer;
-    const needWarmupSound = Boolean( result.somWarmup );
-    let warmupSoundPlayed = false;
+  try {
+    chrome.storage.sync.get( [
+      'webhookLink',
+      'enviarPartida',
+      'warmupTimer',
+      'somWarmup',
+      'customSomWarmup',
+      'warmupSoundTime',
+      'volume'
+    ], function ( result ) {
+      if ( chrome.runtime?.lastError || !result ) { return; }
+      const needDisc = result.webhookLink && result.webhookLink.length > 0;
+      const needWarmup = result.warmupTimer;
+      const needWarmupSound = Boolean( result.somWarmup );
+      let warmupSoundPlayed = false;
 
-    const soundProxyBtn = document.createElement( 'button' );
-    soundProxyBtn.id = 'gc-booster-sound-proxy';
-    soundProxyBtn.style.cssText = 'position:fixed;width:0;height:0;opacity:0;pointer-events:none;border:none;padding:0;margin:0;overflow:hidden;';
-    soundProxyBtn.addEventListener( 'click', () => {
-      const src = soundProxyBtn.dataset.src;
-      const vol = Number( soundProxyBtn.dataset.volume ?? 1 );
-      if ( !src ) { return; }
-      const audio = new Audio( src );
-      audio.volume = vol;
-      audio.play().catch( () => {} );
-    } );
-    document.body.appendChild( soundProxyBtn );
+      const soundProxyBtn = document.createElement( 'button' );
+      soundProxyBtn.id = 'gc-booster-sound-proxy';
+      soundProxyBtn.style.cssText = 'position:fixed;width:0;height:0;opacity:0;pointer-events:none;border:none;padding:0;margin:0;overflow:hidden;';
+      soundProxyBtn.addEventListener( 'click', () => {
+        const src = soundProxyBtn.dataset.src;
+        const vol = Number( soundProxyBtn.dataset.volume ?? 1 );
+        if ( !src ) { return; }
+        const audio = new Audio( src );
+        audio.volume = vol;
+        audio.play().catch( () => {} );
+      } );
+      document.body.appendChild( soundProxyBtn );
 
-    const playWarmupSoundIfNeeded = warmupTimeLeft => {
-      if ( !needWarmupSound || warmupSoundPlayed || warmupTimeLeft < 0 ) {
-        return;
-      }
-      const triggerAt = Number( result.warmupSoundTime ?? 10 );
-      if ( warmupTimeLeft <= triggerAt ) {
-        const som = result.somWarmup === 'custom' ? result.customSomWarmup : result.somWarmup;
-        const volume = Number( result.volume ?? 100 ) / 100;
-        soundProxyBtn.dataset.src = som;
-        soundProxyBtn.dataset.volume = volume;
-        soundProxyBtn.click();
-        warmupSoundPlayed = true;
-      }
-    };
-
-    if ( needDisc || needWarmup || needWarmupSound ) {
-      setInterval( async () => {
-        const selector = '.Disclaimer-sc-1ylcea4-5, .Disclaimer-sc-1ylcea4-7';
-        const disclaimerInput = $( selector );
-        const discElement = document.getElementById( 'botaoDiscordNoDOM' );
-        const warmupElement = document.getElementById( 'warmup_timer' );
-        const needMatchInfo = needWarmupSound || ( needDisc && !discElement ) || ( needWarmup && !warmupElement );
-
-        if ( disclaimerInput.length && needMatchInfo ) {
-          const parentDisclaimer = $( '.Container-sc-1ylcea4-0' ).parent();
-          const listenGame = await axios.get( `https://${GC_URL}/api/lobby/match` );
-          if ( listenGame?.data?.data?.step === 'onServerReady' ) {
-            const warmupTimeLeft = listenGame.data.data.warmupExpiresInSeconds;
-            playWarmupSoundIfNeeded( warmupTimeLeft );
-
-            if ( needWarmup && !warmupElement ) {
-              buildTimer( warmupFinished, parentDisclaimer, warmupTimeLeft, 180, playWarmupSoundIfNeeded );
-            }
-            if ( needDisc && !discElement ) {
-              parentDisclaimer.append(
-                `<button id="botaoDiscordNoDOM" class="WasdButton WasdButton--success WasdButton--lg botaoDiscordNoDOM-sc-1ylcea4-4"
-                  title="[GC Booster]: Clique para enviar no discord">Enviar no Discord</button>`
-              );
-              document.getElementById( 'botaoDiscordNoDOM' ).addEventListener( 'click', async function () {
-                await sendMatchInfo( result.webhookLink, listenGame.data.data );
-              } );
-              if ( result.enviarPartida ) {
-                await sendMatchInfo( result.webhookLink, listenGame.data.data );
-              }
-            }
-          } else {
-            warmupSoundPlayed = false;
-          }
+      const playWarmupSoundIfNeeded = warmupTimeLeft => {
+        if ( !needWarmupSound || warmupSoundPlayed || warmupTimeLeft < 0 ) {
+          return;
         }
-      }, 3000 );
-    }
-  } );
+        const triggerAt = Number( result.warmupSoundTime ?? 10 );
+        if ( warmupTimeLeft <= triggerAt ) {
+          const som = result.somWarmup === 'custom' ? result.customSomWarmup : result.somWarmup;
+          const volume = Number( result.volume ?? 100 ) / 100;
+          soundProxyBtn.dataset.src = som;
+          soundProxyBtn.dataset.volume = volume;
+          soundProxyBtn.click();
+          warmupSoundPlayed = true;
+        }
+      };
+
+      if ( needDisc || needWarmup || needWarmupSound ) {
+        const intervalId = setInterval( async () => {
+          if ( !isExtensionContextValid() ) {
+            clearInterval( intervalId );
+            return;
+          }
+          const selector = '.Disclaimer-sc-1ylcea4-5, .Disclaimer-sc-1ylcea4-7';
+          const disclaimerInput = $( selector );
+          const discElement = document.getElementById( 'botaoDiscordNoDOM' );
+          const warmupElement = document.getElementById( 'warmup_timer' );
+          const needMatchInfo = needWarmupSound || ( needDisc && !discElement ) || ( needWarmup && !warmupElement );
+
+          if ( disclaimerInput.length && needMatchInfo ) {
+            const parentDisclaimer = $( '.Container-sc-1ylcea4-0' ).parent();
+            const listenGame = await axios.get( `https://${GC_URL}/api/lobby/match` );
+            if ( listenGame?.data?.data?.step === 'onServerReady' ) {
+              const warmupTimeLeft = listenGame.data.data.warmupExpiresInSeconds;
+              playWarmupSoundIfNeeded( warmupTimeLeft );
+
+              if ( needWarmup && !warmupElement ) {
+                buildTimer( warmupFinished, parentDisclaimer, warmupTimeLeft, 180, playWarmupSoundIfNeeded );
+              }
+              if ( needDisc && !discElement ) {
+                parentDisclaimer.append(
+                  `<button id="botaoDiscordNoDOM" class="WasdButton WasdButton--success WasdButton--lg botaoDiscordNoDOM-sc-1ylcea4-4"
+                    title="[GC Booster]: Clique para enviar no discord">Enviar no Discord</button>`
+                );
+                document.getElementById( 'botaoDiscordNoDOM' ).addEventListener( 'click', async function () {
+                  await sendMatchInfo( result.webhookLink, listenGame.data.data );
+                } );
+                if ( result.enviarPartida ) {
+                  await sendMatchInfo( result.webhookLink, listenGame.data.data );
+                }
+              }
+            } else {
+              warmupSoundPlayed = false;
+            }
+          }
+        }, 3000 );
+      }
+    } );
+  } catch ( _e ) {
+    // Context invalidated
+  }
 };

@@ -19,14 +19,22 @@ import { ocultarSugestaoDeLobbies } from './ocultarSugestaoDeLobbies';
 import { showStats } from './showStats';
 import { lobbyMapSuggestions } from './lobbyMapSuggestions';
 import { showPlayerSoloStats } from './showPlayerSoloStats';
+import { isExtensionContextValid } from '../../utils';
 
-chrome.storage.sync.get( null, function ( _result ) {
-  if ( window.location.pathname.includes( 'partida' ) || window.location.pathname.includes( '/match/' ) ) {
-    //lobbyMapSuggestions( '25270001' );
-    return;
+if ( isExtensionContextValid() ) {
+  try {
+    chrome.storage.sync.get( null, function ( _result ) {
+      if ( chrome.runtime?.lastError ) { return; }
+      if ( window.location.pathname.includes( 'partida' ) || window.location.pathname.includes( '/match/' ) ) {
+        //lobbyMapSuggestions( '25270001' );
+        return;
+      }
+      initLobby();
+    } );
+  } catch ( _e ) {
+    // Context invalidated
   }
-  initLobby();
-} );
+}
 
 const initLobby = async () => {
   // Resetar estado do auto copy lobby link quando entrar no lobby
@@ -86,6 +94,10 @@ const initLobby = async () => {
 
 const criarObserver = ( seletor, exec, type ) => {
   const observer = new MutationObserver( mutations => {
+    if ( !isExtensionContextValid() ) {
+      observer.disconnect();
+      return;
+    }
 
     let shouldExec = false;
     mutations.forEach( mutation => {

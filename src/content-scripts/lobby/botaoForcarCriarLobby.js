@@ -1,4 +1,4 @@
-import { getAllStorageSyncData, getTranslationText } from '../../utils';
+import { getAllStorageSyncData, getTranslationText, isExtensionContextValid } from '../../utils';
 import axios from 'axios';
 import { GC_URL, isFirefox } from '../../lib/constants';
 import { getLobbiesLimit } from '../../lib/dom';
@@ -12,6 +12,10 @@ export async function adicionarBotaoForcarCriarLobby() {
 
   if ( !$( '#criar-lobby-btn' ).length ) {
     const observer = new MutationObserver( () => {
+      if ( !isExtensionContextValid() ) {
+        observer.disconnect();
+        return;
+      }
       const btnAlreadyExists = $( '#criar-lobby-btn' ).length;
       const $extWrapper = $( '#gc-ext-wrapper' );
 
@@ -61,6 +65,10 @@ function addListeners() {
 //Criar lobby: https://github.com/LouisRiverstone/gamersclub-lobby_waiter/ com as modificações por causa do layout novo
 function intervalerCriacaoLobby() {
   return setInterval( async () => {
+    if ( !isExtensionContextValid() ) {
+      clearInterval( intervalCriarLobby );
+      return;
+    }
     if ( !$( '.sidebar-titulo.sidebar-sala-titulo' ).text().length ) {
       const infoText = $( '.LobbyHeader__info div[type="default"]' )[0]?.innerText || '';
       const numeros = infoText.match( /\d+/g ) || [];
@@ -71,40 +79,47 @@ function intervalerCriacaoLobby() {
 
       if ( limite !== null && !Number.isNaN( limite ) && lobbies < limite ) {
         //Criar lobby por meio de requisição com AXIOS. ozKcs
-        chrome.storage.sync.get( [ 'preVetos', 'lobbyPrivada', 'jogarCom' ], async res => {
-          const preVetos = res.preVetos ? res.preVetos : [];
-          const lobbyPrivada = res.lobbyPrivada ? res.lobbyPrivada : false;
-          const jogarCom = res.jogarCom ? res.jogarCom : 0;
-          const postData = {
-            max_level_to_join: 21,
-            min_level_to_join: 0,
-            private: lobbyPrivada,
-            region: 0,
-            restriction: jogarCom,
-            team: null,
-            team_players: [],
-            type: 'newRoom',
-            vetoes: preVetos,
-            game: 'cs2'
-          };
-
-          const criarPost = await axios.post( `https://${ GC_URL }/lobbyBeta/createLobby`, postData );
-          if ( criarPost.data.success ) {
-            if ( isFirefox ) {
-              window.wrappedJSObject.openLobby();
-            }
-            adicionarBotaoForcarCriarLobby();
-            clearInterval( intervalCriarLobby );
-            location.reload();
-          } else {
-            if ( criarPost.data.message.includes( 'Anti-cheat' ) || criarPost.data.message.includes( 'banned' ) ) {
-              clearInterval( intervalCriarLobby );
-              adicionarBotaoForcarCriarLobby();
-              alertaMsg( criarPost.data.message );
+        try {
+          chrome.storage.sync.get( [ 'preVetos', 'lobbyPrivada', 'jogarCom' ], async res => {
+            if ( chrome.runtime?.lastError || !res ) {
               return;
             }
-          }
-        } );
+            const preVetos = res.preVetos ? res.preVetos : [];
+            const lobbyPrivada = res.lobbyPrivada ? res.lobbyPrivada : false;
+            const jogarCom = res.jogarCom ? res.jogarCom : 0;
+            const postData = {
+              max_level_to_join: 21,
+              min_level_to_join: 0,
+              private: lobbyPrivada,
+              region: 0,
+              restriction: jogarCom,
+              team: null,
+              team_players: [],
+              type: 'newRoom',
+              vetoes: preVetos,
+              game: 'cs2'
+            };
+
+            const criarPost = await axios.post( `https://${ GC_URL }/lobbyBeta/createLobby`, postData );
+            if ( criarPost.data.success ) {
+              if ( isFirefox ) {
+                window.wrappedJSObject.openLobby();
+              }
+              adicionarBotaoForcarCriarLobby();
+              clearInterval( intervalCriarLobby );
+              location.reload();
+            } else {
+              if ( criarPost.data.message.includes( 'Anti-cheat' ) || criarPost.data.message.includes( 'banned' ) ) {
+                clearInterval( intervalCriarLobby );
+                adicionarBotaoForcarCriarLobby();
+                alertaMsg( criarPost.data.message );
+                return;
+              }
+            }
+          } );
+        } catch {
+          // Extension context invalidated
+        }
       }
     } else {
       adicionarBotaoForcarCriarLobby();

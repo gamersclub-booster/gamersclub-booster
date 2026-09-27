@@ -37,21 +37,46 @@ export async function invalidateCache( ids ) {
 }
 
 export async function auditPlayers( gcPlayerIds ) {
+  if ( !gcPlayerIds || !Array.isArray( gcPlayerIds ) || gcPlayerIds.length === 0 ) {
+    return [];
+  }
+
   // Em content scripts (contexto de página web), delega para o background service worker
   // para evitar bloqueios de CORS do navegador na Steam (Manifest V3)
-  if ( typeof window !== 'undefined' && window.document && chrome.runtime?.sendMessage ) {
+  if ( typeof window !== 'undefined' && window.document && chrome.runtime?.id && chrome.runtime?.sendMessage ) {
     return new Promise( resolve => {
-      chrome.runtime.sendMessage( { action: 'AUDIT_PLAYERS', gcPlayerIds }, response => {
-        if ( chrome.runtime.lastError ) {
-          console.warn( '[GC Booster] Erro ao comunicar com background worker:', chrome.runtime.lastError.message );
-          return resolve( auditPlayersDirect( gcPlayerIds ) );
+      let settled = false;
+      const timer = setTimeout( () => {
+        if ( !settled ) {
+          settled = true;
+          console.warn( '[GC Booster] Timeout no background worker para audit, executando direto.' );
+          resolve( auditPlayersDirect( gcPlayerIds ) );
         }
-        if ( response?.success && Array.isArray( response.data ) ) {
-          return resolve( response.data );
+      }, 3500 );
+
+      try {
+        chrome.runtime.sendMessage( { action: 'AUDIT_PLAYERS', gcPlayerIds }, response => {
+          if ( settled ) { return; }
+          settled = true;
+          clearTimeout( timer );
+
+          if ( chrome.runtime?.lastError ) {
+            console.warn( '[GC Booster] Erro ao comunicar com background worker:', chrome.runtime.lastError.message );
+            return resolve( auditPlayersDirect( gcPlayerIds ) );
+          }
+          if ( response?.success && Array.isArray( response.data ) ) {
+            return resolve( response.data );
+          }
+          console.warn( '[GC Booster] Resposta inesperada do background worker:', response );
+          resolve( auditPlayersDirect( gcPlayerIds ) );
+        } );
+      } catch ( _e ) {
+        if ( !settled ) {
+          settled = true;
+          clearTimeout( timer );
+          resolve( auditPlayersDirect( gcPlayerIds ) );
         }
-        console.warn( '[GC Booster] Resposta inesperada do background worker:', response );
-        resolve( auditPlayersDirect( gcPlayerIds ) );
-      } );
+      }
     } );
   }
 
