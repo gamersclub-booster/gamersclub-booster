@@ -367,12 +367,90 @@ input[type="range"].filterKdr::-ms-track {
   align-items: center;
 }
 
-.LobbyChallengeLineUpCard .gcbooster_lupa {
-  transform: translateX(-50%);
+.LobbyChallengeLineUpCard,
+.LobbyChallengeCard,
+.LobbyChallengeCard__item,
+[class*="ChallengeCard"],
+[class*="challengeCard"],
+[class*="ChallengeLineUp"],
+[class*="challengeLineUp"],
+[class*="MyChallenges"],
+[class*="my-challenges"],
+[class*="MyChallenge"],
+[class*="my-challenge"],
+.ChallengesList__item,
+.sidebar-desafios-salas .sidebar-item,
+.sidebar-desafios-team {
+  position: relative !important;
+  overflow: visible !important;
 }
 
-.LobbyChallengeLineUpCard .infos_lobby {
-  top: 142px !important;
+/* Botão dedicado de Raio-X em desafios */
+.gcbooster-challenge-raiox-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: linear-gradient(135deg, rgba(255, 140, 0, 0.25) 0%, rgba(20, 20, 25, 0.95) 100%);
+  border: 1px solid var(--color-orange);
+  color: #fff;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), 0 0 6px rgba(255, 165, 0, 0.25);
+  transition: all 0.2s ease-in-out;
+  white-space: nowrap;
+  user-select: none;
+  z-index: 20;
+}
+
+.gcbooster-challenge-raiox-btn:hover {
+  background: linear-gradient(135deg, rgba(255, 165, 0, 0.5) 0%, rgba(40, 30, 20, 0.95) 100%);
+  border-color: #ffb732;
+  box-shadow: 0 4px 14px rgba(255, 165, 0, 0.4);
+  transform: translateY(-1px);
+  color: #fff;
+}
+
+.gcbooster-challenge-raiox-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.gcbooster-challenge-raiox-btn .gcbooster-btn-icon {
+  font-size: 12px;
+  line-height: 1;
+}
+
+.LobbyChallengeLineUpCard .gcbooster_lupa,
+.LobbyChallengeCard .gcbooster_lupa,
+.LobbyChallengeCard__item .gcbooster_lupa,
+[class*="ChallengeCard"] .gcbooster_lupa,
+[class*="MyChallenge"] .gcbooster_lupa,
+[class*="my-challenge"] .gcbooster_lupa,
+.ChallengesList__item .gcbooster_lupa {
+  transform: translateX(-50%);
+  bottom: 4px;
+  right: 6px;
+  z-index: 10;
+}
+
+.LobbyChallengeLineUpCard .infos_lobby,
+.LobbyChallengeCard .infos_lobby,
+.LobbyChallengeCard__item .infos_lobby,
+[class*="ChallengeCard"] .infos_lobby,
+[class*="MyChallenge"] .infos_lobby,
+.infos_lobby--challenge {
+  top: 100% !important;
+  margin-top: 6px !important;
+  z-index: 999999 !important;
+  min-width: 320px !important;
+  max-width: 650px !important;
 }
 
 .infos_lobby {
@@ -1395,4 +1473,264 @@ input[type="range"].filterKdr::-ms-track {
   color: #667eea;
   font-size: 10px;
   font-style: italic;
+}
+
+/* ========================================================
+   MATCH RAIO-X & AUDITORIA (Tela de Match / Vetos)
+   ======================================================== */
+
+.gcbooster-match-player-badge {
+  background: rgba(255, 165, 0, 0.18);
+  border: 1px solid rgba(255, 165, 0, 0.4);
+  color: #ffa500;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 5px;
+  margin-top: 2px;
+  margin-left: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  line-height: 1.2;
+}
+
+.gcbooster-match-player-badge:hover {
+  background: #ffa500;
+  color: #000;
+  transform: scale(1.1);
+  box-shadow: 0 0 8px rgba(255, 165, 0, 0.6);
+}
+
+/* Modal Master da Match */
+.gcbooster-match-modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  z-index: 999999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px !important;
+  box-sizing: border-box !important;
+}
+
+.gcbooster-match-modal-container {
+  width: 100%;
+  max-width: 1100px;
+  max-height: 90vh;
+  background: #0f121a;
+  border: 1px solid #ffa500;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9), 0 0 25px rgba(255, 165, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  animation: gcboosterFadeIn 0.2s ease-out;
+}
+
+@keyframes gcboosterFadeIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.gcbooster-match-modal-header {
+  padding: 14px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 165, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.gcbooster-match-modal-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gcbooster-match-modal-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffa500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gcbooster-match-summary-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.gcbooster-summary-chip {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+  line-height: 1.2;
+}
+
+.chip-ban {
+  background: rgba(231, 76, 60, 0.2);
+  border: 1px solid #e74c3c;
+  color: #ff6b6b;
+}
+
+.chip-suspect {
+  background: rgba(243, 156, 18, 0.2);
+  border: 1px solid #f39c12;
+  color: #f39c12;
+}
+
+.chip-clean {
+  background: rgba(46, 204, 113, 0.2);
+  border: 1px solid #2ecc71;
+  color: #2ecc71;
+}
+
+.chip-kdr {
+  background: rgba(255, 165, 0, 0.15);
+  border: 1px solid rgba(255, 165, 0, 0.4);
+  color: #ffa500;
+}
+
+.gcbooster-match-modal-tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 3px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.gcbooster-match-tab-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.gcbooster-match-tab-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.gcbooster-match-tab-btn.active {
+  background: #ffa500;
+  color: #000;
+  font-weight: 700;
+}
+
+.gcbooster-match-modal-close {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 165, 0, 0.5);
+  color: #fff;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 13px;
+  transition: all 0.15s ease;
+}
+
+.gcbooster-match-modal-close:hover {
+  background: #e74c3c;
+  border-color: #e74c3c;
+  transform: scale(1.1);
+}
+
+.gcbooster-match-modal-body {
+  padding: 16px 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.gcbooster-match-modal-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+}
+
+.gcbooster-match-team-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gcbooster-match-team-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 4px solid #ffa500;
+  border-radius: 4px;
+}
+
+.gcbooster-match-team-section.team-b .gcbooster-match-team-header {
+  border-left-color: #e74c3c;
+}
+
+.gcbooster-match-team-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+.gcbooster-match-team-count {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.gcbooster-match-players-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+}
+
+@media (max-width: 800px) {
+  .gcbooster-match-players-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.gcbooster-player-highlight {
+  border-color: #ffd700 !important;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5) !important;
+  animation: gcboosterPulse 1.5s infinite alternate;
+}
+
+@keyframes gcboosterPulse {
+  from { box-shadow: 0 0 8px rgba(255, 215, 0, 0.4); }
+  to { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
 }

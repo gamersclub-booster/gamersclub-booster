@@ -90,64 +90,160 @@ const getPlayerInfo = async id => {
   return infoPlayer ;
 };
 
+const renderKdrElement = ( $element, kdr ) => {
+  if ( !$element || !kdr || $element.find( '#gcbooster_kdr' ).length ) { return; }
+
+  const numKdr = parseFloat( kdr );
+  const formattedKdr = !isNaN( numKdr ) ? numKdr.toFixed( 2 ) : kdr;
+
+  const $kdrElement = $( '<div/>', {
+    'id': 'gcbooster_kdr',
+    'class': 'draw-orange',
+    'css': {
+      'margin-bottom': '4px',
+      'margin-top': '2px',
+      'width': '100%',
+      'display': 'flex',
+      'padding': '2px 4px',
+      'align-items': 'center',
+      'justify-content': 'center',
+      'text-align': 'center',
+      'color': 'white',
+      'font-weight': '600',
+      'border': 'none',
+      'background': numKdr <= 2.5 ? '' :
+        'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)',
+      'background-color': numKdr <= 2.5 ? levelColor[Math.round( numKdr * 10 )] + 'cc' : 'initial'
+    }
+  } ).append( $( '<span/>', {
+    'id': 'gcbooster_kdr_span',
+    'text': formattedKdr,
+    'kdr': formattedKdr,
+    'css': { 'width': '100%', 'font-size': '10px' }
+  } ) );
+
+  $element.prepend( $kdrElement );
+  $element.find( 'div.LobbyPlayer' ).append( '<style>.LobbyPlayer:before{top:15px !important;}</style>' );
+};
+
+const scanDesafiosKdr = () => {
+  const challengeContainers = [
+    '#challengeList',
+    '.sidebar-desafios',
+    '.ChallengesList',
+    '.LobbyChallengeLineUpCard',
+    '.LobbyChallengeCard',
+    '.LobbyChallengeCard__item',
+    '.ChallengesList__item',
+    '[class*="Challenge" i]',
+    '[class*="challenge" i]',
+    '[class*="Desafio" i]',
+    '[class*="desafio" i]',
+    '[class*="Proposal" i]',
+    '[class*="proposal" i]',
+    '.sidebar-desafios-salas .sidebar-item',
+    '.sidebar-desafios-team'
+  ].join( ', ' );
+
+  const $containers = $( challengeContainers );
+  if ( !$containers.length ) { return; }
+
+  const playerSelector = [
+    'a.LobbyPlayerVertical',
+    '.sala-lineup-imagem a',
+    '.sala-lineup-player a',
+    'a[href*="/jogador/"]',
+    'a[href*="/player/"]',
+    '[data-player-id]',
+    '[id^="trigger-"]',
+    'img[src*="/avatar/"]',
+    'img[src*="/players/"]'
+  ].join( ', ' );
+
+  $containers
+    .find( playerSelector )
+    .addBack( playerSelector )
+    .each( ( _, element ) => {
+      let $element = $( element );
+
+      // Se for uma imagem de avatar, o elemento alvo onde o badge fica é o container pai
+      if ( $element.is( 'img' ) ) {
+        $element = $element.parent();
+      }
+
+      if ( $element.find( 'div.PlayerPlaceholder' ).length > 0 || $element.hasClass( 'PlayerPlaceholder' ) ) {
+        $element.find( 'div.PlayerPlaceholder__image' ).css( 'margin-top', '23px' );
+        return;
+      }
+
+      if ( $element.find( '#gcbooster_kdr' ).length > 0 || $element.attr( 'data-gcbooster-kdr-applied' ) ) {
+        return;
+      }
+
+      // Aplica min-height apenas em cards verticais clássicos
+      if ( $element.hasClass( 'LobbyPlayerVertical' ) && !$element.parent().hasClass( 'sala-lineup-imagem' ) ) {
+        $element.css( 'min-height', '120px' );
+      }
+
+      const title = $element.attr( 'title' ) || $element.find( '[title]' ).attr( 'title' ) || '';
+      const kdr = getKdrFromTitle( title );
+      if ( kdr ) {
+        $element.attr( 'data-gcbooster-kdr-applied', 'true' );
+        renderKdrElement( $element, kdr );
+        return;
+      }
+
+      // Extrai ID do jogador para buscar KDR
+      let playerId = $element.attr( 'data-player-id' ) || $element.attr( 'data-id' );
+      if ( !playerId && $element.attr( 'id' )?.startsWith( 'trigger-' ) ) {
+        playerId = $element.attr( 'id' ).replace( 'trigger-', '' );
+      }
+      if ( !playerId ) {
+        const href = $element.attr( 'href' ) || $element.find( 'a' ).attr( 'href' ) || '';
+        const matchHref = href.match( /\/(?:jogador|player)\/(\d+)/i );
+        if ( matchHref && matchHref[1] ) {
+          playerId = matchHref[1];
+        }
+      }
+      if ( !playerId ) {
+        const src = $element.find( 'img' ).attr( 'src' ) || $element.attr( 'src' ) || '';
+        const matchSrc = src.match( /\/(?:players\/)?avatar\/(\d+)/i ) || src.match( /\/(?:players|jogador|player)\/(\d+)/i );
+        if ( matchSrc && matchSrc[1] ) {
+          playerId = matchSrc[1];
+        }
+      }
+
+      if ( playerId && /^\d+$/.test( playerId ) && playerId !== '0' ) {
+        $element.attr( 'data-gcbooster-kdr-applied', 'true' );
+        fetchKdr( playerId ).then( fetchedKdr => {
+          if ( fetchedKdr ) {
+            renderKdrElement( $element, parseFloat( fetchedKdr ).toFixed( 2 ) );
+          }
+        } ).catch( () => {} );
+      }
+    } );
+};
+
 export const mostrarKdrDesafios = () => {
+  scanDesafiosKdr();
+
   const observer = new MutationObserver( () => {
     if ( !isExtensionContextValid() ) {
       observer.disconnect();
       return;
     }
-    const challengeCardSelector = '.LobbyChallengeLineUpCard';
-    if ( $( challengeCardSelector ).length ) {
+    scanDesafiosKdr();
+  } );
+  observer.observe( document.body, { childList: true, subtree: true } );
 
-      $( challengeCardSelector ).find( 'a.LobbyPlayerVertical, .sala-lineup-imagem a' )
-        .addBack( 'a.LobbyPlayerVertical, .sala-lineup-imagem a' )
-        .each( ( _, element ) => {
-          const $element = $( element );
-          const $parent = $element.parent();
-
-          if ( !$parent.hasClass( 'sala-lineup-imagem' ) ) {
-            $element.css( 'min-height', '120px' );
-          }
-
-          if ( $element.find( 'div.PlayerPlaceholder' ).length > 0 ) {
-            $element.find( 'div.PlayerPlaceholder__image' ).css( 'margin-top', '23px' );
-          } else if ( !$element.find( '#gcbooster_kdr' ).length ) {
-            const kdr = getKdrFromTitle( $element.attr( 'title' ) );
-
-            const $kdrElement = $( '<div/>', {
-              'id': 'gcbooster_kdr',
-              'class': 'draw-orange',
-              'css': {
-                'margin-bottom': '4px',
-                'margin-top': '2px',
-                'width': '100%',
-                'display': 'flex',
-                'padding': '2px 4px',
-                'align-items': 'center',
-                'justify-content': 'center',
-                'text-align': 'center',
-                'color': 'white',
-                'font-weight': '600',
-                'border': 'none',
-                'background': kdr <= 2.5 ? '' :
-                  'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)',
-                'background-color': kdr <= 2.5 ? levelColor[Math.round( kdr * 10 )] + 'cc' : 'initial'
-              }
-            } ).append( $( '<span/>', {
-              'id': 'gcbooster_kdr_span',
-              'text': kdr,
-              'kdr': kdr,
-              'css': { 'width': '100%', 'font-size': '10px' }
-            } ) );
-
-            $element.prepend( $kdrElement );
-            $element.find( 'div.LobbyPlayer' ).append( '<style>.LobbyPlayer:before{top:15px !important;}</style>' );
-          }
-        } );
+  $( document ).on( 'click', 'button, [role="tab"], a, div', function () {
+    const text = $( this ).text()?.trim()?.toLowerCase();
+    if ( text && ( text.includes( 'desafio' ) || text.includes( 'challenge' ) || text.includes( 'lobby' ) ) ) {
+      setTimeout( () => scanDesafiosKdr(), 100 );
+      setTimeout( () => scanDesafiosKdr(), 500 );
+      setTimeout( () => scanDesafiosKdr(), 1200 );
     }
   } );
-    // monitora o documento inteiro
-  observer.observe( document.body, { childList: true, subtree: true } );
 };
 
 // Limpa o cache a cada 2 dias se o TTL for menor q 'agora'

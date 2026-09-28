@@ -52,7 +52,7 @@ export async function auditPlayers( gcPlayerIds ) {
           console.warn( '[GC Booster] Timeout no background worker para audit, executando direto.' );
           resolve( auditPlayersDirect( gcPlayerIds ) );
         }
-      }, 3500 );
+      }, 8000 );
 
       try {
         chrome.runtime.sendMessage( { action: 'AUDIT_PLAYERS', gcPlayerIds }, response => {

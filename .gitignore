@@ -8,6 +8,10 @@ prints
 /out-tsc
 .test-profile
 test-local.*
+*INSTALAR_BOOSTER.bat
+*LEIA-ME.txt
+gerar-pacote-para-amigos.bat
+scripts/
 
 # Runtime data
 pids

@@ -139,12 +139,27 @@ const createDivAudit = audit => {
   return $auditDiv;
 };
 
-const createDivPlayers = ( playerInfo, audit, playerId ) => $( '<div/>',
+const createDivKdr = playerInfo => {
+  const kdrStat = playerInfo?.stats?.find( stat => stat.stat === 'KDR' );
+  const kdr = kdrStat?.value ?? playerInfo?.kdr ?? null;
+  if ( kdr === null || kdr === undefined ) { return ''; }
+  const formatted = !isNaN( Number( kdr ) ) ? Number( kdr ).toFixed( 2 ) : kdr;
+  return $( '<div />', {
+    class: 'gcbooster-info-stat',
+    title: 'KDR Médio',
+    'data-tip-text': 'KDR Médio',
+    text: `KDR: ${formatted}`
+  } );
+};
+
+export const createDivPlayers = ( playerInfo, audit, playerId ) => $( '<div/>',
   {
-    class: 'gcbooster-info-player'
+    class: 'gcbooster-info-player',
+    'data-player-card-id': playerId
   } )
   .append( createProfileLink( playerId, audit ) )
   .append( $( '<div />', { class: 'gcbooster-info-stats-group' } )
+    .append( createDivKdr( playerInfo ) )
     .append( createDivDateCreate( playerInfo ) )
     .append( createDivLobbys( playerInfo ) )
     .append( createDivVitory( playerInfo ) )
@@ -160,21 +175,62 @@ const createImage = lobbyId => $( '<img/>', {
   'data-tip-text': IMAGE_ALT
 } );
 
-const getPlayersIds = element => {
-  const elements = element
-    .find( 'a.LobbyPlayerVertical, .LobbyPlayerVertical, .sala-lineup-imagem a, .sala-lineup-player a' )
-    .toArray();
+export const getPlayersIds = element => {
+  const selector = [
+    'a.LobbyPlayerVertical',
+    '.LobbyPlayerVertical',
+    '.sala-lineup-imagem a',
+    '.sala-lineup-player a',
+    'a[href*="/jogador/"]',
+    'a[href*="/player/"]',
+    '[data-player-id]',
+    '[data-id]',
+    '[data-playerid]',
+    '[data-user-id]',
+    '[id^="trigger-"]',
+    '[id^="player-"]',
+    '[id^="user-"]',
+    'img[src*="/avatar/"]',
+    'img[src*="/players/"]'
+  ].join( ', ' );
+  const elements = element.find( selector ).toArray();
 
   const ids = [];
   elements.forEach( el => {
-    if ( $( el ).find( '.PlayerPlaceholder' ).length > 0 || $( el ).hasClass( 'PlayerPlaceholder' ) ) {
+    const $el = $( el );
+    if ( $el.closest( '.infos_lobby' ).length > 0 ) {
       return;
     }
-    const href = el.href || $( el ).attr( 'href' ) || $( el ).find( 'a' ).attr( 'href' ) || '';
-    const match = href.match( /\/(?:jogador|player)\/(\d+)/i );
-    if ( match && match[1] ) {
-      ids.push( match[1] );
-    } else {
+    if ( $el.find( '.PlayerPlaceholder' ).length > 0 || $el.hasClass( 'PlayerPlaceholder' ) ) {
+      return;
+    }
+    const dataId = $el.attr( 'data-player-id' ) || $el.attr( 'data-id' ) ||
+                   $el.attr( 'data-playerid' ) || $el.attr( 'data-user-id' );
+    if ( dataId && /^\d+$/.test( dataId ) ) {
+      ids.push( dataId );
+      return;
+    }
+    const elId = $el.attr( 'id' ) || '';
+    if ( elId.startsWith( 'trigger-' ) || elId.startsWith( 'player-' ) || elId.startsWith( 'user-' ) ) {
+      const pId = elId.replace( /^(?:trigger|player|user)-/, '' );
+      if ( /^\d+$/.test( pId ) ) {
+        ids.push( pId );
+        return;
+      }
+    }
+    const href = el.href || $el.attr( 'href' ) || $el.find( 'a' ).attr( 'href' ) || '';
+    const matchHref = href.match( /\/(?:jogador|player)\/(\d+)/i );
+    if ( matchHref && matchHref[1] ) {
+      ids.push( matchHref[1] );
+      return;
+    }
+    const src = $el.attr( 'src' ) || $el.find( 'img' ).attr( 'src' ) || '';
+    const matchSrc = src.match( /\/(?:players\/)?avatar\/(\d+)/i ) || src.match( /\/(?:players|jogador|player)\/(\d+)/i );
+    if ( matchSrc && matchSrc[1] ) {
+      ids.push( matchSrc[1] );
+      return;
+    }
+    if ( href ) {
       const parts = href.split( '/' ).filter( Boolean );
       const last = parts.pop();
       if ( last && /^\d+$/.test( last ) ) {
@@ -183,12 +239,12 @@ const getPlayersIds = element => {
     }
   } );
 
-  return Array.from( new Set( ids ) );
+  return Array.from( new Set( ids.filter( id => id && id !== '0' ) ) );
 };
 
 const getPlayersIdsNew = getPlayersIds;
 
-const createModal = ( lobbyId, type ) => {
+export const createModal = ( lobbyId, type ) => {
   const $modal = $( '<div />', {
     id: `infos_lobby_${lobbyId}`,
     class: `infos_lobby ${type === 'challenge' ? 'infos_lobby--challenge' : 'infos_lobby--room'}`,
@@ -204,7 +260,7 @@ const createModal = ( lobbyId, type ) => {
   return $modal;
 };
 
-const calcAge = ageDate => {
+export const calcAge = ageDate => {
   if ( !ageDate || typeof ageDate !== 'string' ) { return '-'; }
   const parts = ageDate.split( /[/: ]/ ).map( v => parseInt( v, 10 ) );
   if ( parts.length < 3 || isNaN( parts[0] ) ) { return '-'; }
@@ -233,6 +289,178 @@ const calcAge = ageDate => {
   return 'Nova';
 };
 
+const toggleRaioXModal = async ( $trigger, $container, getPlayersIdsFunction, type, lobbyId ) => {
+  const $existingModal = $( `#infos_lobby_${lobbyId}` );
+  if ( $existingModal.length > 0 ) {
+    $existingModal.empty().remove();
+    return;
+  }
+
+  $trigger.css( 'opacity', '0.6' );
+
+  try {
+    let players = getPlayersIdsFunction( $container );
+
+    // Se a sala ainda estiver montando os elementos no DOM, aguarda brevemente e tenta novamente
+    if ( players.length === 0 ) {
+      await new Promise( resolve => setTimeout( resolve, 120 ) );
+      players = getPlayersIdsFunction( $container );
+    }
+
+    const modal = createModal( lobbyId, type );
+    modal.append( createClose( lobbyId ) );
+    $container.append( modal );
+
+    if ( players.length === 0 ) {
+      modal.append( $( '<div />', {
+        class: 'gcbooster-info-stat',
+        style: 'grid-column: 1 / -1; padding: 10px; color: #ffa500;',
+        text: 'Nenhum jogador encontrado na sala.'
+      } ) );
+      return;
+    }
+
+    // Cria spinners isolados para esse lobby
+    players.forEach( playerId => {
+      const loadingDiv = $( '<div/>', {
+        id: `loading-${lobbyId}-${playerId}`,
+        'data-player-id': playerId,
+        class: 'gcbooster-info-player-loading'
+      } ).append( $( '<div/>', {
+        class: 'gcbooster-spinner'
+      } ) );
+      modal.append( loadingDiv );
+    } );
+
+    // Verifica configuração de audit com timeout de segurança
+    const syncConfig = await new Promise( resolve => {
+      if ( !isExtensionContextValid() ) {
+        return resolve( { playerAuditEnabled: true } );
+      }
+      let timedOut = false;
+      const timer = setTimeout( () => {
+        timedOut = true;
+        resolve( { playerAuditEnabled: true } );
+      }, 500 );
+      try {
+        chrome.storage.sync.get( [ 'playerAuditEnabled' ], res => {
+          if ( !timedOut ) {
+            clearTimeout( timer );
+            resolve( res );
+          }
+        } );
+      } catch ( _e ) {
+        if ( !timedOut ) {
+          clearTimeout( timer );
+          resolve( { playerAuditEnabled: true } );
+        }
+      }
+    } );
+    const auditEnabled = syncConfig?.playerAuditEnabled !== false;
+
+    // Renderização progressiva em streaming para zero espera
+    const playerStatsMap = new Map();
+    const playerAuditMap = new Map();
+
+    const updateCard = pId => {
+      if ( !document.getElementById( `infos_lobby_${lobbyId}` ) ) { return; }
+      const info = playerStatsMap.get( String( pId ) );
+      if ( !info ) { return; }
+
+      const audit = playerAuditMap.get( String( pId ) ) || null;
+      const $slot = modal.find( `[data-player-id="${pId}"], [data-player-card-id="${pId}"]` );
+      if ( $slot.length > 0 ) {
+        const $card = createDivPlayers( info, audit, pId );
+        $slot.replaceWith( $card );
+      }
+    };
+
+    // 1. Auditoria Steam / csREP iniciada em paralelo
+    const auditPromise = auditEnabled ?
+      auditPlayers( players ).then( list => {
+        if ( Array.isArray( list ) ) {
+          list.forEach( a => {
+            if ( a?.gcId ) { playerAuditMap.set( String( a.gcId ), a ); }
+          } );
+        }
+        players.forEach( pId => updateCard( pId ) );
+      } ).catch( () => {} ) : Promise.resolve();
+
+    // 2. Busca stats de cada jogador individualmente com atualização imediata (progressive render)
+    const infoPromises = players.map( pId =>
+      getPlayerInfo( pId )
+        .then( info => {
+          playerStatsMap.set( String( pId ), info );
+          updateCard( pId );
+        } )
+        .catch( () => {
+          playerStatsMap.set( String( pId ), {
+            dataCriacao: '-',
+            totalPartidas: 0,
+            porcentagemVitoria: '0.00',
+            anotacao: 'Nenhuma'
+          } );
+          updateCard( pId );
+        } )
+    );
+
+    // Aguarda todos finalizarem antes de restaurar a opacidade do botão
+    await Promise.allSettled( [ ...infoPromises, auditPromise ] );
+  } finally {
+    $trigger.css( 'opacity', '1' );
+  }
+};
+
+const injectChallengeRaioXButton = ( $card, _players, lobbyId ) => {
+  if ( $card.find( `#gcbooster_btn_challenge_${lobbyId}` ).length > 0 ) {
+    return;
+  }
+
+  const $btn = $( '<button />', {
+    id: `gcbooster_btn_challenge_${lobbyId}`,
+    type: 'button',
+    class: 'gcbooster-challenge-raiox-btn draw-orange',
+    title: 'Visualizar Estatísticas e Raio-X da equipe',
+    html: '<span class="gcbooster-btn-icon">🛡️</span> <span class="gcbooster-btn-text">Raio-X</span>'
+  } );
+
+  $btn.on( 'click', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleRaioXModal( $btn, $card, getPlayersIds, 'challenge', lobbyId );
+  } );
+
+  // Tenta encontrar a área de ações da proposta / card
+  const actionsSelector = [
+    '.sidebar-sala-action-buttons',
+    '.sidebar-desafios-play',
+    '[class*="Actions"]',
+    '[class*="actions"]',
+    '[class*="Buttons"]',
+    '[class*="buttons"]',
+    '[class*="Controls"]',
+    '[class*="controls"]'
+  ].join( ', ' );
+  const $actions = $card.find( actionsSelector ).first();
+
+  if ( $actions.length > 0 ) {
+    $actions.prepend( $btn );
+  } else {
+    // Se não encontrou container de ações, procura header ou adiciona no topo do card
+    const $header = $card.find(
+      '[class*="Header"], [class*="header"], [class*="Title"], [class*="title"], [class*="Team"], [class*="team"]'
+    ).first();
+    if ( $header.length > 0 ) {
+      $header.append( $btn );
+    } else {
+      $card.prepend( $btn );
+    }
+  }
+
+  $card.css( { 'overflow': 'visible', 'position': 'relative' } );
+  $card.parent().css( 'overflow', 'visible' );
+};
+
 const createModalForElementNew = ( element, getPlayersIdsFunction, type, lobbyId ) => {
   if ( element.find( '.gcbooster_lupa' ).length === 0 ) {
     const div = createDiv( lobbyId );
@@ -246,95 +474,12 @@ const createModalForElementNew = ( element, getPlayersIdsFunction, type, lobbyId
       e.preventDefault();
       e.stopPropagation();
 
-      const $existingModal = $( `#infos_lobby_${lobbyId}` );
-      if ( $existingModal.length > 0 ) {
-        $existingModal.empty().remove();
-        return;
-      }
-
       if ( isLoading ) { return; }
       isLoading = true;
-      div.css( 'opacity', '0.6' );
-
       try {
-        const modal = createModal( lobbyId, type );
-        modal.append( createClose( lobbyId ) );
-        $( div ).parent().append( modal );
-
-        const players = getPlayersIdsFunction( element );
-
-        if ( players.length === 0 ) {
-          modal.append( $( '<div />', {
-            class: 'gcbooster-info-stat',
-            style: 'grid-column: 1 / -1; padding: 10px; color: #ffa500;',
-            text: 'Nenhum jogador encontrado na sala.'
-          } ) );
-          return;
-        }
-
-        // Cria spinners isolados para esse lobby
-        players.forEach( playerId => {
-          const loadingDiv = $( '<div/>', {
-            id: `loading-${lobbyId}-${playerId}`,
-            'data-player-id': playerId,
-            class: 'gcbooster-info-player-loading'
-          } ).append( $( '<div/>', {
-            class: 'gcbooster-spinner'
-          } ) );
-          modal.append( loadingDiv );
-        } );
-
-        // Verifica configuração de audit com timeout de segurança
-        const syncConfig = await new Promise( resolve => {
-          if ( !isExtensionContextValid() ) {
-            return resolve( { playerAuditEnabled: true } );
-          }
-          let timedOut = false;
-          const timer = setTimeout( () => {
-            timedOut = true;
-            resolve( { playerAuditEnabled: true } );
-          }, 600 );
-          try {
-            chrome.storage.sync.get( [ 'playerAuditEnabled' ], res => {
-              if ( !timedOut ) {
-                clearTimeout( timer );
-                resolve( res );
-              }
-            } );
-          } catch ( _e ) {
-            if ( !timedOut ) {
-              clearTimeout( timer );
-              resolve( { playerAuditEnabled: true } );
-            }
-          }
-        } );
-        const auditEnabled = syncConfig?.playerAuditEnabled !== false;
-
-        // Carregar informações e auditoria em batch para performance máxima
-        const [ playerInfoList, auditList ] = await Promise.all( [
-          Promise.all( players.map( p => getPlayerInfo( p ).catch( () => ( {
-            dataCriacao: '-',
-            totalPartidas: 0,
-            porcentagemVitoria: '0.00',
-            anotacao: 'Nenhuma'
-          } ) ) ) ),
-          auditEnabled ? auditPlayers( players ).catch( () => [] ) : Promise.resolve( [] )
-        ] );
-
-        // Se o modal foi fechado pelo usuário enquanto carregava, aborta substituição
-        if ( !document.getElementById( `infos_lobby_${lobbyId}` ) ) {
-          return;
-        }
-
-        players.forEach( ( player, idx ) => {
-          const response = playerInfoList[idx];
-          const audit = Array.isArray( auditList ) ?
-            auditList.find( a => a && String( a.gcId ) === String( player ) ) : null;
-          modal.find( `[data-player-id="${player}"]` ).replaceWith( createDivPlayers( response, audit, player ) );
-        } );
+        await toggleRaioXModal( div, element, getPlayersIdsFunction, type, lobbyId );
       } finally {
         isLoading = false;
-        div.css( 'opacity', '1' );
       }
     } );
 
@@ -343,24 +488,90 @@ const createModalForElementNew = ( element, getPlayersIdsFunction, type, lobbyId
 };
 
 export const scanAndInjectLupa = () => {
-  // 1. Salas de desafio (.LobbyChallengeLineUpCard)
-  $( '.LobbyChallengeLineUpCard' ).each( ( _, element ) => {
-    let lobbyId = $( element ).attr( 'data-challenge-id' );
-    if ( !lobbyId ) {
-      const matchId = $( element ).attr( 'id' );
-      if ( matchId ) {
-        lobbyId = matchId;
-      } else {
-        const firstPlayerLink = $( element ).find( 'a.LobbyPlayerVertical, .LobbyPlayerVertical a, .sala-lineup-imagem a' )[0];
-        const href = firstPlayerLink ? ( firstPlayerLink.href || $( firstPlayerLink ).attr( 'href' ) || '' ) : '';
-        const match = href.match( /\/(?:jogador|player)\/(\d+)/i );
-        lobbyId = match ? `challenge_${match[1]}` : `challenge_${$( element ).index()}`;
-      }
+  // 1. Salas de desafio (inclui aba "Desafios" e aba "Meus desafios")
+  const challengeSelectors = [
+    '.LobbyChallengeLineUpCard',
+    '.LobbyChallengeCard',
+    '.LobbyChallengeCard__item',
+    '.ChallengesList__item',
+    '[class*="ChallengeLineUp"]',
+    '[class*="challengeLineUp"]',
+    '[class*="ChallengeCard"]',
+    '[class*="challengeCard"]',
+    '[class*="ProposalCard"]',
+    '[class*="proposalCard"]',
+    '[class*="ProposalItem"]',
+    '[class*="proposalItem"]',
+    '[class*="ChallengeItem"]',
+    '[class*="challengeItem"]',
+    '[class*="MyChallenges"]',
+    '[class*="my-challenges"]',
+    '[class*="MyChallenge"]',
+    '[class*="my-challenge"]',
+    '.sidebar-desafios-salas .sidebar-item',
+    '.sidebar-desafios-team'
+  ].join( ', ' );
+
+  // Processa cards conhecidos de desafios
+  $( challengeSelectors ).each( ( _, element ) => {
+    const $element = $( element );
+
+    // Se o elemento contém um filho que também é selecionado, priorize o filho
+    if ( $element.find( '.LobbyChallengeLineUpCard, [class*="ChallengeLineUp"]' ).length > 0 &&
+         !$element.hasClass( 'LobbyChallengeLineUpCard' ) &&
+         !$element.is( '[class*="ChallengeLineUp"]' ) ) {
+      return;
     }
-    createModalForElementNew( $( element ), getPlayersIds, 'challenge', lobbyId );
+
+    const players = getPlayersIds( $element );
+    if ( players.length === 0 ) {
+      return;
+    }
+
+    let lobbyId = $element.attr( 'data-challenge-id' ) || $element.attr( 'data-id' ) || $element.attr( 'id' );
+    if ( !lobbyId || !/^[a-zA-Z0-9_-]+$/.test( lobbyId ) ) {
+      lobbyId = `challenge_${players.slice( 0, 3 ).join( '_' )}`;
+    }
+
+    // Injeta o botão dedicado [ 🛡️ Raio-X ] diretamente no card/linha da proposta
+    injectChallengeRaioXButton( $element, players, lobbyId );
+
+    // Também garante o gatilho da lupa se necessário
+    if ( $element.find( '.gcbooster_lupa' ).length === 0 ) {
+      createModalForElementNew( $element, getPlayersIds, 'challenge', lobbyId );
+    }
   } );
 
-  // 2. Salas normais / lobby ([id^="roomCardWrapper-"])
+  // 2. Busca abrangente por propostas/lineups na aba de Desafios caso as classes variem
+  const challengeContainers = [
+    '#challengeList',
+    '.sidebar-desafios',
+    '.ChallengesList',
+    '[class*="Challenges" i]',
+    '[class*="challenges" i]',
+    '[class*="Desafios" i]',
+    '[class*="desafios" i]'
+  ].join( ', ' );
+
+  $( challengeContainers ).find( 'div, section, li' ).each( ( _, el ) => {
+    const $el = $( el );
+    if ( $el.find( '.gcbooster-challenge-raiox-btn' ).length > 0 ) {
+      return;
+    }
+
+    const players = getPlayersIds( $el );
+    // Se possui exatamente entre 2 e 5 jogadores e não possui filhos com os mesmos jogadores
+    if ( players.length >= 2 && players.length <= 5 ) {
+      const hasChildLineup = $el.children().toArray().some( child => getPlayersIds( $( child ) ).length >= 2 );
+      if ( !hasChildLineup ) {
+        const lobbyId = `challenge_${players.slice( 0, 3 ).join( '_' )}`;
+        injectChallengeRaioXButton( $el, players, lobbyId );
+        createModalForElementNew( $el, getPlayersIds, 'challenge', lobbyId );
+      }
+    }
+  } );
+
+  // 3. Salas normais / lobby ([id^="roomCardWrapper-"])
   $( '[id^="roomCardWrapper-"]' ).each( ( _, element ) => {
     const lobbyId = $( element ).attr( 'id' );
     createModalForElementNew( $( element ), getPlayersIdsNew, 'lobby', lobbyId );
@@ -381,7 +592,19 @@ export const iniciarLupa = () => {
   } );
   observer.observe( document.body, { childList: true, subtree: true } );
 
-  // Intervalo de segurança rápido nos primeiros 5s para garantia de 0 delay
+  // Listener de clique para abas de desafios (ex: "Meus desafios", "Desafios")
+  $( document ).on( 'click', 'button, [role="tab"], a, div', function () {
+    const text = $( this ).text()?.trim()?.toLowerCase();
+    if ( text && ( text.includes( 'desafio' ) || text.includes( 'challenge' ) || text.includes( 'lobby' ) ) ) {
+      setTimeout( () => scanAndInjectLupa(), 50 );
+      setTimeout( () => scanAndInjectLupa(), 200 );
+      setTimeout( () => scanAndInjectLupa(), 600 );
+      setTimeout( () => scanAndInjectLupa(), 1200 );
+      setTimeout( () => scanAndInjectLupa(), 2000 );
+    }
+  } );
+
+  // Intervalo de segurança rápido nos primeiros 6s para garantia de 0 delay
   const intervalFast = setInterval( () => {
     if ( !isExtensionContextValid() ) {
       clearInterval( intervalFast );

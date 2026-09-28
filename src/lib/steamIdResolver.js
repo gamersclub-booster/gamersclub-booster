@@ -1,5 +1,6 @@
 import { resolveVanityViaXml } from './steamApi';
 import { getFromStorage, setStorage } from './storage';
+import { fetchPlayerProfileHtml } from './profileFetcher';
 
 const RESOLVER_CACHE_KEY = 'gc_steam_resolver_cache';
 
@@ -16,10 +17,10 @@ export async function resolveSteamId( gcPlayerId ) {
     // Falha silenciosa ao ler cache de resolver
   }
 
-  // 2. Buscar da página da GamersClub
+  // 2. Buscar da página da GamersClub usando o fetcher com cache e deduplicação
   try {
-    const response = await fetch( `https://gamersclub.com.br/player/${gcPlayerId}` );
-    const html = await response.text();
+    const html = await fetchPlayerProfileHtml( gcPlayerId );
+    if ( !html ) { return null; }
 
     const steamMatch = html.match(
       /https?:\/\/(?:www\.)?steamcommunity\.com\/(profiles\/(\d{17})|id\/([a-zA-Z0-9_-]+))/i
