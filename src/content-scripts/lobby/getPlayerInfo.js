@@ -4,7 +4,7 @@ import { fetchPlayerProfileHtml } from '../../lib/profileFetcher';
 
 const SELETOR_DATA_CRIACAO = '.gc-list-title';
 const DOIS_DIAS = ( 2 * 24 * 60 * 60 * 1000 );
-const UMA_HORA = ( 60 * 60 * 1000 );
+const CINCO_MINUTOS = ( 5 * 60 * 1000 );
 
 const memoryPlayerInfoCache = new Map();
 
@@ -263,21 +263,24 @@ export async function getPlayerInfo( id ) {
     porcentagemVitoria: porcentagemVitoria || '0.00',
     anotacao: anotacao || 'Nenhuma',
     kdr: kdr || null,
-    // Dados parciais ficam com TTL curto (1h) para serem re-buscados rapidamente
-    // Dados reais ficam com TTL longo (2 dias) para performance
     isPartialData: !hasRealData,
-    ttl: hasRealData ? Date.now() + DOIS_DIAS : Date.now() + UMA_HORA
+    ttl: hasRealData ? Date.now() + DOIS_DIAS : Date.now() + CINCO_MINUTOS
   };
 
-  // Salva no cache sempre (inclusive dados parciais com TTL curto)
-  // para evitar re-buscas desnecessárias em requests próximos
-  memoryPlayerInfoCache.set( idStr, response );
-  try {
-    const currentCache = await getFromStorage( 'lupaCache' ) || {};
-    currentCache[idStr] = response;
-    await setStorage( 'lupaCache', currentCache );
-  } catch ( _e ) {
-    // Silencioso
+  if ( hasRealData ) {
+    // Dados reais: persiste no storage por 2 dias
+    memoryPlayerInfoCache.set( idStr, response );
+    try {
+      const currentCache = await getFromStorage( 'lupaCache' ) || {};
+      currentCache[idStr] = response;
+      await setStorage( 'lupaCache', currentCache );
+    } catch ( _e ) {
+      // Silencioso
+    }
+  } else {
+    // Dados parciais: apenas memória por 5 min para não repetir request na mesma sessão
+    // Não grava no storage — próxima sessão/aba sempre tenta de novo
+    memoryPlayerInfoCache.set( idStr, response );
   }
 
   return response;
