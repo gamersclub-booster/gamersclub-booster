@@ -52,6 +52,8 @@ export async function fetchPlayerProfileHtml( gcPlayerId ) {
     return pendingHtmlRequests.get( idStr );
   }
 
+  // Registra a promise ANTES de iniciar qualquer operação async
+  // para garantir que chamadores simultâneos peguem a mesma promise
   const fetchPromise = enqueueRequest( async () => {
     let controller = null;
     let timeoutId = null;
@@ -82,7 +84,8 @@ export async function fetchPlayerProfileHtml( gcPlayerId ) {
       }
 
       const html = await response.text();
-      if ( !html || html.length < 500 ) {
+      // Threshold reduzido para não rejeitar páginas com pouco conteúdo mas ainda válidas
+      if ( !html || html.length < 200 ) {
         return null;
       }
 
@@ -118,11 +121,12 @@ export async function fetchPlayerProfileHtml( gcPlayerId ) {
     } catch ( _err ) {
       if ( timeoutId ) { clearTimeout( timeoutId ); }
       return null;
-    } finally {
-      pendingHtmlRequests.delete( idStr );
     }
   } );
 
+  // Registra como pendente e remove após resolução (independente de sucesso ou erro)
   pendingHtmlRequests.set( idStr, fetchPromise );
+  fetchPromise.finally( () => pendingHtmlRequests.delete( idStr ) );
+
   return fetchPromise;
 }

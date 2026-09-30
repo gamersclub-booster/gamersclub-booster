@@ -105,14 +105,27 @@ export async function getPlayerInfo( id ) {
     try {
       const $html = $( html );
 
+      // --- Data de criação ---
+      // Tentativa 1: elemento com label "registrado em"
       const dataCriacaoElement = $html.find( SELETOR_DATA_CRIACAO ).filter( function () {
         const text = $( this ).text().trim().toLowerCase();
         return /(registrado\s*(em|el)|registered\s*in)/i.test( text );
       } ).first();
-
       dataCriacao = dataCriacaoElement.next().text().trim();
 
-      // Fallback regex se elemento não foi encontrado
+      // Tentativa 2: irmão de qualquer elemento com label de registro
+      if ( !dataCriacao || dataCriacao === '-' ) {
+        $html.find( '[class*="list-title"], [class*="ListTitle"], dt, th, label' ).each( function () {
+          if ( dataCriacao && dataCriacao !== '-' ) { return false; }
+          const text = $( this ).text().trim().toLowerCase();
+          if ( /(registrado|registered)/i.test( text ) ) {
+            const next = $( this ).next().text().trim();
+            if ( next && next.length > 2 ) { dataCriacao = next; }
+          }
+        } );
+      }
+
+      // Tentativa 3: regex no HTML bruto
       if ( !dataCriacao || dataCriacao === '-' ) {
         const matchDate = html.match(
           /(?:registrado|registered)\s*(?:em|in|el)?[:\s]*(\d{1,2}[/.-]\d{1,2}[/.-]\d{2,4})/i
@@ -124,36 +137,18 @@ export async function getPlayerInfo( id ) {
 
       let totalVitorias = 0;
       let totalDerrotas = 0;
+      let foundStats = false;
 
       // 1. Tenta pegar do histórico CS2
       const cs2Tab = $html.find( '#cs2-history-list' ).first();
-      cs2Tab.find( '.gc-card-history-text' ).each( function () {
-        const text = $( this ).clone().children().remove().end().text().trim();
-        const qtd = parseInt( text.replace( /\D/g, '' ), 10 );
-        if ( !isNaN( qtd ) ) { totalPartidas += qtd; }
-      } );
-
-      cs2Tab.find( '.gc-card-history-detail span' ).each( function () {
-        const txt = $( this ).text().trim().toLowerCase();
-        if ( /vit[óo]ri(a|as)|victor(y|ies|ias)/i.test( txt ) ) {
-          const qtd = parseInt( txt.replace( /\D/g, '' ), 10 );
-          if ( !isNaN( qtd ) ) { totalVitorias += qtd; }
-        }
-        if ( /derrotas?|defeat(s)?/i.test( txt ) ) {
-          const qtd = parseInt( txt.replace( /\D/g, '' ), 10 );
-          if ( !isNaN( qtd ) ) { totalDerrotas += qtd; }
-        }
-      } );
-
-      // 2. Se não tinha dados em CS2, tenta pegar do histórico CS:GO
-      if ( totalPartidas === 0 ) {
-        const csgoTab = $html.find( '#csgo-history-list' ).first();
-        csgoTab.find( '.gc-card-history-text' ).each( function () {
+      if ( cs2Tab.length > 0 ) {
+        cs2Tab.find( '.gc-card-history-text' ).each( function () {
           const text = $( this ).clone().children().remove().end().text().trim();
           const qtd = parseInt( text.replace( /\D/g, '' ), 10 );
-          if ( !isNaN( qtd ) ) { totalPartidas += qtd; }
+          if ( !isNaN( qtd ) && qtd > 0 ) { totalPartidas += qtd; foundStats = true; }
         } );
-        csgoTab.find( '.gc-card-history-detail span' ).each( function () {
+
+        cs2Tab.find( '.gc-card-history-detail span' ).each( function () {
           const txt = $( this ).text().trim().toLowerCase();
           if ( /vit[óo]ri(a|as)|victor(y|ies|ias)/i.test( txt ) ) {
             const qtd = parseInt( txt.replace( /\D/g, '' ), 10 );
@@ -166,17 +161,66 @@ export async function getPlayerInfo( id ) {
         } );
       }
 
+      // 2. Se não tinha dados em CS2, tenta pegar do histórico CS:GO
+      if ( !foundStats ) {
+        const csgoTab = $html.find( '#csgo-history-list' ).first();
+        if ( csgoTab.length > 0 ) {
+          csgoTab.find( '.gc-card-history-text' ).each( function () {
+            const text = $( this ).clone().children().remove().end().text().trim();
+            const qtd = parseInt( text.replace( /\D/g, '' ), 10 );
+            if ( !isNaN( qtd ) && qtd > 0 ) { totalPartidas += qtd; foundStats = true; }
+          } );
+          csgoTab.find( '.gc-card-history-detail span' ).each( function () {
+            const txt = $( this ).text().trim().toLowerCase();
+            if ( /vit[óo]ri(a|as)|victor(y|ies|ias)/i.test( txt ) ) {
+              const qtd = parseInt( txt.replace( /\D/g, '' ), 10 );
+              if ( !isNaN( qtd ) ) { totalVitorias += qtd; }
+            }
+            if ( /derrotas?|defeat(s)?/i.test( txt ) ) {
+              const qtd = parseInt( txt.replace( /\D/g, '' ), 10 );
+              if ( !isNaN( qtd ) ) { totalDerrotas += qtd; }
+            }
+          } );
+        }
+      }
+
+      // 3. Fallback genérico de partidas se nenhuma aba específica foi encontrada
+      if ( !foundStats ) {
+        $html.find( '[id*="history"], [class*="history-list"], [class*="HistoryList"]' ).first()
+          .find( '[class*="history-text"], [class*="HistoryText"]' ).each( function () {
+            const text = $( this ).clone().children().remove().end().text().trim();
+            const qtd = parseInt( text.replace( /\D/g, '' ), 10 );
+            if ( !isNaN( qtd ) && qtd > 0 ) { totalPartidas += qtd; }
+          } );
+      }
+
+      // --- Win rate ---
       const totalJogos = totalVitorias + totalDerrotas;
       if ( totalJogos > 0 ) {
         porcentagemVitoria = ( ( totalVitorias / totalJogos ) * 100 ).toFixed( 2 );
+      } else if ( totalPartidas > 0 ) {
+        // Tenta extrair win rate direto do HTML (alguns perfis exibem %)
+        const wrMatch = html.match( /(?:win\s*rate|taxa\s*de\s*vit[óo]ria)[^\d]*(\d+(?:[.,]\d+)?)\s*%/i );
+        if ( wrMatch ) {
+          porcentagemVitoria = parseFloat( wrMatch[1].replace( ',', '.' ) ).toFixed( 2 );
+        }
       }
 
       anotacao = getAnotacao( html );
 
-      // Tenta extrair KDR do HTML se disponível
+      // --- KDR ---
       const kdrMatch = html.match( /KDR[:\s]+(\d+(?:\.\d+)?)/i );
       if ( kdrMatch && kdrMatch[1] ) {
         kdr = kdrMatch[1];
+      }
+
+      // Fallback KDR por elemento
+      if ( !kdr ) {
+        $html.find( '[class*="kdr"], [class*="KDR"], [data-stat="KDR"]' ).each( function () {
+          if ( kdr ) { return false; }
+          const txt = $( this ).text().replace( /[^\d.]/g, '' );
+          if ( txt && !isNaN( parseFloat( txt ) ) ) { kdr = txt; }
+        } );
       }
     } catch ( _err ) {
       // Ignora erro no parse do HTML

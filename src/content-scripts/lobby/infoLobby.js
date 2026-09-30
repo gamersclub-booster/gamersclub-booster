@@ -580,10 +580,22 @@ export const scanAndInjectLupa = () => {
     }
   } );
 
-  // 3. Salas normais / lobby ([id^="roomCardWrapper-"])
-  $( '[id^="roomCardWrapper-"]' ).each( ( _, element ) => {
-    const lobbyId = $( element ).attr( 'id' );
-    createModalForElementNew( $( element ), getPlayersIdsNew, 'lobby', lobbyId );
+  // 3. Salas normais / lobby
+  const roomSelectors = [
+    '[id^="roomCardWrapper-"]',
+    '[id^="room-card-"]',
+    '[id^="lobby-card-"]',
+    '[class*="RoomCard"]:not([class*="RoomCardWrapper"] [class*="RoomCard"])',
+    '[class*="roomCard"]:not([class*="roomCardWrapper"] [class*="roomCard"])',
+    '[class*="LobbyCard"]:not([class*="LobbyCard"] [class*="LobbyCard"])',
+    '[class*="lobbyCard"]:not([class*="lobbyCard"] [class*="lobbyCard"])'
+  ].join( ', ' );
+
+  $( roomSelectors ).each( ( _, element ) => {
+    const $element = $( element );
+    const lobbyId = $element.attr( 'id' ) ||
+      `room_${$element.attr( 'data-id' ) || $element.attr( 'data-room-id' ) || $element.index()}`;
+    createModalForElementNew( $element, getPlayersIdsNew, 'lobby', lobbyId );
   } );
 };
 
