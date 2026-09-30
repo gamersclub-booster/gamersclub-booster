@@ -4,12 +4,43 @@ const RESOLVER_CACHE_KEY = 'gc_steam_resolver_cache';
 const htmlCache = new Map();
 const pendingHtmlRequests = new Map();
 
+// Fila com controle de concorrência e pausa entre requisições
+// Evita "Too Many Requests" (HTTP 429) e bloqueios na Gamers Club
+const MAX_CONCURRENT_REQUESTS = 2;
+const REQUEST_COOLDOWN_MS = 150;
+
+let activeRequests = 0;
+const requestQueue = [];
+
+const processQueue = () => {
+  if ( activeRequests >= MAX_CONCURRENT_REQUESTS || requestQueue.length === 0 ) {
+    return;
+  }
+
+  activeRequests++;
+  const { fn, resolve, reject } = requestQueue.shift();
+
+  fn()
+    .then( resolve )
+    .catch( reject )
+    .finally( () => {
+      activeRequests--;
+      setTimeout( processQueue, REQUEST_COOLDOWN_MS );
+    } );
+};
+
+const enqueueRequest = fn => new Promise( ( resolve, reject ) => {
+  requestQueue.push( { fn, resolve, reject } );
+  processQueue();
+} );
+
 /**
  * Busca o HTML da página de perfil do jogador na Gamers Club com:
  * 1. Cache em memória para evitar múltiplas requisições ao mesmo perfil
  * 2. Deduplicação de requisições simultâneas em andamento
- * 3. Timeout seguro via AbortController (8 segundos)
- * 4. Pré-extração de SteamID para abastecer o cache de auditoria
+ * 3. Fila assíncrona com concorrência limitada (máx 2) e delay (150ms)
+ * 4. Timeout seguro via AbortController (8 segundos)
+ * 5. Pré-extração de SteamID para abastecer o cache de auditoria
  */
 export async function fetchPlayerProfileHtml( gcPlayerId ) {
   if ( !gcPlayerId ) { return null; }
@@ -23,7 +54,7 @@ export async function fetchPlayerProfileHtml( gcPlayerId ) {
     return pendingHtmlRequests.get( idStr );
   }
 
-  const fetchPromise = ( async () => {
+  const fetchPromise = enqueueRequest( async () => {
     let controller = null;
     let timeoutId = null;
 

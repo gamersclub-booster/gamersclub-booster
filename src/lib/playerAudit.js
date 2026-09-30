@@ -83,42 +83,116 @@ export async function auditPlayers( gcPlayerIds ) {
   return auditPlayersDirect( gcPlayerIds );
 }
 
+let auditQueuePromise = Promise.resolve();
+
 export async function auditPlayersDirect( gcPlayerIds ) {
-  // Limpar cache corrompido antigo se existir
-  try {
-    chrome.storage.local.remove( 'playerAuditCache' );
-  } catch ( _e ) {
-    // Ignora erro ao limpar cache antigo
-  }
-
-  // 1. Resolver SteamIDs e URLs do GC (sequencial para evitar Rate Limit/Cloudflare)
-  const resolvedList = [];
-  for ( const id of gcPlayerIds ) {
-    const res = await resolveSteamId( id );
-    resolvedList.push( res );
-    // Se não veio do cache (teve que fazer fetch), adiciona um pequeno delay de 300ms
-    if ( res && !res.fromCache ) {
-      await new Promise( resolve => setTimeout( resolve, 300 ) );
+  const execute = async () => {
+    // Limpar cache corrompido antigo se existir
+    try {
+      chrome.storage.local.remove( 'playerAuditCache' );
+    } catch ( _e ) {
+      // Ignora erro ao limpar cache antigo
     }
-  }
 
-  const steamIds = resolvedList.map( res => res?.steamId || null );
-
-  // 2. Verificar cache de audit
-  const cache = await getFromStorage( CACHE_KEY ) || {};
-
-  const uncachedIds = steamIds.filter( id => {
-    if ( !id ) { return false; }
-    const cached = cache[id];
-    if ( !cached || cached.ttl < Date.now() ) { return true; }
-    // Se a entrada no cache estiver sem nome ou corrompida por falha prévia de rede, reconsulta
-    if ( cached.personaName === '???' || ( cached.profileVisibility === null && !cached.vacBanned ) ) {
-      return true;
+    // 1. Resolver SteamIDs e URLs do GC (sequencial para evitar Rate Limit/Cloudflare)
+    const resolvedList = [];
+    for ( const id of gcPlayerIds ) {
+      const res = await resolveSteamId( id );
+      resolvedList.push( res );
+      // Se não veio do cache (teve que fazer fetch), adiciona um pequeno delay de 300ms
+      if ( res && !res.fromCache ) {
+        await new Promise( resolve => setTimeout( resolve, 300 ) );
+      }
     }
-    return false;
-  } );
 
-  if ( uncachedIds.length === 0 ) {
+    const steamIds = resolvedList.map( res => res?.steamId || null );
+
+    // 2. Verificar cache de audit
+    const cache = await getFromStorage( CACHE_KEY ) || {};
+
+    const uncachedIds = steamIds.filter( id => {
+      if ( !id ) { return false; }
+      const cached = cache[id];
+      if ( !cached || cached.ttl < Date.now() ) { return true; }
+      // Se a entrada no cache estiver sem nome ou corrompida por falha prévia de rede, reconsulta
+      if ( cached.personaName === '???' || ( cached.profileVisibility === null && !cached.vacBanned ) ) {
+        return true;
+      }
+      return false;
+    } );
+
+    if ( uncachedIds.length === 0 ) {
+      return gcPlayerIds.map( ( gcId, i ) => {
+        const sId = steamIds[i];
+        const res = resolvedList[i];
+        if ( !sId ) {
+          return {
+            gcId,
+            csrepUrl: res?.csrepUrl,
+            steamUrl: res?.rawSteamUrl,
+            error: 'Could not resolve 64-bit Steam ID'
+          };
+        }
+        return { gcId, csrepUrl: res?.csrepUrl, ...cache[sId] };
+      } );
+    }
+
+    // 3. Consultar endpoints públicos da Steam em paralelo
+    const steamDetails = await Promise.all( uncachedIds.map( async steamId => {
+      const [ profileXml, miniProfile ] = await Promise.all( [
+        getSteamProfileXml( steamId ),
+        getSteamMiniprofile( steamId )
+      ] );
+      return { steamId, profileXml, miniProfile };
+    } ) );
+
+    // 4. Montar resultado e calcular risco
+    const results = uncachedIds.map( steamId => {
+      const detail = steamDetails.find( d => d.steamId === steamId ) || {};
+      const xml = detail.profileXml || {};
+      const mini = detail.miniProfile || {};
+      const resolved = resolvedList.find( r => r?.steamId === steamId );
+
+      const personaName = mini.personaName || xml.personaName || null;
+      const profileVisibility = xml.privacyState || ( xml.visibilityState === 3 ? 'public' : 'private' );
+
+      const audit = {
+        steamId,
+        // Dados de ban
+        vacBanned: xml.vacBanned === 1,
+        numberOfVACBans: xml.vacBanned === 1 ? 1 : 0,
+        daysSinceLastBan: 0,
+        numberOfGameBans: 0,
+        communityBanned: false,
+        economyBan: xml.tradeBanState || 'None',
+        // Dados de perfil
+        personaName,
+        profileVisibility,
+        isLimitedAccount: xml.isLimitedAccount === 1,
+        // Dados de nível
+        steamLevel: mini.level ?? null,
+        // Links
+        csrepUrl: resolved?.csrepUrl || `https://csrep.gg/player/${steamId}`,
+        steamUrl: resolved?.rawSteamUrl || `https://steamcommunity.com/profiles/${steamId}`,
+        // Timestamp
+        ttl: Date.now() + CACHE_TTL
+      };
+
+      audit.riskLevel = calcularRisco( audit );
+      audit.riskReasons = calcularMotivos( audit );
+      return audit;
+    } );
+
+    // 5. Salvar no cache apenas resultados com dados válidos recebidos
+    const updatedCache = { ...cache };
+    results.forEach( r => {
+      if ( r.personaName || r.vacBanned || r.profileVisibility !== null ) {
+        updatedCache[r.steamId] = r;
+      }
+    } );
+    await setStorage( CACHE_KEY, updatedCache );
+
+    // 6. Retornar array de auditorias
     return gcPlayerIds.map( ( gcId, i ) => {
       const sId = steamIds[i];
       const res = resolvedList[i];
@@ -130,83 +204,17 @@ export async function auditPlayersDirect( gcPlayerIds ) {
           error: 'Could not resolve 64-bit Steam ID'
         };
       }
-      return { gcId, csrepUrl: res?.csrepUrl, ...cache[sId] };
-    } );
-  }
-
-  // 3. Consultar endpoints públicos da Steam em paralelo
-  const steamDetails = await Promise.all( uncachedIds.map( async steamId => {
-    const [ profileXml, miniProfile ] = await Promise.all( [
-      getSteamProfileXml( steamId ),
-      getSteamMiniprofile( steamId )
-    ] );
-    return { steamId, profileXml, miniProfile };
-  } ) );
-
-  // 4. Montar resultado e calcular risco
-  const results = uncachedIds.map( steamId => {
-    const detail = steamDetails.find( d => d.steamId === steamId ) || {};
-    const xml = detail.profileXml || {};
-    const mini = detail.miniProfile || {};
-    const resolved = resolvedList.find( r => r?.steamId === steamId );
-
-    const personaName = mini.personaName || xml.personaName || null;
-    const profileVisibility = xml.privacyState || ( xml.visibilityState === 3 ? 'public' : 'private' );
-
-    const audit = {
-      steamId,
-      // Dados de ban
-      vacBanned: xml.vacBanned === 1,
-      numberOfVACBans: xml.vacBanned === 1 ? 1 : 0,
-      daysSinceLastBan: 0,
-      numberOfGameBans: 0,
-      communityBanned: false,
-      economyBan: xml.tradeBanState || 'None',
-      // Dados de perfil
-      personaName,
-      profileVisibility,
-      isLimitedAccount: xml.isLimitedAccount === 1,
-      // Dados de nível
-      steamLevel: mini.level ?? null,
-      // Links
-      csrepUrl: resolved?.csrepUrl || `https://csrep.gg/player/${steamId}`,
-      steamUrl: resolved?.rawSteamUrl || `https://steamcommunity.com/profiles/${steamId}`,
-      // Timestamp
-      ttl: Date.now() + CACHE_TTL
-    };
-
-    audit.riskLevel = calcularRisco( audit );
-    audit.riskReasons = calcularMotivos( audit );
-    return audit;
-  } );
-
-  // 5. Salvar no cache apenas resultados com dados válidos recebidos
-  const updatedCache = { ...cache };
-  results.forEach( r => {
-    if ( r.personaName || r.vacBanned || r.profileVisibility !== null ) {
-      updatedCache[r.steamId] = r;
-    }
-  } );
-  await setStorage( CACHE_KEY, updatedCache );
-
-  // 6. Retornar array de auditorias
-  return gcPlayerIds.map( ( gcId, i ) => {
-    const sId = steamIds[i];
-    const res = resolvedList[i];
-    if ( !sId ) {
       return {
         gcId,
         csrepUrl: res?.csrepUrl,
-        steamUrl: res?.rawSteamUrl,
-        error: 'Could not resolve 64-bit Steam ID'
+        ...( results.find( r => r.steamId === sId ) || cache[sId] )
       };
-    }
-    return {
-      gcId,
-      csrepUrl: res?.csrepUrl,
-      ...( results.find( r => r.steamId === sId ) || cache[sId] )
-    };
-  } );
+    } );
+  };
+
+  const nextPromise = auditQueuePromise.then( execute, execute );
+  auditQueuePromise = nextPromise.catch( () => {} );
+  return nextPromise;
 }
 
 function calcularRisco( audit ) {
