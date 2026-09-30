@@ -178,62 +178,71 @@ const createImage = lobbyId => $( '<img/>', {
 export const getPlayersIds = element => {
   const selector = [
     'a.LobbyPlayerVertical',
+    '.LobbyPlayerVertical a',
     '.LobbyPlayerVertical',
     '.sala-lineup-imagem a',
     '.sala-lineup-player a',
     'a[href*="/jogador/"]',
     'a[href*="/player/"]',
     '[data-player-id]',
-    '[data-id]',
     '[data-playerid]',
-    '[data-user-id]',
     '[id^="trigger-"]',
-    '[id^="player-"]',
-    '[id^="user-"]',
     'img[src*="/avatar/"]',
     'img[src*="/players/"]'
   ].join( ', ' );
   const elements = element.find( selector ).toArray();
+  if ( element.is( selector ) ) {
+    elements.unshift( element[0] );
+  }
 
   const ids = [];
   elements.forEach( el => {
     const $el = $( el );
-    if ( $el.closest( '.infos_lobby' ).length > 0 ) {
+    if ( $el.closest( '.infos_lobby, .gcbooster_lupa' ).length > 0 ) {
       return;
     }
     if ( $el.find( '.PlayerPlaceholder' ).length > 0 || $el.hasClass( 'PlayerPlaceholder' ) ) {
       return;
     }
-    const dataId = $el.attr( 'data-player-id' ) || $el.attr( 'data-id' ) ||
-                   $el.attr( 'data-playerid' ) || $el.attr( 'data-user-id' );
-    if ( dataId && /^\d+$/.test( dataId ) ) {
-      ids.push( dataId );
+
+    // 1. Prioridade 1: Link direto com /jogador/{id} ou /player/{id}
+    const href = el.href || $el.attr( 'href' ) || $el.find( 'a' ).attr( 'href' ) || '';
+    const matchHref = href.match( /\/(?:jogador|player)\/(\d+)/i );
+    if ( matchHref && matchHref[1] && matchHref[1] !== '0' ) {
+      ids.push( matchHref[1] );
       return;
     }
+
+    // 2. Prioridade 2: Atributos específicos de jogador
+    const dataPlayerId = $el.attr( 'data-player-id' ) || $el.attr( 'data-playerid' );
+    if ( dataPlayerId && /^\d+$/.test( dataPlayerId ) && dataPlayerId !== '0' ) {
+      ids.push( dataPlayerId );
+      return;
+    }
+
+    // 3. Trigger de tooltip/popover de jogador (trigger-{id})
     const elId = $el.attr( 'id' ) || '';
-    if ( elId.startsWith( 'trigger-' ) || elId.startsWith( 'player-' ) || elId.startsWith( 'user-' ) ) {
-      const pId = elId.replace( /^(?:trigger|player|user)-/, '' );
-      if ( /^\d+$/.test( pId ) ) {
+    if ( elId.startsWith( 'trigger-' ) ) {
+      const pId = elId.replace( 'trigger-', '' );
+      if ( /^\d+$/.test( pId ) && pId !== '0' ) {
         ids.push( pId );
         return;
       }
     }
-    const href = el.href || $el.attr( 'href' ) || $el.find( 'a' ).attr( 'href' ) || '';
-    const matchHref = href.match( /\/(?:jogador|player)\/(\d+)/i );
-    if ( matchHref && matchHref[1] ) {
-      ids.push( matchHref[1] );
-      return;
-    }
+
+    // 4. Imagem de avatar com ID de jogador (mínimo 3 dígitos para não pegar badges 0.svg, 1.svg)
     const src = $el.attr( 'src' ) || $el.find( 'img' ).attr( 'src' ) || '';
-    const matchSrc = src.match( /\/(?:players\/)?avatar\/(\d+)/i ) || src.match( /\/(?:players|jogador|player)\/(\d+)/i );
-    if ( matchSrc && matchSrc[1] ) {
+    const matchSrc = src.match( /\/(?:players\/)?avatar\/(\d{3,})/i ) || src.match( /\/(?:players|jogador|player)\/(\d{3,})/i );
+    if ( matchSrc && matchSrc[1] && matchSrc[1] !== '0' ) {
       ids.push( matchSrc[1] );
       return;
     }
-    if ( href ) {
+
+    // 5. Se o href terminar com ID numérico e tiver relação com jogador
+    if ( href && ( href.includes( 'jogador' ) || href.includes( 'player' ) || href.includes( 'user' ) ) ) {
       const parts = href.split( '/' ).filter( Boolean );
       const last = parts.pop();
-      if ( last && /^\d+$/.test( last ) ) {
+      if ( last && /^\d+$/.test( last ) && last !== '0' ) {
         ids.push( last );
       }
     }

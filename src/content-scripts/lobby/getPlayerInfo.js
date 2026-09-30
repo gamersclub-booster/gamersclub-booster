@@ -1,5 +1,5 @@
 import { getFromStorage, setStorage } from '../../lib/storage';
-import { GC_URL, headers } from '../../lib/constants';
+import { GC_URL } from '../../lib/constants';
 import { fetchPlayerProfileHtml } from '../../lib/profileFetcher';
 
 const SELETOR_DATA_CRIACAO = '.gc-list-title';
@@ -45,7 +45,8 @@ const fetchPlayerCardApiFallback = async id => {
     const timeout = controller ? setTimeout( () => controller.abort(), 4000 ) : null;
 
     const res = await fetch( `https://${gcHost}/api/player-card/${id}`, {
-      headers,
+      headers: { Accept: 'application/json' },
+      credentials: 'same-origin',
       signal: controller ? controller.signal : undefined
     } );
 

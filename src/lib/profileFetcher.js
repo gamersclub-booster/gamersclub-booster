@@ -13,20 +13,18 @@ let activeRequests = 0;
 const requestQueue = [];
 
 const processQueue = () => {
-  if ( activeRequests >= MAX_CONCURRENT_REQUESTS || requestQueue.length === 0 ) {
-    return;
+  while ( activeRequests < MAX_CONCURRENT_REQUESTS && requestQueue.length > 0 ) {
+    activeRequests++;
+    const { fn, resolve, reject } = requestQueue.shift();
+
+    fn()
+      .then( resolve )
+      .catch( reject )
+      .finally( () => {
+        activeRequests--;
+        setTimeout( processQueue, REQUEST_COOLDOWN_MS );
+      } );
   }
-
-  activeRequests++;
-  const { fn, resolve, reject } = requestQueue.shift();
-
-  fn()
-    .then( resolve )
-    .catch( reject )
-    .finally( () => {
-      activeRequests--;
-      setTimeout( processQueue, REQUEST_COOLDOWN_MS );
-    } );
 };
 
 const enqueueRequest = fn => new Promise( ( resolve, reject ) => {
@@ -73,6 +71,7 @@ export async function fetchPlayerProfileHtml( gcPlayerId ) {
       }
 
       const response = await fetch( url, {
+        credentials: 'same-origin',
         signal: controller ? controller.signal : undefined
       } );
 
@@ -122,7 +121,7 @@ export async function fetchPlayerProfileHtml( gcPlayerId ) {
     } finally {
       pendingHtmlRequests.delete( idStr );
     }
-  } )();
+  } );
 
   pendingHtmlRequests.set( idStr, fetchPromise );
   return fetchPromise;
