@@ -4,6 +4,7 @@ import { fetchPlayerProfileHtml } from '../../lib/profileFetcher';
 
 const SELETOR_DATA_CRIACAO = '.gc-list-title';
 const DOIS_DIAS = ( 2 * 24 * 60 * 60 * 1000 );
+const UMA_HORA = ( 60 * 60 * 1000 );
 
 const memoryPlayerInfoCache = new Map();
 
@@ -68,9 +69,10 @@ export async function getPlayerInfo( id ) {
   const idStr = String( id );
 
   // 1. Memória rápida (0ms)
+  // Dados marcados como parciais são ignorados para forçar nova busca quando o TTL curto vencer
   if ( memoryPlayerInfoCache.has( idStr ) ) {
     const cachedMem = memoryPlayerInfoCache.get( idStr );
-    if ( cachedMem.ttl > Date.now() ) {
+    if ( cachedMem.ttl > Date.now() && !cachedMem.isPartialData ) {
       return cachedMem;
     }
   }
@@ -83,11 +85,15 @@ export async function getPlayerInfo( id ) {
   const lupaCache = await getFromStorage( 'lupaCache' ) || {};
   const cachedStorage = lupaCache?.[idStr];
 
-  // Só considera cache válido se possuir informações reais
+  // Só considera cache válido se possuir informações reais E não for dado parcial/fictício
   const hasValidData = cachedStorage &&
     ( cachedStorage.dataCriacao !== '-' || cachedStorage.totalPartidas > 0 || cachedStorage.kdr !== null );
 
-  if ( hasValidData && cachedStorage.ttl > Date.now() ) {
+  // Se os dados estão no cache mas foram marcados como parciais (fictícios/fallback),
+  // só retorna se o TTL curto ainda não venceu — caso contrário, tenta re-buscar
+  const isPartialCached = cachedStorage?.isPartialData === true;
+
+  if ( hasValidData && cachedStorage.ttl > Date.now() && !isPartialCached ) {
     memoryPlayerInfoCache.set( idStr, cachedStorage );
     return cachedStorage;
   }
@@ -248,25 +254,30 @@ export async function getPlayerInfo( id ) {
     }
   }
 
+  // Determina se os dados obtidos são parciais/fictícios (nenhuma informação real)
+  const hasRealData = dataCriacao !== '-' || totalPartidas > 0 || kdr !== null;
+
   const response = {
     dataCriacao: dataCriacao || '-',
     totalPartidas: totalPartidas || 0,
     porcentagemVitoria: porcentagemVitoria || '0.00',
     anotacao: anotacao || 'Nenhuma',
     kdr: kdr || null,
-    ttl: Date.now() + DOIS_DIAS
+    // Dados parciais ficam com TTL curto (1h) para serem re-buscados rapidamente
+    // Dados reais ficam com TTL longo (2 dias) para performance
+    isPartialData: !hasRealData,
+    ttl: hasRealData ? Date.now() + DOIS_DIAS : Date.now() + UMA_HORA
   };
 
-  // Salva no cache apenas se obteve alguma informação válida para não persistir falhas
-  if ( response.dataCriacao !== '-' || response.totalPartidas > 0 || response.kdr !== null ) {
-    memoryPlayerInfoCache.set( idStr, response );
-    try {
-      const currentCache = await getFromStorage( 'lupaCache' ) || {};
-      currentCache[idStr] = response;
-      await setStorage( 'lupaCache', currentCache );
-    } catch ( _e ) {
-      // Silencioso
-    }
+  // Salva no cache sempre (inclusive dados parciais com TTL curto)
+  // para evitar re-buscas desnecessárias em requests próximos
+  memoryPlayerInfoCache.set( idStr, response );
+  try {
+    const currentCache = await getFromStorage( 'lupaCache' ) || {};
+    currentCache[idStr] = response;
+    await setStorage( 'lupaCache', currentCache );
+  } catch ( _e ) {
+    // Silencioso
   }
 
   return response;
