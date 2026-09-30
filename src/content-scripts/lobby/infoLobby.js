@@ -53,7 +53,7 @@ const createDivLobbys = playerInfo => $( '<div />',
     text: `P: ${playerInfo?.totalPartidas ?? 0}`
   } );
 
-const createClose = lobbyId => {
+const createClose = ( lobbyId, isOverlay = false ) => {
   const $closeBtn = $( '<div />', {
     class: 'gcbooster-info-close draw-orange',
     title: 'Fechar',
@@ -63,7 +63,11 @@ const createClose = lobbyId => {
   $closeBtn.on( 'click', e => {
     e.preventDefault();
     e.stopPropagation();
-    $( `#infos_lobby_${lobbyId}` ).empty().remove();
+    if ( isOverlay ) {
+      $( `#gcbooster_challenge_overlay_${lobbyId}` ).remove();
+    } else {
+      $( `#infos_lobby_${lobbyId}` ).empty().remove();
+    }
   } );
   return $closeBtn;
 };
@@ -299,10 +303,22 @@ export const calcAge = ageDate => {
 };
 
 const toggleRaioXModal = async ( $trigger, $container, getPlayersIdsFunction, type, lobbyId ) => {
-  const $existingModal = $( `#infos_lobby_${lobbyId}` );
-  if ( $existingModal.length > 0 ) {
-    $existingModal.empty().remove();
-    return;
+  // Para desafios: usa overlay fixo na tela (evita ficar escondido pela sidebar)
+  const isChallenge = type === 'challenge';
+  const overlayId = `gcbooster_challenge_overlay_${lobbyId}`;
+
+  // Toggle: se já existe overlay/modal, fecha e sai
+  if ( isChallenge ) {
+    if ( $( `#${overlayId}` ).length > 0 ) {
+      $( `#${overlayId}` ).remove();
+      return;
+    }
+  } else {
+    const $existingModal = $( `#infos_lobby_${lobbyId}` );
+    if ( $existingModal.length > 0 ) {
+      $existingModal.empty().remove();
+      return;
+    }
   }
 
   $trigger.css( 'opacity', '0.6' );
@@ -317,8 +333,42 @@ const toggleRaioXModal = async ( $trigger, $container, getPlayersIdsFunction, ty
     }
 
     const modal = createModal( lobbyId, type );
-    modal.append( createClose( lobbyId ) );
-    $container.append( modal );
+
+    if ( isChallenge ) {
+      // Cria overlay de tela cheia (igual ao modal de partida)
+      const $overlay = $( '<div />', {
+        id: overlayId,
+        class: 'gcbooster-challenge-modal-overlay'
+      } );
+
+      const $modalWrap = $( '<div />', {
+        class: 'gcbooster-challenge-modal-wrap'
+      } );
+
+      modal.append( createClose( lobbyId, true ) );
+      $modalWrap.append( modal );
+      $overlay.append( $modalWrap );
+
+      // Clique no fundo escurecido fecha o modal
+      $overlay.on( 'click', e => {
+        if ( $( e.target ).is( $overlay ) ) {
+          $overlay.remove();
+        }
+      } );
+
+      // ESC fecha o modal
+      $( document ).off( `keydown.gcbooster_challenge_${lobbyId}` ).on( `keydown.gcbooster_challenge_${lobbyId}`, e => {
+        if ( e.key === 'Escape' ) {
+          $overlay.remove();
+          $( document ).off( `keydown.gcbooster_challenge_${lobbyId}` );
+        }
+      } );
+
+      $( 'body' ).append( $overlay );
+    } else {
+      modal.append( createClose( lobbyId, false ) );
+      $container.append( modal );
+    }
 
     if ( players.length === 0 ) {
       modal.append( $( '<div />', {

@@ -1510,6 +1510,65 @@ input[type="range"].filterKdr::-ms-track {
   box-shadow: 0 0 8px rgba(255, 165, 0, 0.6);
 }
 
+/* =============================================
+   Modal overlay para Raio-X de Desafios
+   (popup fixo centralizado na tela, fundo escurecido)
+   ============================================= */
+.gcbooster-challenge-modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.82) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  z-index: 9999990 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px !important;
+  box-sizing: border-box !important;
+  animation: gcboosterFadeIn 0.18s ease-out;
+}
+
+.gcbooster-challenge-modal-wrap {
+  position: relative;
+  width: auto;
+  max-width: 680px;
+  min-width: 320px;
+}
+
+/* O .infos_lobby dentro do overlay de desafios: centralizado, sem position absolute herdado */
+.gcbooster-challenge-modal-overlay .infos_lobby,
+.gcbooster-challenge-modal-overlay .infos_lobby--challenge {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  transform: none !important;
+  margin-top: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  z-index: 1 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9), 0 0 25px rgba(255, 165, 0, 0.25) !important;
+  animation: gcboosterFadeIn 0.18s ease-out;
+}
+
+/* Botão fechar posicionado dentro do wrap */
+.gcbooster-challenge-modal-overlay .gcbooster-info-close {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  z-index: 10;
+  width: 22px;
+  height: 22px;
+  font-size: 11px;
+  background: rgba(20, 20, 25, 0.95);
+  border: 1px solid var(--color-orange);
+}
+
 /* Modal Master da Match */
 .gcbooster-match-modal-overlay {
   position: fixed !important;
