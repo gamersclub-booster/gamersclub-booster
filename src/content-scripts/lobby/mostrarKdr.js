@@ -151,24 +151,29 @@ const scanDesafiosKdr = () => {
   const playerSelector = [
     'a.LobbyPlayerVertical',
     '.sala-lineup-imagem a',
+    '.sala-lineup-player > a',
     '.sala-lineup-player a',
-    'a[href*="/jogador/"]',
-    'a[href*="/player/"]',
-    '[data-player-id]',
-    '[id^="trigger-"]',
-    'img[src*="/avatar/"]',
-    'img[src*="/players/"]'
+    'a[href*="/jogador/"]'
   ].join( ', ' );
 
   $containers
     .find( playerSelector )
     .addBack( playerSelector )
     .each( ( _, element ) => {
-      let $element = $( element );
+      const $element = $( element );
 
-      // Se for uma imagem de avatar, o elemento alvo onde o badge fica é o container pai
-      if ( $element.is( 'img' ) ) {
-        $element = $element.parent();
+      // NUNCA injetar KDR dentro de modais, overlays, botões de ação ou elementos internos do GC Booster
+      const gcboosterInternal = [
+        '.infos_lobby',
+        '.gcbooster-challenge-modal-overlay',
+        '.gcbooster-info-player',
+        '.gcbooster_lupa',
+        '.gcbooster-csrep-btn',
+        '.gcbooster-steam-btn',
+        '.gcbooster-info-profile'
+      ].join( ', ' );
+      if ( $element.closest( gcboosterInternal ).length > 0 ) {
+        return;
       }
 
       if ( $element.find( 'div.PlayerPlaceholder' ).length > 0 || $element.hasClass( 'PlayerPlaceholder' ) ) {
@@ -176,7 +181,12 @@ const scanDesafiosKdr = () => {
         return;
       }
 
+      // Evita injeção duplicada: verifica o elemento, o container pai e wrappers de lineup
       if ( $element.find( '#gcbooster_kdr' ).length > 0 || $element.attr( 'data-gcbooster-kdr-applied' ) ) {
+        return;
+      }
+      const $wrapper = $element.closest( '.sala-lineup-player, .sala-lineup-imagem, .LobbyPlayerVertical, [class*="LobbyPlayer"]' );
+      if ( $wrapper.length > 0 && $wrapper.find( '#gcbooster_kdr' ).length > 0 ) {
         return;
       }
 
@@ -203,13 +213,6 @@ const scanDesafiosKdr = () => {
         const matchHref = href.match( /\/(?:jogador|player)\/(\d+)/i );
         if ( matchHref && matchHref[1] ) {
           playerId = matchHref[1];
-        }
-      }
-      if ( !playerId ) {
-        const src = $element.find( 'img' ).attr( 'src' ) || $element.attr( 'src' ) || '';
-        const matchSrc = src.match( /\/(?:players\/)?avatar\/(\d+)/i ) || src.match( /\/(?:players|jogador|player)\/(\d+)/i );
-        if ( matchSrc && matchSrc[1] ) {
-          playerId = matchSrc[1];
         }
       }
 

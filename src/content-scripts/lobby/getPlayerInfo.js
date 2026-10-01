@@ -254,6 +254,37 @@ export async function getPlayerInfo( id ) {
     }
   }
 
+  // 5. Fallback adicional para KDR: kdrCache local ou endpoint de histórico da GC
+  if ( !kdr ) {
+    try {
+      const kdrCache = await getFromStorage( 'kdrCache' ) || {};
+      if ( kdrCache[idStr]?.kdr ) {
+        kdr = String( kdrCache[idStr].kdr );
+      }
+    } catch ( _e ) {
+      // Silencioso
+    }
+  }
+
+  if ( !kdr ) {
+    try {
+      const gcHost = GC_URL || window.location.hostname || 'gamersclub.com.br';
+      const res = await fetch( `https://${gcHost}/api/box/history/${idStr}`, {
+        headers: { Accept: 'application/json' },
+        credentials: 'same-origin'
+      } );
+      if ( res.ok ) {
+        const boxData = await res.json();
+        const boxKdr = boxData?.stat?.[0]?.value;
+        if ( boxKdr ) {
+          kdr = String( boxKdr );
+        }
+      }
+    } catch ( _e ) {
+      // Silencioso
+    }
+  }
+
   // Determina se os dados obtidos são parciais/fictícios (nenhuma informação real)
   const hasRealData = dataCriacao !== '-' || totalPartidas > 0 || kdr !== null;
 

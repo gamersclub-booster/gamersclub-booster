@@ -146,7 +146,14 @@ const createDivAudit = audit => {
 const createDivKdr = playerInfo => {
   const kdrStat = playerInfo?.stats?.find( stat => stat.stat === 'KDR' );
   const kdr = kdrStat?.value ?? playerInfo?.kdr ?? null;
-  if ( kdr === null || kdr === undefined ) { return ''; }
+  if ( kdr === null || kdr === undefined ) {
+    return $( '<div />', {
+      class: 'gcbooster-info-stat',
+      title: 'KDR Médio',
+      'data-tip-text': 'KDR Médio',
+      text: 'KDR: -'
+    } );
+  }
   const formatted = !isNaN( Number( kdr ) ) ? Number( kdr ).toFixed( 2 ) : kdr;
   return $( '<div />', {
     class: 'gcbooster-info-stat',
@@ -187,7 +194,6 @@ export const getPlayersIds = element => {
     '.sala-lineup-imagem a',
     '.sala-lineup-player a',
     'a[href*="/jogador/"]',
-    'a[href*="/player/"]',
     '[data-player-id]',
     '[data-playerid]',
     '[id^="trigger-"]',
@@ -202,7 +208,7 @@ export const getPlayersIds = element => {
   const ids = [];
   elements.forEach( el => {
     const $el = $( el );
-    if ( $el.closest( '.infos_lobby, .gcbooster_lupa' ).length > 0 ) {
+    if ( $el.closest( '.infos_lobby, .gcbooster_lupa, .gcbooster-challenge-modal-overlay' ).length > 0 ) {
       return;
     }
     if ( $el.find( '.PlayerPlaceholder' ).length > 0 || $el.hasClass( 'PlayerPlaceholder' ) ) {
@@ -471,7 +477,18 @@ const toggleRaioXModal = async ( $trigger, $container, getPlayersIdsFunction, ty
 };
 
 const injectChallengeRaioXButton = ( $card, _players, lobbyId ) => {
-  if ( $card.find( `#gcbooster_btn_challenge_${lobbyId}` ).length > 0 ) {
+  if ( $card.find( `#gcbooster_btn_challenge_${lobbyId}` ).length > 0 || $card.find( '.gcbooster_lupa' ).length > 0 ) {
+    return;
+  }
+
+  // Tenta encontrar a área de ações da proposta / card (ex: sidebar com ações)
+  const actionsSelector = [
+    '.sidebar-sala-action-buttons',
+    '.sidebar-desafios-play'
+  ].join( ', ' );
+  const $actions = $card.find( actionsSelector ).first();
+
+  if ( $actions.length === 0 ) {
     return;
   }
 
@@ -489,35 +506,7 @@ const injectChallengeRaioXButton = ( $card, _players, lobbyId ) => {
     toggleRaioXModal( $btn, $card, getPlayersIds, 'challenge', lobbyId );
   } );
 
-  // Tenta encontrar a área de ações da proposta / card
-  const actionsSelector = [
-    '.sidebar-sala-action-buttons',
-    '.sidebar-desafios-play',
-    '[class*="Actions"]',
-    '[class*="actions"]',
-    '[class*="Buttons"]',
-    '[class*="buttons"]',
-    '[class*="Controls"]',
-    '[class*="controls"]'
-  ].join( ', ' );
-  const $actions = $card.find( actionsSelector ).first();
-
-  if ( $actions.length > 0 ) {
-    $actions.prepend( $btn );
-  } else {
-    // Se não encontrou container de ações, procura header ou adiciona no topo do card
-    const $header = $card.find(
-      '[class*="Header"], [class*="header"], [class*="Title"], [class*="title"], [class*="Team"], [class*="team"]'
-    ).first();
-    if ( $header.length > 0 ) {
-      $header.append( $btn );
-    } else {
-      $card.prepend( $btn );
-    }
-  }
-
-  $card.css( { 'overflow': 'visible', 'position': 'relative' } );
-  $card.parent().css( 'overflow', 'visible' );
+  $actions.prepend( $btn );
 };
 
 const createModalForElementNew = ( element, getPlayersIdsFunction, type, lobbyId ) => {
@@ -592,13 +581,13 @@ export const scanAndInjectLupa = () => {
       lobbyId = `challenge_${players.slice( 0, 3 ).join( '_' )}`;
     }
 
-    // Injeta o botão dedicado [ 🛡️ Raio-X ] diretamente no card/linha da proposta
-    injectChallengeRaioXButton( $element, players, lobbyId );
-
-    // Também garante o gatilho da lupa se necessário
+    // Garante o gatilho da lupa no card de desafio
     if ( $element.find( '.gcbooster_lupa' ).length === 0 ) {
       createModalForElementNew( $element, getPlayersIds, 'challenge', lobbyId );
     }
+
+    // Injeta o botão apenas se for proposta em sidebar com área de ações específica
+    injectChallengeRaioXButton( $element, players, lobbyId );
   } );
 
   // 2. Busca abrangente por propostas/lineups na aba de Desafios caso as classes variem
@@ -614,7 +603,7 @@ export const scanAndInjectLupa = () => {
 
   $( challengeContainers ).find( 'div, section, li' ).each( ( _, el ) => {
     const $el = $( el );
-    if ( $el.find( '.gcbooster-challenge-raiox-btn' ).length > 0 ) {
+    if ( $el.find( '.gcbooster-challenge-raiox-btn, .gcbooster_lupa' ).length > 0 ) {
       return;
     }
 
@@ -624,8 +613,8 @@ export const scanAndInjectLupa = () => {
       const hasChildLineup = $el.children().toArray().some( child => getPlayersIds( $( child ) ).length >= 2 );
       if ( !hasChildLineup ) {
         const lobbyId = `challenge_${players.slice( 0, 3 ).join( '_' )}`;
-        injectChallengeRaioXButton( $el, players, lobbyId );
         createModalForElementNew( $el, getPlayersIds, 'challenge', lobbyId );
+        injectChallengeRaioXButton( $el, players, lobbyId );
       }
     }
   } );
