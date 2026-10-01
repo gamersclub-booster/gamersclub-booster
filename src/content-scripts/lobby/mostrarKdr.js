@@ -170,9 +170,11 @@ const scanDesafiosKdr = () => {
         '.gcbooster_lupa',
         '.gcbooster-csrep-btn',
         '.gcbooster-steam-btn',
-        '.gcbooster-info-profile'
+        '.gcbooster-info-profile',
+        '.gcbooster-profile-redirect-link',
+        '.gcbooster-audit-actions-row'
       ].join( ', ' );
-      if ( $element.closest( gcboosterInternal ).length > 0 ) {
+      if ( $element.is( gcboosterInternal ) || $element.closest( gcboosterInternal ).length > 0 ) {
         return;
       }
 

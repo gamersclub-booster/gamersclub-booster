@@ -4,6 +4,7 @@ import { auditPlayers } from '../../lib/playerAudit';
 import { createDivPlayers } from './infoLobby';
 import { GC_URL } from '../../lib/constants';
 import { isExtensionContextValid } from '../../utils';
+import { getUserInfo } from '../../lib/dom';
 
 export const isMatchPage = () => {
   const path = window.location.pathname.toLowerCase();
@@ -119,6 +120,12 @@ const closeMatchModal = () => {
 export const openMatchRaioXModal = async ( options = {} ) => {
   const { initialTeam = 'all', highlightPlayer = null } = options;
 
+  const { plID: myPlayerId } = getUserInfo();
+  const strMyPlayerId = String( myPlayerId );
+  const domPlayers = getMatchPlayersFromDOM();
+  const isMyTeamA = strMyPlayerId && domPlayers.teamA.includes( strMyPlayerId );
+  const isMyTeamB = strMyPlayerId && domPlayers.teamB.includes( strMyPlayerId );
+
   closeMatchModal();
 
   const $overlay = $( '<div />', {
@@ -147,21 +154,31 @@ export const openMatchRaioXModal = async ( options = {} ) => {
 
   const $tabsWrap = $( '<div />', { class: 'gcbooster-match-modal-tabs' } );
 
+  let team1Label = '';
+  let team2Label = '';
+  if ( isMyTeamA ) {
+    team1Label = ' (Seu Time)';
+    team2Label = ' - Adversários';
+  } else if ( isMyTeamB ) {
+    team1Label = ' - Adversários';
+    team2Label = ' (Seu Time)';
+  }
+
   const $tabAll = $( '<button />', {
     class: `gcbooster-match-tab-btn ${initialTeam === 'all' ? 'active' : ''}`,
-    text: 'Todos (10)',
+    text: `Todos (${domPlayers.all.length || 10})`,
     'data-team': 'all'
   } );
 
   const $tabTeamA = $( '<button />', {
     class: `gcbooster-match-tab-btn ${initialTeam === 'teamA' ? 'active' : ''}`,
-    text: 'Time 1 (5)',
+    text: `Time 1${team1Label} (${domPlayers.teamA.length || 5})`,
     'data-team': 'teamA'
   } );
 
   const $tabTeamB = $( '<button />', {
     class: `gcbooster-match-tab-btn ${initialTeam === 'teamB' ? 'active' : ''}`,
-    text: 'Time 2 - Adversários (5)',
+    text: `Time 2${team2Label} (${domPlayers.teamB.length || 5})`,
     'data-team': 'teamB'
   } );
 
@@ -362,12 +379,24 @@ export const openMatchRaioXModal = async ( options = {} ) => {
     };
 
     if ( selectedTeam === 'all' || selectedTeam === 'teamA' ) {
-      const titleA = '⚔️ TIME 1 (SEU TIME)';
+      let labelA = '';
+      if ( isMyTeamA ) {
+        labelA = ' (SEU TIME)';
+      } else if ( isMyTeamB ) {
+        labelA = ' (ADVERSÁRIOS)';
+      }
+      const titleA = `⚔️ TIME 1${labelA}`;
       $body.append( renderTeamSection( titleA, teamA.length ? teamA : all.slice( 0, 5 ), 'team-a' ) );
     }
 
     if ( selectedTeam === 'all' || selectedTeam === 'teamB' ) {
-      const titleB = '⚔️ TIME 2 (ADVERSÁRIOS)';
+      let labelB = '';
+      if ( isMyTeamB ) {
+        labelB = ' (SEU TIME)';
+      } else if ( isMyTeamA ) {
+        labelB = ' (ADVERSÁRIOS)';
+      }
+      const titleB = `⚔️ TIME 2${labelB}`;
       $body.append( renderTeamSection( titleB, teamB.length ? teamB : all.slice( 5 ), 'team-b' ) );
     }
 

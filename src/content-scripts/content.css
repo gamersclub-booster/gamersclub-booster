@@ -1060,6 +1060,12 @@ input[type="range"].filterKdr::-ms-track {
 }
 
 /* Barra informativa na lobby */
+.gcbooster-info-player #gcbooster_kdr,
+.gcbooster-info-player #gcbooster_kdr_span,
+.gcbooster-info-player [id^="gcbooster_kdr_match_"] {
+  display: none !important;
+}
+
 .gboost-info-player .gcboost-content {
   width: 100%;
   display: flex;
