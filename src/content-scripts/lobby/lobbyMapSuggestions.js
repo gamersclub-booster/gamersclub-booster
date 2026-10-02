@@ -1,4 +1,5 @@
 import { GC_URL, headers as auth, lobbyMapSuggestionsConsts } from '../../lib/constants';
+import { isExtensionContextValid } from '../../utils';
 
 const {
   PLAYERS_PER_TEAM,
@@ -239,12 +240,18 @@ async function analisadorDeLobby( matchId = '', mapasVisiveis = [] ) {
 
 
 export async function lobbyMapSuggestions( partidaId = '' ) {
+  if ( !isExtensionContextValid() ) { return; }
 
-  chrome.storage.sync.get( [ 'disableShowMapStatsSuggestions' ], function ( result ) {
-    if ( result.disableShowMapStatsSuggestions ) {
-      return;
-    }
-  } );
+  try {
+    chrome.storage.sync.get( [ 'disableShowMapStatsSuggestions' ], function ( result ) {
+      if ( chrome.runtime?.lastError || !result ) { return; }
+      if ( result.disableShowMapStatsSuggestions ) {
+        return;
+      }
+    } );
+  } catch ( _e ) {
+    // Context invalidated
+  }
 
   const style = document.createElement( 'style' );
   style.innerHTML = `
@@ -566,6 +573,10 @@ export async function lobbyMapSuggestions( partidaId = '' ) {
   }
 
   const observer = new MutationObserver( () => {
+    if ( !isExtensionContextValid() ) {
+      observer.disconnect();
+      return;
+    }
     if ( document.querySelector( '.WasdMapCard' ) ) {
       observer.disconnect();
       processarLobby();

@@ -59,6 +59,7 @@ function iniciarPaginaOpcoes() {
   listenerJogarCom();
   marcarJogarCom();
   popularComplete();
+  iniciarPlayerLinks();
 }
 
 function mostrarMensagemAtencao() {
@@ -709,3 +710,20 @@ function completeMaxText() {
 
 limparOpcoesInvalidas();
 iniciarPaginaOpcoes();
+
+function iniciarPlayerLinks() {
+  chrome.storage.sync.get(
+    [ 'playerLinksEnabled' ],
+    response => {
+      const enableEl = document.getElementById( 'playerLinksEnabled' );
+      if ( enableEl ) { enableEl.checked = response.playerLinksEnabled !== false; }
+    }
+  );
+
+  const enableEl = document.getElementById( 'playerLinksEnabled' );
+  if ( enableEl ) {
+    enableEl.addEventListener( 'change', function () {
+      chrome.storage.sync.set( { playerLinksEnabled: this.checked } );
+    } );
+  }
+}

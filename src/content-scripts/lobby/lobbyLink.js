@@ -2,6 +2,7 @@ import axios from 'axios';
 import { GC_URL } from '../../lib/constants';
 import { sendLobby } from '../../lib/discord';
 import { alertaMsg } from '../../lib/messageAlerts';
+import { isExtensionContextValid } from '../../utils';
 
 const BUTTON_ID = 'discordLobbyButton';
 const LOBBY_ROOM_SELECTOR = 'button.MyRoomHeader__button.MyRoomHeader__button--delete-room';
@@ -81,7 +82,13 @@ const addDiscordButton = webhookUrl => {
     return;
   }
 
-  const discordSvgUrl = chrome.runtime.getURL( '/images/discord.svg' );
+  let discordSvgUrl;
+  try {
+    discordSvgUrl = chrome.runtime?.getURL ? chrome.runtime.getURL( '/images/discord.svg' ) : '';
+  } catch {
+    return;
+  }
+
   const discordButton = createDiscordButton( discordSvgUrl );
 
   discordButton.addEventListener( 'click', async event => {
@@ -130,13 +137,25 @@ const processMutations = async ( mutations, webhookUrl, shouldAutoSend ) => {
 };
 
 export const lobbyLink = mutations => {
-  chrome.storage.sync.get( [ 'webhookLink', 'enviarLinkLobby' ], result => {
-    if ( !result.webhookLink || !isValidWebhookUrl( result.webhookLink ) ) {
-      return;
-    }
+  if ( !isExtensionContextValid() ) {
+    return;
+  }
 
-    processMutations( mutations, result.webhookLink, result.enviarLinkLobby ).catch( error => {
-      console.error( '[GamersClub Booster] Erro ao processar mutações:', error );
+  try {
+    chrome.storage.sync.get( [ 'webhookLink', 'enviarLinkLobby' ], result => {
+      if ( !isExtensionContextValid() || chrome.runtime?.lastError || !result ) {
+        return;
+      }
+
+      if ( !result.webhookLink || !isValidWebhookUrl( result.webhookLink ) ) {
+        return;
+      }
+
+      processMutations( mutations, result.webhookLink, result.enviarLinkLobby ).catch( error => {
+        console.error( '[GamersClub Booster] Erro ao processar mutações:', error );
+      } );
     } );
-  } );
+  } catch {
+    // Context invalidated
+  }
 };

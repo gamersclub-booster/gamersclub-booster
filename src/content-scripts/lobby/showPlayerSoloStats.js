@@ -1,4 +1,5 @@
 import { GC_URL, headers as auth, showPlayerSoloStatsConsts } from '../../lib/constants';
+import { isExtensionContextValid } from '../../utils';
 
 const { PLAYERS_IDS_DEBUG, DEBUG_PLAYERS } = showPlayerSoloStatsConsts;
 const SOLO_STATS_CACHE_TTL = 10 * 60 * 1000; // 10 minutos
@@ -124,171 +125,181 @@ function isSoloDraftScreen() {
 }
 
 export function showPlayerSoloStats() {
-  chrome.storage.sync.get( [ 'disableShowPlayerSoloStats' ], function ( result ) {
-    if ( result.disableShowPlayerSoloStats ) { return; }
-    if ( !DEBUG_PLAYERS && window._gcSoloStatsInitialized ) { return; }
+  if ( !isExtensionContextValid() ) { return; }
+  try {
+    chrome.storage.sync.get( [ 'disableShowPlayerSoloStats' ], function ( result ) {
+      if ( chrome.runtime?.lastError || !result ) { return; }
+      if ( result.disableShowPlayerSoloStats ) { return; }
+      if ( !DEBUG_PLAYERS && window._gcSoloStatsInitialized ) { return; }
 
-    window._gcSoloStatsInitialized = true;
+      window._gcSoloStatsInitialized = true;
 
-    let playerIds = [];
-    const processLobby = async () => {
+      let playerIds = [];
+      const processLobby = async () => {
 
-      let wrappers = [];
+        let wrappers = [];
 
-      if ( DEBUG_PLAYERS ) {
-        playerIds = PLAYERS_IDS_DEBUG;
-      } else {
-        if ( !isSoloDraftScreen() ) { return; }
+        if ( DEBUG_PLAYERS ) {
+          playerIds = PLAYERS_IDS_DEBUG;
+        } else {
+          if ( !isSoloDraftScreen() ) { return; }
 
-        wrappers = Array.from(
-          document.querySelectorAll( 'div[id^="trigger-"]' )
-        ).map( trigger => trigger.closest( 'div[class*="PlayerCardWrapper"]' ) )
-          .filter( Boolean );
+          wrappers = Array.from(
+            document.querySelectorAll( 'div[id^="trigger-"]' )
+          ).map( trigger => trigger.closest( 'div[class*="PlayerCardWrapper"]' ) )
+            .filter( Boolean );
 
-        const wrappersWithoutBadge = wrappers.filter( wrapper => {
-          const userInfoContainer = wrapper.querySelector(
-            '.PlayerIdentityNickname__userInformations'
-          );
+          const wrappersWithoutBadge = wrappers.filter( wrapper => {
+            const userInfoContainer = wrapper.querySelector(
+              '.PlayerIdentityNickname__userInformations'
+            );
 
-          if ( !userInfoContainer ) { return false; }
-          return !userInfoContainer.querySelector( '.gc-solo-stats-badge' );
+            if ( !userInfoContainer ) { return false; }
+            return !userInfoContainer.querySelector( '.gc-solo-stats-badge' );
+          } );
+
+          playerIds = wrappersWithoutBadge
+            .map( extractPlayerIdFromWrapper )
+            .filter( Boolean );
+
+          playerIds = [ ...new Set( playerIds ) ];
+
+          if ( !playerIds.length ) { return; }
+        }
+
+        const results = await Promise.allSettled(
+          playerIds.map( id => getPlayerStats( id ) )
+        );
+
+        const statsMap = {};
+        const debugTable = [];
+
+        results.forEach( res => {
+          if ( res.status === 'fulfilled' && res.value ) {
+            const stat = res.value;
+            statsMap[stat.id] = stat;
+
+            debugTable.push( {
+              ID: stat.id,
+              Partidas: stat.matches,
+              Vitórias: stat.wins,
+              'WR (%)': stat.winRate
+            } );
+          }
         } );
 
-        playerIds = wrappersWithoutBadge
-          .map( extractPlayerIdFromWrapper )
-          .filter( Boolean );
+        if ( DEBUG_PLAYERS ) {
+          console.log( '[GC-BOOSTER] Estatísticas Solo (Debug):' );
+          console.table( debugTable );
+        }
 
-        playerIds = [ ...new Set( playerIds ) ];
+        if ( !DEBUG_PLAYERS ) {
+          wrappers.forEach( wrapper => {
+            const trigger = wrapper.querySelector( 'div[id^="trigger-"]' );
+            const card = wrapper.querySelector(
+              'div[data-test^="div:playerCard:"]'
+            );
 
-        if ( !playerIds.length ) { return; }
-      }
+            if ( !trigger || !card ) { return; }
 
-      const results = await Promise.allSettled(
-        playerIds.map( id => getPlayerStats( id ) )
-      );
+            const match = trigger.id.match( /trigger-(\d+)/ );
+            if ( !match ) { return; }
 
-      const statsMap = {};
-      const debugTable = [];
+            const id = parseInt( match[1], 10 );
+            const stat = statsMap[id];
+            if ( !stat ) { return; }
 
-      results.forEach( res => {
-        if ( res.status === 'fulfilled' && res.value ) {
-          const stat = res.value;
-          statsMap[stat.id] = stat;
+            const userInfoContainer = card.querySelector(
+              '.PlayerIdentityNickname__userInformations'
+            );
 
-          debugTable.push( {
-            ID: stat.id,
-            Partidas: stat.matches,
-            Vitórias: stat.wins,
-            'WR (%)': stat.winRate
+            if ( !userInfoContainer ) { return; }
+            if ( userInfoContainer.querySelector( '.gc-solo-stats-badge' ) ) { return; }
+
+            const badge = document.createElement( 'span' );
+            badge.className = 'gc-solo-stats-badge';
+            badge.textContent = `${stat.winRate}%`;
+
+            Object.assign( badge.style, {
+              background: 'oklch(70% 0.22 50)',
+              color: '#fff',
+              padding: '0px 2px',
+              fontSize: '10px',
+              fontWeight: 'bold',
+              marginLeft: '8px',
+              userSelect: 'none',
+              display: 'inline-block',
+              position: 'relative',
+              cursor: 'default',
+              order: '10'
+            } );
+
+            const tooltip = document.createElement( 'div' );
+            tooltip.textContent = `Vitórias (${stat.wins}/${stat.matches})`;
+
+            Object.assign( tooltip.style, {
+              position: 'absolute',
+              bottom: '125%',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              background: '#111',
+              color: '#fff',
+              padding: '6px 8px',
+              borderRadius: '6px',
+              fontSize: '11px',
+              whiteSpace: 'nowrap',
+              opacity: '0',
+              pointerEvents: 'none',
+              transition: 'opacity 0.15s ease',
+              zIndex: '9999',
+              boxShadow: '0 4px 10px rgba(0,0,0,0.3)'
+            } );
+
+            badge.appendChild( tooltip );
+            badge.addEventListener( 'mouseenter', () => {
+              tooltip.style.opacity = '1';
+            } );
+
+            badge.addEventListener( 'mouseleave', () => {
+              tooltip.style.opacity = '0';
+            } );
+
+            userInfoContainer.appendChild( badge );
           } );
         }
-      } );
-
-      if ( DEBUG_PLAYERS ) {
-        console.log( '[GC-BOOSTER] Estatísticas Solo (Debug):' );
-        console.table( debugTable );
-      }
+      };
 
       if ( !DEBUG_PLAYERS ) {
-        wrappers.forEach( wrapper => {
-          const trigger = wrapper.querySelector( 'div[id^="trigger-"]' );
-          const card = wrapper.querySelector(
-            'div[data-test^="div:playerCard:"]'
-          );
+        const observer = new MutationObserver( () => {
+          if ( !isExtensionContextValid() ) {
+            observer.disconnect();
+            return;
+          }
+          if ( isSoloDraftScreen() && !window._gcSoloStatsProcessing ) {
+            window._gcSoloStatsProcessing = true;
 
-          if ( !trigger || !card ) { return; }
-
-          const match = trigger.id.match( /trigger-(\d+)/ );
-          if ( !match ) { return; }
-
-          const id = parseInt( match[1], 10 );
-          const stat = statsMap[id];
-          if ( !stat ) { return; }
-
-          const userInfoContainer = card.querySelector(
-            '.PlayerIdentityNickname__userInformations'
-          );
-
-          if ( !userInfoContainer ) { return; }
-          if ( userInfoContainer.querySelector( '.gc-solo-stats-badge' ) ) { return; }
-
-          const badge = document.createElement( 'span' );
-          badge.className = 'gc-solo-stats-badge';
-          badge.textContent = `${stat.winRate}%`;
-
-          Object.assign( badge.style, {
-            background: 'oklch(70% 0.22 50)',
-            color: '#fff',
-            padding: '0px 2px',
-            fontSize: '10px',
-            fontWeight: 'bold',
-            marginLeft: '8px',
-            userSelect: 'none',
-            display: 'inline-block',
-            position: 'relative',
-            cursor: 'default',
-            order: '10'
-          } );
-
-          const tooltip = document.createElement( 'div' );
-          tooltip.textContent = `Vitórias (${stat.wins}/${stat.matches})`;
-
-          Object.assign( tooltip.style, {
-            position: 'absolute',
-            bottom: '125%',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            background: '#111',
-            color: '#fff',
-            padding: '6px 8px',
-            borderRadius: '6px',
-            fontSize: '11px',
-            whiteSpace: 'nowrap',
-            opacity: '0',
-            pointerEvents: 'none',
-            transition: 'opacity 0.15s ease',
-            zIndex: '9999',
-            boxShadow: '0 4px 10px rgba(0,0,0,0.3)'
-          } );
-
-          badge.appendChild( tooltip );
-          badge.addEventListener( 'mouseenter', () => {
-            tooltip.style.opacity = '1';
-          } );
-
-          badge.addEventListener( 'mouseleave', () => {
-            tooltip.style.opacity = '0';
-          } );
-
-          userInfoContainer.appendChild( badge );
+            setTimeout( async () => {
+              await processLobby();
+              window._gcSoloStatsProcessing = false;
+            }, 600 );
+          }
         } );
+
+        observer.observe( document.body, {
+          childList: true,
+          subtree: true
+        } );
+
+        // fallback inicial
+        setTimeout( () => {
+          if ( isSoloDraftScreen() ) { processLobby(); }
+        }, 1500 );
+
+      } else {
+        setTimeout( processLobby, 1500 );
       }
-    };
-
-    if ( !DEBUG_PLAYERS ) {
-      const observer = new MutationObserver( () => {
-        if ( isSoloDraftScreen() && !window._gcSoloStatsProcessing ) {
-          window._gcSoloStatsProcessing = true;
-
-          setTimeout( async () => {
-            await processLobby();
-            window._gcSoloStatsProcessing = false;
-          }, 600 );
-        }
-      } );
-
-      observer.observe( document.body, {
-        childList: true,
-        subtree: true
-      } );
-
-      // fallback inicial
-      setTimeout( () => {
-        if ( isSoloDraftScreen() ) { processLobby(); }
-      }, 1500 );
-
-    } else {
-      setTimeout( processLobby, 1500 );
-    }
-  } );
+    } );
+  } catch ( _e ) {
+    // Context invalidated
+  }
 }

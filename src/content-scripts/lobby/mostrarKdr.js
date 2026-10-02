@@ -1,5 +1,6 @@
 import { GC_URL, headers, levelColor } from '../../lib/constants';
 import { getFromStorage, setStorage } from '../../lib/storage';
+import { isExtensionContextValid } from '../../utils';
 
 export const mostrarKdr = mutations => {
   $.each( mutations, async ( _, mutation ) => {
@@ -89,60 +90,165 @@ const getPlayerInfo = async id => {
   return infoPlayer ;
 };
 
+const renderKdrElement = ( $element, kdr ) => {
+  if ( !$element || !kdr || $element.find( '#gcbooster_kdr' ).length ) { return; }
+
+  const numKdr = parseFloat( kdr );
+  const formattedKdr = !isNaN( numKdr ) ? numKdr.toFixed( 2 ) : kdr;
+
+  const $kdrElement = $( '<div/>', {
+    'id': 'gcbooster_kdr',
+    'class': 'draw-orange',
+    'css': {
+      'margin-bottom': '4px',
+      'margin-top': '2px',
+      'width': '100%',
+      'display': 'flex',
+      'padding': '2px 4px',
+      'align-items': 'center',
+      'justify-content': 'center',
+      'text-align': 'center',
+      'color': 'white',
+      'font-weight': '600',
+      'border': 'none',
+      'background': numKdr <= 2.5 ? '' :
+        'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)',
+      'background-color': numKdr <= 2.5 ? levelColor[Math.round( numKdr * 10 )] + 'cc' : 'initial'
+    }
+  } ).append( $( '<span/>', {
+    'id': 'gcbooster_kdr_span',
+    'text': formattedKdr,
+    'kdr': formattedKdr,
+    'css': { 'width': '100%', 'font-size': '10px' }
+  } ) );
+
+  $element.prepend( $kdrElement );
+  $element.find( 'div.LobbyPlayer' ).append( '<style>.LobbyPlayer:before{top:15px !important;}</style>' );
+};
+
+const scanDesafiosKdr = () => {
+  const challengeContainers = [
+    '#challengeList',
+    '.sidebar-desafios',
+    '.ChallengesList',
+    '.LobbyChallengeLineUpCard',
+    '.LobbyChallengeCard',
+    '.LobbyChallengeCard__item',
+    '.ChallengesList__item',
+    '[class*="Challenge" i]',
+    '[class*="challenge" i]',
+    '[class*="Desafio" i]',
+    '[class*="desafio" i]',
+    '[class*="Proposal" i]',
+    '[class*="proposal" i]',
+    '.sidebar-desafios-salas .sidebar-item',
+    '.sidebar-desafios-team'
+  ].join( ', ' );
+
+  const $containers = $( challengeContainers );
+  if ( !$containers.length ) { return; }
+
+  const playerSelector = [
+    'a.LobbyPlayerVertical',
+    '.sala-lineup-imagem a',
+    '.sala-lineup-player > a',
+    '.sala-lineup-player a',
+    'a[href*="/jogador/"]'
+  ].join( ', ' );
+
+  $containers
+    .find( playerSelector )
+    .addBack( playerSelector )
+    .each( ( _, element ) => {
+      const $element = $( element );
+
+      // NUNCA injetar KDR dentro de modais, overlays, botões de ação ou elementos internos do GC Booster
+      const gcboosterInternal = [
+        '.infos_lobby',
+        '.gcbooster-challenge-modal-overlay',
+        '.gcbooster-info-player',
+        '.gcbooster_lupa',
+        '.gcbooster-csrep-btn',
+        '.gcbooster-steam-btn',
+        '.gcbooster-info-profile',
+        '.gcbooster-profile-redirect-link',
+        '.gcbooster-audit-actions-row'
+      ].join( ', ' );
+      if ( $element.is( gcboosterInternal ) || $element.closest( gcboosterInternal ).length > 0 ) {
+        return;
+      }
+
+      if ( $element.find( 'div.PlayerPlaceholder' ).length > 0 || $element.hasClass( 'PlayerPlaceholder' ) ) {
+        $element.find( 'div.PlayerPlaceholder__image' ).css( 'margin-top', '23px' );
+        return;
+      }
+
+      // Evita injeção duplicada: verifica o elemento, o container pai e wrappers de lineup
+      if ( $element.find( '#gcbooster_kdr' ).length > 0 || $element.attr( 'data-gcbooster-kdr-applied' ) ) {
+        return;
+      }
+      const $wrapper = $element.closest( '.sala-lineup-player, .sala-lineup-imagem, .LobbyPlayerVertical, [class*="LobbyPlayer"]' );
+      if ( $wrapper.length > 0 && $wrapper.find( '#gcbooster_kdr' ).length > 0 ) {
+        return;
+      }
+
+      // Aplica min-height apenas em cards verticais clássicos
+      if ( $element.hasClass( 'LobbyPlayerVertical' ) && !$element.parent().hasClass( 'sala-lineup-imagem' ) ) {
+        $element.css( 'min-height', '120px' );
+      }
+
+      const title = $element.attr( 'title' ) || $element.find( '[title]' ).attr( 'title' ) || '';
+      const kdr = getKdrFromTitle( title );
+      if ( kdr ) {
+        $element.attr( 'data-gcbooster-kdr-applied', 'true' );
+        renderKdrElement( $element, kdr );
+        return;
+      }
+
+      // Extrai ID do jogador para buscar KDR
+      let playerId = $element.attr( 'data-player-id' ) || $element.attr( 'data-id' );
+      if ( !playerId && $element.attr( 'id' )?.startsWith( 'trigger-' ) ) {
+        playerId = $element.attr( 'id' ).replace( 'trigger-', '' );
+      }
+      if ( !playerId ) {
+        const href = $element.attr( 'href' ) || $element.find( 'a' ).attr( 'href' ) || '';
+        const matchHref = href.match( /\/(?:jogador|player)\/(\d+)/i );
+        if ( matchHref && matchHref[1] ) {
+          playerId = matchHref[1];
+        }
+      }
+
+      if ( playerId && /^\d+$/.test( playerId ) && playerId !== '0' ) {
+        $element.attr( 'data-gcbooster-kdr-applied', 'true' );
+        fetchKdr( playerId ).then( fetchedKdr => {
+          if ( fetchedKdr ) {
+            renderKdrElement( $element, parseFloat( fetchedKdr ).toFixed( 2 ) );
+          }
+        } ).catch( () => {} );
+      }
+    } );
+};
+
 export const mostrarKdrDesafios = () => {
+  scanDesafiosKdr();
+
   const observer = new MutationObserver( () => {
-    const challengeCardSelector = '.LobbyChallengeLineUpCard';
-    if ( $( challengeCardSelector ).length ) {
+    if ( !isExtensionContextValid() ) {
+      observer.disconnect();
+      return;
+    }
+    scanDesafiosKdr();
+  } );
+  observer.observe( document.body, { childList: true, subtree: true } );
 
-      $( challengeCardSelector ).find( 'a.LobbyPlayerVertical, .sala-lineup-imagem a' )
-        .addBack( 'a.LobbyPlayerVertical, .sala-lineup-imagem a' )
-        .each( ( _, element ) => {
-          const $element = $( element );
-          const $parent = $element.parent();
-
-          if ( !$parent.hasClass( 'sala-lineup-imagem' ) ) {
-            $element.css( 'min-height', '120px' );
-          }
-
-          if ( $element.find( 'div.PlayerPlaceholder' ).length > 0 ) {
-            $element.find( 'div.PlayerPlaceholder__image' ).css( 'margin-top', '23px' );
-          } else if ( !$element.find( '#gcbooster_kdr' ).length ) {
-            const kdr = getKdrFromTitle( $element.attr( 'title' ) );
-
-            const $kdrElement = $( '<div/>', {
-              'id': 'gcbooster_kdr',
-              'class': 'draw-orange',
-              'css': {
-                'margin-bottom': '4px',
-                'margin-top': '2px',
-                'width': '100%',
-                'display': 'flex',
-                'padding': '2px 4px',
-                'align-items': 'center',
-                'justify-content': 'center',
-                'text-align': 'center',
-                'color': 'white',
-                'font-weight': '600',
-                'border': 'none',
-                'background': kdr <= 2.5 ? '' :
-                  'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)',
-                'background-color': kdr <= 2.5 ? levelColor[Math.round( kdr * 10 )] + 'cc' : 'initial'
-              }
-            } ).append( $( '<span/>', {
-              'id': 'gcbooster_kdr_span',
-              'text': kdr,
-              'kdr': kdr,
-              'css': { 'width': '100%', 'font-size': '10px' }
-            } ) );
-
-            $element.prepend( $kdrElement );
-            $element.find( 'div.LobbyPlayer' ).append( '<style>.LobbyPlayer:before{top:15px !important;}</style>' );
-          }
-        } );
+  $( document ).on( 'click', 'button, [role="tab"], a, div', function () {
+    const text = $( this ).text()?.trim()?.toLowerCase();
+    if ( text && ( text.includes( 'desafio' ) || text.includes( 'challenge' ) || text.includes( 'lobby' ) ) ) {
+      setTimeout( () => scanDesafiosKdr(), 100 );
+      setTimeout( () => scanDesafiosKdr(), 500 );
+      setTimeout( () => scanDesafiosKdr(), 1200 );
     }
   } );
-    // monitora o documento inteiro
-  observer.observe( document.body, { childList: true, subtree: true } );
 };
 
 // Limpa o cache a cada 2 dias se o TTL for menor q 'agora'
@@ -194,6 +300,10 @@ const fetchKdr = async id => {
 
 export const mostrarKdrRanked = () => {
   const kdrRankedInterval = setInterval( () => {
+    if ( !isExtensionContextValid() ) {
+      clearInterval( kdrRankedInterval );
+      return;
+    }
     $( '[class^=PlayerCardWrapper] [id^=trigger-]' ).each( ( _, element ) => {
       ( async () => {
         const playerId = String( element.id ).split( '-' ).pop();
@@ -230,60 +340,75 @@ export const mostrarKdrRanked = () => {
 };
 
 export const mostrarInfoPlayerIntervaler = () => {
-  chrome.storage.sync.get( [ 'autoInfoPlayer' ], function ( result ) {
-    if ( result.autoInfoPlayer ) {
-      document.body.classList.add( 'gboost-info-player' );
-      setInterval( () => {
-        $( '#integrantesLobbyShort .player' ).each( async ( _, player ) => {
-          const $element = $( player );
-
-          if ( $element.attr( 'id' ) === undefined || $element.attr( 'id' ) === '' ) {
-            const $nodeChildren = $element.find( '.LobbyPlayerHorizontal__nickname' );
-
-            const kdrInfos = $element.find( '.LobbyPlayerHorizontal__kdr' );
-            const kdrValue = kdrInfos.text().split( 'KDR' )[1];
-
-            const playerLink = $nodeChildren.children( 'a' ).attr( 'href' );
-            const playerId = playerLink?.split( '/' ).pop() ;
-            $element.attr( 'id', `gcboost-content-${playerId}` );
-
-            await getPlayerInfo( playerId ).then( infoPlayer => {
-              const completeUrl = getUrlFlag( infoPlayer?.countryFlag );
-              const flagImg = `<img src="${completeUrl}" id="gcb-flag-${playerId}" alt="Flag" class="gcboost-flag b-lazy">`;
-              const playerWins = infoPlayer?.currentMonthMatchesHistory?.wins || 0;
-              const playerLoss = infoPlayer?.currentMonthMatchesHistory?.loss || 0;
-
-              const colorKrdDefault = kdrValue <= 2 ? '#000' :
-                'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)';
-              const colorKdr = kdrValue <= 2 ? levelColor[Math.round( kdrValue * 10 )] : colorKrdDefault;
-
-              const infos = `
-          <div class="gcboost-content">
-            <div class="gcboost-result">
-              <div class="wins">Vitórias: ${playerWins}</div>
-              <div class="gcboost-kdr-color" title="[GC Booster]: KDR médio: ${kdrValue}" style="background-color: ${colorKdr}">
-                ${kdrValue || '0.00'}
-              </div>
-              <div class="losses">Derrotas: ${playerLoss}</div>
-            </div>
-          </div>`;
-
-              $nodeChildren.prepend( flagImg );
-              $element.append( infos );
-
-            } ).catch( error => {
-              console.error( 'Erro ao obter informações do jogador:', error );
-            } );
+  if ( !isExtensionContextValid() ) { return; }
+  try {
+    chrome.storage.sync.get( [ 'autoInfoPlayer' ], function ( result ) {
+      if ( chrome.runtime?.lastError || !result ) { return; }
+      if ( result.autoInfoPlayer ) {
+        document.body.classList.add( 'gboost-info-player' );
+        const infoPlayerInterval = setInterval( () => {
+          if ( !isExtensionContextValid() ) {
+            clearInterval( infoPlayerInterval );
+            return;
           }
-        } );
-      }, 1000 );
-    }
+          $( '#integrantesLobbyShort .player' ).each( async ( _, player ) => {
+            const $element = $( player );
+
+            if ( $element.attr( 'id' ) === undefined || $element.attr( 'id' ) === '' ) {
+              const $nodeChildren = $element.find( '.LobbyPlayerHorizontal__nickname' );
+
+              const kdrInfos = $element.find( '.LobbyPlayerHorizontal__kdr' );
+              const kdrValue = kdrInfos.text().split( 'KDR' )[1];
+
+              const playerLink = $nodeChildren.children( 'a' ).attr( 'href' );
+              const playerId = playerLink?.split( '/' ).pop();
+              $element.attr( 'id', `gcboost-content-${playerId}` );
+
+              await getPlayerInfo( playerId ).then( infoPlayer => {
+                const completeUrl = getUrlFlag( infoPlayer?.countryFlag );
+                const flagImg = `<img src="${completeUrl}" id="gcb-flag-${playerId}" alt="Flag" class="gcboost-flag b-lazy">`;
+                const playerWins = infoPlayer?.currentMonthMatchesHistory?.wins || 0;
+                const playerLoss = infoPlayer?.currentMonthMatchesHistory?.loss || 0;
+
+                const colorKrdDefault = kdrValue <= 2 ? '#000' :
+                  'linear-gradient(135deg, rgba(0,255,222,0.8) 0%, rgba(245,255,0,0.8) 30%, rgba(255,145,0,1) 60%, rgba(166,0,255,0.8) 100%)';
+                const colorKdr = kdrValue <= 2 ? levelColor[Math.round( kdrValue * 10 )] : colorKrdDefault;
+
+                const $infos = $( '<div>' ).addClass( 'gcboost-content' );
+                const $result = $( '<div>' ).addClass( 'gcboost-result' );
+                const $wins = $( '<div>' ).addClass( 'wins' ).text( `Vitórias: ${playerWins}` );
+                const $kdr = $( '<div>' )
+                  .addClass( 'gcboost-kdr-color' )
+                  .attr( 'title', `[GC Booster]: KDR médio: ${kdrValue}` )
+                  .css( 'background-color', colorKdr )
+                  .text( kdrValue || '0.00' );
+                const $losses = $( '<div>' ).addClass( 'losses' ).text( `Derrotas: ${playerLoss}` );
+
+                $result.append( $wins, $kdr, $losses );
+                $infos.append( $result );
+
+                $nodeChildren.prepend( flagImg );
+                $element.append( $infos );
+
+              } ).catch( error => {
+                console.error( 'Erro ao obter informações do jogador:', error );
+              } );
+            }
+          } );
+        }, 1000 );
+      }
+    } );
+  } catch ( _e ) {
+    // Context invalidated
   }
-  );
 };
 
 export const showKdrMatch = () => {
   const observer = new MutationObserver( () => {
+    if ( !isExtensionContextValid() ) {
+      observer.disconnect();
+      return;
+    }
     $( '[id^="trigger-"]' ).each( ( _, element ) => {
       if ( element.dataset.gcboosterProcessed ) {
         return;

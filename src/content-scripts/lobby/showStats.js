@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { GC_URL, headers } from '../../lib/constants';
 import { getUserInfo } from '../../lib/dom';
+import { isExtensionContextValid } from '../../utils';
 
 const { plID: PLAYER_ID } = getUserInfo();
 const PAGE_SIZE = 20;
@@ -289,6 +290,7 @@ function injectHTML() {
 function renderStats( stats ) {
   const summary = document.getElementById( 'gcStatsSummary' );
   const content = document.getElementById( 'gcStatsContent' );
+  if ( !summary || !content ) { return; }
 
   if ( stats.overall.totalMatches === 0 ) {
     summary.innerHTML = '<span>Nenhuma partida encontrada para este período.</span>';
@@ -321,10 +323,14 @@ function renderStats( stats ) {
 }
 
 function setUIState( state ) {
-  document.getElementById( 'gcStatsLoading' ).style.display = state === 'loading' ? 'flex' : 'none';
-  document.getElementById( 'gcStatsBody' ).style.display = state === 'success' ? 'block' : 'none';
-  document.getElementById( 'gcStatsError' ).style.display = state === 'error' ? 'block' : 'none';
-  if ( state === 'error' ) { document.getElementById( 'gcStatsError' ).innerHTML = '<p>Erro ao carregar as estatísticas. Verifique o console.</p>'; }
+  const loading = document.getElementById( 'gcStatsLoading' );
+  const body = document.getElementById( 'gcStatsBody' );
+  const error = document.getElementById( 'gcStatsError' );
+  if ( !loading || !body || !error ) { return; }
+  loading.style.display = state === 'loading' ? 'flex' : 'none';
+  body.style.display = state === 'success' ? 'block' : 'none';
+  error.style.display = state === 'error' ? 'block' : 'none';
+  if ( state === 'error' ) { error.innerHTML = '<p>Erro ao carregar as estatísticas. Verifique o console.</p>'; }
 }
 
 async function loadStatsForPeriod( monthsCount ) {
@@ -384,29 +390,35 @@ async function loadStatsForPeriod( monthsCount ) {
 }
 
 export const showStats = () => {
+  if ( !isExtensionContextValid() ) { return; }
 
-  chrome.storage.sync.get( [ 'showStats' ], function ( result ) {
-    if ( result.showStats ) {
-      injectHTML();
-      const header = document.getElementById( 'gcStatsHeader' );
-      if ( header ) {
-        header.addEventListener( 'click', () => {
-          document.getElementById( 'gcStatsContent' ).classList.toggle( 'hidden' );
-          document.getElementById( 'gcStatsToggle' ).classList.toggle( 'collapsed' );
-        } );
+  try {
+    chrome.storage.sync.get( [ 'showStats' ], function ( result ) {
+      if ( chrome.runtime?.lastError || !result ) { return; }
+      if ( result.showStats ) {
+        injectHTML();
+        const header = document.getElementById( 'gcStatsHeader' );
+        if ( header ) {
+          header.addEventListener( 'click', () => {
+            document.getElementById( 'gcStatsContent' ).classList.toggle( 'hidden' );
+            document.getElementById( 'gcStatsToggle' ).classList.toggle( 'collapsed' );
+          } );
+        }
+
+        const controls = document.getElementById( 'gcStatsControls' );
+        if ( controls ) {
+          controls.addEventListener( 'click', event => {
+            if ( event.target.tagName === 'BUTTON' ) {
+              const months = event.target.dataset.months;
+              loadStatsForPeriod( parseInt( months ) );
+            }
+          } );
+        }
+
+        loadStatsForPeriod( DEFAULT_MONTHS );
       }
-
-      const controls = document.getElementById( 'gcStatsControls' );
-      if ( controls ) {
-        controls.addEventListener( 'click', event => {
-          if ( event.target.tagName === 'BUTTON' ) {
-            const months = event.target.dataset.months;
-            loadStatsForPeriod( parseInt( months ) );
-          }
-        } );
-      }
-
-      loadStatsForPeriod( DEFAULT_MONTHS );
-    }
-  } );
+    } );
+  } catch ( _e ) {
+    // Context invalidated
+  }
 };
