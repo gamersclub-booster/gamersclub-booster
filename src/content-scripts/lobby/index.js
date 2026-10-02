@@ -9,7 +9,8 @@ import { mostrarInfoPlayerIntervaler, mostrarKdr, mostrarKdrDesafios, mostrarKdr
 import { partidaInfo } from './partidaInfo';
 import { somReady, somReadySetInterval, tocarSomSeVoceForExpulsoDaLobby } from './sons';
 import { adicionarFiltroKdr } from './filtrarKdr';
-import { infoChallenge, infoLobby } from './infoLobby';
+import { iniciarLupa } from './infoLobby';
+import { iniciarMatchRaioX } from './matchRaioX';
 
 import { autoKickNegativados } from './autoKickNegativados';
 import { autoMostrarIp } from './autoMostrarIp';
@@ -19,14 +20,18 @@ import { ocultarSugestaoDeLobbies } from './ocultarSugestaoDeLobbies';
 import { showStats } from './showStats';
 import { lobbyMapSuggestions } from './lobbyMapSuggestions';
 import { showPlayerSoloStats } from './showPlayerSoloStats';
+import { isExtensionContextValid } from '../../utils';
 
-chrome.storage.sync.get( null, function ( _result ) {
-  if ( window.location.pathname.includes( 'partida' ) || window.location.pathname.includes( '/match/' ) ) {
-    //lobbyMapSuggestions( '25270001' );
-    return;
+if ( isExtensionContextValid() ) {
+  try {
+    chrome.storage.sync.get( null, function ( _result ) {
+      if ( chrome.runtime?.lastError ) { return; }
+      initLobby();
+    } );
+  } catch ( _e ) {
+    // Context invalidated
   }
-  initLobby();
-} );
+}
 
 const initLobby = async () => {
   // Resetar estado do auto copy lobby link quando entrar no lobby
@@ -43,8 +48,7 @@ const initLobby = async () => {
   criarObserver( '.lobby', autoCopyLobbyLink );
 
   criarObserver( '#lobbies-wrapper', mostrarKdr );
-  criarObserver( '#lobbies-wrapper', infoLobby );
-  criarObserver( '.lobby', infoChallenge );
+  iniciarLupa();
   criarObserver( '#GamersClubCSApp-globals-globalToaster', tocarSomSeVoceForExpulsoDaLobby );
 
 
@@ -82,11 +86,41 @@ const initLobby = async () => {
   lobbyMapSuggestions();
   showPlayerSoloStats();
   showKdrMatch();
+  iniciarMatchRaioX();
   adicionarFiltroKdr();
+
+  // Monitorar navegação SPA para partidas e novos lobbies
+  let currentPathname = window.location.pathname;
+  const onPathChange = () => {
+    if ( isExtensionContextValid() ) {
+      iniciarMatchRaioX();
+      iniciarLupa();
+      mostrarKdrDesafios();
+    }
+  };
+
+  window.addEventListener( 'popstate', onPathChange );
+  window.addEventListener( 'hashchange', onPathChange );
+
+  const pathObserver = new MutationObserver( () => {
+    if ( !isExtensionContextValid() ) {
+      pathObserver.disconnect();
+      return;
+    }
+    if ( window.location.pathname !== currentPathname ) {
+      currentPathname = window.location.pathname;
+      onPathChange();
+    }
+  } );
+  pathObserver.observe( document.body, { childList: true, subtree: true } );
 };
 
 const criarObserver = ( seletor, exec, type ) => {
   const observer = new MutationObserver( mutations => {
+    if ( !isExtensionContextValid() ) {
+      observer.disconnect();
+      return;
+    }
 
     let shouldExec = false;
     mutations.forEach( mutation => {

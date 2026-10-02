@@ -18,6 +18,8 @@
  * - A microcopy nova ainda nao esta integrada ao sistema de traducoes da extensao.
  */
 
+import { isExtensionContextValid } from '../../utils';
+
 // Vulnerability note:
 // Ready detection still relies on button text matching.
 // If GamersClub changes the label, language, or DOM structure,
@@ -44,10 +46,20 @@ const readySession = {
 let readySessionCounter = 0;
 
 function getAutoReadySettings( callback ) {
-  chrome.storage.sync.get( [
-    'autoAceitarReady',
-    'autoAceitarReadyDelaySeconds'
-  ], callback );
+  if ( !isExtensionContextValid() ) {
+    return;
+  }
+  try {
+    chrome.storage.sync.get( [
+      'autoAceitarReady',
+      'autoAceitarReadyDelaySeconds'
+    ], result => {
+      if ( chrome.runtime?.lastError ) { return; }
+      callback( result );
+    } );
+  } catch ( _e ) {
+    // Extension context invalidated
+  }
 }
 
 function getDelaySeconds( settings ) {
@@ -293,6 +305,11 @@ function renderReadyPopup( sessionToken, delaySeconds ) {
 
   clearPendingCountdownInterval();
   readySession.pendingCountdownInterval = setInterval( () => {
+    if ( !isExtensionContextValid() ) {
+      clearPendingCountdownInterval();
+      return;
+    }
+
     if ( sessionToken !== readySession.sessionToken ) {
       clearPendingCountdownInterval();
       return;
@@ -381,7 +398,11 @@ export const autoAceitarReady = _mutations =>
   getAutoReadySettings( processAutoReady );
 
 export function autoAceitarReadySetInterval() {
-  setInterval( () => {
+  const intervalId = setInterval( () => {
+    if ( !isExtensionContextValid() ) {
+      clearInterval( intervalId );
+      return;
+    }
     getAutoReadySettings( processAutoReady );
   }, 300 );
 }

@@ -1,4 +1,4 @@
-//import { mostrarKdr } from './mostrarKdr.js';
+import { isExtensionContextValid } from '../../utils';
 
 let observerLobbiesWrapper = null;
 let observerChallengesList = null;
@@ -87,23 +87,40 @@ const salvarFaixaPersistida = ( min, max ) => {
 
   timeoutSalvarFaixa = window.setTimeout( () => {
     timeoutSalvarFaixa = null;
-    chrome.storage.sync.set( {
-      [FILTER_MIN_OPTION_KEY]: Number( min.toFixed( 1 ) ),
-      [FILTER_MAX_OPTION_KEY]: Number( max.toFixed( 1 ) )
-    } );
+    if ( !isExtensionContextValid() ) { return; }
+    try {
+      chrome.storage.sync.set( {
+        [FILTER_MIN_OPTION_KEY]: Number( min.toFixed( 1 ) ),
+        [FILTER_MAX_OPTION_KEY]: Number( max.toFixed( 1 ) )
+      } );
+    } catch ( _e ) {
+      // Context invalidated
+    }
   }, 120 );
 };
 
 const carregarFaixaPersistida = callback => {
-  chrome.storage.sync.get( [ FILTER_MIN_OPTION_KEY, FILTER_MAX_OPTION_KEY ], result => {
-    const minPersistido = normalizarValorFaixa( result[FILTER_MIN_OPTION_KEY], KDR_MIN_RANGE );
-    const maxPersistido = normalizarValorFaixa( result[FILTER_MAX_OPTION_KEY], KDR_MAX_RANGE );
+  if ( !isExtensionContextValid() ) {
+    callback( { min: KDR_MIN_RANGE, max: KDR_MAX_RANGE } );
+    return;
+  }
+  try {
+    chrome.storage.sync.get( [ FILTER_MIN_OPTION_KEY, FILTER_MAX_OPTION_KEY ], result => {
+      if ( chrome.runtime?.lastError || !result ) {
+        callback( { min: KDR_MIN_RANGE, max: KDR_MAX_RANGE } );
+        return;
+      }
+      const minPersistido = normalizarValorFaixa( result[FILTER_MIN_OPTION_KEY], KDR_MIN_RANGE );
+      const maxPersistido = normalizarValorFaixa( result[FILTER_MAX_OPTION_KEY], KDR_MAX_RANGE );
 
-    callback( {
-      min: Math.min( minPersistido, maxPersistido ),
-      max: Math.max( minPersistido, maxPersistido )
+      callback( {
+        min: Math.min( minPersistido, maxPersistido ),
+        max: Math.max( minPersistido, maxPersistido )
+      } );
     } );
-  } );
+  } catch ( _e ) {
+    callback( { min: KDR_MIN_RANGE, max: KDR_MAX_RANGE } );
+  }
 };
 
 const obterValoresFiltroAtual = () => {
@@ -447,6 +464,10 @@ const iniciarObserverLobbies = () => {
   }
 
   observerLobbiesWrapper = new MutationObserver( () => {
+    if ( !isExtensionContextValid() ) {
+      limparFiltro();
+      return;
+    }
     agendarAplicacaoFiltro();
   } );
 
@@ -467,6 +488,10 @@ const iniciarObserverDesafios = () => {
   }
 
   observerChallengesList = new MutationObserver( () => {
+    if ( !isExtensionContextValid() ) {
+      limparFiltro();
+      return;
+    }
     agendarAplicacaoFiltro();
   } );
 
@@ -509,65 +534,76 @@ const limparFiltro = () => {
 };
 
 const adicionarFiltroKdr = () => {
-  chrome.storage.sync.get( [ FILTER_OPTION_KEY ], result => {
-    if ( result[FILTER_OPTION_KEY] === false ) {
-      limparFiltro();
-      return;
-    }
+  if ( !isExtensionContextValid() ) { return; }
+  try {
+    chrome.storage.sync.get( [ FILTER_OPTION_KEY ], result => {
+      if ( chrome.runtime?.lastError || !result ) { return; }
+      if ( result[FILTER_OPTION_KEY] === false ) {
+        limparFiltro();
+        return;
+      }
 
-    criarUiFiltro();
-    iniciarObserverLobbies();
+      criarUiFiltro();
+      iniciarObserverLobbies();
 
-    if ( observerPage ) {
-      observerPage.disconnect();
-    }
+      if ( observerPage ) {
+        observerPage.disconnect();
+      }
 
-    observerPage = new MutationObserver( mutations => {
-      const temMudancaRelevante = mutations.some( mutation => {
-        return Array.from( mutation.addedNodes ).some( node => {
-          if ( !( node instanceof Element ) ) { return false; }
-          return node.matches( MENU_SELECTOR ) ||
-            !!node.querySelector( MENU_SELECTOR ) ||
-            node.matches( LOBBIES_WRAPPER_SELECTOR ) ||
-            !!node.querySelector( LOBBIES_WRAPPER_SELECTOR ) ||
-            node.matches( CHALLENGES_LIST_SELECTOR ) ||
-            !!node.querySelector( CHALLENGES_LIST_SELECTOR ) ||
-            node.matches( CHALLENGE_ITEM_SELECTOR ) ||
-            !!node.querySelector( CHALLENGE_ITEM_SELECTOR );
+      observerPage = new MutationObserver( mutations => {
+        if ( !isExtensionContextValid() ) {
+          limparFiltro();
+          return;
+        }
+
+        const temMudancaRelevante = mutations.some( mutation => {
+          return Array.from( mutation.addedNodes ).some( node => {
+            if ( !( node instanceof Element ) ) { return false; }
+            return node.matches( MENU_SELECTOR ) ||
+              !!node.querySelector( MENU_SELECTOR ) ||
+              node.matches( LOBBIES_WRAPPER_SELECTOR ) ||
+              !!node.querySelector( LOBBIES_WRAPPER_SELECTOR ) ||
+              node.matches( CHALLENGES_LIST_SELECTOR ) ||
+              !!node.querySelector( CHALLENGES_LIST_SELECTOR ) ||
+              node.matches( CHALLENGE_ITEM_SELECTOR ) ||
+              !!node.querySelector( CHALLENGE_ITEM_SELECTOR );
+          } );
         } );
+
+        if ( !temMudancaRelevante ) { return; }
+
+        const hasUi = !!document.getElementById( 'filtrarKdrMinInput' );
+        if ( !hasUi ) {
+          //mostrarKdr();
+          criarUiFiltro();
+        }
+
+        if ( !document.querySelector( LOBBIES_WRAPPER_SELECTOR ) ) { return; }
+        if ( !observerLobbiesWrapper ) {
+          iniciarObserverLobbies();
+        }
+
+        if ( document.querySelector( CHALLENGES_LIST_SELECTOR ) ) {
+          if ( !observerChallengesList ) {
+            iniciarObserverDesafios();
+          }
+        } else if ( observerChallengesList ) {
+          observerChallengesList.disconnect();
+          observerChallengesList = null;
+        }
+
+        agendarAplicacaoFiltro();
+
       } );
 
-      if ( !temMudancaRelevante ) { return; }
-
-      const hasUi = !!document.getElementById( 'filtrarKdrMinInput' );
-      if ( !hasUi ) {
-        //mostrarKdr();
-        criarUiFiltro();
-      }
-
-      if ( !document.querySelector( LOBBIES_WRAPPER_SELECTOR ) ) { return; }
-      if ( !observerLobbiesWrapper ) {
-        iniciarObserverLobbies();
-      }
-
-      if ( document.querySelector( CHALLENGES_LIST_SELECTOR ) ) {
-        if ( !observerChallengesList ) {
-          iniciarObserverDesafios();
-        }
-      } else if ( observerChallengesList ) {
-        observerChallengesList.disconnect();
-        observerChallengesList = null;
-      }
-
-      agendarAplicacaoFiltro();
-
+      observerPage.observe( document.body, {
+        childList: true,
+        subtree: true
+      } );
     } );
-
-    observerPage.observe( document.body, {
-      childList: true,
-      subtree: true
-    } );
-  } );
+  } catch ( _e ) {
+    // Context invalidated
+  }
 };
 
 export { adicionarFiltroKdr };

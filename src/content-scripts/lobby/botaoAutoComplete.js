@@ -1,6 +1,6 @@
 import { preVetosMapas } from '../../lib/constants';
 import { alertaMsg } from '../../lib/messageAlerts';
-import { getAllStorageSyncData, getTranslationText } from '../../utils';
+import { getAllStorageSyncData, getTranslationText, isExtensionContextValid } from '../../utils';
 
 let intervalId;
 
@@ -54,6 +54,10 @@ export async function adicionarBotaoAutoComplete() {
   if ( !$( '#btn-auto-complete' ).length ) { // Se precisa criar o botão e adicionar na página
 
     const observer = new MutationObserver( () => {
+      if ( !isExtensionContextValid() ) {
+        observer.disconnect();
+        return;
+      }
       const btnAlreadyExists = $( '#btn-auto-complete' ).length;
       const $extWrapper = $( '#gc-ext-wrapper' );
 
@@ -84,6 +88,10 @@ export async function adicionarBotaoAutoComplete() {
 
 function intervalerAutoComplete() {
   intervalId = setInterval( function () {
+    if ( !isExtensionContextValid() ) {
+      clearInterval( intervalId );
+      return;
+    }
     // Verifique se não está no lobby
     if ( $( '#SidebarSala' ).length === 0 ) {
       const acceptBtn = $( '.LobbyComplete__requestItemContainer > button' );
@@ -94,52 +102,57 @@ function intervalerAutoComplete() {
         const mapCode = getMapCode( $( '.LobbyComplete__requestItemMap' ).text() );
 
         if ( Number.isFinite( scoreWinning ) && Number.isFinite( scoreLosing ) && mapCode ) {
-          chrome.storage.sync.get( [ 'complete', 'roundsDiff', 'roundsMin', 'roundsMax' ], res => {
-            const { complete, roundsDiff, roundsMin, roundsMax } = res || {};
+          try {
+            chrome.storage.sync.get( [ 'complete', 'roundsDiff', 'roundsMin', 'roundsMax' ], res => {
+              if ( chrome.runtime?.lastError || !res ) { return; }
+              const { complete, roundsDiff, roundsMin, roundsMax } = res || {};
 
-            const isInCheckedMaps = !complete || complete.includes( mapCode );
-            const hasMinRounds = ( scoreWinning + scoreLosing ) >= ( roundsMin || 0 );
-            const isInDiff = Math.abs( scoreWinning - scoreLosing ) <= ( roundsDiff || 13 );
-            const hasMaxWinningRounds = scoreWinning <= ( roundsMax || 12 );
+              const isInCheckedMaps = !complete || complete.includes( mapCode );
+              const hasMinRounds = ( scoreWinning + scoreLosing ) >= ( roundsMin || 0 );
+              const isInDiff = Math.abs( scoreWinning - scoreLosing ) <= ( roundsDiff || 13 );
+              const hasMaxWinningRounds = scoreWinning <= ( roundsMax || 12 );
 
-            if ( isInCheckedMaps && hasMinRounds && isInDiff && hasMaxWinningRounds ) {
-              clearInterval( intervalId );
+              if ( isInCheckedMaps && hasMinRounds && isInDiff && hasMaxWinningRounds ) {
+                clearInterval( intervalId );
 
-              // Clica no botão de aceitar do complete
-              acceptBtn.get( 0 ).click();
+                // Clica no botão de aceitar do complete
+                acceptBtn.get( 0 ).click();
 
-              // Aguarda o modal aparecer e clica na confirmação
-              const confirmationAttempt = setInterval( () => {
-                let confirmBtn = $( '#completePlayerModal .sm-button-accept.btn.btn-success' );
+                // Aguarda o modal aparecer e clica na confirmação
+                const confirmationAttempt = setInterval( () => {
+                  let confirmBtn = $( '#completePlayerModal .sm-button-accept.btn.btn-success' );
 
-                // Fallback: procura por qualquer botão de confirmação no modal
-                if ( !confirmBtn.length ) {
-                  confirmBtn = $( '#completePlayerModal button.btn-success' );
-                }
+                  // Fallback: procura por qualquer botão de confirmação no modal
+                  if ( !confirmBtn.length ) {
+                    confirmBtn = $( '#completePlayerModal button.btn-success' );
+                  }
 
-                // Se encontrou o botão, clica e aguarda redirecionamento
-                if ( confirmBtn.length ) {
-                  confirmBtn.eq( 0 ).click();
+                  // Se encontrou o botão, clica e aguarda redirecionamento
+                  if ( confirmBtn.length ) {
+                    confirmBtn.eq( 0 ).click();
+                    clearInterval( confirmationAttempt );
+
+                    // Fallback: reload se o redirecionamento não acontecer em 2 segundos
+                    setTimeout( () => {
+                      if ( window.location.pathname.includes( 'lobby' ) ) {
+                        window.location.reload();
+                      }
+                    }, 2000 );
+                  }
+                }, 100 );
+
+                // Timeout: se não encontrar o botão de confirmação em 3s, avisa o usuário
+                setTimeout( () => {
                   clearInterval( confirmationAttempt );
-
-                  // Fallback: reload se o redirecionamento não acontecer em 2 segundos
-                  setTimeout( () => {
-                    if ( window.location.pathname.includes( 'lobby' ) ) {
-                      window.location.reload();
-                    }
-                  }, 2000 );
-                }
-              }, 100 );
-
-              // Timeout: se não encontrar o botão de confirmação em 3s, avisa o usuário
-              setTimeout( () => {
-                clearInterval( confirmationAttempt );
-                if ( window.location.pathname.includes( 'lobby' ) ) {
-                  alertaMsg( 'Não foi possível confirmar o complete automaticamente' );
-                }
-              }, 3000 );
-            }
-          } );
+                  if ( window.location.pathname.includes( 'lobby' ) ) {
+                    alertaMsg( 'Não foi possível confirmar o complete automaticamente' );
+                  }
+                }, 3000 );
+              }
+            } );
+          } catch ( _e ) {
+            // Context invalidated
+          }
         }
       }
     } else {

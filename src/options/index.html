@@ -78,6 +78,11 @@
           <img src="images/menu/integracoes.svg" alt="Integrações" class="img-menu" />
           <a href="#integracoes" translation-key="discord"></a>
         </li>
+        <li id="link-playerLinks">
+          <img src="images/menu/geral.svg" alt="Links de Perfil" class="img-menu" />
+          <a href="#playerLinks" translation-key="player-links">🔗 Links de Perfil</a>
+        </li>
+
         <li id="link-backup">
           <img src="images/menu/backup.svg" alt="Backup" class="img-menu" />
           <a href="#backup" translation-key="backup"></a>
@@ -651,6 +656,46 @@
             </label>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- PLAYER LINKS -->
+    <div class="pagina" id="playerLinks">
+      <h3 class="subtitulo">🔗 Links de Perfil</h3>
+      <p class="descricao">
+        Acesse rapidamente o perfil de cada jogador na Steam e a análise completa no csREP.gg,
+        diretamente na Lupa de cada sala no lobby, na aba Meus Desafios e na tela de Match.
+        Essa funcionalidade apenas monta links a partir do perfil já público na Gamers Club —
+        <strong>não faz nenhuma requisição à Steam e não exige nenhuma permissão extra</strong> da extensão.
+      </p>
+
+      <!-- Toggle principal -->
+      <label class="container" for="playerLinksEnabled"
+        title="Ativa os links de perfil na Lupa, Desafios e Match">
+        <p class="descricao" translation-key="player-links-ativar">Ativar Links de Perfil (Lupa, Desafios e Match)</p>
+        <input type="checkbox" id="playerLinksEnabled" />
+
+        <span class="checkmark"></span>
+      </label>
+
+      <!-- csREP Info -->
+      <h3 class="subtitulo" style="margin-top: 24px;">🔍 csREP.gg — Auditoria com IA</h3>
+      <div class="form-input">
+        <p class="descricao" style="font-size: 12px; opacity: 0.8;">
+          O csREP.gg analisa demos com IA para detectar trapaças de forma avançada.<br>
+          <strong>Não precisa de API key!</strong> Um botão "🔍 csREP" aparece ao lado
+          de cada jogador no lobby — basta clicar para abrir a análise completa.<br><br>
+          📊 <strong>O que o csREP mostra:</strong><br>
+          • Trust Score (0-100%) — pontuação de confiança baseada em IA<br>
+          • Demo Stats — TTD, Reaction Time, Crosshair Placement, Preaim<br>
+          • Anomaly Detection — boosting, manipulação de partida, skill mismatch<br>
+          • HLTV Rating 2.0, KAST%, ADR<br>
+          • Ranks cruzados — FACEIT, Premier, Wingman<br><br>
+          💡 <strong>Dica:</strong> Você também pode adicionar "w" antes de qualquer URL
+          de perfil Steam para abrir no csREP. Ex:<br>
+          <code>steamcommunity.com/profiles/123...</code> →
+          <code><strong>w</strong>steamcommunity.com/profiles/123...</code>
+        </p>
       </div>
     </div>
 
