@@ -290,6 +290,7 @@ function injectHTML() {
 function renderStats( stats ) {
   const summary = document.getElementById( 'gcStatsSummary' );
   const content = document.getElementById( 'gcStatsContent' );
+  if ( !summary || !content ) { return; }
 
   if ( stats.overall.totalMatches === 0 ) {
     summary.innerHTML = '<span>Nenhuma partida encontrada para este período.</span>';
@@ -322,10 +323,14 @@ function renderStats( stats ) {
 }
 
 function setUIState( state ) {
-  document.getElementById( 'gcStatsLoading' ).style.display = state === 'loading' ? 'flex' : 'none';
-  document.getElementById( 'gcStatsBody' ).style.display = state === 'success' ? 'block' : 'none';
-  document.getElementById( 'gcStatsError' ).style.display = state === 'error' ? 'block' : 'none';
-  if ( state === 'error' ) { document.getElementById( 'gcStatsError' ).innerHTML = '<p>Erro ao carregar as estatísticas. Verifique o console.</p>'; }
+  const loading = document.getElementById( 'gcStatsLoading' );
+  const body = document.getElementById( 'gcStatsBody' );
+  const error = document.getElementById( 'gcStatsError' );
+  if ( !loading || !body || !error ) { return; }
+  loading.style.display = state === 'loading' ? 'flex' : 'none';
+  body.style.display = state === 'success' ? 'block' : 'none';
+  error.style.display = state === 'error' ? 'block' : 'none';
+  if ( state === 'error' ) { error.innerHTML = '<p>Erro ao carregar as estatísticas. Verifique o console.</p>'; }
 }
 
 async function loadStatsForPeriod( monthsCount ) {

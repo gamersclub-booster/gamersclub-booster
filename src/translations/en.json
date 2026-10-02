@@ -102,6 +102,6 @@
   "show-stats": "Show player stats in the Lobby",
   "disable-show-map-stats-suggestions": "Disable map stats suggestions in the Lobby",
   "disable-show-player-solo-stats": "Disable solo player stats in the Lobby",
-  "player-audit": "Player Audit",
-  "player-audit-ativar": "Enable Player Audit (Lupa, Challenges & Match)"
+  "player-links": "Profile Links",
+  "player-links-ativar": "Enable Profile Links (Lupa, Challenges & Match)"
 }

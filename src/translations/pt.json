@@ -103,6 +103,6 @@
   "show-stats": "Exibir estatísticas do jogador na Lobby",
   "disable-show-map-stats-suggestions": "Desativar sugestões de estatísticas de mapas na Lobby",
   "disable-show-player-solo-stats": "Desativar estatísticas solo do jogador na Lobby",
-  "player-audit": "Player Audit",
-  "player-audit-ativar": "Ativar Player Audit (Lupa, Desafios e Match)"
+  "player-links": "Links de Perfil",
+  "player-links-ativar": "Ativar Links de Perfil (Lupa, Desafios e Match)"
 }

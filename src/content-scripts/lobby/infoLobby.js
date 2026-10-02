@@ -1,5 +1,5 @@
 import { getPlayerInfo } from './getPlayerInfo';
-import { auditPlayers } from '../../lib/playerAudit';
+import { getPlayerLinks } from '../../lib/playerLinks';
 import { GC_URL } from '../../lib/constants';
 import { isExtensionContextValid } from '../../utils';
 
@@ -12,10 +12,9 @@ const createDiv = lobbyId => $( '<div/>',
     title: IMAGE_ALT
   } );
 
-const createProfileLink = ( playerId, audit ) => {
+const createProfileLink = playerId => {
   const gcHost = GC_URL || window.location.hostname || 'gamersclub.com.br';
   const gcUrl = `https://${gcHost}/jogador/${playerId}`;
-  const displayName = audit?.personaName ? audit.personaName : 'Jogador';
 
   return $( '<div />', {
     class: 'gcbooster-info-profile'
@@ -24,7 +23,7 @@ const createProfileLink = ( playerId, audit ) => {
     href: gcUrl,
     target: '_blank',
     rel: 'noopener noreferrer',
-    title: `Abrir perfil de ${displayName} na Gamers Club`,
+    title: 'Abrir perfil na Gamers Club',
     text: '👤 Perfil'
   } ) );
 };
@@ -81,45 +80,21 @@ const createDivAnotacao = playerInfo => $( '<div />',
     text: `A: ${playerInfo?.anotacao === 'Positiva' ? '👍' : playerInfo?.anotacao === 'Negativa' ? '👎' : '-'}`
   } );
 
-const createDivAudit = audit => {
-  if ( !audit || audit.error ) { return ''; }
+const createDivLinks = links => {
+  if ( !links || links.error || ( !links.steamUrl && !links.csrepUrl ) ) { return ''; }
 
-  const $auditDiv = $( '<div />', {
+  const $linksDiv = $( '<div />', {
     class: 'gcbooster-info-audit'
   } );
-
-  let statusText = 'Steam: OK';
-  let statusColor = '#2ecc71';
-
-  if ( audit.vacBanned || audit.numberOfGameBans > 0 ) {
-    statusText = '⛔ BAN';
-    statusColor = '#e74c3c';
-  } else if ( audit.riskLevel === 'suspect' ) {
-    statusText = '⚠️ Suspeito';
-    statusColor = '#f39c12';
-  }
-
-  $auditDiv.append( $( '<div />', {
-    class: 'gcbooster-audit-status',
-    text: statusText,
-    style: `color: ${statusColor};`
-  } ) );
-
-  if ( audit.steamLevel !== null && audit.steamLevel !== undefined ) {
-    $auditDiv.append( $( '<div />', {
-      class: 'gcbooster-audit-level',
-      text: `Lvl ${audit.steamLevel}`
-    } ) );
-  }
 
   const $actionsRow = $( '<div />', {
     class: 'gcbooster-audit-actions-row'
   } );
 
-  if ( audit.steamUrl ) {
+  if ( links.steamUrl ) {
     $actionsRow.append( $( '<a />', {
       class: 'gcbooster-steam-btn',
-      href: audit.steamUrl,
+      href: links.steamUrl,
       target: '_blank',
       rel: 'noopener noreferrer',
       text: '🎮 Steam',
@@ -127,10 +102,10 @@ const createDivAudit = audit => {
     } ) );
   }
 
-  if ( audit.csrepUrl ) {
+  if ( links.csrepUrl ) {
     $actionsRow.append( $( '<a />', {
       class: 'gcbooster-csrep-btn',
-      href: audit.csrepUrl,
+      href: links.csrepUrl,
       target: '_blank',
       rel: 'noopener noreferrer',
       text: '🔍 csREP',
@@ -138,9 +113,9 @@ const createDivAudit = audit => {
     } ) );
   }
 
-  $auditDiv.append( $actionsRow );
+  $linksDiv.append( $actionsRow );
 
-  return $auditDiv;
+  return $linksDiv;
 };
 
 const createDivKdr = playerInfo => {
@@ -163,12 +138,12 @@ const createDivKdr = playerInfo => {
   } );
 };
 
-export const createDivPlayers = ( playerInfo, audit, playerId ) => $( '<div/>',
+export const createDivPlayers = ( playerInfo, links, playerId ) => $( '<div/>',
   {
     class: 'gcbooster-info-player',
     'data-player-card-id': playerId
   } )
-  .append( createProfileLink( playerId, audit ) )
+  .append( createProfileLink( playerId ) )
   .append( $( '<div />', { class: 'gcbooster-info-stats-group' } )
     .append( createDivKdr( playerInfo ) )
     .append( createDivDateCreate( playerInfo ) )
@@ -176,7 +151,7 @@ export const createDivPlayers = ( playerInfo, audit, playerId ) => $( '<div/>',
     .append( createDivVitory( playerInfo ) )
     .append( createDivAnotacao( playerInfo ) )
   )
-  .append( createDivAudit( audit ) );
+  .append( createDivLinks( links ) );
 
 const createImage = lobbyId => $( '<img/>', {
   id: `gcbooster_lupa_img_${lobbyId}`,
@@ -397,18 +372,18 @@ const toggleRaioXModal = async ( $trigger, $container, getPlayersIdsFunction, ty
       modal.append( loadingDiv );
     } );
 
-    // Verifica configuração de audit com timeout de segurança
+    // Verifica configuração de links com timeout de segurança
     const syncConfig = await new Promise( resolve => {
       if ( !isExtensionContextValid() ) {
-        return resolve( { playerAuditEnabled: true } );
+        return resolve( { playerLinksEnabled: true } );
       }
       let timedOut = false;
       const timer = setTimeout( () => {
         timedOut = true;
-        resolve( { playerAuditEnabled: true } );
+        resolve( { playerLinksEnabled: true } );
       }, 500 );
       try {
-        chrome.storage.sync.get( [ 'playerAuditEnabled' ], res => {
+        chrome.storage.sync.get( [ 'playerLinksEnabled' ], res => {
           if ( !timedOut ) {
             clearTimeout( timer );
             resolve( res );
@@ -417,35 +392,35 @@ const toggleRaioXModal = async ( $trigger, $container, getPlayersIdsFunction, ty
       } catch ( _e ) {
         if ( !timedOut ) {
           clearTimeout( timer );
-          resolve( { playerAuditEnabled: true } );
+          resolve( { playerLinksEnabled: true } );
         }
       }
     } );
-    const auditEnabled = syncConfig?.playerAuditEnabled !== false;
+    const linksEnabled = syncConfig?.playerLinksEnabled !== false;
 
     // Renderização progressiva em streaming para zero espera
     const playerStatsMap = new Map();
-    const playerAuditMap = new Map();
+    const playerLinksMap = new Map();
 
     const updateCard = pId => {
       if ( !document.getElementById( `infos_lobby_${lobbyId}` ) ) { return; }
       const info = playerStatsMap.get( String( pId ) );
       if ( !info ) { return; }
 
-      const audit = playerAuditMap.get( String( pId ) ) || null;
+      const links = playerLinksMap.get( String( pId ) ) || null;
       const $slot = modal.find( `[data-player-id="${pId}"], [data-player-card-id="${pId}"]` );
       if ( $slot.length > 0 ) {
-        const $card = createDivPlayers( info, audit, pId );
+        const $card = createDivPlayers( info, links, pId );
         $slot.replaceWith( $card );
       }
     };
 
-    // 1. Auditoria Steam / csREP iniciada em paralelo
-    const auditPromise = auditEnabled ?
-      auditPlayers( players ).then( list => {
+    // 1. Links de Steam / csREP resolvidos em paralelo
+    const linksPromise = linksEnabled ?
+      getPlayerLinks( players ).then( list => {
         if ( Array.isArray( list ) ) {
-          list.forEach( a => {
-            if ( a?.gcId ) { playerAuditMap.set( String( a.gcId ), a ); }
+          list.forEach( l => {
+            if ( l?.gcId ) { playerLinksMap.set( String( l.gcId ), l ); }
           } );
         }
         players.forEach( pId => updateCard( pId ) );
@@ -470,7 +445,7 @@ const toggleRaioXModal = async ( $trigger, $container, getPlayersIdsFunction, ty
     );
 
     // Aguarda todos finalizarem antes de restaurar a opacidade do botão
-    await Promise.allSettled( [ ...infoPromises, auditPromise ] );
+    await Promise.allSettled( [ ...infoPromises, linksPromise ] );
   } finally {
     $trigger.css( 'opacity', '1' );
   }

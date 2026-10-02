@@ -69,7 +69,7 @@ export const features = [
   'autoCopyLobbyLink',
   'showStats',
   'filtrarKdrMedioLobby',
-  'playerAuditEnabled'
+  'playerLinksEnabled'
 ];
 export const preVetosMapas = [
   {
@@ -131,7 +131,7 @@ export const configValues = [
   'customSomWarmup',
   'warmupSoundTime'
 ];
-export const paginas = [ 'novidades', 'geral', 'mapas', 'lobby', 'complete', 'contato', 'sobre', 'sons', 'integracoes', 'playerAudit',
+export const paginas = [ 'novidades', 'geral', 'mapas', 'lobby', 'complete', 'contato', 'sobre', 'sons', 'integracoes', 'playerLinks',
   'backup', 'doacao' ];
 export const audios = {
   '': 'Nenhum',

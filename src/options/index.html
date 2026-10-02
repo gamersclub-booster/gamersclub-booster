@@ -78,9 +78,9 @@
           <img src="images/menu/integracoes.svg" alt="Integrações" class="img-menu" />
           <a href="#integracoes" translation-key="discord"></a>
         </li>
-        <li id="link-playerAudit">
-          <img src="images/menu/geral.svg" alt="Player Audit" class="img-menu" />
-          <a href="#playerAudit" translation-key="player-audit">🛡️ Player Audit</a>
+        <li id="link-playerLinks">
+          <img src="images/menu/geral.svg" alt="Links de Perfil" class="img-menu" />
+          <a href="#playerLinks" translation-key="player-links">🔗 Links de Perfil</a>
         </li>
 
         <li id="link-backup">
@@ -659,30 +659,31 @@
       </div>
     </div>
 
-    <!-- PLAYER AUDIT -->
-    <div class="pagina" id="playerAudit">
-      <h3 class="subtitulo">🛡️ Player Audit (Raio-X do Jogador)</h3>
+    <!-- PLAYER LINKS -->
+    <div class="pagina" id="playerLinks">
+      <h3 class="subtitulo">🔗 Links de Perfil</h3>
       <p class="descricao">
-        Detecte jogadores banidos (VAC, Game Ban) e contas suspeitas 
-        (smurfs, contas novas) diretamente na Lupa de cada sala no lobby, na aba Meus Desafios e na tela de Match.
-        Inclui link direto para o perfil do jogador na Gamers Club, perfil na Steam e auditoria completa por IA no csREP.gg.
+        Acesse rapidamente o perfil de cada jogador na Steam e a análise completa no csREP.gg,
+        diretamente na Lupa de cada sala no lobby, na aba Meus Desafios e na tela de Match.
+        Essa funcionalidade apenas monta links a partir do perfil já público na Gamers Club —
+        <strong>não faz nenhuma requisição à Steam e não exige nenhuma permissão extra</strong> da extensão.
       </p>
-      
+
       <!-- Toggle principal -->
-      <label class="container" for="playerAuditEnabled" 
-        title="Ativa a verificação de jogadores na Lupa, Desafios e Match">
-        <p class="descricao" translation-key="player-audit-ativar">Ativar Player Audit (Lupa, Desafios e Match)</p>
-        <input type="checkbox" id="playerAuditEnabled" />
+      <label class="container" for="playerLinksEnabled"
+        title="Ativa os links de perfil na Lupa, Desafios e Match">
+        <p class="descricao" translation-key="player-links-ativar">Ativar Links de Perfil (Lupa, Desafios e Match)</p>
+        <input type="checkbox" id="playerLinksEnabled" />
 
         <span class="checkmark"></span>
       </label>
-      
+
       <!-- csREP Info -->
       <h3 class="subtitulo" style="margin-top: 24px;">🔍 csREP.gg — Auditoria com IA</h3>
       <div class="form-input">
         <p class="descricao" style="font-size: 12px; opacity: 0.8;">
           O csREP.gg analisa demos com IA para detectar trapaças de forma avançada.<br>
-          <strong>Não precisa de API key!</strong> Um botão "🔍 csREP" aparece ao lado 
+          <strong>Não precisa de API key!</strong> Um botão "🔍 csREP" aparece ao lado
           de cada jogador no lobby — basta clicar para abrir a análise completa.<br><br>
           📊 <strong>O que o csREP mostra:</strong><br>
           • Trust Score (0-100%) — pontuação de confiança baseada em IA<br>
@@ -690,28 +691,11 @@
           • Anomaly Detection — boosting, manipulação de partida, skill mismatch<br>
           • HLTV Rating 2.0, KAST%, ADR<br>
           • Ranks cruzados — FACEIT, Premier, Wingman<br><br>
-          💡 <strong>Dica:</strong> Você também pode adicionar "w" antes de qualquer URL 
+          💡 <strong>Dica:</strong> Você também pode adicionar "w" antes de qualquer URL
           de perfil Steam para abrir no csREP. Ex:<br>
-          <code>steamcommunity.com/profiles/123...</code> → 
+          <code>steamcommunity.com/profiles/123...</code> →
           <code><strong>w</strong>steamcommunity.com/profiles/123...</code>
         </p>
-      </div>
-      
-      <!-- Legenda dos badges -->
-      <h3 class="subtitulo" style="margin-top: 20px;">📊 Legenda dos Badges</h3>
-      <div style="display: flex; flex-direction: column; gap: 8px;">
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <span style="background: #2ecc71; padding: 4px 10px; border-radius: 4px; color: #fff; font-weight: bold; font-size: 12px;">✓</span>
-          <span><strong>Limpo</strong> — Sem banimentos, conta confiável</span>
-        </div>
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <span style="background: #f39c12; padding: 4px 10px; border-radius: 4px; color: #fff; font-weight: bold; font-size: 12px;">⚠</span>
-          <span><strong>Suspeito</strong> — Nível baixo, conta limitada ou perfil privado</span>
-        </div>
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <span style="background: #e74c3c; padding: 4px 10px; border-radius: 4px; color: #fff; font-weight: bold; font-size: 12px;">✕</span>
-          <span><strong>Banido</strong> — VAC Ban ou Trade Ban confirmado</span>
-        </div>
       </div>
     </div>
 

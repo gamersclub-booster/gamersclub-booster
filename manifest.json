@@ -10,13 +10,9 @@
   "host_permissions": [
     "https://*.gamersclub.com.br/",
     "https://cs.gamersclub.gg/",
-    "https://discord.com/api/webhooks/*",
-    "https://steamcommunity.com/*"
+    "https://discord.com/api/webhooks/*"
   ],
   "permissions": ["storage"],
-  "background": {
-    "service_worker": "background.js"
-  },
   "content_scripts": [
     {
       "matches": ["*://*.gamersclub.com.br/*", "*://cs.gamersclub.gg/*"],

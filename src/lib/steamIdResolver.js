@@ -1,4 +1,3 @@
-import { resolveVanityViaXml } from './steamApi';
 import { getFromStorage, setStorage } from './storage';
 import { fetchPlayerProfileHtml } from './profileFetcher';
 
@@ -29,13 +28,10 @@ export async function resolveSteamId( gcPlayerId ) {
 
     const fullUrl = steamMatch[0];
     const steamIdDirect = steamMatch[2];
-    const vanityName = steamMatch[3];
 
-    let steamId = steamIdDirect || null;
-
-    if ( !steamId && vanityName ) {
-      steamId = await resolveVanityViaXml( vanityName );
-    }
+    // Sem permissão de host para steamcommunity.com, não resolvemos vanity URLs
+    // para SteamID64 — perfis com /id/<vanity> usam o link cru da GC (fallback abaixo).
+    const steamId = steamIdDirect || null;
 
     const csrepUrl = fullUrl.replace(
       /https?:\/\/(?:www\.)?steamcommunity\.com/i,

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { getPlayerInfo } from './getPlayerInfo';
-import { auditPlayers } from '../../lib/playerAudit';
+import { getPlayerLinks } from '../../lib/playerLinks';
 import { createDivPlayers } from './infoLobby';
 import { GC_URL } from '../../lib/constants';
 import { isExtensionContextValid } from '../../utils';
@@ -234,18 +234,18 @@ export const openMatchRaioXModal = async ( options = {} ) => {
     return;
   }
 
-  // Verifica configuração de player audit
+  // Verifica configuração de links de perfil
   const syncConfig = await new Promise( resolve => {
     if ( !isExtensionContextValid() ) {
-      return resolve( { playerAuditEnabled: true } );
+      return resolve( { playerLinksEnabled: true } );
     }
     let timedOut = false;
     const timer = setTimeout( () => {
       timedOut = true;
-      resolve( { playerAuditEnabled: true } );
+      resolve( { playerLinksEnabled: true } );
     }, 600 );
     try {
-      chrome.storage.sync.get( [ 'playerAuditEnabled' ], res => {
+      chrome.storage.sync.get( [ 'playerLinksEnabled' ], res => {
         if ( !timedOut ) {
           clearTimeout( timer );
           resolve( res );
@@ -254,21 +254,21 @@ export const openMatchRaioXModal = async ( options = {} ) => {
     } catch ( _e ) {
       if ( !timedOut ) {
         clearTimeout( timer );
-        resolve( { playerAuditEnabled: true } );
+        resolve( { playerLinksEnabled: true } );
       }
     }
   } );
-  const auditEnabled = syncConfig?.playerAuditEnabled !== false;
+  const linksEnabled = syncConfig?.playerLinksEnabled !== false;
 
-  // Busca dados e auditoria em lote
-  const [ playerInfoList, auditList ] = await Promise.all( [
+  // Busca dados do jogador e links de perfil em lote
+  const [ playerInfoList, linksList ] = await Promise.all( [
     Promise.all( all.map( pId => getPlayerInfo( pId ).catch( () => ( {
       dataCriacao: '-',
       totalPartidas: 0,
       porcentagemVitoria: '0.00',
       anotacao: 'Nenhuma'
     } ) ) ) ),
-    auditEnabled ? auditPlayers( all ).catch( () => [] ) : Promise.resolve( [] )
+    linksEnabled ? getPlayerLinks( all ).catch( () => [] ) : Promise.resolve( [] )
   ] );
 
   if ( !document.getElementById( 'gcbooster_match_raiox_modal' ) ) {
@@ -276,38 +276,26 @@ export const openMatchRaioXModal = async ( options = {} ) => {
   }
 
   const playerInfoMap = new Map();
-  const auditMap = new Map();
+  const linksMap = new Map();
 
   all.forEach( ( pId, idx ) => {
     playerInfoMap.set( String( pId ), playerInfoList[idx] );
   } );
 
-  if ( Array.isArray( auditList ) ) {
-    auditList.forEach( audit => {
-      if ( audit?.gcId ) {
-        auditMap.set( String( audit.gcId ), audit );
+  if ( Array.isArray( linksList ) ) {
+    linksList.forEach( links => {
+      if ( links?.gcId ) {
+        linksMap.set( String( links.gcId ), links );
       }
     } );
   }
 
   // Calcular estatísticas agregadas do resumo
-  let bannedCount = 0;
-  let suspectCount = 0;
-  let cleanCount = 0;
   let totalKdr = 0;
   let kdrCount = 0;
 
   all.forEach( pId => {
-    const audit = auditMap.get( String( pId ) );
     const pInfo = playerInfoMap.get( String( pId ) );
-
-    if ( audit?.vacBanned || audit?.numberOfGameBans > 0 ) {
-      bannedCount++;
-    } else if ( audit?.riskLevel === 'suspect' ) {
-      suspectCount++;
-    } else if ( audit ) {
-      cleanCount++;
-    }
 
     const kdrStat = pInfo?.stats?.find( s => s.stat === 'KDR' );
     const kdrVal = parseFloat( kdrStat?.value ?? pInfo?.kdr );
@@ -318,24 +306,6 @@ export const openMatchRaioXModal = async ( options = {} ) => {
   } );
 
   $statsSummary.empty();
-  if ( bannedCount > 0 ) {
-    $statsSummary.append( $( '<span />', {
-      class: 'gcbooster-summary-chip chip-ban',
-      text: `⛔ ${bannedCount} BAN`
-    } ) );
-  }
-  if ( suspectCount > 0 ) {
-    $statsSummary.append( $( '<span />', {
-      class: 'gcbooster-summary-chip chip-suspect',
-      text: `⚠️ ${suspectCount} Suspeito(s)`
-    } ) );
-  }
-  if ( cleanCount > 0 ) {
-    $statsSummary.append( $( '<span />', {
-      class: 'gcbooster-summary-chip chip-clean',
-      text: `🟢 ${cleanCount} Limpos`
-    } ) );
-  }
   if ( kdrCount > 0 ) {
     const avgKdr = ( totalKdr / kdrCount ).toFixed( 2 );
     $statsSummary.append( $( '<span />', {
@@ -364,8 +334,8 @@ export const openMatchRaioXModal = async ( options = {} ) => {
 
       playerIds.forEach( pId => {
         const info = playerInfoMap.get( String( pId ) );
-        const audit = auditMap.get( String( pId ) );
-        const $playerCard = createDivPlayers( info, audit, pId );
+        const links = linksMap.get( String( pId ) );
+        const $playerCard = createDivPlayers( info, links, pId );
 
         if ( highlightPlayer && String( highlightPlayer ) === String( pId ) ) {
           $playerCard.addClass( 'gcbooster-player-highlight' );

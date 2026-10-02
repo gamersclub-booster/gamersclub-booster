@@ -6,13 +6,6 @@ prints
 /dist
 /tmp
 /out-tsc
-.test-profile
-test-local.*
-test-env/
-*INSTALAR_BOOSTER.bat
-*LEIA-ME.txt
-gerar-pacote-para-amigos.bat
-scripts/
 
 # Runtime data
 pids
@@ -102,4 +95,3 @@ Thumbs.db
 
 *test.js
 .env
-*.pdf
