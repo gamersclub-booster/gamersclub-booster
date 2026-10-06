@@ -118,7 +118,7 @@ const closeMatchModal = () => {
 };
 
 export const openMatchRaioXModal = async ( options = {} ) => {
-  const { initialTeam = 'all', highlightPlayer = null } = options;
+  const { initialTeam = 'all' } = options;
 
   const { plID: myPlayerId } = getUserInfo();
   const strMyPlayerId = String( myPlayerId );
@@ -336,11 +336,6 @@ export const openMatchRaioXModal = async ( options = {} ) => {
         const info = playerInfoMap.get( String( pId ) );
         const links = linksMap.get( String( pId ) );
         const $playerCard = createDivPlayers( info, links, pId );
-
-        if ( highlightPlayer && String( highlightPlayer ) === String( pId ) ) {
-          $playerCard.addClass( 'gcbooster-player-highlight' );
-        }
-
         $grid.append( $playerCard );
       } );
 
@@ -369,15 +364,6 @@ export const openMatchRaioXModal = async ( options = {} ) => {
       const titleB = `⚔️ TIME 2${labelB}`;
       $body.append( renderTeamSection( titleB, teamB.length ? teamB : all.slice( 5 ), 'team-b' ) );
     }
-
-    if ( highlightPlayer ) {
-      const $highlighted = $body.find( '.gcbooster-player-highlight' );
-      if ( $highlighted.length ) {
-        setTimeout( () => {
-          $highlighted[0]?.scrollIntoView( { behavior: 'smooth', block: 'nearest' } );
-        }, 150 );
-      }
-    }
   };
 
   renderTeams( initialTeam );
@@ -396,59 +382,25 @@ export const injectMatchButtons = () => {
     return;
   }
 
-  // Remove botões redundantes que possam ter ficado no DOM
-  $( '#gcbooster_match_raiox_btn, #gcbooster_team_a_raiox_btn, #gcbooster_team_b_raiox_btn' ).remove();
+  if ( $( '#gcbooster_match_raiox_btn' ).length > 0 ) {
+    return;
+  }
 
-  // Badges de Raio-X individual nos cards de jogador (.PlayerListCard)
-  $( '.PlayerListCard' ).each( ( _, card ) => {
-    const $card = $( card );
-    if ( $card.find( '.gcbooster-match-player-badge' ).length > 0 ) {
-      return;
-    }
-
-    const $badges = $card.find( '.PlayerIdentityBadges' );
-    if ( $badges.length === 0 ) {
-      return;
-    }
-
-    // Identificar playerId
-    let playerId = null;
-    const $trigger = $card.find( '[id^="trigger-"]' );
-    if ( $trigger.length > 0 ) {
-      const match = $trigger.attr( 'id' ).replace( 'trigger-', '' );
-      if ( /^\d+$/.test( match ) ) {
-        playerId = match;
-      }
-    }
-    if ( !playerId ) {
-      const href = $card.find( 'a[href*="/jogador/"], a[href*="/player/"]' ).attr( 'href' ) || '';
-      const match = href.match( /\/(?:jogador|player)\/(\d+)/i );
-      if ( match && match[1] ) {
-        playerId = match[1];
-      }
-    }
-
-    if ( !playerId ) {
-      return;
-    }
-
-    const $badge = $( '<div />', {
-      class: 'WasdTooltip__wrapper gcbooster-match-player-badge',
-      title: '[GC Booster]: Ver Raio-X deste jogador',
-      text: '🛡️'
-    } );
-
-    $badge.on( 'click', e => {
-      e.preventDefault();
-      e.stopPropagation();
-      openMatchRaioXModal( {
-        initialTeam: $card.hasClass( 'PlayerListCard--left' ) ? 'teamA' : 'teamB',
-        highlightPlayer: playerId
-      } );
-    } );
-
-    $badges.append( $badge );
+  const $btn = $( '<button />', {
+    id: 'gcbooster_match_raiox_btn',
+    type: 'button',
+    class: 'gcbooster-match-raiox-btn draw-orange',
+    title: 'Visualizar Estatísticas e Raio-X de ambos os times',
+    html: '<span class="gcbooster-btn-icon">🛡️</span> <span class="gcbooster-btn-text">Raio-X</span>'
   } );
+
+  $btn.on( 'click', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    openMatchRaioXModal( { initialTeam: 'all' } );
+  } );
+
+  $( 'body' ).append( $btn );
 };
 
 export const iniciarMatchRaioX = () => {

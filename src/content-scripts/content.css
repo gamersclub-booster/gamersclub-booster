@@ -385,61 +385,6 @@ input[type="range"].filterKdr::-ms-track {
   overflow: visible !important;
 }
 
-/* Botão dedicado de Raio-X em desafios */
-.gcbooster-challenge-raiox-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  background: linear-gradient(135deg, rgba(255, 140, 0, 0.25) 0%, rgba(20, 20, 25, 0.95) 100%);
-  border: 1px solid var(--color-orange);
-  color: #fff;
-  font-family: inherit;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 4px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), 0 0 6px rgba(255, 165, 0, 0.25);
-  transition: all 0.2s ease-in-out;
-  white-space: nowrap;
-  user-select: none;
-  z-index: 20;
-}
-
-.gcbooster-challenge-raiox-btn:hover {
-  background: linear-gradient(135deg, rgba(255, 165, 0, 0.5) 0%, rgba(40, 30, 20, 0.95) 100%);
-  border-color: #ffb732;
-  box-shadow: 0 4px 14px rgba(255, 165, 0, 0.4);
-  transform: translateY(-1px);
-  color: #fff;
-}
-
-.gcbooster-challenge-raiox-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
-}
-
-.gcbooster-challenge-raiox-btn .gcbooster-btn-icon {
-  font-size: 12px;
-  line-height: 1;
-}
-
-.LobbyChallengeLineUpCard .gcbooster_lupa,
-.LobbyChallengeCard .gcbooster_lupa,
-.LobbyChallengeCard__item .gcbooster_lupa,
-[class*="ChallengeCard"] .gcbooster_lupa,
-[class*="MyChallenge"] .gcbooster_lupa,
-[class*="my-challenge"] .gcbooster_lupa,
-.ChallengesList__item .gcbooster_lupa {
-  transform: translateX(-50%);
-  bottom: 4px;
-  right: 6px;
-  z-index: 10;
-}
-
 .infos_lobby {
   position: absolute !important;
   left: 50% !important;
@@ -465,19 +410,6 @@ input[type="range"].filterKdr::-ms-track {
 [id^="roomCardWrapper-"] .infos_lobby {
   top: 62px !important;
   bottom: auto !important;
-}
-
-.LobbyChallengeLineUpCard .infos_lobby,
-.LobbyChallengeCard .infos_lobby,
-.LobbyChallengeCard__item .infos_lobby,
-[class*="ChallengeCard"] .infos_lobby,
-[class*="MyChallenge"] .infos_lobby,
-.infos_lobby--challenge {
-  top: 100% !important;
-  margin-top: 6px !important;
-  z-index: 999999 !important;
-  min-width: 320px !important;
-  max-width: 650px !important;
 }
 
 .infos_lobby * {
@@ -1309,110 +1241,53 @@ input[type="range"].filterKdr::-ms-track {
   color: #fff;
 }
 
-/* Links dentro de Salas para Desafiar (LobbyPlayerVertical) */
-.gcbooster-challenge-audit-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  margin-top: 2px;
-  margin-bottom: 2px;
-  position: relative;
-  z-index: 3;
-}
-
-.gcbooster-challenge-audit-wrap .gcbooster-csrep-btn {
-  font-size: 8px;
-  padding: 1px 3px;
-  margin-left: 2px;
-}
-
 /* ========================================================
    MATCH RAIO-X (Tela de Match / Vetos)
    ======================================================== */
 
-.gcbooster-match-player-badge {
-  background: rgba(255, 165, 0, 0.18);
-  border: 1px solid rgba(255, 165, 0, 0.4);
-  color: #ffa500;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 2px 5px;
-  margin-top: 2px;
-  margin-left: 4px;
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex;
+/* Botão único fixo na tela de match para abrir o Raio-X de ambos os times */
+.gcbooster-match-raiox-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 99999;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s ease;
-  line-height: 1.2;
-}
-
-.gcbooster-match-player-badge:hover {
-  background: #ffa500;
-  color: #000;
-  transform: scale(1.1);
-  box-shadow: 0 0 8px rgba(255, 165, 0, 0.6);
-}
-
-/* =============================================
-   Modal overlay para Raio-X de Desafios
-   (popup fixo centralizado na tela, fundo escurecido)
-   ============================================= */
-.gcbooster-challenge-modal-overlay {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  background: rgba(0, 0, 0, 0.82) !important;
-  backdrop-filter: blur(6px) !important;
-  -webkit-backdrop-filter: blur(6px) !important;
-  z-index: 9999990 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 20px !important;
-  box-sizing: border-box !important;
-  animation: gcboosterFadeIn 0.18s ease-out;
-}
-
-.gcbooster-challenge-modal-wrap {
-  position: relative;
-  width: auto;
-  max-width: 680px;
-  min-width: 320px;
-}
-
-/* O .infos_lobby dentro do overlay de desafios: centralizado, sem position absolute herdado */
-.gcbooster-challenge-modal-overlay .infos_lobby,
-.gcbooster-challenge-modal-overlay .infos_lobby--challenge {
-  position: relative !important;
-  top: auto !important;
-  left: auto !important;
-  transform: none !important;
-  margin-top: 0 !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  min-width: 0 !important;
-  z-index: 1 !important;
-  border-radius: 10px !important;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9), 0 0 25px rgba(255, 165, 0, 0.25) !important;
-  animation: gcboosterFadeIn 0.18s ease-out;
-}
-
-/* Botão fechar posicionado dentro do wrap */
-.gcbooster-challenge-modal-overlay .gcbooster-info-close {
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  z-index: 10;
-  width: 22px;
-  height: 22px;
-  font-size: 11px;
-  background: rgba(20, 20, 25, 0.95);
+  gap: 6px;
+  background: linear-gradient(135deg, rgba(255, 140, 0, 0.25) 0%, rgba(20, 20, 25, 0.95) 100%);
   border: 1px solid var(--color-orange);
+  color: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 8px rgba(255, 165, 0, 0.3);
+  transition: all 0.2s ease-in-out;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.gcbooster-match-raiox-btn:hover {
+  background: linear-gradient(135deg, rgba(255, 165, 0, 0.5) 0%, rgba(40, 30, 20, 0.95) 100%);
+  border-color: #ffb732;
+  box-shadow: 0 4px 16px rgba(255, 165, 0, 0.4);
+  transform: translateY(-1px);
+  color: #fff;
+}
+
+.gcbooster-match-raiox-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.gcbooster-match-raiox-btn .gcbooster-btn-icon {
+  font-size: 14px;
+  line-height: 1;
 }
 
 /* Modal Master da Match */
@@ -1615,15 +1490,4 @@ input[type="range"].filterKdr::-ms-track {
   .gcbooster-match-players-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-}
-
-.gcbooster-player-highlight {
-  border-color: #ffd700 !important;
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5) !important;
-  animation: gcboosterPulse 1.5s infinite alternate;
-}
-
-@keyframes gcboosterPulse {
-  from { box-shadow: 0 0 8px rgba(255, 215, 0, 0.4); }
-  to { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
 }

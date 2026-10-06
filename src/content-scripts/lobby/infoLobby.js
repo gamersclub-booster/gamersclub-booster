@@ -52,7 +52,7 @@ const createDivLobbys = playerInfo => $( '<div />',
     text: `P: ${playerInfo?.totalPartidas ?? 0}`
   } );
 
-const createClose = ( lobbyId, isOverlay = false ) => {
+const createClose = lobbyId => {
   const $closeBtn = $( '<div />', {
     class: 'gcbooster-info-close draw-orange',
     title: 'Fechar',
@@ -62,11 +62,7 @@ const createClose = ( lobbyId, isOverlay = false ) => {
   $closeBtn.on( 'click', e => {
     e.preventDefault();
     e.stopPropagation();
-    if ( isOverlay ) {
-      $( `#gcbooster_challenge_overlay_${lobbyId}` ).remove();
-    } else {
-      $( `#infos_lobby_${lobbyId}` ).empty().remove();
-    }
+    $( `#infos_lobby_${lobbyId}` ).empty().remove();
   } );
   return $closeBtn;
 };
@@ -183,7 +179,7 @@ export const getPlayersIds = element => {
   const ids = [];
   elements.forEach( el => {
     const $el = $( el );
-    if ( $el.closest( '.infos_lobby, .gcbooster_lupa, .gcbooster-challenge-modal-overlay' ).length > 0 ) {
+    if ( $el.closest( '.infos_lobby, .gcbooster_lupa' ).length > 0 ) {
       return;
     }
     if ( $el.find( '.PlayerPlaceholder' ).length > 0 || $el.hasClass( 'PlayerPlaceholder' ) ) {
@@ -236,12 +232,10 @@ export const getPlayersIds = element => {
   return Array.from( new Set( ids.filter( id => id && id !== '0' ) ) );
 };
 
-const getPlayersIdsNew = getPlayersIds;
-
-export const createModal = ( lobbyId, type ) => {
+export const createModal = lobbyId => {
   const $modal = $( '<div />', {
     id: `infos_lobby_${lobbyId}`,
-    class: `infos_lobby ${type === 'challenge' ? 'infos_lobby--challenge' : 'infos_lobby--room'}`,
+    class: 'infos_lobby infos_lobby--room',
     title: 'Estatísticas'
   } );
 
@@ -283,23 +277,11 @@ export const calcAge = ageDate => {
   return 'Nova';
 };
 
-const toggleRaioXModal = async ( $trigger, $container, getPlayersIdsFunction, type, lobbyId ) => {
-  // Para desafios: usa overlay fixo na tela (evita ficar escondido pela sidebar)
-  const isChallenge = type === 'challenge';
-  const overlayId = `gcbooster_challenge_overlay_${lobbyId}`;
-
-  // Toggle: se já existe overlay/modal, fecha e sai
-  if ( isChallenge ) {
-    if ( $( `#${overlayId}` ).length > 0 ) {
-      $( `#${overlayId}` ).remove();
-      return;
-    }
-  } else {
-    const $existingModal = $( `#infos_lobby_${lobbyId}` );
-    if ( $existingModal.length > 0 ) {
-      $existingModal.empty().remove();
-      return;
-    }
+const toggleRaioXModal = async ( $trigger, $container, getPlayersIdsFunction, lobbyId ) => {
+  const $existingModal = $( `#infos_lobby_${lobbyId}` );
+  if ( $existingModal.length > 0 ) {
+    $existingModal.empty().remove();
+    return;
   }
 
   $trigger.css( 'opacity', '0.6' );
@@ -313,43 +295,9 @@ const toggleRaioXModal = async ( $trigger, $container, getPlayersIdsFunction, ty
       players = getPlayersIdsFunction( $container );
     }
 
-    const modal = createModal( lobbyId, type );
-
-    if ( isChallenge ) {
-      // Cria overlay de tela cheia (igual ao modal de partida)
-      const $overlay = $( '<div />', {
-        id: overlayId,
-        class: 'gcbooster-challenge-modal-overlay'
-      } );
-
-      const $modalWrap = $( '<div />', {
-        class: 'gcbooster-challenge-modal-wrap'
-      } );
-
-      modal.append( createClose( lobbyId, true ) );
-      $modalWrap.append( modal );
-      $overlay.append( $modalWrap );
-
-      // Clique no fundo escurecido fecha o modal
-      $overlay.on( 'click', e => {
-        if ( $( e.target ).is( $overlay ) ) {
-          $overlay.remove();
-        }
-      } );
-
-      // ESC fecha o modal
-      $( document ).off( `keydown.gcbooster_challenge_${lobbyId}` ).on( `keydown.gcbooster_challenge_${lobbyId}`, e => {
-        if ( e.key === 'Escape' ) {
-          $overlay.remove();
-          $( document ).off( `keydown.gcbooster_challenge_${lobbyId}` );
-        }
-      } );
-
-      $( 'body' ).append( $overlay );
-    } else {
-      modal.append( createClose( lobbyId, false ) );
-      $container.append( modal );
-    }
+    const modal = createModal( lobbyId );
+    modal.append( createClose( lobbyId ) );
+    $container.append( modal );
 
     if ( players.length === 0 ) {
       modal.append( $( '<div />', {
@@ -451,40 +399,7 @@ const toggleRaioXModal = async ( $trigger, $container, getPlayersIdsFunction, ty
   }
 };
 
-const injectChallengeRaioXButton = ( $card, _players, lobbyId ) => {
-  if ( $card.find( `#gcbooster_btn_challenge_${lobbyId}` ).length > 0 || $card.find( '.gcbooster_lupa' ).length > 0 ) {
-    return;
-  }
-
-  // Tenta encontrar a área de ações da proposta / card (ex: sidebar com ações)
-  const actionsSelector = [
-    '.sidebar-sala-action-buttons',
-    '.sidebar-desafios-play'
-  ].join( ', ' );
-  const $actions = $card.find( actionsSelector ).first();
-
-  if ( $actions.length === 0 ) {
-    return;
-  }
-
-  const $btn = $( '<button />', {
-    id: `gcbooster_btn_challenge_${lobbyId}`,
-    type: 'button',
-    class: 'gcbooster-challenge-raiox-btn draw-orange',
-    title: 'Visualizar Estatísticas e Raio-X da equipe',
-    html: '<span class="gcbooster-btn-icon">🛡️</span> <span class="gcbooster-btn-text">Raio-X</span>'
-  } );
-
-  $btn.on( 'click', e => {
-    e.preventDefault();
-    e.stopPropagation();
-    toggleRaioXModal( $btn, $card, getPlayersIds, 'challenge', lobbyId );
-  } );
-
-  $actions.prepend( $btn );
-};
-
-const createModalForElementNew = ( element, getPlayersIdsFunction, type, lobbyId ) => {
+const createModalForElementNew = ( element, getPlayersIdsFunction, lobbyId ) => {
   if ( element.find( '.gcbooster_lupa' ).length === 0 ) {
     const div = createDiv( lobbyId );
     const image = createImage( lobbyId );
@@ -500,7 +415,7 @@ const createModalForElementNew = ( element, getPlayersIdsFunction, type, lobbyId
       if ( isLoading ) { return; }
       isLoading = true;
       try {
-        await toggleRaioXModal( div, element, getPlayersIdsFunction, type, lobbyId );
+        await toggleRaioXModal( div, element, getPlayersIdsFunction, lobbyId );
       } finally {
         isLoading = false;
       }
@@ -511,90 +426,7 @@ const createModalForElementNew = ( element, getPlayersIdsFunction, type, lobbyId
 };
 
 export const scanAndInjectLupa = () => {
-  // 1. Salas de desafio (inclui aba "Desafios" e aba "Meus desafios")
-  const challengeSelectors = [
-    '.LobbyChallengeLineUpCard',
-    '.LobbyChallengeCard',
-    '.LobbyChallengeCard__item',
-    '.ChallengesList__item',
-    '[class*="ChallengeLineUp"]',
-    '[class*="challengeLineUp"]',
-    '[class*="ChallengeCard"]',
-    '[class*="challengeCard"]',
-    '[class*="ProposalCard"]',
-    '[class*="proposalCard"]',
-    '[class*="ProposalItem"]',
-    '[class*="proposalItem"]',
-    '[class*="ChallengeItem"]',
-    '[class*="challengeItem"]',
-    '[class*="MyChallenges"]',
-    '[class*="my-challenges"]',
-    '[class*="MyChallenge"]',
-    '[class*="my-challenge"]',
-    '.sidebar-desafios-salas .sidebar-item',
-    '.sidebar-desafios-team'
-  ].join( ', ' );
-
-  // Processa cards conhecidos de desafios
-  $( challengeSelectors ).each( ( _, element ) => {
-    const $element = $( element );
-
-    // Se o elemento contém um filho que também é selecionado, priorize o filho
-    if ( $element.find( '.LobbyChallengeLineUpCard, [class*="ChallengeLineUp"]' ).length > 0 &&
-         !$element.hasClass( 'LobbyChallengeLineUpCard' ) &&
-         !$element.is( '[class*="ChallengeLineUp"]' ) ) {
-      return;
-    }
-
-    const players = getPlayersIds( $element );
-    if ( players.length === 0 ) {
-      return;
-    }
-
-    let lobbyId = $element.attr( 'data-challenge-id' ) || $element.attr( 'data-id' ) || $element.attr( 'id' );
-    if ( !lobbyId || !/^[a-zA-Z0-9_-]+$/.test( lobbyId ) ) {
-      lobbyId = `challenge_${players.slice( 0, 3 ).join( '_' )}`;
-    }
-
-    // Garante o gatilho da lupa no card de desafio
-    if ( $element.find( '.gcbooster_lupa' ).length === 0 ) {
-      createModalForElementNew( $element, getPlayersIds, 'challenge', lobbyId );
-    }
-
-    // Injeta o botão apenas se for proposta em sidebar com área de ações específica
-    injectChallengeRaioXButton( $element, players, lobbyId );
-  } );
-
-  // 2. Busca abrangente por propostas/lineups na aba de Desafios caso as classes variem
-  const challengeContainers = [
-    '#challengeList',
-    '.sidebar-desafios',
-    '.ChallengesList',
-    '[class*="Challenges" i]',
-    '[class*="challenges" i]',
-    '[class*="Desafios" i]',
-    '[class*="desafios" i]'
-  ].join( ', ' );
-
-  $( challengeContainers ).find( 'div, section, li' ).each( ( _, el ) => {
-    const $el = $( el );
-    if ( $el.find( '.gcbooster-challenge-raiox-btn, .gcbooster_lupa' ).length > 0 ) {
-      return;
-    }
-
-    const players = getPlayersIds( $el );
-    // Se possui exatamente entre 2 e 5 jogadores e não possui filhos com os mesmos jogadores
-    if ( players.length >= 2 && players.length <= 5 ) {
-      const hasChildLineup = $el.children().toArray().some( child => getPlayersIds( $( child ) ).length >= 2 );
-      if ( !hasChildLineup ) {
-        const lobbyId = `challenge_${players.slice( 0, 3 ).join( '_' )}`;
-        createModalForElementNew( $el, getPlayersIds, 'challenge', lobbyId );
-        injectChallengeRaioXButton( $el, players, lobbyId );
-      }
-    }
-  } );
-
-  // 3. Salas normais / lobby
+  // Salas normais / lobby
   const roomSelectors = [
     '[id^="roomCardWrapper-"]',
     '[id^="room-card-"]',
@@ -609,7 +441,7 @@ export const scanAndInjectLupa = () => {
     const $element = $( element );
     const lobbyId = $element.attr( 'id' ) ||
       `room_${$element.attr( 'data-id' ) || $element.attr( 'data-room-id' ) || $element.index()}`;
-    createModalForElementNew( $element, getPlayersIdsNew, 'lobby', lobbyId );
+    createModalForElementNew( $element, getPlayersIds, lobbyId );
   } );
 };
 
@@ -626,18 +458,6 @@ export const iniciarLupa = () => {
     scanAndInjectLupa();
   } );
   observer.observe( document.body, { childList: true, subtree: true } );
-
-  // Listener de clique para abas de desafios (ex: "Meus desafios", "Desafios")
-  $( document ).on( 'click', 'button, [role="tab"], a, div', function () {
-    const text = $( this ).text()?.trim()?.toLowerCase();
-    if ( text && ( text.includes( 'desafio' ) || text.includes( 'challenge' ) || text.includes( 'lobby' ) ) ) {
-      setTimeout( () => scanAndInjectLupa(), 50 );
-      setTimeout( () => scanAndInjectLupa(), 200 );
-      setTimeout( () => scanAndInjectLupa(), 600 );
-      setTimeout( () => scanAndInjectLupa(), 1200 );
-      setTimeout( () => scanAndInjectLupa(), 2000 );
-    }
-  } );
 
   // Intervalo de segurança rápido nos primeiros 6s para garantia de 0 delay
   const intervalFast = setInterval( () => {
@@ -659,5 +479,4 @@ export const iniciarLupa = () => {
   }, 6000 );
 };
 
-export const infoChallenge = () => scanAndInjectLupa();
 export const infoLobby = () => scanAndInjectLupa();
