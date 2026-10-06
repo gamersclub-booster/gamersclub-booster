@@ -53,7 +53,7 @@ export async function sendLobby( url, lobbyInfo ) {
       },
       {
         name: 'Membros:',
-        value: Object.values( lobbyInfo.members )
+        value: Object.values( lobbyInfo?.members || {} )
           .map( function ( e ) {
             return `${e.nick} | ${e.level} | KDR: ${e.kdr} \n`;
           } )
