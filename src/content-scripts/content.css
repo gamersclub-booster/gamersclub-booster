@@ -1273,41 +1273,43 @@ input[type="range"].filterKdr::-ms-track {
 }
 
 /* Modal Master da Match */
+/* Painel lateral (drawer), não bloqueia a navegação: sem fundo escurecido,
+   o overlay nao captura clique (pointer-events: none), só o painel em si
+   (pointer-events: auto) recebe interação. O resto da tela continua
+   clicável por baixo. */
 .gcbooster-match-modal-overlay {
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
   width: 100vw !important;
   height: 100vh !important;
-  background: rgba(0, 0, 0, 0.8) !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
   z-index: 999999 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 20px !important;
-  box-sizing: border-box !important;
+  pointer-events: none !important;
 }
 
 .gcbooster-match-modal-container {
-  width: 100%;
-  max-width: 1100px;
-  max-height: 90vh;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 360px;
+  max-width: 92vw;
+  height: auto;
+  max-height: 70vh;
   background: #0f121a;
   border: 1px solid #ffa500;
   border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9), 0 0 25px rgba(255, 165, 0, 0.25);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   box-sizing: border-box;
-  animation: gcboosterFadeIn 0.2s ease-out;
+  pointer-events: auto;
+  animation: gcboosterSlideIn 0.2s ease-out;
 }
 
-@keyframes gcboosterFadeIn {
-  from { opacity: 0; transform: scale(0.96); }
-  to { opacity: 1; transform: scale(1); }
+@keyframes gcboosterSlideIn {
+  from { opacity: 0; transform: translateX(16px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 .gcbooster-match-modal-header {
@@ -1319,6 +1321,8 @@ input[type="range"].filterKdr::-ms-track {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 12px;
+  cursor: move;
+  user-select: none;
 }
 
 .gcbooster-match-modal-title-wrap {
@@ -1464,12 +1468,6 @@ input[type="range"].filterKdr::-ms-track {
 
 .gcbooster-match-players-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
-}
-
-@media (max-width: 800px) {
-  .gcbooster-match-players-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }

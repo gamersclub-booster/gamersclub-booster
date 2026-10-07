@@ -5,6 +5,7 @@ import { createDivPlayers } from './infoLobby';
 import { GC_URL } from '../../lib/constants';
 import { isExtensionContextValid } from '../../utils';
 import { getUserInfo } from '../../lib/dom';
+import { makeDraggable } from './dragPanel';
 
 export const isMatchPage = () => {
   const path = window.location.pathname.toLowerCase();
@@ -211,12 +212,7 @@ export const openMatchRaioXModal = async ( options = {} ) => {
   $overlay.append( $modal );
   $( 'body' ).append( $overlay );
 
-  // Fechar no clique fora
-  $overlay.on( 'click', e => {
-    if ( $( e.target ).is( '#gcbooster_match_raiox_modal' ) ) {
-      closeMatchModal();
-    }
-  } );
+  makeDraggable( $modal, $header );
 
   // Fechar com ESC
   $( document ).on( 'keydown.gcbooster_match_modal', e => {
