@@ -10,7 +10,6 @@ import { partidaInfo } from './partidaInfo';
 import { somReady, somReadySetInterval, tocarSomSeVoceForExpulsoDaLobby } from './sons';
 import { adicionarFiltroKdr } from './filtrarKdr';
 import { iniciarLupa } from './infoLobby';
-import { iniciarMatchRaioX } from './matchRaioX';
 
 import { autoKickNegativados } from './autoKickNegativados';
 import { autoMostrarIp } from './autoMostrarIp';
@@ -78,7 +77,6 @@ const initLobby = async () => {
   lobbyMapSuggestions();
   showPlayerSoloStats();
   showKdrMatch();
-  iniciarMatchRaioX();
   adicionarFiltroKdr();
 };
 
