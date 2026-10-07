@@ -29,6 +29,14 @@ export const waitForElement = selector => {
   } );
 };
 
+export const isExtensionContextValid = () => {
+  try {
+    return !!( chrome?.runtime?.id );
+  } catch ( _e ) {
+    return false;
+  }
+};
+
 export const getTranslationText = ( jsonKey, language ) => {
   const LOCALES = {
     'pt': pt,
