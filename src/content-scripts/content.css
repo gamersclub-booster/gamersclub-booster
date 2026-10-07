@@ -367,24 +367,6 @@ input[type="range"].filterKdr::-ms-track {
   align-items: center;
 }
 
-.LobbyChallengeLineUpCard,
-.LobbyChallengeCard,
-.LobbyChallengeCard__item,
-[class*="ChallengeCard"],
-[class*="challengeCard"],
-[class*="ChallengeLineUp"],
-[class*="challengeLineUp"],
-[class*="MyChallenges"],
-[class*="my-challenges"],
-[class*="MyChallenge"],
-[class*="my-challenge"],
-.ChallengesList__item,
-.sidebar-desafios-salas .sidebar-item,
-.sidebar-desafios-team {
-  position: relative !important;
-  overflow: visible !important;
-}
-
 .infos_lobby {
   position: absolute !important;
   left: 50% !important;

@@ -10,8 +10,7 @@ export const isMatchPage = () => {
   const path = window.location.pathname.toLowerCase();
   return path.includes( '/match' ) ||
          path.includes( '/partida' ) ||
-         $( '.PlayerListCard' ).length > 0 ||
-         $( '[id^="trigger-"]' ).length > 0;
+         $( '.PlayerListCard' ).length > 0;
 };
 
 export const getMatchPlayersFromDOM = () => {
@@ -378,7 +377,12 @@ export const openMatchRaioXModal = async ( options = {} ) => {
 };
 
 export const injectMatchButtons = () => {
-  if ( !isExtensionContextValid() || !isMatchPage() ) {
+  if ( !isExtensionContextValid() ) {
+    return;
+  }
+
+  if ( !isMatchPage() ) {
+    $( '#gcbooster_match_raiox_btn' ).remove();
     return;
   }
 
