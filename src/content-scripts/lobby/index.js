@@ -9,7 +9,8 @@ import { mostrarInfoPlayerIntervaler, mostrarKdr, mostrarKdrDesafios, mostrarKdr
 import { partidaInfo } from './partidaInfo';
 import { somReady, somReadySetInterval, tocarSomSeVoceForExpulsoDaLobby } from './sons';
 import { adicionarFiltroKdr } from './filtrarKdr';
-import { infoChallenge, infoLobby } from './infoLobby';
+import { iniciarLupa } from './infoLobby';
+import { iniciarMatchRaioX } from './matchRaioX';
 
 import { autoKickNegativados } from './autoKickNegativados';
 import { autoMostrarIp } from './autoMostrarIp';
@@ -21,10 +22,6 @@ import { lobbyMapSuggestions } from './lobbyMapSuggestions';
 import { showPlayerSoloStats } from './showPlayerSoloStats';
 
 chrome.storage.sync.get( null, function ( _result ) {
-  if ( window.location.pathname.includes( 'partida' ) || window.location.pathname.includes( '/match/' ) ) {
-    //lobbyMapSuggestions( '25270001' );
-    return;
-  }
   initLobby();
 } );
 
@@ -43,8 +40,7 @@ const initLobby = async () => {
   criarObserver( '.lobby', autoCopyLobbyLink );
 
   criarObserver( '#lobbies-wrapper', mostrarKdr );
-  criarObserver( '#lobbies-wrapper', infoLobby );
-  criarObserver( '.lobby', infoChallenge );
+  iniciarLupa();
   criarObserver( '#GamersClubCSApp-globals-globalToaster', tocarSomSeVoceForExpulsoDaLobby );
 
 
@@ -82,6 +78,7 @@ const initLobby = async () => {
   lobbyMapSuggestions();
   showPlayerSoloStats();
   showKdrMatch();
+  iniciarMatchRaioX();
   adicionarFiltroKdr();
 };
 

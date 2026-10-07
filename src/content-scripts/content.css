@@ -367,32 +367,82 @@ input[type="range"].filterKdr::-ms-track {
   align-items: center;
 }
 
-.LobbyChallengeLineUpCard .gcbooster_lupa {
-  transform: translateX(-50%);
-}
-
-.LobbyChallengeLineUpCard .infos_lobby {
-  width: 90%;
-  left: 6px;
-}
-
 .infos_lobby {
-  top: 210px;
-  left: 0;
-  z-index: 1;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
+  position: absolute !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: calc(100% - 8px) !important;
+  max-width: calc(100% - 8px) !important;
+  box-sizing: border-box !important;
+  top: 62px !important;
+  z-index: 100 !important;
+  border-radius: 8px !important;
+  background: rgba(14, 16, 22, 0.94) !important;
+  border: 1px solid var(--color-orange) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.85), 0 0 12px rgba(255, 165, 0, 0.3) !important;
+  padding: 20px 3px 5px 3px !important;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 3px !important;
+}
+
+.infos_lobby--room,
+[id^="roomCardWrapper-"] .infos_lobby {
+  top: 62px !important;
+  bottom: auto !important;
+}
+
+.infos_lobby * {
+  box-sizing: border-box;
+}
+
+.gcbooster-modal-header {
   position: absolute;
-  border-radius: 7px;
-  background: var(--color-transparent-black-2);
-  padding: 2px 4px;
-  box-shadow: 0 0 10px var(--color-transparent-orange-4);
+  top: 4px;
+  left: 8px;
+  right: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #ffa500;
+  pointer-events: none;
+  opacity: 0.9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gcbooster-info-close {
+  position: absolute;
+  right: 5px;
+  top: 3px;
+  color: var(--color-white);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 9px;
+  background: rgba(0, 0, 0, 0.7);
   border: 1px solid var(--color-orange);
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  width: 100%;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+  transition: all 0.15s ease;
+  z-index: 10;
+}
+
+.gcbooster-info-close:hover {
+  background: var(--color-orange);
+  color: #000;
+  transform: scale(1.15);
 }
 
 .gcbooster-padding-bottom {
@@ -400,46 +450,157 @@ input[type="range"].filterKdr::-ms-track {
 }
 
 .gcbooster-info-player {
-  font-size: 10px;
-  padding: 2px 0;
-  border-right: 1px solid var(--color-transparent-orange-7);
-  padding-left: 4px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 165, 0, 0.18);
+  border-radius: 4px;
+  padding: 4px 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+  overflow: hidden;
+  transition: background 0.15s ease, border-color 0.15s ease;
 }
 
-.gcbooster-info-player:nth-last-of-type(-2n + 1) {
-  border: none !important;
+.gcbooster-info-player:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 165, 0, 0.35);
 }
 
-.gcbooster-info-titles {
-  position: absolute;
-  top: -18px;
-  left: -1px;
-  background: var(--color-orange);
-  width: calc(100% + 2px);
-  border-radius: 6px 6px 0 0;
-  padding: 1px 9px;
-  color: var(--color-black);
-  text-transform: uppercase;
-  font-size: 13px;
-  font-weight: 600;
-  text-align: center;
+.gcbooster-info-profile {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid rgba(255, 165, 0, 0.2);
 }
 
-.gcbooster-info-close {
-  position: absolute;
-  right: -12px;
-  top: -12px;
-  color: var(--color-white);
-  cursor: pointer;
-  font-weight: 400;
-  font-size: 10px;
-  background: var(--color-black);
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
+.gcbooster-profile-redirect-link {
+  font-size: 8px;
+  font-weight: 700;
+  color: #ffa500;
+  text-decoration: none;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 1px;
+  padding: 1px 2px;
+  border-radius: 3px;
+  background: rgba(255, 165, 0, 0.12);
+  border: 1px solid rgba(255, 165, 0, 0.25);
+  transition: all 0.15s ease;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.gcbooster-profile-redirect-link:hover {
+  background: rgba(255, 165, 0, 0.3);
+  border-color: #ffa500;
+  color: #ffc04d;
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.gcbooster-info-stats-group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-bottom: 2px;
+}
+
+.gcbooster-info-stat {
+  font-size: 8.5px;
+  line-height: 1.25;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.88);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gcbooster-info-audit {
+  width: 100%;
+  border-top: 1px solid rgba(255, 165, 0, 0.2);
+  margin-top: 2px;
+  padding-top: 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.gcbooster-audit-actions-row {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.gcbooster-steam-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  padding: 1px 2px;
+  border-radius: 3px;
+  font-size: 7.5px;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1.2;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  white-space: nowrap;
+  margin: 0 !important;
+}
+
+.gcbooster-steam-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+  text-decoration: none;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.gcbooster-audit-actions-row .gcbooster-csrep-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  padding: 1px 2px;
+  border-radius: 3px;
+  font-size: 7.5px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1.2;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  white-space: nowrap;
+  margin: 0 !important;
+  opacity: 0.9;
+}
+
+.gcbooster-audit-actions-row .gcbooster-csrep-btn:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+  text-decoration: none;
+  color: #fff;
 }
 
 .sidebar-sala-action-buttons {
@@ -798,6 +959,12 @@ input[type="range"].filterKdr::-ms-track {
 }
 
 /* Barra informativa na lobby */
+.gcbooster-info-player #gcbooster_kdr,
+.gcbooster-info-player #gcbooster_kdr_span,
+.gcbooster-info-player [id^="gcbooster_kdr_match_"] {
+  display: none !important;
+}
+
 .gboost-info-player .gcboost-content {
   width: 100%;
   display: flex;
@@ -1022,4 +1189,287 @@ input[type="range"].filterKdr::-ms-track {
   box-shadow: none;
   border: 2px solid var(--color-white);
   background: var(--color-white);
+}
+
+/* ============================
+   Player Links — csREP Button
+   ============================ */
+
+/* Botão csREP */
+.gcbooster-csrep-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  text-decoration: none;
+  margin-left: 4px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  opacity: 0.85;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1;
+}
+
+.gcbooster-csrep-btn:hover {
+  transform: scale(1.1);
+  opacity: 1;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.5);
+  text-decoration: none;
+  color: #fff;
+}
+
+/* ========================================================
+   MATCH RAIO-X (Tela de Match / Vetos)
+   ======================================================== */
+
+/* Botão único fixo na tela de match para abrir o Raio-X de ambos os times */
+.gcbooster-match-raiox-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 99999;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: linear-gradient(135deg, rgba(255, 140, 0, 0.25) 0%, rgba(20, 20, 25, 0.95) 100%);
+  border: 1px solid var(--color-orange);
+  color: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 8px rgba(255, 165, 0, 0.3);
+  transition: all 0.2s ease-in-out;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.gcbooster-match-raiox-btn:hover {
+  background: linear-gradient(135deg, rgba(255, 165, 0, 0.5) 0%, rgba(40, 30, 20, 0.95) 100%);
+  border-color: #ffb732;
+  box-shadow: 0 4px 16px rgba(255, 165, 0, 0.4);
+  transform: translateY(-1px);
+  color: #fff;
+}
+
+.gcbooster-match-raiox-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.gcbooster-match-raiox-btn .gcbooster-btn-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* Modal Master da Match */
+.gcbooster-match-modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  z-index: 999999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px !important;
+  box-sizing: border-box !important;
+}
+
+.gcbooster-match-modal-container {
+  width: 100%;
+  max-width: 1100px;
+  max-height: 90vh;
+  background: #0f121a;
+  border: 1px solid #ffa500;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9), 0 0 25px rgba(255, 165, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  animation: gcboosterFadeIn 0.2s ease-out;
+}
+
+@keyframes gcboosterFadeIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.gcbooster-match-modal-header {
+  padding: 14px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 165, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.gcbooster-match-modal-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gcbooster-match-modal-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffa500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gcbooster-match-summary-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.gcbooster-summary-chip {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+  line-height: 1.2;
+}
+
+.chip-kdr {
+  background: rgba(255, 165, 0, 0.15);
+  border: 1px solid rgba(255, 165, 0, 0.4);
+  color: #ffa500;
+}
+
+.gcbooster-match-modal-tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 3px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.gcbooster-match-tab-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.gcbooster-match-tab-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.gcbooster-match-tab-btn.active {
+  background: #ffa500;
+  color: #000;
+  font-weight: 700;
+}
+
+.gcbooster-match-modal-close {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 165, 0, 0.5);
+  color: #fff;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 13px;
+  transition: all 0.15s ease;
+}
+
+.gcbooster-match-modal-close:hover {
+  background: #e74c3c;
+  border-color: #e74c3c;
+  transform: scale(1.1);
+}
+
+.gcbooster-match-modal-body {
+  padding: 16px 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.gcbooster-match-modal-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+}
+
+.gcbooster-match-team-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gcbooster-match-team-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 4px solid #ffa500;
+  border-radius: 4px;
+}
+
+.gcbooster-match-team-section.team-b .gcbooster-match-team-header {
+  border-left-color: #e74c3c;
+}
+
+.gcbooster-match-team-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+.gcbooster-match-team-count {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.gcbooster-match-players-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+}
+
+@media (max-width: 800px) {
+  .gcbooster-match-players-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
