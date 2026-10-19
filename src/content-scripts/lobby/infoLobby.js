@@ -1,7 +1,6 @@
 import { getPlayerInfo } from './getPlayerInfo';
 import { getPlayerLinks } from '../../lib/playerLinks';
 import { GC_URL } from '../../lib/constants';
-import { isExtensionContextValid } from '../../utils';
 
 const IMAGE_ALT = '[GC Booster]: Buscar informações da lobby';
 
@@ -424,29 +423,17 @@ export const iniciarLupa = () => {
 
   // Observer com detecção rápida para novas salas inseridas
   const observer = new MutationObserver( () => {
-    if ( !isExtensionContextValid() ) {
-      observer.disconnect();
-      return;
-    }
     scanAndInjectLupa();
   } );
   observer.observe( document.body, { childList: true, subtree: true } );
 
   // Intervalo de segurança rápido nos primeiros 6s para garantia de 0 delay
   const intervalFast = setInterval( () => {
-    if ( !isExtensionContextValid() ) {
-      clearInterval( intervalFast );
-      return;
-    }
     scanAndInjectLupa();
   }, 400 );
   setTimeout( () => {
     clearInterval( intervalFast );
-    const intervalSlow = setInterval( () => {
-      if ( !isExtensionContextValid() ) {
-        clearInterval( intervalSlow );
-        return;
-      }
+    setInterval( () => {
       scanAndInjectLupa();
     }, 1200 );
   }, 6000 );
