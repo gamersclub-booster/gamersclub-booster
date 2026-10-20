@@ -274,6 +274,11 @@
         <input type="checkbox" id="showStats" />
         <span class="checkmark"></span>
       </label>
+      <label class="container" for="steamHours" title="Exibir horas de CS2 (Steam) junto ao KDR">
+        <p class="descricao" translation-key="show-steam-hours"></p>
+        <input type="checkbox" id="steamHours" />
+        <span class="checkmark"></span>
+      </label>
       <label class="container" for="disableShowPlayerSoloStats" title="Desativar estatísticas solo do jogador na Lobby">
         <p class="descricao" translation-key="disable-show-player-solo-stats"></p>
         <input type="checkbox" id="disableShowPlayerSoloStats" />
@@ -650,6 +655,20 @@
               <span class="checkmark"></span>
             </label>
           </div>
+        </div>
+      </div>
+      <hr />
+      <div>
+        <h3 class="subtitulo">Steam</h3>
+        <div class="form-input">
+          <span translation-key="steam-api-key-label">Chave da Web API do Steam (API Key)</span>
+          <div class="input-container">
+            <input type="text" id="steamApiKey" placeholder="Cole aqui sua Steam API Key de 32 caracteres" class="input-form-gray form-control" />
+          </div>
+          <p class="descricao" style="font-size: 11px; margin-top: 6px;" translation-key="steam-api-key-desc">
+            * Necessária para consultar as horas de jogo dos players na Steam. Obtenha a sua em
+            <a href="https://steamcommunity.com/dev/apikey" target="_blank" rel="noopener noreferrer" style="color: #00bcd4;">https://steamcommunity.com/dev/apikey</a>.
+          </p>
         </div>
       </div>
     </div>

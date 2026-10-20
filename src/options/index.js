@@ -54,6 +54,7 @@ function iniciarPaginaOpcoes() {
   atualizarValorWarmupSoundTime();
   adicionarListenersSons();
   loadWebhook();
+  loadSteamApiKey();
   adicionarListenerTraducao();
   listenerButtonBackup();
   listenerJogarCom();
@@ -444,6 +445,20 @@ function abrirPagina( pagina ) {
 
   link.classList.add( 'active' );
   paginaAtiva.classList.add( 'ativo' );
+}
+
+function loadSteamApiKey() {
+  chrome.storage.sync.get( [ 'steamApiKey' ], function ( data ) {
+    if ( data.steamApiKey ) {
+      document.getElementById( 'steamApiKey' ).value = data.steamApiKey;
+    } else {
+      document.getElementById( 'steamApiKey' ).value = '';
+    }
+  } );
+
+  document.getElementById( 'steamApiKey' ).addEventListener( 'change', function () {
+    chrome.storage.sync.set( { steamApiKey: this.value } );
+  } );
 }
 
 //Discord
