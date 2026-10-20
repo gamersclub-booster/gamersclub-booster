@@ -409,7 +409,16 @@ export const scanAndInjectLupa = () => {
     '[class*="lobbyCard"]:not([class*="lobbyCard"] [class*="lobbyCard"])'
   ].join( ', ' );
 
-  $( roomSelectors ).each( ( _, element ) => {
+  const $candidates = $( roomSelectors );
+
+  // Alguns dos seletores acima podem casar tanto o wrapper externo da sala quanto um
+  // elemento interno dela (ex: roomCardWrapper-X e room-card-X). Para evitar injetar
+  // a lupa duas vezes na mesma sala (uma sobrepondo a outra), mantemos apenas os
+  // elementos que não estão aninhados dentro de outro candidato já casado.
+  const elements = $candidates.filter( ( _, el ) =>
+    !$candidates.toArray().some( other => other !== el && $.contains( other, el ) ) );
+
+  elements.each( ( _, element ) => {
     const $element = $( element );
     const lobbyId = $element.attr( 'id' ) ||
       `room_${$element.attr( 'data-id' ) || $element.attr( 'data-room-id' ) || $element.index()}`;
