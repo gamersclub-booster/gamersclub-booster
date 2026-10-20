@@ -97,6 +97,7 @@ function limparComplete( complete, mapa ) {
 
 function limparOpcoesInvalidas() {
   const mapasInvalidos = [
+    3, // train
     11, // cbble_classic
     13, // tuscan
     16 // cache_old
