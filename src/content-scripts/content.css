@@ -1216,11 +1216,6 @@ input[type="range"].filterKdr::-ms-track {
 #gcb-kdr-filters .gcb-kdr-storage { color: #ffaaaa; }
 #gcb-kdr-filters [hidden], #gcb-kdr-filters .gcb-kdr-storage:empty { display: none; }
 
-.gcbooster-kdr-media[data-gcb-derived-average] {
-  color: #f3a044;
-  font-size: 11px;
-  font-weight: 600;
-}
 
 /* Pending statistics retain their layout box for intersection-driven rendering. */
 .gcb-kdr-pending { visibility: hidden; pointer-events: none; }

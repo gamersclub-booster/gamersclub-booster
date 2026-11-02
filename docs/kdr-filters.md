@@ -47,7 +47,7 @@ npm run build
 
 Teste opcional de navegador: instale Chromium com `npx playwright install chromium` e execute `npm run test:browser`, ou defina `GCB_BROWSER_EXECUTABLE` para um executável Chromium compatível. O teste utiliza perfil temporário e respostas sintéticas para a página; não acessa a conta autenticada. No PowerShell, pode-se usar `npm.cmd`/`npx.cmd` caso a política local bloqueie os wrappers `.ps1`.
 
-A suíte tem 59 testes de regras/DOM e um cenário de navegador que verifica controles, SPA, persistência, progressão com IntersectionObserver, ausência da dica removida e estabilidade geométrica do contador. Inclui comparação do renderizador de médias com a base oficial e fixture explicitamente sintético com um card e um skeleton. Não inclui vídeos, capturas ou dados reais de jogadores.
+A suíte tem 62 testes de regras/DOM e um cenário de navegador que verifica controles, SPA, persistência, progressão com IntersectionObserver, ausência da dica removida e estabilidade geométrica do contador. Inclui comparação do renderizador de médias com a base oficial e fixture explicitamente sintético com um card e um skeleton. Não inclui vídeos, capturas ou dados reais de jogadores.
 
 ## Homologação real e limites
 
@@ -63,3 +63,5 @@ Seis cenários foram relatados como aprovados no Opera GX, na compilação local
 A clean.4 removeu somente a explicação visível e o espaço vazio do rodapé. Passou nos testes automatizados, mas ainda aguarda conferência visual final no navegador. A homologação completa de desafios, máximo legado, perfis e todos os fluxos de partida não está concluída. Períodos estatísticos e técnicas internas de virtualização da plataforma não foram comprovados.
 
 A versão oficial do manifest/package é preservada. A identificação clean.4 pertence aos builds locais; não é uma nova versão oficial proposta no código do PR.
+
+A referência de saída do renderizador oficial é um fixture estático com proveniência registrada. A suíte funciona sem histórico Git; não executa git show nem busca código de referência pela rede.

@@ -5,8 +5,6 @@ import { LIST_SELECTOR, ROOM_SELECTOR, readLobby } from './dom.mjs';
 const PANEL_ID = 'gcb-kdr-filters';
 const PENDING_CLASS = 'gcb-kdr-pending';
 const HIDDEN_CLASS = 'gcb-kdr-filter-hidden';
-const VISIBLE_CLASS = 'gcb-kdr-filter-visible';
-const ACTIVE_CLASS = 'gcb-kdr-filter-active';
 const WATCH_OPTIONS = {
   childList: true,
   subtree: true,
@@ -178,14 +176,12 @@ export function createKdrFilters( { document, window, storage, runtime } ) {
     // Ignore our own UI/visibility mutations, with no observer feedback loop.
     observer.disconnect();
     const nextList = document.querySelector( LIST_SELECTOR );
-    if ( list && list !== nextList ) { list.classList.remove( ACTIVE_CLASS ); }
     list = nextList;
     for ( const room of touched ) {
       if ( !room.isConnected || !list?.contains( room ) ) {
         room.removeAttribute( 'data-gcb-kdr-status' );
         room.removeAttribute( 'data-gcb-kdr-reasons' );
         room.classList.remove( HIDDEN_CLASS, PENDING_CLASS );
-        room.classList.remove( VISIBLE_CLASS );
         touched.delete( room );
       }
     }
@@ -196,7 +192,6 @@ export function createKdrFilters( { document, window, storage, runtime } ) {
       panel = null;
     } else {
       const active = preferences.averageEnabled || preferences.individualEnabled;
-      list.classList.toggle( ACTIVE_CLASS, active );
       if ( !panel?.isConnected || panel.nextElementSibling !== list ) { mountPanel(); }
       const counts = { visible: 0, hidden: 0, pending: 0, loading: 0 };
       const diagnostics = [];
@@ -205,7 +200,7 @@ export function createKdrFilters( { document, window, storage, runtime } ) {
         // Keep the wrapper in layout: the platform may wait for intersection.
         if ( skeleton ) {
           counts.loading++;
-          room.classList.remove( HIDDEN_CLASS, PENDING_CLASS, VISIBLE_CLASS );
+          room.classList.remove( HIDDEN_CLASS, PENDING_CLASS );
           room.removeAttribute( 'data-gcb-kdr-status' );
           room.removeAttribute( 'data-gcb-kdr-reasons' );
           touched.add( room );
@@ -229,7 +224,7 @@ export function createKdrFilters( { document, window, storage, runtime } ) {
           setAttribute( room, 'data-gcb-kdr-reasons', reasons.join( ',' ) );
           diagnostics.push( {
             room: room.id, status, reasons, players: lobby.players.length,
-            average: lobby.average, averageSource: lobby.nativeAverage ? 'published' : 'booster-derived'
+            average: lobby.average, averageSource: published ? 'published' : 'booster-derived'
           } );
         } else {
           room.removeAttribute( 'data-gcb-kdr-status' );
@@ -237,7 +232,6 @@ export function createKdrFilters( { document, window, storage, runtime } ) {
         }
         room.classList.toggle( HIDDEN_CLASS, status === 'hidden' );
         room.classList.toggle( PENDING_CLASS, status === 'pending' );
-        room.classList.toggle( VISIBLE_CLASS, active && status === 'visible' );
         touched.add( room );
 
       }
@@ -284,12 +278,10 @@ export function createKdrFilters( { document, window, storage, runtime } ) {
     if ( frame !== null ) { window.cancelAnimationFrame( frame ); }
     storage.onChanged.removeListener( onStorageChanged );
     window.removeEventListener( 'pagehide', onPageHide );
-    list?.classList.remove( ACTIVE_CLASS );
     for ( const room of touched ) {
       room.removeAttribute( 'data-gcb-kdr-status' );
       room.removeAttribute( 'data-gcb-kdr-reasons' );
       room.classList.remove( HIDDEN_CLASS, PENDING_CLASS );
-      room.classList.remove( VISIBLE_CLASS );
     }
     touched.clear();
     for ( const item of challengeItems ) { item.classList.remove( 'gcb-kdr-challenge-hidden' ); }

@@ -1,29 +1,31 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
-import vm from 'node:vm';
+import { readFileSync } from 'node:fs';
 import { JSDOM } from 'jsdom';
 import { harness, room, listing, player } from './helpers.mjs';
 import { calcularKdrMedioLobby, renderizarKdrMedioLobby } from '../src/content-scripts/lobby/filtrarKdr.js';
 
-test( 'official and clean builds: same mean, markup and styles in a shared fixture', () => {
-  const reference = '11b4e5aced81c93f9002ea37508b9d923925db00:src/content-scripts/lobby/filtrarKdr.js';
-  const official = execFileSync( 'git', [ 'show', reference ], { encoding: 'utf8' } );
-  const code = official.slice( official.indexOf( 'const calcularKdrMedioLobby' ), official.indexOf( 'const aplicarFiltroDesafios' ) );
-  const html = room( 1, [ 1.1, 1.2, 1.05 ] ).replace( '</article>',
-    '<span gcbooster_kdr_lobby="1" kdr="1.10"></span><span gcbooster_kdr_lobby="1" kdr="1.20"></span>' +
-    '<span gcbooster_kdr_lobby="1" kdr="1.05"></span></article>' );
-  const original = new JSDOM( html );
-  const modified = new JSDOM( html );
+test( 'official reference: same mean, markup, placement and styles without Git history', () => {
+  const reference = JSON.parse( readFileSync( new URL( './fixtures/official-average-reference.json', import.meta.url ), 'utf8' ) );
+  const badges = reference.values.map( value => `<span gcbooster_kdr_lobby="1" kdr="${value}"></span>` ).join( '' );
+  const dom = new JSDOM( room( 1, reference.values ).replace( '</article>', `${badges}</article>` ) );
   try {
-    const context = vm.createContext( { document: original.window.document } );
-    vm.runInContext( `const normalizarTituloLobby = title => title?.trim() || ''; ${code}
-      const room = document.querySelector('[id^="roomCardWrapper-"]');
-      renderizarKdrMedioLobby(room, calcularKdrMedioLobby(room));`, context );
-    const card = modified.window.document.querySelector( '[id^="roomCardWrapper-"]' );
-    renderizarKdrMedioLobby( card, calcularKdrMedioLobby( card ) );
-    assert.equal( card.outerHTML, original.window.document.querySelector( '[id^="roomCardWrapper-"]' ).outerHTML );
-  } finally { original.window.close(); modified.window.close(); }
+    const card = dom.window.document.querySelector( '[id^="roomCardWrapper-"]' );
+    const title = card.querySelector( '.LobbyRoom__title' );
+    title.innerText = title.textContent; // jsdom has no layout-backed innerText.
+    const before = card.outerHTML;
+    const mean = calcularKdrMedioLobby( card );
+    assert.equal( mean, reference.expectedMean );
+    renderizarKdrMedioLobby( card, mean );
+    const badge = card.querySelector( '.gcbooster-kdr-media' );
+    assert.equal( badge.outerHTML, reference.indicatorHTML );
+    assert.equal( title.nextElementSibling, badge );
+    renderizarKdrMedioLobby( card, mean );
+    assert.equal( card.querySelectorAll( '.gcbooster-kdr-media' ).length, 1 );
+    const copy = card.cloneNode( true );
+    copy.querySelector( '.gcbooster-kdr-media' ).remove();
+    assert.equal( copy.outerHTML, before );
+  } finally { dom.window.close(); }
 } );
 
 test( 'mean and individual badges survive filters, reset, and controller teardown', async () => {

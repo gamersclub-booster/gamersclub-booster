@@ -1,0 +1,12 @@
+{
+  "sourceCommit": "11b4e5aced81c93f9002ea37508b9d923925db00",
+  "sourceFile": "src/content-scripts/lobby/filtrarKdr.js",
+  "description": "Frozen original output; generated once, tests do not invoke Git.",
+  "values": [
+    "1.10",
+    "1.20",
+    "1.05"
+  ],
+  "expectedMean": 1.1166666666666665,
+  "indicatorHTML": "<div class=\"gcbooster-kdr-media\" style=\"font-size: 11px; font-weight: 600; color: rgb(243, 156, 18);\" gcbooster_kdr_medio=\"1.12\" gcbooster_lobby_title=\"Sala 1\">KDR Médio: 1.12</div>"
+}

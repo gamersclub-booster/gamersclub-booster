@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { JSDOM } from 'jsdom';
-import { harness } from './helpers.mjs';
+import { harness, listing, room } from './helpers.mjs';
 import { atualizarMediasDesafios } from '../src/content-scripts/lobby/filtrarKdr.js';
 
 test( 'supplied sanitized fixture: short counts, skeleton separate, badges preserved', async () => {
@@ -27,6 +27,67 @@ test( 'supplied sanitized fixture: short counts, skeleton separate, badges prese
     assert.equal( summary.hidden, true );
     assert.equal( h.document.querySelectorAll( '[gcbooster_kdr_lobby]' ).length, 4 );
     assert.equal( h.document.querySelectorAll( '.gcbooster-kdr-media' ).length, 1 );
+  } finally { h.close(); }
+} );
+
+test( 'legacy challenge maximum: equality and sentinel 2 or higher', () => {
+  const dom = new JSDOM( `<div gcbooster_kdr_medio="1.50" gcbooster_lobby_title="A"></div>
+    <div class="ChallengesList__list"><div class="LobbyChallengeCard__item">
+    <div class="LobbyChallengeCard__info"><p>A</p></div></div></div>` );
+  const doc = dom.window.document;
+  const item = doc.querySelector( '.LobbyChallengeCard__item' );
+  try {
+    atualizarMediasDesafios( doc, { enabled: true, min: 1, max: 1.5 } );
+    assert.equal( item.classList.contains( 'gcb-kdr-challenge-hidden' ), false );
+    doc.querySelector( '[gcbooster_kdr_medio]' ).setAttribute( 'gcbooster_kdr_medio', '2.50' );
+    for ( const max of [ 2, 3 ] ) {
+      atualizarMediasDesafios( doc, { enabled: true, min: 1, max } );
+      assert.equal( item.classList.contains( 'gcb-kdr-challenge-hidden' ), false );
+    }
+    atualizarMediasDesafios( doc, { enabled: true, min: 1, max: 1.99 } );
+    assert.equal( item.classList.contains( 'gcb-kdr-challenge-hidden' ), true );
+  } finally { dom.window.close(); }
+} );
+
+test( 'legacy challenge maximum: saved value, storage updates and reset preserve behavior', async () => {
+  const html = listing( room( 1, [ 1.2, 1.3 ] ) ) + `<div class="ChallengesList__list">
+    <div class="LobbyChallengeCard__item"><div class="LobbyChallengeCard__info"><p>Sala 1</p></div></div></div>`;
+  const h = await harness( html, { filtrarKdrMedioLobbyMax: 1.2 } );
+  try {
+    h.document.querySelector( '.LobbyRoom__title' ).innerText = 'Sala 1';
+    const item = h.document.querySelector( '.LobbyChallengeCard__item' );
+    const hidden = () => item.classList.contains( 'gcb-kdr-challenge-hidden' );
+    await h.input( 'averageEnabled', true );
+    assert.equal( hidden(), true );
+    assert.equal( h.hidden( 1 ), false, 'legacy maximum does not restrict the lobby filter' );
+    await new Promise( resolve => h.storage.sync.set( { filtrarKdrMedioLobbyMax: 1.25 }, resolve ) );
+    await h.tick();
+    assert.equal( hidden(), false );
+    await new Promise( resolve => h.storage.sync.set( { filtrarKdrMedioLobbyMax: 1.24 }, resolve ) );
+    await h.tick();
+    assert.equal( hidden(), true );
+    h.document.querySelector( '[data-action="reset"]' ).click();
+    await h.tick();
+    assert.equal( hidden(), false );
+    assert.equal( h.data.filtrarKdrMedioLobbyMax, 1.24 );
+    await h.input( 'individualEnabled', true );
+    assert.equal( hidden(), false, 'individual filter alone does not filter challenges' );
+    await h.input( 'averageEnabled', true );
+    assert.equal( hidden(), true );
+  } finally { h.close(); }
+} );
+
+test( 'diagnostic distinguishes Booster average from published average across reprocessing', async () => {
+  const h = await harness();
+  try {
+    const source = () => JSON.parse( h.document.getElementById( 'gcb-kdr-filters' ).dataset.diagnostics )[0].averageSource;
+    await h.input( 'averageEnabled', true );
+    assert.equal( source(), 'booster-derived' );
+    await h.input( 'averageMin', '1.05' );
+    assert.equal( source(), 'booster-derived' );
+    h.document.getElementById( 'roomCardWrapper-1' ).setAttribute( 'data-average-kdr', '1.10' );
+    await h.tick();
+    assert.equal( source(), 'published' );
   } finally { h.close(); }
 } );
 

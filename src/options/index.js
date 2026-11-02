@@ -203,7 +203,8 @@ function marcarCheckboxes() {
   chrome.storage.sync.get( null, response => {
     if ( !response ) { return false; }
     for ( const feature of features ) {
-      document.getElementById( feature ).checked = response[feature] === true;
+      const kdrOption = feature === 'filtrarKdrMedioLobby' || feature === 'filtrarKdrIndividualLobby';
+      document.getElementById( feature ).checked = kdrOption ? response[feature] === true : response[feature];
     }
   } );
 }
