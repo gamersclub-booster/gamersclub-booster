@@ -31,7 +31,8 @@ module.exports = {
   experiments: { topLevelAwait: true },
   plugins: [
     new CopyPlugin( {
-      patterns: [ 'public', 'manifest.json', 'src/options/index.html', 'src/content-scripts/content.css' ],
+      patterns: [ 'public', 'manifest.json', 'src/options/index.html', 'src/content-scripts/content.css',
+        'LICENSE.md', 'README.md', 'COPYING' ],
       options: {}
     } ),
     new webpack.ProvidePlugin( {

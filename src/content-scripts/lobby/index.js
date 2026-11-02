@@ -8,7 +8,6 @@ import { autoCopyLobbyLink, resetLobbyLinkState } from './autoCopyLobbyLink';
 import { mostrarInfoPlayerIntervaler, mostrarKdr, mostrarKdrDesafios, mostrarKdrRanked, showKdrMatch } from './mostrarKdr';
 import { partidaInfo } from './partidaInfo';
 import { somReady, somReadySetInterval, tocarSomSeVoceForExpulsoDaLobby } from './sons';
-import { adicionarFiltroKdr } from './filtrarKdr';
 import { iniciarLupa } from './infoLobby';
 
 import { autoKickNegativados } from './autoKickNegativados';
@@ -77,7 +76,6 @@ const initLobby = async () => {
   lobbyMapSuggestions();
   showPlayerSoloStats();
   showKdrMatch();
-  adicionarFiltroKdr();
 };
 
 const criarObserver = ( seletor, exec, type ) => {

@@ -1,4 +1,5 @@
 import { audios, configValues, features, paginas, preVetosMapas } from '../lib/constants';
+import { bindKdrOptions } from '../lib/kdr/options.mjs';
 import manifest from '../../manifest.json';
 import { testWebhook } from '../lib/discord';
 import en from '../translations/en.json';
@@ -40,6 +41,7 @@ function iniciarPaginaOpcoes() {
   mostrarMensagemAtencao();
   adicionaVersao();
   marcarCheckboxes();
+  bindKdrOptions( document, chrome.storage );
   iniciarOpcaoDelayReady();
   marcarPreVetos();
   marcarCompleteMapas();
@@ -201,11 +203,7 @@ function marcarCheckboxes() {
   chrome.storage.sync.get( null, response => {
     if ( !response ) { return false; }
     for ( const feature of features ) {
-      if ( feature === 'filtrarKdrMedioLobby' ) {
-        document.getElementById( feature ).checked = response[feature] !== false;
-      } else {
-        document.getElementById( feature ).checked = response[feature];
-      }
+      document.getElementById( feature ).checked = response[feature] === true;
     }
   } );
 }

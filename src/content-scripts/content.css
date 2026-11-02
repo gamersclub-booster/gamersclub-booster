@@ -1185,3 +1185,44 @@ input[type="range"].filterKdr::-ms-track {
   background: var(--color-white);
 }
 
+
+/* Custom KDR filters: scoped styles leave the platform's own visibility intact. */
+.gcb-kdr-filter-hidden, .gcb-kdr-challenge-hidden {
+  display: none !important;
+}
+
+#gcb-kdr-filters { box-sizing: border-box; width: 100%; margin: 8px 0; padding: 8px 12px;
+  border: 1px solid #303a48; border-radius: 6px; background: #171d28; color: #edf1f7; font: 12px/1.4 system-ui, sans-serif; }
+#gcb-kdr-filters .gcb-kdr-controls, #gcb-kdr-filters .gcb-kdr-group, #gcb-kdr-filters label, #gcb-kdr-filters .gcb-kdr-footer {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px; color: #edf1f7; margin: 0; }
+#gcb-kdr-filters .gcb-kdr-controls { gap: 8px 18px; }
+#gcb-kdr-filters strong { color: #cbd8e8; font-size: 12px; }
+#gcb-kdr-filters .gcb-kdr-stepper { display: inline-flex; align-items: center; }
+#gcb-kdr-filters input[type="text"] { box-sizing: border-box; width: 58px; height: 28px; padding: 3px;
+  border: 1px solid #455268; border-radius: 0; background: #101722; color: #f4f7fc; text-align: center; font: inherit; }
+#gcb-kdr-filters input[aria-invalid="true"] { border-color: #ff8b8b; }
+#gcb-kdr-filters input[type="checkbox"] { appearance: auto; position: static; opacity: 1; width: 14px; height: 14px;
+  margin: 0; accent-color: #338fee; }
+#gcb-kdr-filters button { box-sizing: border-box; height: 28px; padding: 3px 8px; border: 1px solid #455268;
+  border-radius: 4px; background: #253247; color: #e9f2ff; cursor: pointer; font: inherit; }
+#gcb-kdr-filters .gcb-kdr-stepper button { width: 28px; padding: 0; color: #95c8ff; }
+#gcb-kdr-filters .gcb-kdr-stepper button:first-child { border-radius: 4px 0 0 4px; border-right: 0; }
+#gcb-kdr-filters .gcb-kdr-stepper button:last-child { border-radius: 0 4px 4px 0; border-left: 0; }
+#gcb-kdr-filters button[data-action="reset"] { background: transparent; border-color: transparent; color: #b6c5d9; margin-left: auto; }
+#gcb-kdr-filters button:hover { background: #334968; }
+#gcb-kdr-filters :focus-visible { outline: 2px solid #65afff; outline-offset: 2px; }
+#gcb-kdr-filters .gcb-kdr-footer { justify-content: flex-start; margin-top: 5px; color: #b6c5d9; font-size: 11px; }
+#gcb-kdr-filters p { margin: 5px 0 0; color: #ced9e8; }
+#gcb-kdr-filters .gcb-kdr-storage { color: #ffaaaa; }
+#gcb-kdr-filters [hidden], #gcb-kdr-filters .gcb-kdr-storage:empty { display: none; }
+
+.gcbooster-kdr-media[data-gcb-derived-average] {
+  color: #f3a044;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Pending statistics retain their layout box for intersection-driven rendering. */
+.gcb-kdr-pending { visibility: hidden; pointer-events: none; }
+
+#gcb-kdr-filters .gcb-kdr-count { margin-left: auto; min-width: 32ch; text-align: right; font-variant-numeric: tabular-nums; }

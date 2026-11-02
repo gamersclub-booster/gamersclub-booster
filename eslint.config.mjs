@@ -20,12 +20,14 @@ export default [
   // --- Base recommended rules (replaces "extends": "eslint:recommended")
   js.configs.recommended,
 
+  { files: [ 'tests/**/*.mjs' ], languageOptions: { globals: globals.node } },
+
   // --- Your project rules
   {
-    files: ["**/*.js"],
+    files: ["**/*.js", "src/**/*.mjs", "tests/**/*.mjs"],
 
     languageOptions: {
-      ecmaVersion: 2020,
+      ecmaVersion: 2022,
       sourceType: "module",
 
       globals: {
@@ -50,7 +52,7 @@ export default [
         ...globals.browser,
         ...globals.webextensions,
         ...globals.jquery,
-        ...globals.es2021
+        ...globals.es2022
       }
     },
 

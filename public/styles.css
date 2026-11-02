@@ -605,3 +605,7 @@ input:not([type="range"]) {
 #novidades p {
   text-align: justify;
 }
+
+#lobby > label.container { min-height: 28px; margin: 0 0 8px; gap: 8px; }
+#lobby > label.container .descricao { margin-top: 0; margin-bottom: 0; }
+#lobby > h3 { margin-top: 16px; margin-bottom: 12px; }

@@ -2,6 +2,9 @@ import { autoCompactMode } from './autoCompactMode';
 import { autoDarkMode } from './autoDarkMode';
 import { adicionarBarraLevel } from './barraLevel';
 import injectPageScripts from './injectPageScripts';
+import { createKdrFilters } from '../../lib/kdr/controller.mjs';
+
+createKdrFilters( { document, window, storage: chrome.storage, runtime: chrome.runtime } ).start();
 
 let generalOptions = [];
 chrome.storage.sync.get( null, function ( result ) {
