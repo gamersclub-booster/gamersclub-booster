@@ -51,16 +51,18 @@ A suíte tem 62 testes de regras/DOM e um cenário de navegador que verifica con
 
 ## Homologação real e limites
 
-Seis cenários foram relatados como aprovados no Opera GX, na compilação local clean.3:
+O responsável pela contribuição realizou e aprovou pessoalmente seis verificações reais na GamersClub, usando o Opera GX, na compilação local clean.3:
 
-1. Flicker eliminado.
+1. Cintilação visual (flicker) eliminada.
 2. Contador estável.
 3. Filtros médio e individual funcionando.
 4. Média e badges originais preservados.
 5. Carregamento progressivo funcionando.
-6. Nenhuma alternância excessiva de cards com a página parada.
+6. Nenhuma alternância excessiva de cartões com a página parada.
 
-A clean.4 removeu somente a explicação visível e o espaço vazio do rodapé. Passou nos testes automatizados, mas ainda aguarda conferência visual final no navegador. A homologação completa de desafios, máximo legado, perfis e todos os fluxos de partida não está concluída. Períodos estatísticos e técnicas internas de virtualização da plataforma não foram comprovados.
+Na clean.4, o responsável também validou pessoalmente no Opera GX a remoção do texto explicativo redundante e a eliminação do espaço vazio no rodapé. A conferência visual dessa versão está concluída, além das validações automatizadas já registradas.
+
+Essas confirmações abrangem as funcionalidades implementadas nos cenários descritos. Não representam testes completos de desafios, máximo legado, perfis ou de todos os fluxos de partida da plataforma.
 
 A versão oficial do manifest/package é preservada. A identificação clean.4 pertence aos builds locais; não é uma nova versão oficial proposta no código do PR.
 
