@@ -2,6 +2,7 @@ import { DEFAULTS, STORAGE_KEYS, parseThreshold, stepThreshold, preferencesFromS
 import { calcularKdrMedioLobby, renderizarKdrMedioLobby, atualizarMediasDesafios } from '../../content-scripts/lobby/filtrarKdr.js';
 import { LIST_SELECTOR, ROOM_SELECTOR, readLobby } from './dom.mjs';
 
+const HOST_ID = 'gc-ext-wrapper';
 const PANEL_ID = 'gcb-kdr-filters';
 const PENDING_CLASS = 'gcb-kdr-pending';
 const HIDDEN_CLASS = 'gcb-kdr-filter-hidden';
@@ -33,7 +34,8 @@ export function createKdrFilters( { document, window, storage, runtime } ) {
       if ( target === list || target?.closest( `${LIST_SELECTOR}, .ChallengesList__list` ) ) { return true; }
       return [ ...mutation.addedNodes, ...mutation.removedNodes ].some( node => node.nodeType === 1 &&
         ( node.matches( `${LIST_SELECTOR}, .ChallengesList__list` ) ||
-          node.querySelector( `${LIST_SELECTOR}, .ChallengesList__list` ) || node.id === PANEL_ID ) );
+          node.querySelector( `${LIST_SELECTOR}, .ChallengesList__list` ) ||
+          node.id === PANEL_ID || node.id === HOST_ID || node.querySelector( `#${HOST_ID}` ) ) );
     } );
     if ( relevant ) { schedule(); }
   } );
@@ -51,7 +53,7 @@ export function createKdrFilters( { document, window, storage, runtime } ) {
   }
 
   function setAttribute( node, name, value ) {
-    if ( node.getAttribute( name ) !== value ) { node.setAttribute( name, value ); }
+    if ( node && node.getAttribute( name ) !== value ) { node.setAttribute( name, value ); }
   }
 
   function flush() {
@@ -94,7 +96,10 @@ export function createKdrFilters( { document, window, storage, runtime } ) {
   }
 
   function mountPanel() {
+    const host = document.getElementById( HOST_ID );
     panel?.remove();
+    panel = null;
+    if ( !host ) { return; }
     document.getElementById( PANEL_ID )?.remove();
     panel = document.createElement( 'section' );
     panel.id = PANEL_ID;
@@ -115,7 +120,7 @@ export function createKdrFilters( { document, window, storage, runtime } ) {
         <span class="gcb-kdr-count" role="status" aria-live="polite" aria-atomic="true"></span></div>
       <p class="gcb-kdr-empty" hidden>Nenhum lobby atende aos filtros configurados.</p>
       <p class="gcb-kdr-storage" role="status"></p>`;
-    list.insertAdjacentElement( 'beforebegin', panel );
+    host.append( panel );
     panel.addEventListener( 'input', event => {
       const input = event.target;
       const field = input.name;
@@ -192,7 +197,7 @@ export function createKdrFilters( { document, window, storage, runtime } ) {
       panel = null;
     } else {
       const active = preferences.averageEnabled || preferences.individualEnabled;
-      if ( !panel?.isConnected || panel.nextElementSibling !== list ) { mountPanel(); }
+      if ( !panel?.isConnected || panel.parentElement !== document.getElementById( HOST_ID ) ) { mountPanel(); }
       const counts = { visible: 0, hidden: 0, pending: 0, loading: 0 };
       const diagnostics = [];
       for ( const room of list.querySelectorAll( ROOM_SELECTOR ) ) {
@@ -243,13 +248,15 @@ export function createKdrFilters( { document, window, storage, runtime } ) {
       } );
       setAttribute( panel, 'data-diagnostics', JSON.stringify( diagnostics ) );
       setAttribute( panel, 'data-counts', JSON.stringify( { ...counts, rendered: counts.visible + counts.hidden + counts.pending } ) );
-      const shownText = counts.visible === 1 ? '1 sala exibida' : `${counts.visible} salas exibidas`;
-      const hiddenText = counts.hidden === 1 ? '1 ocultada' : `${counts.hidden} ocultadas`;
-      setText( panel.querySelector( '.gcb-kdr-count' ), `${shownText} · ${hiddenText}` );
-      panel.querySelector( '.gcb-kdr-count' ).hidden = !active;
-      panel.querySelector( '.gcb-kdr-footer' ).hidden = !active;
-      panel.querySelector( '.gcb-kdr-empty' ).hidden = counts.visible > 0 ||
-        ( !preferences.averageEnabled && !preferences.individualEnabled );
+      if ( panel ) {
+        const shownText = counts.visible === 1 ? '1 sala exibida' : `${counts.visible} salas exibidas`;
+        const hiddenText = counts.hidden === 1 ? '1 ocultada' : `${counts.hidden} ocultadas`;
+        setText( panel.querySelector( '.gcb-kdr-count' ), `${shownText} · ${hiddenText}` );
+        panel.querySelector( '.gcb-kdr-count' ).hidden = !active;
+        panel.querySelector( '.gcb-kdr-footer' ).hidden = !active;
+        panel.querySelector( '.gcb-kdr-empty' ).hidden = counts.visible > 0 ||
+          ( !preferences.averageEnabled && !preferences.individualEnabled );
+      }
     }
     observer.observe( document.body, WATCH_OPTIONS );
   }

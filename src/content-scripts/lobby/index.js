@@ -19,6 +19,10 @@ import { showStats } from './showStats';
 import { lobbyMapSuggestions } from './lobbyMapSuggestions';
 import { showPlayerSoloStats } from './showPlayerSoloStats';
 
+import { createKdrFilters } from '../../lib/kdr/controller.mjs';
+
+createKdrFilters( { document, window, storage: chrome.storage, runtime: chrome.runtime } ).start();
+
 chrome.storage.sync.get( null, function ( _result ) {
   initLobby();
 } );

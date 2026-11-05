@@ -69,7 +69,7 @@ test( 'SPA: inicialização fora do lobby, recriação de lista, saída e retorn
     h.document.body.innerHTML = listing( room( 1, [ 0.5 ] ) );
     await h.tick();
     assert.equal( h.hidden( 1 ), true );
-    h.document.getElementById( 'lobbies-wrapper' ).outerHTML = listing( room( 2, [ 1.5 ] ) );
+    h.document.body.innerHTML = listing( room( 2, [ 1.5 ] ) );
     await h.tick();
     assert.equal( h.hidden( 2 ), false );
     assert.equal( h.document.querySelectorAll( '#gcb-kdr-filters' ).length, 1 );
@@ -162,5 +162,27 @@ test( 'média nativa atualizada dinamicamente prevalece sobre a derivada', async
     card.setAttribute( 'data-average-kdr', '1.01' );
     await h.tick();
     assert.equal( h.hidden( 1 ), false );
+  } finally { h.close(); }
+} );
+
+
+test( 'barra usa o espaço de extensões, aguarda sua criação e preserva controles existentes', async () => {
+  const h = await harness( listing( room( 1, [ 1.2 ] ) ).replace( '<div id="gc-ext-wrapper"></div>', '' ) );
+  try {
+    assert.equal( h.document.getElementById( 'gcb-kdr-filters' ), null );
+    h.document.body.insertAdjacentHTML( 'afterbegin', '<div id="gc-ext-wrapper"><button id="native-extension-button">Existente</button></div>' );
+    await h.tick();
+    const wrapper = h.document.getElementById( 'gc-ext-wrapper' );
+    const button = h.document.getElementById( 'native-extension-button' );
+    const panel = h.document.getElementById( 'gcb-kdr-filters' );
+    assert.equal( panel.parentElement, wrapper );
+    assert.equal( button.parentElement, wrapper );
+    await h.input( 'individualEnabled', true );
+    wrapper.outerHTML = '<div id="gc-ext-wrapper"><button>Outro controle</button></div>';
+    await h.tick();
+    assert.equal( h.document.querySelectorAll( '#gcb-kdr-filters' ).length, 1 );
+    assert.equal( h.document.querySelector( '[name="individualEnabled"]' ).checked, true );
+    assert.equal( h.document.querySelector( '#gc-ext-wrapper > button' ).textContent, 'Outro controle' );
+    assert.equal( button.isConnected, false );
   } finally { h.close(); }
 } );

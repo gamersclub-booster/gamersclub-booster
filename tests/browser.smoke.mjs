@@ -48,8 +48,8 @@ test( 'Chromium: carrega dist MV3, filtra DOM, navega SPA, persiste e restaura',
     } );
     const page = await context.newPage();
     page.on( 'pageerror', error => errors.push( error.message ) );
-    // Enter outside /lobby to prove the main content script handles SPA entry.
-    await page.goto( 'https://gamersclub.com.br/home' );
+    // Start on /lobby, where the manifest injects the lobby content script.
+    await page.goto( 'https://gamersclub.com.br/lobby' );
     await page.locator( '#gcb-kdr-filters' ).waitFor();
     const visible = async ( id, expected ) => {
       await page.waitForFunction( ( { id, expected } ) => {
@@ -57,6 +57,7 @@ test( 'Chromium: carrega dist MV3, filtra DOM, navega SPA, persiste e restaura',
         return card && ( getComputedStyle( card ).display !== 'none' && getComputedStyle( card ).visibility !== 'hidden' ) === expected;
       }, { id, expected } );
     };
+    assert.equal( await page.locator( '#gc-ext-wrapper > #gcb-kdr-filters' ).count(), 1 );
     await visible( 1, true );
     await page.locator( '[data-field="individualMin"][data-step="1"]' ).click();
     assert.equal( await page.locator( '[name="individualMin"]' ).inputValue(), '1.05' );
@@ -87,7 +88,7 @@ test( 'Chromium: carrega dist MV3, filtra DOM, navega SPA, persiste e restaura',
     await page.locator( '[name="averageMin"]' ).blur();
     await mkdir( resolve( root, 'artifacts' ), { recursive: true } );
     await page.screenshot( { path: resolve( root, 'artifacts/kdr-filters-preview.png' ), fullPage: true } );
-    await page.goto( 'https://gamersclub.com.br/home' );
+    await page.goto( 'https://gamersclub.com.br/lobby' );
     await page.locator( '#gcb-kdr-filters' ).waitFor();
     assert.equal( await page.locator( '[name="individualEnabled"]' ).isChecked(), true );
     assert.equal( await page.locator( '[name="averageEnabled"]' ).isChecked(), true );
@@ -138,9 +139,18 @@ test( 'Chromium: carrega dist MV3, filtra DOM, navega SPA, persiste e restaura',
       '<a class="LobbyPlayerVertical" href="/jogador/4" title="KDR: 0.60 Level: 20">Jogador novo</a>' ) );
     await visible( 2, false );
     await page.locator( '#roomCardWrapper-2 #gcbooster_kdr_span' ).first().waitFor( { state: 'attached' } );
-    assert.deepEqual( errors, [], 'No page errors in the compiled main content script' );
+    assert.deepEqual( errors, [], 'No page errors in the compiled content scripts' );
     assert.equal( requests.some( url => /\/api\//.test( url ) ), false, 'KDR filters must not fetch API data' );
-    console.log( `Browser verified: ${context.browser().version()}; synthetic data only.` );
+    console.log( `Lobby checks passed: ${context.browser().version()}; synthetic data only.` );
+    // Document route-scoped injection: pushState alone cannot load an uninjected content script.
+    await page.goto( 'https://gamersclub.com.br/home' );
+    assert.equal( await page.locator( '#gcb-kdr-filters' ).count(), 0 );
+    await page.evaluate( () => history.pushState( {}, '', '/lobby' ) );
+    await page.evaluate( () => new Promise( resolve => requestAnimationFrame( () => requestAnimationFrame( resolve ) ) ) );
+    assert.equal( await page.locator( '#gcb-kdr-filters' ).count(), 0,
+      'An external SPA entry requires a document reload; this limitation is documented' );
+    await page.reload();
+    await page.locator( '#gc-ext-wrapper > #gcb-kdr-filters' ).waitFor();
   } finally {
     await context?.close();
     await removeProfile( profile );

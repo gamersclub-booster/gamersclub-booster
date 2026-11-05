@@ -2,7 +2,7 @@
 
 A barra permite habilitar separadamente o mínimo de KDR médio e o mínimo de todos os jogadores. Ambos começam desligados, com mínimos de 1.00. Os controles aceitam ponto ou vírgula e incrementos de 0.05. A comparação é inclusiva, em duas casas: com mínimo 1.00, 0.99 reprova; 1.00 e 1.01 atendem ao requisito.
 
-As preferências usam `chrome.storage.sync`; os toggles também são sincronizados com as opções da extensão. A aplicação acompanha alterações do DOM e navegação SPA, sem botão de atualização, polling, novas requisições ou scroll automático. A média e os badges continuam sendo apresentados quando os filtros estão desligados.
+As preferências usam `chrome.storage.sync`; os toggles também são sincronizados com as opções da extensão. Após o carregamento do módulo de lobby, a aplicação acompanha alterações do DOM e navegação SPA, sem botão de atualização, polling, novas requisições ou scroll automático. A média e os badges continuam sendo apresentados quando os filtros estão desligados.
 
 ## Comparação com o comportamento anterior
 
@@ -47,7 +47,7 @@ npm run build
 
 Teste opcional de navegador: instale Chromium com `npx playwright install chromium` e execute `npm run test:browser`, ou defina `GCB_BROWSER_EXECUTABLE` para um executável Chromium compatível. O teste utiliza perfil temporário e respostas sintéticas para a página; não acessa a conta autenticada. No PowerShell, pode-se usar `npm.cmd`/`npx.cmd` caso a política local bloqueie os wrappers `.ps1`.
 
-A suíte tem 62 testes de regras/DOM e um cenário de navegador que verifica controles, SPA, persistência, progressão com IntersectionObserver, ausência da dica removida e estabilidade geométrica do contador. Inclui comparação do renderizador de médias com a base oficial e fixture explicitamente sintético com um card e um skeleton. Não inclui vídeos, capturas ou dados reais de jogadores.
+A suíte tem 63 testes de regras/DOM e um cenário de navegador que verifica controles, SPA, persistência, progressão com IntersectionObserver, ausência da dica removida e estabilidade geométrica do contador. Inclui comparação do renderizador de médias com a base oficial e fixture explicitamente sintético com um card e um skeleton. Não inclui vídeos, capturas ou dados reais de jogadores.
 
 ## Homologação real e limites
 
@@ -67,3 +67,13 @@ Essas confirmações abrangem as funcionalidades implementadas nos cenários des
 A versão oficial do manifest/package é preservada. A identificação clean.4 pertence aos builds locais; não é uma nova versão oficial proposta no código do PR.
 
 A referência de saída do renderizador oficial é um fixture estático com proveniência registrada. A suíte funciona sem histórico Git; não executa git show nem busca código de referência pela rede.
+
+## Integração com a página de lobby
+
+A barra é inserida em `#gc-ext-wrapper`, espaço utilizado pelos controles de extensão, sem substituir os botões existentes ou inserir o painel junto à lista nativa. Se o contêiner ainda não existir, o controlador aguarda sua criação; as estatísticas e os filtros salvos continuam sendo processados. A recriação do contêiner preserva as preferências.
+
+A inicialização pertence a `src/content-scripts/lobby/index.js`; o controlador não integra mais o bundle geral. A injeção segue as rotas já declaradas para o módulo de lobby no manifest. A navegação SPA após o carregamento desse módulo continua coberta pelos testes.
+
+No cenário sintético que começa fora dessas rotas, mudar somente a URL com `history.pushState` não injeta o módulo; é necessário recarregar o documento no lobby. Essa limitação é verificada explicitamente no teste de navegador. O responsável não encontrou essa transição sem recarga nos caminhos reais que experimentou na GamersClub; isso não comprova a inexistência de navegação SPA em todos os fluxos da plataforma.
+
+O posicionamento da barra no contêiner de extensões foi conferido pelo responsável no Opera GX. Essa conferência é adicional às validações das compilações clean.3 e clean.4 descritas acima.

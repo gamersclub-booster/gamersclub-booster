@@ -1191,7 +1191,7 @@ input[type="range"].filterKdr::-ms-track {
   display: none !important;
 }
 
-#gcb-kdr-filters { box-sizing: border-box; width: 100%; margin: 8px 0; padding: 8px 12px;
+#gcb-kdr-filters { box-sizing: border-box; flex: 1 1 auto; min-width: 0; margin: 8px 0; padding: 8px 12px;
   border: 1px solid #303a48; border-radius: 6px; background: #171d28; color: #edf1f7; font: 12px/1.4 system-ui, sans-serif; }
 #gcb-kdr-filters .gcb-kdr-controls, #gcb-kdr-filters .gcb-kdr-group, #gcb-kdr-filters label, #gcb-kdr-filters .gcb-kdr-footer {
   display: flex; align-items: center; flex-wrap: wrap; gap: 8px; color: #edf1f7; margin: 0; }

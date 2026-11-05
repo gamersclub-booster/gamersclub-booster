@@ -7,7 +7,7 @@ import { atualizarMediasDesafios } from '../src/content-scripts/lobby/filtrarKdr
 
 test( 'supplied sanitized fixture: short counts, skeleton separate, badges preserved', async () => {
   const html = readFileSync( new URL( './fixtures/gamersclub-sanitized.html', import.meta.url ), 'utf8' );
-  const h = await harness( html );
+  const h = await harness( html.replace( '<body>', '<body><div id="gc-ext-wrapper"></div>' ) );
   try {
     const panel = h.document.getElementById( 'gcb-kdr-filters' );
     const summary = panel.querySelector( '.gcb-kdr-count' );

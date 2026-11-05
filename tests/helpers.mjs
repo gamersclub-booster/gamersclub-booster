@@ -7,7 +7,8 @@ export const player = ( id, kdr ) => `<a class="LobbyPlayerVertical" href="/joga
 export const room = ( id, values ) => `<div id="roomCardWrapper-${id}"><article class="LobbyRoom"><h3 class="LobbyRoom__title">Sala ${id}</h3>
   <div class="LobbyRoom__lineup" id="lobby-${id}">${values.map( ( kdr, index ) => player( index + 1, kdr ) ).join( '' )}</div>
   <button class="join">Entrar</button></article></div>`;
-export const listing = content => `<div id="lobby-filters-container">Filtros GC</div><div id="lobbies-wrapper">${content}</div>`;
+export const listing = content => `<div id="gc-ext-wrapper"></div><div id="lobby-filters-container">Filtros GC</div>
+  <div id="lobbies-wrapper">${content}</div>`;
 
 export function fakeStorage( initial = {} ) {
   const data = { ...initial };
