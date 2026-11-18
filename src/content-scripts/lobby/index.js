@@ -1,14 +1,13 @@
-import { autoAceitarReady, autoAceitarReadySetInterval } from './autoAceitarReady';
+import { autoAceitarReady, autoAceitarReadySetInterval, resetAutoAceitarReadyState } from './autoAceitarReady';
 import { autoConcordarTermosRanked } from './autoConcordarTermosRanked';
 import { autoFixarMenuLobby } from './autoFixarMenuLobby';
 import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
-// import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
 import { lobbyLink } from './lobbyLink';
 import { autoCopyLobbyLink, resetLobbyLinkState } from './autoCopyLobbyLink';
 import { partidaInfo } from './partidaInfo';
 import { somReady, somReadySetInterval, tocarSomSeVoceForExpulsoDaLobby } from './sons';
 import { adicionarFiltroKdr } from './filtrarKdr';
-import { infoChallenge, infoLobby } from './infoLobby';
+import { iniciarLupa } from './infoLobby';
 
 import { autoKickNegativados } from './autoKickNegativados';
 import { autoMostrarIp } from './autoMostrarIp';
@@ -20,16 +19,13 @@ import { lobbyMapSuggestions } from './lobbyMapSuggestions';
 import { showPlayerSoloStats } from './showPlayerSoloStats';
 
 chrome.storage.sync.get( null, function ( _result ) {
-  if ( window.location.pathname.includes( 'partida' ) || window.location.pathname.includes( '/match/' ) ) {
-    //lobbyMapSuggestions( '25270001' );
-    return;
-  }
   initLobby();
 } );
 
 const initLobby = async () => {
   // Resetar estado do auto copy lobby link quando entrar no lobby
   resetLobbyLinkState();
+  resetAutoAceitarReadyState();
 
   // Esses dois não estão funcionando, verificar o motivo, criei o intervaler pra substituir por enquanto...
   criarObserver( '.lobby,.ranking', somReady );
@@ -40,8 +36,7 @@ const initLobby = async () => {
   criarObserver( '.lobby', lobbyLink );
   criarObserver( '.lobby', autoCopyLobbyLink );
 
-  criarObserver( '#lobbies-wrapper', infoLobby );
-  criarObserver( '.lobby', infoChallenge );
+  iniciarLupa();
   criarObserver( '#GamersClubCSApp-globals-globalToaster', tocarSomSeVoceForExpulsoDaLobby );
 
   // Esconde a sugestão de lobbies para entrar

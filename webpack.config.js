@@ -19,6 +19,11 @@ module.exports = {
     'content-scripts/profile': contentScripts( 'profile' ),
     'content-scripts/kdr-monitor': contentScripts( 'kdr-monitor' )
   },
+  resolve: {
+    alias: {
+      src: path.resolve(__dirname, 'src')
+    }
+  },
   devtool: 'source-map',
   output: {
     clean: true,

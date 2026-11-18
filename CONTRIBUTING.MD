@@ -6,3 +6,4 @@ To contribute to this repo:
 5- Commit with semantic release message (start with "fix:" for fixes or "feat:" for new features)
 6- Open pull request
 7- Wait :)
+

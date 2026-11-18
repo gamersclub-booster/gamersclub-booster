@@ -168,11 +168,21 @@
     <!-- GERAL -->
     <div class="pagina" id="geral">
       <h3 class="subtitulo" translation-key="automacoes"></h3>
-      <label class="container" for="autoAceitarReady" title="Aceita automaticamente o ready">
-        <p class="descricao" translation-key="aceitar-ready"></p>
-        <input type="checkbox" id="autoAceitarReady" />
-        <span class="checkmark"></span>
-      </label>
+      <div class="ready-delay-setting">
+        <label class="container" for="autoAceitarReady" title="Aceita automaticamente o ready">
+          <p class="descricao" translation-key="aceitar-ready"></p>
+          <input type="checkbox" id="autoAceitarReady" />
+          <span class="checkmark"></span>
+        </label>
+        <div class="ready-delay-slider-wrapper"
+          title="0 aceita o ready com 1ms. De 1 a 10 exibe o popup e espera o tempo escolhido.">
+          <div class="ready-delay-slider-header">
+            <span class="ready-delay-slider-label">Delay do Ready</span>
+            <span class="ready-delay-slider-value" id="autoAceitarReadyDelayValue">0s</span>
+          </div>
+          <input type="range" id="autoAceitarReadyDelaySeconds" min="0" max="10" step="1" value="0" />
+        </div>
+      </div>
 
       <label class="container" for="autoCopiarIp" title="Copia o IP automáticamente assim que disponível"
         style="display: none">

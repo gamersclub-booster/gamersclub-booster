@@ -299,6 +299,62 @@ input:not([type="range"]) {
   user-select: none;
 }
 
+.ready-delay-setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.ready-delay-setting .container {
+  margin-bottom: 0;
+  flex: 1;
+}
+
+.ready-delay-slider-wrapper {
+  width: 180px;
+  padding: 8px 10px;
+  border: 1px solid rgba(36, 126, 185, 0.75);
+  border-radius: 6px;
+  background: rgba(20, 21, 38, 0.45);
+  transition: 0.2s ease-out;
+}
+
+.ready-delay-slider-wrapper.ready-delay-slider-disabled {
+  opacity: 0.45;
+}
+
+.ready-delay-slider-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.ready-delay-slider-label,
+.ready-delay-slider-value {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ready-delay-slider-value {
+  color: #2196f3;
+}
+
+#autoAceitarReadyDelaySeconds {
+  width: 100%;
+  height: auto !important;
+  padding: 0 !important;
+  cursor: pointer;
+}
+
+#autoAceitarReadyDelaySeconds:disabled {
+  cursor: not-allowed;
+}
+
 /* Hide the browser's default checkbox */
 .container input {
   position: absolute;
