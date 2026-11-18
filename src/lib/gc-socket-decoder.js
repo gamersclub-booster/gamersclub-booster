@@ -3,7 +3,7 @@
  * ============================================================
  * @file        gc-socket-decoder.js
  * @author      Caio Felipe
- * @version     1.0.0
+ * @version     1.0.1
  * @date        2026-11-18
  * @license     MIT
  *
@@ -162,11 +162,24 @@ class GCSocketDecoder {
       } else if ( event.data instanceof Blob ) {
         event.data
           .arrayBuffer()
-          .then( buffer => this._handleBuffer( buffer, socket.url ) );
+          .then( buffer => this._handleBuffer( buffer, socket.url ) )
+          .catch( err => this._debug( '[GCSocketDecoder] Blob.arrayBuffer() falhou:', err ) );
       }
     } );
 
     this._log( `[GCSocketDecoder] Socket anexado: ${socket.url}` );
+  }
+
+  /**
+     * Processa um frame bruto e notifica via onMessage se a mensagem for válida.
+     * Interface pública para processamento externo sem expor _handleBuffer.
+     *
+     * @param {ArrayBuffer} buffer   - Dados binários do pacote
+     * @param {string}      [url=""] - URL de origem (informativo)
+     * @returns {void}
+     */
+  processFrame( buffer, url = '' ) {
+    this._handleBuffer( buffer, url );
   }
 
   /**
@@ -283,10 +296,13 @@ class GCSocketDecoder {
     const kdrField = player.find( f => f.field === 11 && f.wire === 5 );
     const steamField = player.find( f => f.field === 14 && f.wire === 2 );
 
+    const levelNum = levelField ? Number( levelField.value ) : null;
+    const level = ( Number.isSafeInteger( levelNum ) && levelNum >= 0 ) ? levelNum : null;
+
     return {
       name: nameField ? this._getString( nameField ) : null,
       steam_id: steamField ? this._getString( steamField ) : null,
-      level: levelField ? Number( levelField.value ) : null,
+      level,
       kdr: kdrField ? this._getFloat32( kdrField ) : null
     };
   }
@@ -374,29 +390,39 @@ class GCSocketDecoder {
   /**
      * @private
      * Lê um inteiro de largura variável (varint) conforme spec Protobuf.
-     * Suporta até 70 bits (10 bytes) para evitar loops infinitos.
+     * Limita a leitura a no máximo 10 bytes e valida o 10º byte contra overflow.
      *
      * @param {Uint8Array}      data
      * @param {{ pos: number }} state - Cursor de leitura (mutado in-place)
      * @returns {bigint}
-     * @throws {Error} Se o varint for incompleto ou exceder 70 bits
+     * @throws {Error} Se o varint for incompleto ou exceder 10 bytes / 64 bits
      */
   _readVarint( data, state ) {
     let result = 0n;
     let shift = 0n;
+    let bytesRead = 0;
 
     while ( state.pos < data.length ) {
       const byte = data[state.pos++];
+      bytesRead++;
+
+      if ( bytesRead > 10 ) {
+        throw new Error( 'Varint excedeu o tamanho máximo permitido (10 bytes)' );
+      }
+
+      if ( bytesRead === 10 ) {
+        if ( ( byte & 0x80 ) !== 0 ) {
+          throw new Error( 'Varint overflow no 10º byte' );
+        }
+        result |= BigInt( byte & 0x7f ) << shift;
+        return result;
+      }
 
       result |= BigInt( byte & 0x7f ) << shift;
 
       if ( !( byte & 0x80 ) ) { return result; }
 
       shift += 7n;
-
-      if ( shift > 70n ) {
-        throw new Error( 'Varint excedeu o tamanho máximo permitido (70 bits)' );
-      }
     }
 
     throw new Error( 'Varint incompleto — stream encerrou inesperadamente' );
@@ -416,9 +442,10 @@ class GCSocketDecoder {
   /**
      * @private
      * Decodifica um campo Fixed32 (wire=5) como float32 little-endian.
+     * Rejeita NaN e Infinity, retornando null nesses casos.
      *
      * @param {{ value: Uint8Array }} field
-     * @returns {number|null} Valor float ou null se inválido
+     * @returns {number|null} Valor float finito ou null se inválido
      */
   _getFloat32( field ) {
     if (
@@ -433,7 +460,8 @@ class GCSocketDecoder {
       field.value.byteOffset + field.value.byteLength
     );
 
-    return new DataView( buffer ).getFloat32( 0, true );
+    const value = new DataView( buffer ).getFloat32( 0, true );
+    return Number.isFinite( value ) ? value : null;
   }
 
   // ----------------------------------------------------------
@@ -466,7 +494,7 @@ class GCSocketDecoder {
 }
 
 // Exporta para ambientes modulares (ES Module)
-// e também expõe globalmente para uso em scripts de browser.
+// e também expõe globalmente para uso em scripts de browser ou testes.
 export { GCSocketDecoder };
 
 if ( typeof window !== 'undefined' ) {

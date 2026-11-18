@@ -2,7 +2,7 @@
  * ============================================================
  * @file        index.js (kdr-monitor)
  * @author      Caio Felipe
- * @version     1.0.0
+ * @version     1.0.1
  *
  * @description
  *   Content script executado no MAIN world (document_start).
@@ -20,7 +20,7 @@ import { GCSocketDecoder } from '../../lib/gc-socket-decoder';
 // ==========================================
 
 const DEBUG = false;
-const isDebug = () => Boolean( DEBUG || window.__GC_DEBUG__ );
+const isDebug = () => Boolean( DEBUG || ( typeof window !== 'undefined' && window.__GC_DEBUG__ ) );
 
 const debugLog = ( ...args ) => {
   if ( isDebug() ) {
@@ -47,11 +47,6 @@ const debugGroupEnd = () => {
 };
 
 ( () => {
-  if ( window.gcMonitor ) {
-    debugWarn( '[GC] Monitor já está ativo.' );
-    return;
-  }
-
   // ==========================================
   // CONFIGURAÇÃO
   // ==========================================
@@ -63,20 +58,167 @@ const debugGroupEnd = () => {
   const PLAYER_SELECTOR = '.LobbyRoom__lineup a.LobbyPlayerVertical';
 
   // ==========================================
-  // INTERCEPTAÇÃO WEBSOCKET
-  // (usa a WebSocket original antes de qualquer Proxy)
+  // ESTADO E CONTROLE DE CICLO DE VIDA
   // ==========================================
 
+  let monitorActive = false;
+  let interceptorsInstalled = false;
+  let domObserver = null;
+  let rafPending = false;
+  let pendingDOMListener = null;
+
+  // Referências originais da plataforma
   const OriginalWebSocket = window.WebSocket;
   const originalAddEventListener = OriginalWebSocket.prototype.addEventListener;
+  const originalFetch = window.fetch;
+  const originalOpen = XMLHttpRequest.prototype.open;
+  const originalSend = XMLHttpRequest.prototype.send;
+
+  // Referências instaladas para restauração segura
+  let gcFetch = null;
+  let gcXHROpen = null;
+  let gcXHRSend = null;
+  let MonitoredWebSocket = null;
+
+  // Sockets já anexados
+  const monitoredSockets = new WeakSet();
 
   // ==========================================
-  // ARMAZENAMENTO DOS DADOS
+  // NORMALIZAÇÃO DE DADOS
+  // ==========================================
+
+  function normalizeName( name ) {
+    return String( name || '' )
+      .normalize( 'NFD' )
+      .replace( /[\u0300-\u036f]/g, '' )
+      .trim()
+      .toLowerCase()
+      .replace( /\s+/g, ' ' );
+  }
+
+  function getPlayerName( element ) {
+    const title = element.getAttribute( 'title' );
+    if ( !title ) { return null; }
+    return title.split( '\n' )[0].split( '|' )[0].trim();
+  }
+
+  // ==========================================
+  // GERENCIAMENTO CENTRALIZADO DE DADOS
   // ==========================================
 
   const roomStore = new Map();
 
+  /**
+   * Localiza um jogador existente na lista utilizando a estratégia hierárquica:
+   * 1. steam_id (mais confiável)
+   * 2. id (identificador interno da GamersClub)
+   * 3. name normalizado (fallback)
+   */
+  function findMatchingPlayerIndex( playerList, candidate ) {
+    if ( !candidate || !Array.isArray( playerList ) ) { return -1; }
+
+    // 1. Steam ID
+    if ( candidate.steam_id ) {
+      const candSteam = String( candidate.steam_id ).trim();
+      if ( candSteam ) {
+        const idx = playerList.findIndex( p => p.steam_id && String( p.steam_id ).trim() === candSteam );
+        if ( idx !== -1 ) { return idx; }
+      }
+    }
+
+    // 2. ID interno
+    if ( candidate.id ) {
+      const candId = String( candidate.id ).trim();
+      if ( candId ) {
+        const idx = playerList.findIndex( p => p.id && String( p.id ).trim() === candId );
+        if ( idx !== -1 ) { return idx; }
+      }
+    }
+
+    // 3. Nome normalizado
+    if ( candidate.name ) {
+      const candNorm = normalizeName( candidate.name );
+      if ( candNorm ) {
+        const idx = playerList.findIndex( p => p.name && normalizeName( p.name ) === candNorm );
+        if ( idx !== -1 ) { return idx; }
+      }
+    }
+
+    return -1;
+  }
+
+  /**
+   * Realiza merge de atributos de jogador, impedindo que null, undefined ou
+   * strings vazias sobrescrevam dados válidos previamente conhecidos.
+   */
+  function mergePlayer( oldPlayer, newPlayer ) {
+    const merged = { ...oldPlayer };
+
+    for ( const [ key, value ] of Object.entries( newPlayer ) ) {
+      if ( value !== null && value !== undefined && value !== '' ) {
+        merged[key] = value;
+      }
+    }
+
+    return merged;
+  }
+
+  /**
+   * Mescla as informações de uma sala, reconciliando jogadores e
+   * gerenciando entradas e saídas (snapshots completos vs parciais).
+   */
+  function mergeRoom( roomId, incomingPlayers, metadata = {} ) {
+    const strRoomId = String( roomId );
+    const current = roomStore.get( strRoomId ) || {
+      room_id: strRoomId,
+      players: []
+    };
+
+    const isSnapshot = metadata.isSnapshot !== false;
+    const currentPlayers = [ ...current.players ];
+    const updatedPlayers = [];
+    const matchedOldIndices = new Set();
+
+    incomingPlayers.forEach( incoming => {
+      // Ignora jogadores sem identificador utilizável
+      const hasId = Boolean( incoming.id && String( incoming.id ).trim() );
+      const hasSteam = Boolean( incoming.steam_id && String( incoming.steam_id ).trim() );
+      const hasName = Boolean( incoming.name && String( incoming.name ).trim() );
+
+      if ( !hasId && !hasSteam && !hasName ) { return; }
+
+      const matchIdx = findMatchingPlayerIndex( currentPlayers, incoming );
+      if ( matchIdx !== -1 ) {
+        matchedOldIndices.add( matchIdx );
+        const existing = currentPlayers[matchIdx];
+        updatedPlayers.push( mergePlayer( existing, incoming ) );
+      } else {
+        updatedPlayers.push( { ...incoming } );
+      }
+    } );
+
+    // Se for atualização parcial, mantém jogadores antigos não presentes no pacote
+    if ( !isSnapshot ) {
+      for ( let i = 0; i < currentPlayers.length; i++ ) {
+        if ( !matchedOldIndices.has( i ) ) {
+          updatedPlayers.push( currentPlayers[i] );
+        }
+      }
+    }
+
+    roomStore.set( strRoomId, {
+      ...current,
+      ...metadata,
+      room_id: strRoomId,
+      players: updatedPlayers
+    } );
+
+    publishRoomData();
+  }
+
   function publishRoomData() {
+    if ( !monitorActive ) { return; }
+
     const rooms = Array.from( roomStore.values() );
 
     window.gcRoomData = {
@@ -90,56 +232,11 @@ const debugGroupEnd = () => {
       )
     };
 
-    updatePlayerKDR();
-  }
-
-  function mergePlayer( oldPlayer, newPlayer ) {
-    const merged = { ...oldPlayer };
-
-    for ( const [ key, value ] of Object.entries( newPlayer ) ) {
-      if ( value !== null && value !== undefined ) {
-        merged[key] = value;
-      }
-    }
-
-    return merged;
-  }
-
-  function mergeRoom( roomId, incomingPlayers, metadata = {} ) {
-    const current = roomStore.get( String( roomId ) ) || {
-      room_id: String( roomId ),
-      players: []
-    };
-
-    const players = new Map(
-      current.players.map( player => [
-        String( player.id || player.steam_id || player.name ),
-        player
-      ] )
-    );
-
-    incomingPlayers.forEach( incoming => {
-      const key = String( incoming.id || incoming.steam_id || incoming.name );
-      const existing = players.get( key );
-
-      players.set(
-        key,
-        existing ? mergePlayer( existing, incoming ) : incoming
-      );
-    } );
-
-    roomStore.set( String( roomId ), {
-      ...current,
-      ...metadata,
-      room_id: String( roomId ),
-      players: Array.from( players.values() )
-    } );
-
-    publishRoomData();
+    scheduleKDRUpdate();
   }
 
   // ==========================================
-  // ESTILIZAÇÃO
+  // ESTILIZAÇÃO E INTERFACE
   // ==========================================
 
   function injectStyles() {
@@ -191,23 +288,114 @@ const debugGroupEnd = () => {
     document.head.appendChild( style );
   }
 
-  // ==========================================
-  // NORMALIZAÇÃO DOS JOGADORES
-  // ==========================================
-
-  function normalizeName( name ) {
-    return String( name || '' )
-      .normalize( 'NFD' )
-      .replace( /[\u0300-\u036f]/g, '' )
-      .trim()
-      .toLowerCase()
-      .replace( /\s+/g, ' ' );
+  function removeStyles() {
+    document.getElementById( STYLE_ID )?.remove();
   }
 
-  function getPlayerName( element ) {
-    const title = element.getAttribute( 'title' );
-    if ( !title ) { return null; }
-    return title.split( '\n' )[0].split( '|' )[0].trim();
+  function clearDOMBadges() {
+    document.querySelectorAll( '.gc-kdr-badge' ).forEach( el => el.remove() );
+    document.querySelectorAll( '.gc-kdr-wrapper' ).forEach( el => el.classList.remove( 'gc-kdr-wrapper' ) );
+  }
+
+  /**
+   * Atualização otimizada dos badges KDR no DOM:
+   * - Utiliza Map com busca O(1) por nome normalizado.
+   * - Modifica o DOM apenas quando o badge for novo ou o valor tiver mudado.
+   */
+  function updatePlayerKDR() {
+    if ( !monitorActive || !window.gcRoomData ) { return; }
+
+    const players = window.gcRoomData.players || [];
+    if ( !players.length ) { return; }
+
+    const playerMap = new Map();
+    for ( const player of players ) {
+      if ( player.name ) {
+        const norm = normalizeName( player.name );
+        if ( norm && !playerMap.has( norm ) ) {
+          playerMap.set( norm, player );
+        }
+      }
+    }
+
+    const elements = document.querySelectorAll( PLAYER_SELECTOR );
+    for ( let i = 0; i < elements.length; i++ ) {
+      const element = elements[i];
+      const htmlName = getPlayerName( element );
+      if ( !htmlName ) { continue; }
+
+      const normalizedHTMLName = normalizeName( htmlName );
+      const playerData = playerMap.get( normalizedHTMLName );
+
+      if (
+        !playerData ||
+        typeof playerData.kdr !== 'number' ||
+        !Number.isFinite( playerData.kdr )
+      ) {
+        continue;
+      }
+
+      const avatarWrapper = element.querySelector( '[id^="player-trigger-wrapper-"]' );
+      if ( !avatarWrapper ) { continue; }
+
+      const formattedKDR = playerData.kdr.toFixed( 2 );
+      let badge = avatarWrapper.querySelector( '.gc-kdr-badge' );
+
+      if ( !badge ) {
+        avatarWrapper.classList.add( 'gc-kdr-wrapper' );
+        badge = document.createElement( 'span' );
+        badge.className = 'gc-kdr-badge';
+        badge.dataset.kdr = formattedKDR;
+        badge.textContent = formattedKDR;
+        avatarWrapper.appendChild( badge );
+      } else if ( badge.dataset.kdr !== formattedKDR ) {
+        badge.dataset.kdr = formattedKDR;
+        badge.textContent = formattedKDR;
+      }
+
+      if ( element.dataset.gcKdr !== formattedKDR ) {
+        element.dataset.gcKdr = formattedKDR;
+      }
+      const pid = playerData.id || '';
+      if ( element.dataset.gcPlayerId !== pid ) {
+        element.dataset.gcPlayerId = pid;
+      }
+    }
+  }
+
+  /**
+   * Agrupa e despacha atualizações visuais via requestAnimationFrame.
+   */
+  function scheduleKDRUpdate() {
+    if ( rafPending || !monitorActive ) { return; }
+    rafPending = true;
+
+    requestAnimationFrame( () => {
+      rafPending = false;
+      updatePlayerKDR();
+    } );
+  }
+
+  function startDOMObserver() {
+    if ( !monitorActive || !document.body || domObserver ) { return; }
+
+    injectStyles();
+
+    domObserver = new MutationObserver( () => scheduleKDRUpdate() );
+    domObserver.observe( document.body, {
+      childList: true,
+      subtree: true
+    } );
+
+    debugLog( '[GC] Observador DOM iniciado.' );
+  }
+
+  function stopDOMObserver() {
+    if ( domObserver ) {
+      domObserver.disconnect();
+      domObserver = null;
+    }
+    rafPending = false;
   }
 
   // ==========================================
@@ -215,13 +403,13 @@ const debugGroupEnd = () => {
   // ==========================================
 
   function processHTTPResponse( data, url ) {
-    if ( !url || !url.includes( API_URL ) ) { return; }
+    if ( !monitorActive || !url || !url.includes( API_URL ) ) { return; }
 
     if (
       !data ||
-            data.success !== true ||
-            !data.lobbyList ||
-            !data.lobbyList.lobbys
+      data.success !== true ||
+      !data.lobbyList ||
+      !data.lobbyList.lobbys
     ) {
       return;
     }
@@ -230,34 +418,39 @@ const debugGroupEnd = () => {
     let totalPlayers = 0;
 
     Object.entries( data.lobbyList.lobbys ).forEach( ( [ roomId, room ] ) => {
-
       const players = Object.entries( room.members || {} ).map(
-        ( [ playerId, member ] ) => ( {
-          id: String( playerId ),
-          name: member.nick || null,
-          avatar: member.avatar || null,
-          steam_id: member.steamId64 || null,
-          level: member.level !== null && member.level !== undefined ? Number( member.level ) : null,
-          kdr: member.kdr !== null && member.kdr !== undefined ? Number( member.kdr ) : null,
-          country: member.country || null,
-          isPrime: member.isPrime,
-          isVerified: member.isVerified,
-          isOfficial: member.isOfficial,
-          isPro: member.isPro,
-          isPremium: member.isPremium,
-          isPlus: member.isPlus,
-          medalha_id: member.medalha_id,
-          medalha_name: member.medalha_name,
-          firepower: member.firepower,
-          teamwork: member.teamwork,
-          playerFrame: member.playerFrame,
-          matchmakingLevel: member.matchmakingLevel,
-          currentSeasonPosition: member.currentSeasonPosition
-        } )
+        ( [ playerId, member ] ) => {
+          const kdrRaw = ( member.kdr !== null && member.kdr !== undefined ) ? Number( member.kdr ) : null;
+          const levelRaw = ( member.level !== null && member.level !== undefined ) ? Number( member.level ) : null;
+
+          return {
+            id: String( playerId ),
+            name: member.nick || null,
+            avatar: member.avatar || null,
+            steam_id: member.steamId64 || null,
+            level: ( levelRaw !== null && Number.isFinite( levelRaw ) && levelRaw >= 0 ) ? levelRaw : null,
+            kdr: ( kdrRaw !== null && Number.isFinite( kdrRaw ) && kdrRaw >= 0 ) ? kdrRaw : null,
+            country: member.country || null,
+            isPrime: member.isPrime,
+            isVerified: member.isVerified,
+            isOfficial: member.isOfficial,
+            isPro: member.isPro,
+            isPremium: member.isPremium,
+            isPlus: member.isPlus,
+            medalha_id: member.medalha_id,
+            medalha_name: member.medalha_name,
+            firepower: member.firepower,
+            teamwork: member.teamwork,
+            playerFrame: member.playerFrame,
+            matchmakingLevel: member.matchmakingLevel,
+            currentSeasonPosition: member.currentSeasonPosition
+          };
+        }
       );
 
       mergeRoom( roomId, players, {
         source: 'http',
+        isSnapshot: true,
         game: room.game,
         region: room.region,
         map: null,
@@ -275,106 +468,33 @@ const debugGroupEnd = () => {
       totalPlayers += players.length;
     } );
 
-    console.group(
+    debugGroup(
       '%c[GC] Dados iniciais recebidos via HTTP',
       'color:#16a34a;font-weight:bold'
     );
-    console.log( 'Endpoint:', url );
-    console.log( 'Salas:', totalRooms );
-    console.log( 'Jogadores:', totalPlayers );
-    console.log( 'Dados estruturados:', window.gcRoomData );
-    console.groupEnd();
+    debugLog( 'Endpoint:', url );
+    debugLog( 'Salas:', totalRooms );
+    debugLog( 'Jogadores:', totalPlayers );
+    debugLog( 'Dados estruturados:', window.gcRoomData );
+    debugGroupEnd();
 
-    updatePlayerKDR();
+    scheduleKDRUpdate();
   }
 
   // ==========================================
-  // INTERCEPTAÇÃO FETCH
-  // ==========================================
-
-  const originalFetch = window.fetch;
-
-  window.fetch = async function ( ...args ) {
-    const response = await originalFetch.apply( this, args );
-
-    try {
-      const requestURL = new URL(
-        args[0] instanceof Request ? args[0].url : args[0],
-        location.href
-      );
-
-      if (
-        requestURL.pathname.includes( API_URL ) &&
-                requestURL.searchParams.get( 'region' ) === REGION
-      ) {
-        response.clone().json()
-          .then( data => processHTTPResponse( data, requestURL.href ) )
-          .catch( err => {
-            if ( isDebug() ) { console.debug( '[GC] Erro ao ler HTTP:', err ); }
-          } );
-      }
-    } catch ( error ) {
-      if ( isDebug() ) { console.debug( '[GC] Interceptação fetch:', error ); }
-    }
-
-    return response;
-  };
-
-  // ==========================================
-  // INTERCEPTAÇÃO XMLHttpRequest
-  // ==========================================
-
-  const originalOpen = XMLHttpRequest.prototype.open;
-  const originalSend = XMLHttpRequest.prototype.send;
-
-  XMLHttpRequest.prototype.open = function ( method, url, ...args ) {
-    this.__gcURL = new URL( url, location.href ).href;
-    return originalOpen.call( this, method, url, ...args );
-  };
-
-  XMLHttpRequest.prototype.send = function ( ...args ) {
-    this.addEventListener( 'load', function () {
-      try {
-        const url = new URL( this.__gcURL );
-
-        if (
-          url.pathname.includes( API_URL ) &&
-                    url.searchParams.get( 'region' ) === REGION
-        ) {
-          processHTTPResponse(
-            JSON.parse( this.responseText ),
-            this.__gcURL
-          );
-        }
-      } catch ( error ) {
-        if ( isDebug() ) { console.debug( '[GC] Erro ao processar XHR:', error ); }
-      }
-    } );
-
-    return originalSend.apply( this, args );
-  };
-
-  // ==========================================
-  // INTEGRAÇÃO COM GCSocketDecoder
+  // INTEGRAÇÃO COM DECODER WEBSOCKET
   // ==========================================
 
   function onSocketMessage( result, url ) {
+    if ( !monitorActive ) { return; }
+
     const roomId = result.room_id;
     if ( !roomId ) { return; }
 
-    const current = roomStore.get( String( roomId ) );
-
-    const mergedPlayers = result.players.map( player => {
-      const existing = current?.players.find( item =>
-        ( player.steam_id && item.steam_id === player.steam_id ) ||
-                ( player.name && normalizeName( item.name ) === normalizeName( player.name ) )
-      );
-
-      return existing ? mergePlayer( existing, player ) : player;
-    } );
-
-    mergeRoom( roomId, mergedPlayers, {
+    // Cada pacote Protobuf de sala representa a lista completa de membros naquele instante
+    mergeRoom( roomId, result.players, {
       source: 'websocket',
+      isSnapshot: true,
       game: result.game,
       map: result.map
     } );
@@ -386,7 +506,7 @@ const debugGroupEnd = () => {
     debugLog( 'WebSocket:', url );
     debugLog( 'JSON estruturado:' );
     debugLog( JSON.stringify( result, null, 2 ) );
-    if ( isDebug() ) { console.table( mergedPlayers ); }
+    if ( isDebug() ) { console.table( result.players ); }
     debugGroupEnd();
   }
 
@@ -395,168 +515,233 @@ const debugGroupEnd = () => {
     debug: isDebug()
   } );
 
-  // ==========================================
-  // WEBSOCKET MONITOR
-  // ==========================================
+  const processFrame = ( buf, url ) => {
+    if ( !monitorActive ) { return; }
 
-  const monitored = new WeakSet();
+    if ( typeof socketDecoder.processFrame === 'function' ) {
+      socketDecoder.processFrame( buf, url );
+    } else if ( typeof socketDecoder._handleBuffer === 'function' ) {
+      socketDecoder._handleBuffer( buf, url );
+    }
+  };
 
   function attachSocket( socket ) {
-    if ( monitored.has( socket ) ) { return; }
-    monitored.add( socket );
+    if ( !socket || monitoredSockets.has( socket ) ) { return; }
+    monitoredSockets.add( socket );
 
     originalAddEventListener.call( socket, 'message', event => {
-      if ( event.data instanceof ArrayBuffer ) {
-        socketDecoder._handleBuffer( event.data, socket.url );
+      if ( !monitorActive ) { return; }
 
+      if ( event.data instanceof ArrayBuffer ) {
+        processFrame( event.data, socket.url );
       } else if ( event.data instanceof Blob ) {
-        event.data.arrayBuffer().then( buffer =>
-          socketDecoder._handleBuffer( buffer, socket.url )
-        );
+        event.data.arrayBuffer()
+          .then( buffer => processFrame( buffer, socket.url ) )
+          .catch( err => debugLog( '[GC] Falha na conversão de Blob:', err ) );
       }
     } );
 
     debugLog( '[GC] WebSocket monitorado:', socket.url );
   }
 
-  const MonitoredWebSocket = new Proxy( OriginalWebSocket, {
-    construct( target, args, newTarget ) {
-      const socket = Reflect.construct( target, args, newTarget );
-      attachSocket( socket );
-      return socket;
+  // ==========================================
+  // INSTALAÇÃO / REMOÇÃO DE INTERCEPTAÇÕES
+  // ==========================================
+
+  function installInterceptors() {
+    if ( interceptorsInstalled ) { return; }
+    interceptorsInstalled = true;
+
+    // 1. Fetch
+    window.fetch = async function ( ...args ) {
+      const response = await originalFetch.apply( this, args );
+
+      if ( monitorActive ) {
+        try {
+          const requestURL = new URL(
+            args[0] instanceof Request ? args[0].url : args[0],
+            location.href
+          );
+
+          if (
+            requestURL.pathname.includes( API_URL ) &&
+            requestURL.searchParams.get( 'region' ) === REGION
+          ) {
+            response.clone().json()
+              .then( data => processHTTPResponse( data, requestURL.href ) )
+              .catch( err => debugLog( '[GC] Erro ao ler HTTP:', err ) );
+          }
+        } catch ( error ) {
+          debugLog( '[GC] Interceptação fetch:', error );
+        }
+      }
+
+      return response;
+    };
+    gcFetch = window.fetch;
+
+    // 2. XMLHttpRequest
+    XMLHttpRequest.prototype.open = function ( method, url, ...args ) {
+      this.__gcURL = new URL( url, location.href ).href;
+      return originalOpen.call( this, method, url, ...args );
+    };
+    gcXHROpen = XMLHttpRequest.prototype.open;
+
+    XMLHttpRequest.prototype.send = function ( ...args ) {
+      this.addEventListener( 'load', function () {
+        if ( !monitorActive ) { return; }
+
+        try {
+          const url = new URL( this.__gcURL );
+
+          if (
+            url.pathname.includes( API_URL ) &&
+            url.searchParams.get( 'region' ) === REGION
+          ) {
+            processHTTPResponse(
+              JSON.parse( this.responseText ),
+              this.__gcURL
+            );
+          }
+        } catch ( error ) {
+          debugLog( '[GC] Erro ao processar XHR:', error );
+        }
+      } );
+
+      return originalSend.apply( this, args );
+    };
+    gcXHRSend = XMLHttpRequest.prototype.send;
+
+    // 3. WebSocket Proxy
+    MonitoredWebSocket = new Proxy( OriginalWebSocket, {
+      construct( target, args, newTarget ) {
+        const socket = Reflect.construct( target, args, newTarget );
+        if ( monitorActive ) {
+          attachSocket( socket );
+        }
+        return socket;
+      }
+    } );
+    window.WebSocket = MonitoredWebSocket;
+  }
+
+  function uninstallInterceptors() {
+    if ( !interceptorsInstalled ) { return; }
+
+    // Restaura WebSocket se ainda for o nosso Proxy
+    if ( window.WebSocket === MonitoredWebSocket ) {
+      window.WebSocket = OriginalWebSocket;
     }
-  } );
 
-  window.WebSocket = MonitoredWebSocket;
+    // Restaura fetch apenas se a função atual for exatamente a que instalamos
+    if ( window.fetch === gcFetch ) {
+      window.fetch = originalFetch;
+    }
 
-  // ==========================================
-  // ATUALIZAÇÃO DOS KDR NO HTML
-  // ==========================================
+    // Restaura XMLHttpRequest apenas se as funções atuais forem as nossas
+    if ( XMLHttpRequest.prototype.open === gcXHROpen ) {
+      XMLHttpRequest.prototype.open = originalOpen;
+    }
+    if ( XMLHttpRequest.prototype.send === gcXHRSend ) {
+      XMLHttpRequest.prototype.send = originalSend;
+    }
 
-  function updatePlayerKDR() {
-    if ( !window.gcRoomData ) { return; }
-
-    const players = window.gcRoomData.players || [];
-    if ( !players.length ) { return; }
-
-    document.querySelectorAll( PLAYER_SELECTOR ).forEach( element => {
-      const htmlName = getPlayerName( element );
-      if ( !htmlName ) { return; }
-
-      const normalizedHTMLName = normalizeName( htmlName );
-
-      const playerData = players.find(
-        player => normalizeName( player.name ) === normalizedHTMLName
-      );
-
-      if (
-        !playerData ||
-                typeof playerData.kdr !== 'number' ||
-                !Number.isFinite( playerData.kdr )
-      ) {
-        return;
-      }
-
-      const avatarWrapper = element.querySelector(
-        '[id^="player-trigger-wrapper-"]'
-      );
-
-      if ( !avatarWrapper ) { return; }
-
-      let badge = avatarWrapper.querySelector( '.gc-kdr-badge' );
-
-      if ( !badge ) {
-        avatarWrapper.classList.add( 'gc-kdr-wrapper' );
-        badge = document.createElement( 'span' );
-        badge.className = 'gc-kdr-badge';
-        avatarWrapper.appendChild( badge );
-      }
-
-      const formattedKDR = playerData.kdr.toFixed( 2 );
-
-      if ( badge.dataset.kdr !== formattedKDR ) {
-        badge.dataset.kdr = formattedKDR;
-        badge.textContent = formattedKDR;
-      }
-
-      element.dataset.gcKdr = formattedKDR;
-      element.dataset.gcPlayerId = playerData.id || '';
-    } );
+    interceptorsInstalled = false;
+    gcFetch = null;
+    gcXHROpen = null;
+    gcXHRSend = null;
   }
 
   // ==========================================
-  // OBSERVADOR DO DOM
-  // ==========================================
-
-  let domObserver = null;
-
-  function startDOMObserver() {
-    if ( !document.body || domObserver ) { return; }
-
-    injectStyles();
-
-    domObserver = new MutationObserver( () => updatePlayerKDR() );
-
-    domObserver.observe( document.body, {
-      childList: true,
-      subtree: true
-    } );
-
-    debugLog( '[GC] Observador DOM iniciado.' );
-  }
-
-  if ( document.body ) {
-    startDOMObserver();
-  } else {
-    document.addEventListener( 'DOMContentLoaded', startDOMObserver, { once: true } );
-  }
-
-  // ==========================================
-  // CONTROLE DO MONITOR (API pública)
+  // CONTROLE DO MONITOR (API PÚBLICA)
   // ==========================================
 
   window.gcMonitor = {
+    /**
+     * Inicializa ou reativa o monitor de forma idempotente.
+     */
+    start() {
+      if ( monitorActive ) {
+        debugWarn( '[GC] Monitor já está ativo.' );
+        return;
+      }
+
+      monitorActive = true;
+      installInterceptors();
+
+      if ( document.body ) {
+        startDOMObserver();
+      } else if ( !pendingDOMListener ) {
+        pendingDOMListener = () => {
+          pendingDOMListener = null;
+          if ( monitorActive ) { startDOMObserver(); }
+        };
+        document.addEventListener( 'DOMContentLoaded', pendingDOMListener, { once: true } );
+      }
+
+      console.log( '%c[GC] Monitor iniciado!', 'color:#16a34a;font-weight:bold' );
+    },
+
+    /**
+     * Desativa o monitor com segurança e de forma idempotente.
+     */
+    stop() {
+      if ( !monitorActive && !interceptorsInstalled ) {
+        debugWarn( '[GC] Monitor já está desativado.' );
+        return;
+      }
+
+      monitorActive = false;
+
+      // Remove listener de DOMContentLoaded pendente se houver
+      if ( pendingDOMListener ) {
+        document.removeEventListener( 'DOMContentLoaded', pendingDOMListener );
+        pendingDOMListener = null;
+      }
+
+      stopDOMObserver();
+      uninstallInterceptors();
+      clearDOMBadges();
+      removeStyles();
+
+      // Limpeza dos dados globais conforme especificação
+      window.gcRoomData = null;
+      roomStore.clear();
+
+      debugLog( '[GC] Monitor desativado.' );
+    },
+
+    /** Força atualização dos badges KDR na tela */
     update() {
       updatePlayerKDR();
       debugLog( '[GC] Interface atualizada.' );
     },
+
+    /** Retorna todas as salas armazenadas */
     getRooms() {
       return Array.from( roomStore.values() );
     },
+
+    /** Retorna todos os jogadores de todas as salas */
     getPlayers() {
       return window.gcRoomData?.players || [];
     },
+
+    /** Retorna uma sala específica pelo ID */
     getRoom( roomId ) {
       return roomStore.get( String( roomId ) ) || null;
     },
-    stop() {
-      if ( window.WebSocket === MonitoredWebSocket ) {
-        window.WebSocket = OriginalWebSocket;
-      }
 
-      if ( window.fetch !== originalFetch ) {
-        window.fetch = originalFetch;
-      }
-
-      XMLHttpRequest.prototype.open = originalOpen;
-      XMLHttpRequest.prototype.send = originalSend;
-
-      domObserver?.disconnect();
-      domObserver = null;
-
-      document.querySelectorAll( '.gc-kdr-badge' )
-        .forEach( el => el.remove() );
-
-      document.querySelectorAll( '.gc-kdr-wrapper' )
-        .forEach( el => el.classList.remove( 'gc-kdr-wrapper' ) );
-
-      document.getElementById( STYLE_ID )?.remove();
-
-      delete window.gcMonitor;
-
-      debugLog( '[GC] Monitor desativado.' );
+    /** Informa se o monitor está ativo */
+    isActive() {
+      return monitorActive;
     }
   };
 
-  console.log( '%c[GC] Monitor iniciado!', 'color:#16a34a;font-weight:bold' );
+  // ==========================================
+  // AUTO-INICIALIZAÇÃO
+  // ==========================================
+
+  window.gcMonitor.start();
+
 } )();
