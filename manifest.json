@@ -16,6 +16,12 @@
   "content_scripts": [
     {
       "matches": ["*://*.gamersclub.com.br/*", "*://cs.gamersclub.gg/*"],
+      "js": ["content-scripts/kdr-monitor.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": ["*://*.gamersclub.com.br/*", "*://cs.gamersclub.gg/*"],
       "js": ["content-scripts/main.js"],
       "css": ["content.css"],
       "run_at": "document_end"

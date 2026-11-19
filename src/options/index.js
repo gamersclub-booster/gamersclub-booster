@@ -201,11 +201,7 @@ function marcarCheckboxes() {
   chrome.storage.sync.get( null, response => {
     if ( !response ) { return false; }
     for ( const feature of features ) {
-      if ( feature === 'filtrarKdrMedioLobby' ) {
-        document.getElementById( feature ).checked = response[feature] !== false;
-      } else {
-        document.getElementById( feature ).checked = response[feature];
-      }
+      document.getElementById( feature ).checked = response[feature];
     }
   } );
 }
