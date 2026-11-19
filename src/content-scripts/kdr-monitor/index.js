@@ -55,7 +55,7 @@ const debugGroupEnd = () => {
   const REGION = '27';
 
   const STYLE_ID = 'gc-kdr-monitor-style';
-  const PLAYER_SELECTOR = '.LobbyRoom__lineup a.LobbyPlayerVertical';
+  const PLAYER_SELECTOR = '.LobbyRoom__lineup a.LobbyPlayerVertical, .LobbyChallengeLineUpCard a.LobbyPlayerVertical, a.LobbyPlayerVertical';
 
   // ==========================================
   // ESTADO E CONTROLE DE CICLO DE VIDA
@@ -283,6 +283,26 @@ const debugGroupEnd = () => {
                 color: #9ca3af !important;
                 font-size: 8px !important;
             }
+
+            .gc-kdr-room-badge {
+                display: inline-flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                font-family: Arial, sans-serif !important;
+                font-size: 11px !important;
+                font-weight: 700 !important;
+                padding: 2px 6px !important;
+                border-radius: 4px !important;
+                background: rgba(245, 158, 11, 0.15) !important;
+                border: 1px solid rgba(245, 158, 11, 0.5) !important;
+                color: #f59e0b !important;
+                margin-left: auto !important;
+                line-height: 1.1 !important;
+                white-space: nowrap !important;
+                vertical-align: middle !important;
+                box-shadow: 0 1px 3px rgba(0,0,0,.3) !important;
+                pointer-events: auto !important;
+            }
         `;
 
     document.head.appendChild( style );
@@ -293,7 +313,7 @@ const debugGroupEnd = () => {
   }
 
   function clearDOMBadges() {
-    document.querySelectorAll( '.gc-kdr-badge' ).forEach( el => el.remove() );
+    document.querySelectorAll( '.gc-kdr-badge, .gc-kdr-room-badge, .gcbooster-kdr-media, .gcbooster-kdr' ).forEach( el => el.remove() );
     document.querySelectorAll( '.gc-kdr-wrapper' ).forEach( el => el.classList.remove( 'gc-kdr-wrapper' ) );
   }
 
@@ -363,6 +383,126 @@ const debugGroupEnd = () => {
     }
   }
 
+  function calculateRoomAverage( cardElement ) {
+    const playerElements = cardElement.querySelectorAll( PLAYER_SELECTOR );
+    if ( !playerElements.length ) { return null; }
+
+    let total = 0;
+    let count = 0;
+    const processed = new Set();
+
+    for ( let i = 0; i < playerElements.length; i++ ) {
+      const el = playerElements[i];
+      if ( processed.has( el ) ) { continue; }
+      processed.add( el );
+
+      let kdrValue = el.dataset?.gcKdr;
+
+      if ( !kdrValue ) {
+        const badge = el.querySelector( '.gc-kdr-badge' );
+        kdrValue = badge?.dataset?.kdr || badge?.textContent?.trim();
+      }
+
+      if ( kdrValue ) {
+        const parsed = Number.parseFloat( String( kdrValue ).replace( ',', '.' ) );
+        if ( !Number.isNaN( parsed ) && Number.isFinite( parsed ) && parsed > 0 ) {
+          total += parsed;
+          count++;
+        }
+      }
+    }
+
+    if ( !count ) { return null; }
+    return total / count;
+  }
+
+  function renderRoomAverageBadge( cardElement, averageKDR ) {
+    const cardHeader = cardElement.matches( '.CardHeader' ) ? cardElement : cardElement.querySelector( '.CardHeader' );
+    const titleRow = cardElement.querySelector( '.CardHeader__title-row' );
+    const title = cardElement.querySelector(
+      '.CardHeader__title, h1.CardHeader__title, .LobbyRoom__title, .RoomCard__title, [class*="CardHeader__title"], [class*="RoomTitle"]'
+    );
+
+    if ( !title && !titleRow && !cardHeader ) { return; }
+
+    const formatted = averageKDR.toFixed( 2 );
+    let badge = cardElement.querySelector( '.gc-kdr-room-badge' );
+
+    if ( !badge ) {
+      badge = document.createElement( 'div' );
+      badge.className = 'gc-kdr-room-badge';
+      badge.dataset.kdr = formatted;
+      badge.title = `KDR Médio: ${formatted}`;
+      badge.textContent = formatted;
+
+      if ( titleRow ) {
+        titleRow.style.display = 'flex';
+        titleRow.style.alignItems = 'center';
+        titleRow.style.width = '100%';
+        titleRow.appendChild( badge );
+      } else if ( title ) {
+        title.insertAdjacentElement( 'afterend', badge );
+      } else if ( cardHeader ) {
+        const info = cardHeader.querySelector( '.CardHeader__info' ) || cardHeader;
+        info.appendChild( badge );
+      }
+    } else {
+      if ( badge.dataset.kdr !== formatted ) {
+        badge.dataset.kdr = formatted;
+        badge.textContent = formatted;
+      }
+      const titleAttr = `KDR Médio: ${formatted}`;
+      if ( badge.title !== titleAttr ) {
+        badge.title = titleAttr;
+      }
+    }
+  }
+
+  function updateRoomAverageKDR() {
+    if ( !monitorActive ) { return; }
+
+    const processedCards = new Set();
+
+    // 1. Cards com .CardHeader
+    const headers = document.querySelectorAll( '.CardHeader' );
+    headers.forEach( header => {
+      const card = header.closest(
+        '[id^="roomCardWrapper-"], .RoomCardWrapper, [class*="RoomCard"], [class*="LobbyCard"], [class*="CardWrapper"], [class*="Card"]'
+      ) || header.closest( '#lobbies-wrapper > div' ) || header.parentElement;
+
+      if ( !card || processedCards.has( card ) ) { return; }
+      processedCards.add( card );
+
+      const avg = calculateRoomAverage( card );
+      if ( avg !== null ) {
+        renderRoomAverageBadge( card, avg );
+      }
+    } );
+
+    // 2. Cards com seletores clássicos
+    const traditionalCards = document.querySelectorAll(
+      '[id^="roomCardWrapper-"], .RoomCardWrapper, [class*="RoomCard"]:not([class*="RoomCardWrapper"] [class*="RoomCard"])'
+    );
+    traditionalCards.forEach( card => {
+      if ( processedCards.has( card ) ) { return; }
+      processedCards.add( card );
+
+      const avg = calculateRoomAverage( card );
+      if ( avg !== null ) {
+        renderRoomAverageBadge( card, avg );
+      }
+    } );
+
+    // 3. Desafios / Challenges
+    const challengeItems = document.querySelectorAll( '.LobbyChallengeCard__item' );
+    challengeItems.forEach( item => {
+      const avg = calculateRoomAverage( item );
+      if ( avg !== null ) {
+        renderRoomAverageBadge( item, avg );
+      }
+    } );
+  }
+
   /**
    * Agrupa e despacha atualizações visuais via requestAnimationFrame.
    */
@@ -373,6 +513,7 @@ const debugGroupEnd = () => {
     requestAnimationFrame( () => {
       rafPending = false;
       updatePlayerKDR();
+      updateRoomAverageKDR();
     } );
   }
 
@@ -714,6 +855,7 @@ const debugGroupEnd = () => {
     /** Força atualização dos badges KDR na tela */
     update() {
       updatePlayerKDR();
+      updateRoomAverageKDR();
       debugLog( '[GC] Interface atualizada.' );
     },
 
