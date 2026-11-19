@@ -2,13 +2,10 @@ import { autoAceitarReady, autoAceitarReadySetInterval, resetAutoAceitarReadySta
 import { autoConcordarTermosRanked } from './autoConcordarTermosRanked';
 import { autoFixarMenuLobby } from './autoFixarMenuLobby';
 import { adicionarBotaoAutoComplete } from './botaoAutoComplete';
-import { adicionarBotaoForcarCriarLobby } from './botaoForcarCriarLobby';
 import { lobbyLink } from './lobbyLink';
 import { autoCopyLobbyLink, resetLobbyLinkState } from './autoCopyLobbyLink';
-import { mostrarInfoPlayerIntervaler, mostrarKdr, mostrarKdrDesafios, mostrarKdrRanked, showKdrMatch } from './mostrarKdr';
 import { partidaInfo } from './partidaInfo';
 import { somReady, somReadySetInterval, tocarSomSeVoceForExpulsoDaLobby } from './sons';
-import { adicionarFiltroKdr } from './filtrarKdr';
 import { iniciarLupa } from './infoLobby';
 
 import { autoKickNegativados } from './autoKickNegativados';
@@ -38,12 +35,8 @@ const initLobby = async () => {
   criarObserver( '.lobby', lobbyLink );
   criarObserver( '.lobby', autoCopyLobbyLink );
 
-  criarObserver( '#lobbies-wrapper', mostrarKdr );
   iniciarLupa();
   criarObserver( '#GamersClubCSApp-globals-globalToaster', tocarSomSeVoceForExpulsoDaLobby );
-
-
-  mostrarKdrDesafios();
 
   // Esconde a sugestão de lobbies para entrar
   ocultarSugestaoDeLobbies();
@@ -57,10 +50,8 @@ const initLobby = async () => {
   // Feature para aceitar complete automatico
   adicionarBotaoAutoComplete();
   // Feature pra criar lobby caso full
-  adicionarBotaoForcarCriarLobby();
-  // Feature para mostrar kdr dos players
-  mostrarKdrRanked();
-  mostrarInfoPlayerIntervaler();
+  // GC removeu a var de limite de lobbies, n temos solução ainda pra isso...
+  // adicionarBotaoForcarCriarLobby();
   // Feature de discord na hora de copiar o ip
   partidaInfo();
   //Feature que mostra ip assim que server é liberado
@@ -76,8 +67,6 @@ const initLobby = async () => {
   showStats();
   lobbyMapSuggestions();
   showPlayerSoloStats();
-  showKdrMatch();
-  adicionarFiltroKdr();
 };
 
 const criarObserver = ( seletor, exec, type ) => {
