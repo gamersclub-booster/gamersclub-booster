@@ -79,12 +79,12 @@ export const preVetosMapas = [
     codigo: 2
   },
   {
-    mapa: 'de_train',
-    codigo: 3
-  },
-  {
     mapa: 'de_mirage',
     codigo: 5
+  },
+  {
+    mapa: 'de_cache',
+    codigo: 6
   },
   {
     mapa: 'de_overpass',
@@ -199,7 +199,6 @@ export const lobbyMapSuggestionsConsts = {
     'de_ancient',
     'de_nuke',
     'de_overpass',
-    'de_train',
     'de_cache',
     'de_cache_nova',
     'de_thera',
