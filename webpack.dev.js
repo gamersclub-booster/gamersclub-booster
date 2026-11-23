@@ -3,23 +3,25 @@ const CopyPlugin = require( 'copy-webpack-plugin' );
 const webpack = require( 'webpack' );
 const glob = require( 'glob' );
 
-const resolveEntries = pattern => glob.sync( pattern ).map( entry => path.resolve( __dirname, entry ) );
-const contentScripts = name => resolveEntries( `./src/content-scripts/${name}/*.js` );
+const contentScripts = name =>
+  glob.sync( `./src/content-scripts/${name}/*.js` )
+    .map( f => path.resolve( __dirname, f ) );
 
 module.exports = {
   mode: 'development',
   entry: {
-    'index': resolveEntries( './src/options/*.js' ),
+    'index': glob.sync( './src/options/*.js' ).map( f => path.resolve( __dirname, f ) ),
     'content-scripts/main': contentScripts( 'main' ),
     'content-scripts/lobby': contentScripts( 'lobby' ),
     'content-scripts/missions': contentScripts( 'missions' ),
     'content-scripts/team': contentScripts( 'team' ),
     'content-scripts/my-matches': contentScripts( 'my-matches' ),
-    'content-scripts/profile': contentScripts( 'profile' )
+    'content-scripts/profile': contentScripts( 'profile' ),
+    'content-scripts/kdr-monitor': contentScripts( 'kdr-monitor' )
   },
   resolve: {
     alias: {
-      src: path.resolve(__dirname, 'src')
+      src: path.resolve( __dirname, 'src' )
     }
   },
   devtool: 'source-map',
