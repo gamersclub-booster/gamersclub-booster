@@ -56,6 +56,7 @@ const debugGroupEnd = () => {
 
   const STYLE_ID = 'gc-kdr-monitor-style';
   const PLAYER_SELECTOR = '.LobbyRoom__lineup a.LobbyPlayerVertical, .LobbyChallengeLineUpCard a.LobbyPlayerVertical, a.LobbyPlayerVertical';
+  const TEAM_PLAYER_SELECTOR = '#integrantesLobbyShort .player, .MyRoomPlayers .player, #integrantesLobby .player, [id*="integrantesLobby"] .player';
 
   // ==========================================
   // ESTADO E CONTROLE DE CICLO DE VIDA
@@ -278,7 +279,7 @@ const debugGroupEnd = () => {
             }
 
             .gc-kdr-badge::before {
-                content: "KDR" !important;
+                content: "" !important;
                 margin-right: 3px !important;
                 color: #9ca3af !important;
                 font-size: 8px !important;
@@ -303,6 +304,43 @@ const debugGroupEnd = () => {
                 box-shadow: 0 1px 3px rgba(0,0,0,.3) !important;
                 pointer-events: auto !important;
             }
+
+            .gc-kdr-team-badge {
+                display: inline-flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                min-width: 42px !important;
+                height: 17px !important;
+                padding: 0 5px !important;
+                box-sizing: border-box !important;
+                background: #111827 !important;
+                border: 1px solid #16a34a !important;
+                border-radius: 5px !important;
+                color: #4ade80 !important;
+                font-family: Arial, sans-serif !important;
+                font-size: 10px !important;
+                font-weight: 800 !important;
+                line-height: 1 !important;
+                white-space: nowrap !important;
+                pointer-events: none !important;
+                box-shadow: 0 2px 5px rgba(0,0,0,.45) !important;
+                margin-left: auto !important;
+            }
+
+            .gc-kdr-team-badge::before {
+                content: "" !important;
+                margin-right: 3px !important;
+                color: #9ca3af !important;
+                font-size: 8px !important;
+                text-align: center !important;
+            }
+
+            .styles_badges__uB3qD,
+            [class*="styles_badges__"] {
+                display: flex !important;
+                align-items: center !important;
+                width: 100% !important;
+            }
         `;
 
     document.head.appendChild( style );
@@ -313,7 +351,9 @@ const debugGroupEnd = () => {
   }
 
   function clearDOMBadges() {
-    document.querySelectorAll( '.gc-kdr-badge, .gc-kdr-room-badge, .gcbooster-kdr-media, .gcbooster-kdr' ).forEach( el => el.remove() );
+    document.querySelectorAll(
+      '.gc-kdr-badge, .gc-kdr-room-badge, .gc-kdr-team-badge, .gcbooster-kdr-media, .gcbooster-kdr'
+    ).forEach( el => el.remove() );
     document.querySelectorAll( '.gc-kdr-wrapper' ).forEach( el => el.classList.remove( 'gc-kdr-wrapper' ) );
   }
 
@@ -378,6 +418,165 @@ const debugGroupEnd = () => {
       }
       const pid = playerData.id || '';
       if ( element.dataset.gcPlayerId !== pid ) {
+        element.dataset.gcPlayerId = pid;
+      }
+    }
+  }
+
+  function buildPlayerIndex( players ) {
+    const byId = new Map();
+    const byName = new Map();
+
+    for ( const player of players ) {
+      if ( player.id ) {
+        const idStr = String( player.id ).trim();
+        if ( idStr && !byId.has( idStr ) ) {
+          byId.set( idStr, player );
+        }
+      }
+      if ( player.name ) {
+        const norm = normalizeName( player.name );
+        if ( norm && !byName.has( norm ) ) {
+          byName.set( norm, player );
+        }
+      }
+    }
+
+    return { byId, byName };
+  }
+
+  function findPlayerData( id, name, playerIndex ) {
+    if ( id ) {
+      const idStr = String( id ).trim();
+      const match = playerIndex.byId.get( idStr );
+      if ( match ) { return match; }
+    }
+
+    if ( name ) {
+      const norm = normalizeName( name );
+      const match = playerIndex.byName.get( norm );
+      if ( match ) { return match; }
+    }
+
+    return null;
+  }
+
+  function extractTeamPlayerInfo( element ) {
+    let id = null;
+    let name = null;
+
+    // 1. Link do jogador: <a href="/player/2841710" target="_blank" rel="noreferrer"> Soren;)</a>
+    const link = element.querySelector( 'a[href*="/player/"], [class*="styles_nickname"] a, [class*="nickname"] a' );
+    if ( link ) {
+      const href = link.getAttribute( 'href' ) || '';
+      const hrefMatch = href.match( /\/player\/(\d+)/i );
+      if ( hrefMatch ) {
+        id = hrefMatch[1];
+      }
+      const text = link.textContent?.trim();
+      if ( text ) {
+        name = text;
+      }
+    }
+
+    // 2. Trigger wrappers: id="player-trigger-wrapper-2841710" ou id="player-trigger-2841710"
+    if ( !id ) {
+      const trigger = element.querySelector( '[id^="player-trigger-wrapper-"], [id^="player-trigger-"]' );
+      if ( trigger ) {
+        const match = trigger.id.match( /player-trigger(?:-wrapper)?-(\d+)/ );
+        if ( match ) {
+          id = match[1];
+        }
+      }
+    }
+
+    // 3. Imagem do avatar: src=".../avatar/2841710/..." e alt=" Soren;)"
+    const avatarImg = element.querySelector( '.AvatarWrapper__image, [class*="AvatarWrapper__image"], img[src*="/players/avatar/"]' );
+    if ( avatarImg ) {
+      if ( !id ) {
+        const src = avatarImg.getAttribute( 'src' ) || '';
+        const srcMatch = src.match( /\/avatar\/(\d+)\// );
+        if ( srcMatch ) {
+          id = srcMatch[1];
+        }
+      }
+      if ( !name ) {
+        const alt = avatarImg.getAttribute( 'alt' )?.trim();
+        if ( alt ) {
+          name = alt;
+        }
+      }
+    }
+
+    return { id, name };
+  }
+
+  /**
+   * Atualização otimizada dos badges KDR nos jogadores do time:
+   * - Localiza jogadores na listagem (#integrantesLobbyShort / .MyRoomPlayers).
+   * - Insere o badge à direita do container .styles_badges__uB3qD.
+   */
+  function updateTeamPlayerKDR() {
+    if ( !monitorActive || !window.gcRoomData ) { return; }
+
+    const players = window.gcRoomData.players || [];
+    if ( !players.length ) { return; }
+
+    const playerIndex = buildPlayerIndex( players );
+
+    let elements = document.querySelectorAll( TEAM_PLAYER_SELECTOR );
+    if ( !elements.length ) {
+      elements = document.querySelectorAll( '.player' );
+    }
+
+    for ( let i = 0; i < elements.length; i++ ) {
+      const element = elements[i];
+      const badgesContainer = element.querySelector(
+        '.styles_badges__uB3qD, [class*="styles_badges__"], [class*="badges__"]'
+      );
+      if ( !badgesContainer ) { continue; }
+
+      const { id, name } = extractTeamPlayerInfo( element );
+      if ( !id && !name ) { continue; }
+
+      const playerData = findPlayerData( id, name, playerIndex );
+      if (
+        !playerData ||
+        typeof playerData.kdr !== 'number' ||
+        !Number.isFinite( playerData.kdr )
+      ) {
+        continue;
+      }
+
+      const formattedKDR = playerData.kdr.toFixed( 2 );
+      let badge = badgesContainer.querySelector( '.gc-kdr-team-badge' );
+
+      if ( !badge ) {
+        badge = document.createElement( 'span' );
+        badge.className = 'gc-kdr-team-badge';
+        badge.dataset.kdr = formattedKDR;
+        badge.title = `KDR: ${formattedKDR}`;
+        badge.textContent = formattedKDR;
+        badgesContainer.appendChild( badge );
+      } else {
+        if ( badge.dataset.kdr !== formattedKDR ) {
+          badge.dataset.kdr = formattedKDR;
+          badge.textContent = formattedKDR;
+        }
+        const titleAttr = `KDR: ${formattedKDR}`;
+        if ( badge.title !== titleAttr ) {
+          badge.title = titleAttr;
+        }
+        if ( badgesContainer.lastElementChild !== badge ) {
+          badgesContainer.appendChild( badge );
+        }
+      }
+
+      if ( element.dataset.gcKdr !== formattedKDR ) {
+        element.dataset.gcKdr = formattedKDR;
+      }
+      const pid = playerData.id || id || '';
+      if ( pid && element.dataset.gcPlayerId !== pid ) {
         element.dataset.gcPlayerId = pid;
       }
     }
@@ -513,6 +712,7 @@ const debugGroupEnd = () => {
     requestAnimationFrame( () => {
       rafPending = false;
       updatePlayerKDR();
+      updateTeamPlayerKDR();
       updateRoomAverageKDR();
     } );
   }
@@ -855,6 +1055,7 @@ const debugGroupEnd = () => {
     /** Força atualização dos badges KDR na tela */
     update() {
       updatePlayerKDR();
+      updateTeamPlayerKDR();
       updateRoomAverageKDR();
       debugLog( '[GC] Interface atualizada.' );
     },

@@ -2,8 +2,8 @@
 /**
  * ============================================================
  * @file        gc-socket-decoder.js
- * @author      Caio Felipe
- * @version     1.0.1
+ * @author      Caio Felipe - https://github.com/caiofelipedossantos
+ * @version     1.0.2
  * @date        2026-11-18
  * @license     MIT
  *
@@ -15,8 +15,22 @@
  *   sem qualquer dependência de DOM ou ambiente de browser.
  *
  *
- *   NÃO REALIZEI O MAPEAMENTO COMPLETO DOS CAMPOS,
- *   APENAS O NECESSÁRIO PARA FUNCIONAR O KDR.
+ *   SEGUE A TABELA DE DADOS DOS PLAYERS - 2026-11-19
+ *
+ *   field  1: player_id (varint)
+ *   field  2: name      (string)
+ *   field  4: pais      (string)
+ *   field  5: level     (varint)
+ *   field 11: kdr       (float32 / wire=5)
+ *   field 12: mID       (varint) -> ID da Medalha
+ *   field 13: nome      (string) -> Nome da Medalha
+ *   field 14: steam_id  (string)
+ *   field 15: moldura do avatar (string)
+ *   field 21: accountid (string)
+ *
+ *   CAMPO 17 SEM IDENTIFICAÇÃO
+ *   CAMPOS 24 e 25 NÃO IDENTIFIQUEI AINDA, PARECE SER DO RANK DA SEASON
+ *
  *
  *
  * @purpose
@@ -291,6 +305,7 @@ class GCSocketDecoder {
   _decodePlayer( bytes ) {
     const player = this._parseProtobuf( bytes );
 
+    const idField = player.find( f => f.field === 1 && f.wire === 0 );
     const nameField = player.find( f => f.field === 2 && f.wire === 2 );
     const levelField = player.find( f => f.field === 5 && f.wire === 0 );
     const kdrField = player.find( f => f.field === 11 && f.wire === 5 );
@@ -300,6 +315,7 @@ class GCSocketDecoder {
     const level = ( Number.isSafeInteger( levelNum ) && levelNum >= 0 ) ? levelNum : null;
 
     return {
+      id: idField ? String( idField.value ) : null,
       name: nameField ? this._getString( nameField ) : null,
       steam_id: steamField ? this._getString( steamField ) : null,
       level,
