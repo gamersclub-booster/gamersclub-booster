@@ -278,12 +278,14 @@ const debugGroupEnd = () => {
                 box-shadow: 0 2px 5px rgba(0,0,0,.45) !important;
             }
 
+            /* Reativar se quiser exibir o texto KDR: antes do valor.
             .gc-kdr-badge::before {
-                content: "" !important;
+                content: "KDR:" !important;
                 margin-right: 3px !important;
                 color: #9ca3af !important;
                 font-size: 8px !important;
             }
+            */
 
             .gc-kdr-room-badge {
                 display: inline-flex !important;
