@@ -278,12 +278,14 @@ const debugGroupEnd = () => {
                 box-shadow: 0 2px 5px rgba(0,0,0,.45) !important;
             }
 
+            /* Reativar se quiser exibir o texto KDR: antes do valor.
             .gc-kdr-badge::before {
-                content: "" !important;
+                content: "KDR:" !important;
                 margin-right: 3px !important;
                 color: #9ca3af !important;
                 font-size: 8px !important;
             }
+            */
 
             .gc-kdr-room-badge {
                 display: inline-flex !important;
@@ -692,12 +694,77 @@ const debugGroupEnd = () => {
       }
     } );
 
-    // 3. Desafios / Challenges
+    // 3. Desafios / Challenges (cards com .LobbyChallengeCard__item)
     const challengeItems = document.querySelectorAll( '.LobbyChallengeCard__item' );
     challengeItems.forEach( item => {
       const avg = calculateRoomAverage( item );
       if ( avg !== null ) {
         renderRoomAverageBadge( item, avg );
+      }
+    } );
+
+    // 4. Listagem de desafios (<li id="challenge_{roomId}">)
+    updateChallengeListKDR();
+  }
+
+  /**
+   * Exibe o KDR médio na listagem de desafios:
+   * - Elemento: <li id="challenge_{roomId}">
+   * - Posicionamento: após .styles_level__fnBMT, antes de .styles_title__GSzXq
+   * - Reutiliza a média já calculada a partir do roomStore.
+   */
+  function updateChallengeListKDR() {
+    if ( !monitorActive ) { return; }
+
+    const rows = document.querySelectorAll( 'li[id^="challenge_"]' );
+    if ( !rows.length ) { return; }
+
+    rows.forEach( row => {
+      const rawId = row.id.replace( 'challenge_', '' );
+      if ( !rawId ) { return; }
+
+      const room = roomStore.get( rawId );
+      const players = room?.players;
+      if ( !players || !players.length ) { return; }
+
+      let total = 0;
+      let count = 0;
+      players.forEach( p => {
+        if ( typeof p.kdr === 'number' && Number.isFinite( p.kdr ) && p.kdr > 0 ) {
+          total += p.kdr;
+          count++;
+        }
+      } );
+
+      if ( !count ) { return; }
+
+      const avg = total / count;
+      const formatted = avg.toFixed( 2 );
+
+      let badge = row.querySelector( '.gc-kdr-room-badge' );
+
+      if ( !badge ) {
+        badge = document.createElement( 'span' );
+        badge.className = 'gc-kdr-room-badge';
+        badge.dataset.kdr = formatted;
+        badge.title = `KDR Médio: ${formatted}`;
+        badge.textContent = formatted;
+
+        const levelSpan = row.querySelector( '.styles_level__fnBMT, [class*="styles_level__"]' );
+        if ( levelSpan ) {
+          levelSpan.insertAdjacentElement( 'afterend', badge );
+        } else {
+          row.prepend( badge );
+        }
+      } else {
+        if ( badge.dataset.kdr !== formatted ) {
+          badge.dataset.kdr = formatted;
+          badge.textContent = formatted;
+        }
+        const titleAttr = `KDR Médio: ${formatted}`;
+        if ( badge.title !== titleAttr ) {
+          badge.title = titleAttr;
+        }
       }
     } );
   }
